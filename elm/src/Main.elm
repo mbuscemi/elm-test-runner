@@ -1,6 +1,7 @@
 module Main exposing (main)
 
-import Html exposing (Html, div)
+import Html exposing (Html, div, h2, text)
+import Html.Attributes exposing (class)
 
 
 type alias Model =
@@ -33,4 +34,5 @@ update message model =
 
 view : Model -> Html Message
 view model =
-    div [] []
+    div [ class "etr-main-view" ]
+        [ h2 [] [ text "Elm Test Runner" ] ]

@@ -1,0 +1,11 @@
+
+.etr-main-view {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-left: 6px;
+}
+
+.etr-main-view h2 {
+    margin: 0.5em 2em 0 2em;
+}
