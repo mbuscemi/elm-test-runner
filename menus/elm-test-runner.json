@@ -1,0 +1,26 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Toggle elm-test-runner",
+        "command": "elm-test-runner:toggle"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "Elm Test Runner",
+          "submenu": [
+            {
+              "label": "Toggle Dashboard",
+              "command": "elm-test-runner:toggle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
