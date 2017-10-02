@@ -2,6 +2,7 @@ port module Main exposing (main)
 
 import Html exposing (Html, div, h2, section, span, text)
 import Html.Attributes exposing (class)
+import State.RunStatus as RunStatus exposing (RunStatus)
 import Svg exposing (circle, svg)
 import Svg.Attributes exposing (cx, cy, fill, height, r, width)
 import TestEvent.RunComplete as RunComplete
@@ -19,13 +20,6 @@ type Message
     | RunComplete RunComplete.RawData
 
 
-type RunStatus
-    = NoData
-    | Processing
-    | LastPassed
-    | LastFailed
-
-
 main : Program Never Model Message
 main =
     Html.program
@@ -38,14 +32,14 @@ main =
 
 init : ( Model, Cmd Message )
 init =
-    { runStatus = NoData } ! []
+    { runStatus = RunStatus.noData } ! []
 
 
 update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
         RunStart data ->
-            { runStatus = Processing } ! []
+            { runStatus = RunStatus.processing } ! []
 
         TestCompleted data ->
             model ! []
@@ -56,10 +50,7 @@ update message model =
                     RunComplete.parse data
 
                 newStatus =
-                    if RunComplete.passed event then
-                        LastPassed
-                    else
-                        LastFailed
+                    RunStatus.passFail <| RunComplete.passed event
             in
             { runStatus = newStatus } ! []
 
@@ -84,42 +75,10 @@ redGreenDisplay runStatus =
     div [ class "status-bar" ]
         [ svg
             [ width "12", height "12" ]
-            [ circle [ cx "6", cy "6", r "6", fill <| runStatusColor runStatus ] [] ]
+            [ circle [ cx "6", cy "6", r "6", fill <| RunStatus.toColor runStatus ] [] ]
         , span []
-            [ text <| runStatusText runStatus ]
+            [ text <| RunStatus.toText runStatus ]
         ]
-
-
-runStatusText : RunStatus -> String
-runStatusText runStatus =
-    case runStatus of
-        NoData ->
-            "No Data"
-
-        Processing ->
-            "... Processing ..."
-
-        LastPassed ->
-            "Passed!"
-
-        LastFailed ->
-            "Failed"
-
-
-runStatusColor : RunStatus -> String
-runStatusColor runStatus =
-    case runStatus of
-        NoData ->
-            "grey"
-
-        Processing ->
-            "yellow"
-
-        LastPassed ->
-            "green"
-
-        LastFailed ->
-            "red"
 
 
 subscriptions : Model -> Sub Message

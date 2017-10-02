@@ -8486,6 +8486,42 @@ var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$a
 var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
 var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
 
+var _user$project$State_RunStatus$toColor = function (runStatus) {
+	var _p0 = runStatus;
+	switch (_p0.ctor) {
+		case 'NoData':
+			return 'grey';
+		case 'Processing':
+			return 'yellow';
+		case 'LastPassed':
+			return 'green';
+		default:
+			return 'red';
+	}
+};
+var _user$project$State_RunStatus$toText = function (runStatus) {
+	var _p1 = runStatus;
+	switch (_p1.ctor) {
+		case 'NoData':
+			return 'No Data';
+		case 'Processing':
+			return '... Processing ...';
+		case 'LastPassed':
+			return 'Passed!';
+		default:
+			return 'Failed';
+	}
+};
+var _user$project$State_RunStatus$LastFailed = {ctor: 'LastFailed'};
+var _user$project$State_RunStatus$LastPassed = {ctor: 'LastPassed'};
+var _user$project$State_RunStatus$passFail = function (didPass) {
+	return didPass ? _user$project$State_RunStatus$LastPassed : _user$project$State_RunStatus$LastFailed;
+};
+var _user$project$State_RunStatus$Processing = {ctor: 'Processing'};
+var _user$project$State_RunStatus$processing = _user$project$State_RunStatus$Processing;
+var _user$project$State_RunStatus$NoData = {ctor: 'NoData'};
+var _user$project$State_RunStatus$noData = _user$project$State_RunStatus$NoData;
+
 var _user$project$TestEvent_Util$parseInt = function (string) {
 	return A2(
 		_elm_lang$core$Result$withDefault,
@@ -8531,32 +8567,6 @@ var _user$project$TestEvent_TestCompleted$RawData = F4(
 		return {status: a, labels: b, failures: c, duration: d};
 	});
 
-var _user$project$Main$runStatusColor = function (runStatus) {
-	var _p0 = runStatus;
-	switch (_p0.ctor) {
-		case 'NoData':
-			return 'grey';
-		case 'Processing':
-			return 'yellow';
-		case 'LastPassed':
-			return 'green';
-		default:
-			return 'red';
-	}
-};
-var _user$project$Main$runStatusText = function (runStatus) {
-	var _p1 = runStatus;
-	switch (_p1.ctor) {
-		case 'NoData':
-			return 'No Data';
-		case 'Processing':
-			return '... Processing ...';
-		case 'LastPassed':
-			return 'Passed!';
-		default:
-			return 'Failed';
-	}
-};
 var _user$project$Main$redGreenDisplay = function (runStatus) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -8594,7 +8604,7 @@ var _user$project$Main$redGreenDisplay = function (runStatus) {
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$svg$Svg_Attributes$fill(
-											_user$project$Main$runStatusColor(runStatus)),
+											_user$project$State_RunStatus$toColor(runStatus)),
 										_1: {ctor: '[]'}
 									}
 								}
@@ -8611,7 +8621,7 @@ var _user$project$Main$redGreenDisplay = function (runStatus) {
 					{
 						ctor: '::',
 						_0: _elm_lang$html$Html$text(
-							_user$project$Main$runStatusText(runStatus)),
+							_user$project$State_RunStatus$toText(runStatus)),
 						_1: {ctor: '[]'}
 					}),
 				_1: {ctor: '[]'}
@@ -8691,6 +8701,34 @@ var _user$project$Main$view = function (model) {
 			}
 		});
 };
+var _user$project$Main$update = F2(
+	function (message, model) {
+		var _p0 = message;
+		switch (_p0.ctor) {
+			case 'RunStart':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					{runStatus: _user$project$State_RunStatus$processing},
+					{ctor: '[]'});
+			case 'TestCompleted':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'});
+			default:
+				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
+				var newStatus = _user$project$State_RunStatus$passFail(
+					_user$project$TestEvent_RunComplete$passed(event));
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					{runStatus: newStatus},
+					{ctor: '[]'});
+		}
+	});
+var _user$project$Main$init = A2(
+	_elm_lang$core$Platform_Cmd_ops['!'],
+	{runStatus: _user$project$State_RunStatus$noData},
+	{ctor: '[]'});
 var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(
 	'runStart',
 	A2(
@@ -8795,37 +8833,6 @@ var _user$project$Main$subscriptions = function (model) {
 			}
 		});
 };
-var _user$project$Main$LastFailed = {ctor: 'LastFailed'};
-var _user$project$Main$LastPassed = {ctor: 'LastPassed'};
-var _user$project$Main$Processing = {ctor: 'Processing'};
-var _user$project$Main$update = F2(
-	function (message, model) {
-		var _p2 = message;
-		switch (_p2.ctor) {
-			case 'RunStart':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					{runStatus: _user$project$Main$Processing},
-					{ctor: '[]'});
-			case 'TestCompleted':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{ctor: '[]'});
-			default:
-				var event = _user$project$TestEvent_RunComplete$parse(_p2._0);
-				var newStatus = _user$project$TestEvent_RunComplete$passed(event) ? _user$project$Main$LastPassed : _user$project$Main$LastFailed;
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					{runStatus: newStatus},
-					{ctor: '[]'});
-		}
-	});
-var _user$project$Main$NoData = {ctor: 'NoData'};
-var _user$project$Main$init = A2(
-	_elm_lang$core$Platform_Cmd_ops['!'],
-	{runStatus: _user$project$Main$NoData},
-	{ctor: '[]'});
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
 
