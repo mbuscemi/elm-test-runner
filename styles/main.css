@@ -10,6 +10,15 @@
     margin: 0.5em 2em 0 2em;
 }
 
-.button-toolbar {
-    margin: 0.5em 0;
+.etr-main-view .button-toolbar {
+    margin: 1em 0 0.5em 0;
+}
+
+.etr-main-view .status-bar svg {
+    vertical-align: middle;
+}
+
+.etr-main-view .status-bar span {
+    margin-left: 8px;
+    vertical-align: middle;
 }
