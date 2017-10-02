@@ -2,6 +2,9 @@ port module Main exposing (main)
 
 import Html exposing (Html, div, h2, section, text)
 import Html.Attributes exposing (class)
+import TestEvent.RunComplete as RunComplete
+import TestEvent.RunStart as RunStart
+import TestEvent.TestCompleted as TestCompleted
 
 
 type alias Model =
@@ -9,32 +12,9 @@ type alias Model =
 
 
 type Message
-    = RunStart RunStartRawData
-    | TestCompleted TestCompletedRawData
-    | RunComplete RunCompleteRawData
-
-
-type alias RunStartRawData =
-    { testCount : String
-    , fuzzRuns : String
-    , paths : List String
-    , initialSeed : String
-    }
-
-
-type alias TestCompletedRawData =
-    { status : String
-    , labels : List String
-    , failures : List String
-    , duration : String
-    }
-
-
-type alias RunCompleteRawData =
-    { passed : String
-    , failed : String
-    , duration : String
-    }
+    = RunStart RunStart.RawData
+    | TestCompleted TestCompleted.RawData
+    | RunComplete RunComplete.RawData
 
 
 main : Program Never Model Message
@@ -84,10 +64,10 @@ view model =
         ]
 
 
-port runStart : (RunStartRawData -> message) -> Sub message
+port runStart : (RunStart.RawData -> message) -> Sub message
 
 
-port testCompleted : (TestCompletedRawData -> message) -> Sub message
+port testCompleted : (TestCompleted.RawData -> message) -> Sub message
 
 
-port runComplete : (RunCompleteRawData -> message) -> Sub message
+port runComplete : (RunComplete.RawData -> message) -> Sub message

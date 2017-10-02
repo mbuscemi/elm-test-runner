@@ -8145,6 +8145,25 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _user$project$TestEvent_RunComplete$RawData = F3(
+	function (a, b, c) {
+		return {passed: a, failed: b, duration: c};
+	});
+
+var _user$project$TestEvent_RunStart$RawData = F4(
+	function (a, b, c, d) {
+		return {testCount: a, fuzzRuns: b, paths: c, initialSeed: d};
+	});
+var _user$project$TestEvent_RunStart$ParsedData = F4(
+	function (a, b, c, d) {
+		return {testCount: a, fuzzRuns: b, paths: c, initialSeed: d};
+	});
+
+var _user$project$TestEvent_TestCompleted$RawData = F4(
+	function (a, b, c, d) {
+		return {status: a, labels: b, failures: c, duration: d};
+	});
+
 var _user$project$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -8219,10 +8238,24 @@ var _user$project$Main$subscriptions = function (model) {
 };
 var _user$project$Main$update = F2(
 	function (message, model) {
-		return A2(
-			_elm_lang$core$Platform_Cmd_ops['!'],
-			model,
-			{ctor: '[]'});
+		var _p0 = message;
+		switch (_p0.ctor) {
+			case 'RunStart':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'});
+			case 'TestCompleted':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'});
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'});
+		}
 	});
 var _user$project$Main$init = A2(
 	_elm_lang$core$Platform_Cmd_ops['!'],
@@ -8307,19 +8340,15 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
 var _user$project$Main$Model = {};
-var _user$project$Main$RunStartRawData = F4(
-	function (a, b, c, d) {
-		return {testCount: a, fuzzRuns: b, paths: c, initialSeed: d};
-	});
-var _user$project$Main$TestCompletedRawData = F4(
-	function (a, b, c, d) {
-		return {status: a, labels: b, failures: c, duration: d};
-	});
-var _user$project$Main$RunCompleteRawData = F3(
-	function (a, b, c) {
-		return {passed: a, failed: b, duration: c};
-	});
-var _user$project$Main$None = {ctor: 'None'};
+var _user$project$Main$RunComplete = function (a) {
+	return {ctor: 'RunComplete', _0: a};
+};
+var _user$project$Main$TestCompleted = function (a) {
+	return {ctor: 'TestCompleted', _0: a};
+};
+var _user$project$Main$RunStart = function (a) {
+	return {ctor: 'RunStart', _0: a};
+};
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
