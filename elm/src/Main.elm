@@ -2,16 +2,13 @@ port module Main exposing (main)
 
 import Html exposing (Html, div, h2, section, span, text)
 import Html.Attributes exposing (class)
+import Model.Model as Model exposing (Model, setRunStatusToPassFail, setRunStatusToProcessing)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import Svg exposing (circle, svg)
 import Svg.Attributes exposing (cx, cy, fill, height, r, width)
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
-
-
-type alias Model =
-    { runStatus : RunStatus }
 
 
 type Message
@@ -32,14 +29,14 @@ main =
 
 init : ( Model, Cmd Message )
 init =
-    { runStatus = RunStatus.noData } ! []
+    Model.default ! []
 
 
 update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
         RunStart data ->
-            { runStatus = RunStatus.processing } ! []
+            setRunStatusToProcessing model ! []
 
         TestCompleted data ->
             model ! []
@@ -48,11 +45,8 @@ update message model =
             let
                 event =
                     RunComplete.parse data
-
-                newStatus =
-                    RunStatus.passFail <| RunComplete.passed event
             in
-            { runStatus = newStatus } ! []
+            setRunStatusToPassFail event model ! []
 
 
 view : Model -> Html Message

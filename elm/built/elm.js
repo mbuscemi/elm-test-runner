@@ -8553,6 +8553,25 @@ var _user$project$TestEvent_RunComplete$parse = function (rawData) {
 		});
 };
 
+var _user$project$Model_Model$setRunStatusToPassFail = F2(
+	function (event, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				runStatus: _user$project$State_RunStatus$passFail(
+					_user$project$TestEvent_RunComplete$passed(event))
+			});
+	});
+var _user$project$Model_Model$setRunStatusToProcessing = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{runStatus: _user$project$State_RunStatus$processing});
+};
+var _user$project$Model_Model$default = {runStatus: _user$project$State_RunStatus$noData};
+var _user$project$Model_Model$Model = function (a) {
+	return {runStatus: a};
+};
+
 var _user$project$TestEvent_RunStart$RawData = F4(
 	function (a, b, c, d) {
 		return {testCount: a, fuzzRuns: b, paths: c, initialSeed: d};
@@ -8708,7 +8727,7 @@ var _user$project$Main$update = F2(
 			case 'RunStart':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
-					{runStatus: _user$project$State_RunStatus$processing},
+					_user$project$Model_Model$setRunStatusToProcessing(model),
 					{ctor: '[]'});
 			case 'TestCompleted':
 				return A2(
@@ -8717,17 +8736,15 @@ var _user$project$Main$update = F2(
 					{ctor: '[]'});
 			default:
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
-				var newStatus = _user$project$State_RunStatus$passFail(
-					_user$project$TestEvent_RunComplete$passed(event));
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
-					{runStatus: newStatus},
+					A2(_user$project$Model_Model$setRunStatusToPassFail, event, model),
 					{ctor: '[]'});
 		}
 	});
 var _user$project$Main$init = A2(
 	_elm_lang$core$Platform_Cmd_ops['!'],
-	{runStatus: _user$project$State_RunStatus$noData},
+	_user$project$Model_Model$default,
 	{ctor: '[]'});
 var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(
 	'runStart',
@@ -8805,9 +8822,6 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 				A2(_elm_lang$core$Json_Decode$field, 'failed', _elm_lang$core$Json_Decode$string));
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
-var _user$project$Main$Model = function (a) {
-	return {runStatus: a};
-};
 var _user$project$Main$RunComplete = function (a) {
 	return {ctor: 'RunComplete', _0: a};
 };
