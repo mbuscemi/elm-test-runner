@@ -7,10 +7,14 @@ import View.RedGreenDisplay
 import View.Toolbar
 
 
-render : RunStatus -> Html message
-render runStatus =
+type alias Messages message =
+    { runAllButtonClickHandler : message }
+
+
+render : RunStatus -> Messages message -> Html message
+render runStatus messages =
     div [ class "etr-main-view" ]
         [ h2 [] [ text "Elm Test Runner" ]
-        , View.Toolbar.render
+        , View.Toolbar.render messages.runAllButtonClickHandler
         , View.RedGreenDisplay.render runStatus
         ]

@@ -49,7 +49,7 @@ toColor runStatus =
             "grey"
 
         Processing ->
-            "yellow"
+            "lightBlue"
 
         LastPassed ->
             "green"

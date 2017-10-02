@@ -9,7 +9,8 @@ import View.Main
 
 
 type Message
-    = RunStart RunStart.RawData
+    = RunAllButtonClicked
+    | RunStart RunStart.RawData
     | TestCompleted TestCompleted.RawData
     | RunComplete RunComplete.RawData
 
@@ -32,6 +33,9 @@ init =
 update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
+        RunAllButtonClicked ->
+            setRunStatusToProcessing model ! [ runTest () ]
+
         RunStart data ->
             setRunStatusToProcessing model ! []
 
@@ -48,7 +52,9 @@ update message model =
 
 view : Model -> Html Message
 view model =
-    View.Main.render model.runStatus
+    View.Main.render
+        model.runStatus
+        { runAllButtonClickHandler = RunAllButtonClicked }
 
 
 subscriptions : Model -> Sub Message
@@ -58,6 +64,9 @@ subscriptions model =
         , testCompleted TestCompleted
         , runComplete RunComplete
         ]
+
+
+port runTest : () -> Cmd message
 
 
 port runStart : (RunStart.RawData -> message) -> Sub message
