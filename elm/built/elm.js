@@ -8214,6 +8214,9 @@ var _user$project$Main$view = function (model) {
 			}
 		});
 };
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
 var _user$project$Main$update = F2(
 	function (message, model) {
 		return A2(
@@ -8226,13 +8229,96 @@ var _user$project$Main$init = A2(
 	{},
 	{ctor: '[]'});
 var _user$project$Main$main = _elm_lang$html$Html$program(
-	{
-		init: _user$project$Main$init,
-		view: _user$project$Main$view,
-		update: _user$project$Main$update,
-		subscriptions: _elm_lang$core$Basics$always(_elm_lang$core$Platform_Sub$none)
-	})();
+	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
+var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(
+	'runStart',
+	A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (testCount) {
+			return A2(
+				_elm_lang$core$Json_Decode$andThen,
+				function (fuzzRuns) {
+					return A2(
+						_elm_lang$core$Json_Decode$andThen,
+						function (paths) {
+							return A2(
+								_elm_lang$core$Json_Decode$andThen,
+								function (initialSeed) {
+									return _elm_lang$core$Json_Decode$succeed(
+										{testCount: testCount, fuzzRuns: fuzzRuns, paths: paths, initialSeed: initialSeed});
+								},
+								A2(_elm_lang$core$Json_Decode$field, 'initialSeed', _elm_lang$core$Json_Decode$string));
+						},
+						A2(
+							_elm_lang$core$Json_Decode$field,
+							'paths',
+							_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)));
+				},
+				A2(_elm_lang$core$Json_Decode$field, 'fuzzRuns', _elm_lang$core$Json_Decode$string));
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'testCount', _elm_lang$core$Json_Decode$string)));
+var _user$project$Main$testCompleted = _elm_lang$core$Native_Platform.incomingPort(
+	'testCompleted',
+	A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (status) {
+			return A2(
+				_elm_lang$core$Json_Decode$andThen,
+				function (labels) {
+					return A2(
+						_elm_lang$core$Json_Decode$andThen,
+						function (failures) {
+							return A2(
+								_elm_lang$core$Json_Decode$andThen,
+								function (duration) {
+									return _elm_lang$core$Json_Decode$succeed(
+										{status: status, labels: labels, failures: failures, duration: duration});
+								},
+								A2(_elm_lang$core$Json_Decode$field, 'duration', _elm_lang$core$Json_Decode$string));
+						},
+						A2(
+							_elm_lang$core$Json_Decode$field,
+							'failures',
+							_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)));
+				},
+				A2(
+					_elm_lang$core$Json_Decode$field,
+					'labels',
+					_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)));
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'status', _elm_lang$core$Json_Decode$string)));
+var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort(
+	'runComplete',
+	A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (passed) {
+			return A2(
+				_elm_lang$core$Json_Decode$andThen,
+				function (failed) {
+					return A2(
+						_elm_lang$core$Json_Decode$andThen,
+						function (duration) {
+							return _elm_lang$core$Json_Decode$succeed(
+								{passed: passed, failed: failed, duration: duration});
+						},
+						A2(_elm_lang$core$Json_Decode$field, 'duration', _elm_lang$core$Json_Decode$string));
+				},
+				A2(_elm_lang$core$Json_Decode$field, 'failed', _elm_lang$core$Json_Decode$string));
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
 var _user$project$Main$Model = {};
+var _user$project$Main$RunStartRawData = F4(
+	function (a, b, c, d) {
+		return {testCount: a, fuzzRuns: b, paths: c, initialSeed: d};
+	});
+var _user$project$Main$TestCompletedRawData = F4(
+	function (a, b, c, d) {
+		return {status: a, labels: b, failures: c, duration: d};
+	});
+var _user$project$Main$RunCompleteRawData = F3(
+	function (a, b, c) {
+		return {passed: a, failed: b, duration: c};
+	});
 var _user$project$Main$None = {ctor: 'None'};
 
 var Elm = {};

@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Html exposing (Html, div, h2, section, text)
 import Html.Attributes exposing (class)
@@ -9,7 +9,32 @@ type alias Model =
 
 
 type Message
-    = None
+    = RunStart RunStartRawData
+    | TestCompleted TestCompletedRawData
+    | RunComplete RunCompleteRawData
+
+
+type alias RunStartRawData =
+    { testCount : String
+    , fuzzRuns : String
+    , paths : List String
+    , initialSeed : String
+    }
+
+
+type alias TestCompletedRawData =
+    { status : String
+    , labels : List String
+    , failures : List String
+    , duration : String
+    }
+
+
+type alias RunCompleteRawData =
+    { passed : String
+    , failed : String
+    , duration : String
+    }
 
 
 main : Program Never Model Message
@@ -18,7 +43,7 @@ main =
         { init = init
         , view = view
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions
         }
 
 
@@ -29,7 +54,20 @@ init =
 
 update : Message -> Model -> ( Model, Cmd Message )
 update message model =
-    model ! []
+    case message of
+        RunStart data ->
+            model ! []
+
+        TestCompleted data ->
+            model ! []
+
+        RunComplete data ->
+            model ! []
+
+
+subscriptions : Model -> Sub Message
+subscriptions model =
+    Sub.none
 
 
 view : Model -> Html Message
@@ -44,3 +82,12 @@ view model =
                 ]
             ]
         ]
+
+
+port runStart : (RunStartRawData -> message) -> Sub message
+
+
+port testCompleted : (TestCompletedRawData -> message) -> Sub message
+
+
+port runComplete : (RunCompleteRawData -> message) -> Sub message
