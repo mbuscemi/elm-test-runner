@@ -1,7 +1,7 @@
 port module Main exposing (main)
 
 import Html exposing (Html)
-import Model.Model as Model exposing (Model, resetPassedTests, setRunStatusToPassFail, setRunStatusToProcessing, setTotalTestCount)
+import Model.Model as Model exposing (Model, resetPassedTests, setRunStatusToPassFail, setRunStatusToProcessing, setTotalTestCount, updatePassedTestCount)
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
@@ -58,7 +58,11 @@ update message model =
                 |> andNoCommand
 
         TestCompleted data ->
-            model
+            let
+                event =
+                    TestCompleted.parse data
+            in
+            updatePassedTestCount event model
                 |> andNoCommand
 
         RunComplete data ->

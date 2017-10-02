@@ -8693,6 +8693,49 @@ var _user$project$TestEvent_RunStart$parse = function (rawData) {
 		});
 };
 
+var _user$project$TestEvent_TestCompleted$passed = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1._0.status;
+	if (_p2.ctor === 'Pass') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
+	return _user$project$TestEvent_TestCompleted$passed(event) ? 1 : 0;
+};
+var _user$project$TestEvent_TestCompleted$RawData = F4(
+	function (a, b, c, d) {
+		return {status: a, labels: b, failures: c, duration: d};
+	});
+var _user$project$TestEvent_TestCompleted$Parsed = F4(
+	function (a, b, c, d) {
+		return {status: a, labels: b, failures: c, duration: d};
+	});
+var _user$project$TestEvent_TestCompleted$TestCompleted = function (a) {
+	return {ctor: 'TestCompleted', _0: a};
+};
+var _user$project$TestEvent_TestCompleted$Fail = {ctor: 'Fail'};
+var _user$project$TestEvent_TestCompleted$Pass = {ctor: 'Pass'};
+var _user$project$TestEvent_TestCompleted$parse = function (rawData) {
+	return _user$project$TestEvent_TestCompleted$TestCompleted(
+		{
+			status: _elm_lang$core$Native_Utils.eq(rawData.status, 'pass') ? _user$project$TestEvent_TestCompleted$Pass : _user$project$TestEvent_TestCompleted$Fail,
+			labels: rawData.labels,
+			failures: rawData.failures,
+			duration: _user$project$TestEvent_Util$parseInt(rawData.duration)
+		});
+};
+
+var _user$project$Model_Model$updatePassedTestCount = F2(
+	function (event, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				passedTests: model.passedTests + _user$project$TestEvent_TestCompleted$passedTestCountToIncrement(event)
+			});
+	});
 var _user$project$Model_Model$setTotalTestCount = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -8724,11 +8767,6 @@ var _user$project$Model_Model$default = {runStatus: _user$project$State_RunStatu
 var _user$project$Model_Model$Model = F3(
 	function (a, b, c) {
 		return {runStatus: a, totalTests: b, passedTests: c};
-	});
-
-var _user$project$TestEvent_TestCompleted$RawData = F4(
-	function (a, b, c, d) {
-		return {status: a, labels: b, failures: c, duration: d};
 	});
 
 var _user$project$View_PassingTestsDisplay$render = F2(
@@ -8984,7 +9022,9 @@ var _user$project$Main$update = F2(
 						event,
 						_user$project$Model_Model$setRunStatusToProcessing(model)));
 			case 'TestCompleted':
-				return _user$project$Main$andNoCommand(model);
+				var event = _user$project$TestEvent_TestCompleted$parse(_p0._0);
+				return _user$project$Main$andNoCommand(
+					A2(_user$project$Model_Model$updatePassedTestCount, event, model));
 			default:
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
