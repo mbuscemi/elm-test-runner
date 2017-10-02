@@ -8586,7 +8586,7 @@ var _user$project$TestEvent_TestCompleted$RawData = F4(
 		return {status: a, labels: b, failures: c, duration: d};
 	});
 
-var _user$project$Main$redGreenDisplay = function (runStatus) {
+var _user$project$View_RedGreenDisplay$render = function (runStatus) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -8647,7 +8647,54 @@ var _user$project$Main$redGreenDisplay = function (runStatus) {
 			}
 		});
 };
-var _user$project$Main$view = function (model) {
+
+var _user$project$View_Toolbar$render = A2(
+	_elm_lang$html$Html$section,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('input-block'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('button-toolbar'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('button-group'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('btn icon icon-sync'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Run All'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}),
+		_1: {ctor: '[]'}
+	});
+
+var _user$project$View_Main$render = function (runStatus) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -8667,58 +8714,18 @@ var _user$project$Main$view = function (model) {
 				}),
 			_1: {
 				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$section,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('input-block'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('button-toolbar'),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$div,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('button-group'),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$div,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('btn icon icon-sync'),
-												_1: {ctor: '[]'}
-											},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Run All'),
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}),
+				_0: _user$project$View_Toolbar$render,
 				_1: {
 					ctor: '::',
-					_0: _user$project$Main$redGreenDisplay(model.runStatus),
+					_0: _user$project$View_RedGreenDisplay$render(runStatus),
 					_1: {ctor: '[]'}
 				}
 			}
 		});
+};
+
+var _user$project$Main$view = function (model) {
+	return _user$project$View_Main$render(model.runStatus);
 };
 var _user$project$Main$update = F2(
 	function (message, model) {
