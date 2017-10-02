@@ -1,7 +1,7 @@
 port module Main exposing (main)
 
 import Html exposing (Html)
-import Model.Model as Model exposing (Model, setRunStatusToPassFail, setRunStatusToProcessing)
+import Model.Model as Model exposing (Model, resetPassedTests, setRunStatusToPassFail, setRunStatusToProcessing, setTotalTestCount)
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
@@ -30,24 +30,44 @@ init =
     Model.default ! []
 
 
+andNoCommand : Model -> ( Model, Cmd Message )
+andNoCommand model =
+    ( model, Cmd.none )
+
+
+andPerform : Cmd Message -> Model -> ( Model, Cmd Message )
+andPerform command model =
+    ( model, command )
+
+
 update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
         RunAllButtonClicked ->
-            setRunStatusToProcessing model ! [ runTest () ]
+            setRunStatusToProcessing model
+                |> resetPassedTests
+                |> andPerform (runTest ())
 
         RunStart data ->
-            setRunStatusToProcessing model ! []
+            let
+                event =
+                    RunStart.parse data
+            in
+            setRunStatusToProcessing model
+                |> setTotalTestCount event
+                |> andNoCommand
 
         TestCompleted data ->
-            model ! []
+            model
+                |> andNoCommand
 
         RunComplete data ->
             let
                 event =
                     RunComplete.parse data
             in
-            setRunStatusToPassFail event model ! []
+            setRunStatusToPassFail event model
+                |> andNoCommand
 
 
 view : Model -> Html Message

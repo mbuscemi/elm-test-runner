@@ -8668,6 +8668,44 @@ var _user$project$TestEvent_RunComplete$parse = function (rawData) {
 		});
 };
 
+var _user$project$TestEvent_RunStart$numTotalTests = function (_p0) {
+	var _p1 = _p0;
+	return _p1._0.testCount;
+};
+var _user$project$TestEvent_RunStart$RawData = F4(
+	function (a, b, c, d) {
+		return {testCount: a, fuzzRuns: b, paths: c, initialSeed: d};
+	});
+var _user$project$TestEvent_RunStart$Parsed = F4(
+	function (a, b, c, d) {
+		return {testCount: a, fuzzRuns: b, paths: c, initialSeed: d};
+	});
+var _user$project$TestEvent_RunStart$RunStart = function (a) {
+	return {ctor: 'RunStart', _0: a};
+};
+var _user$project$TestEvent_RunStart$parse = function (rawData) {
+	return _user$project$TestEvent_RunStart$RunStart(
+		{
+			testCount: _user$project$TestEvent_Util$parseInt(rawData.testCount),
+			fuzzRuns: _user$project$TestEvent_Util$parseInt(rawData.fuzzRuns),
+			paths: rawData.paths,
+			initialSeed: _user$project$TestEvent_Util$parseInt(rawData.initialSeed)
+		});
+};
+
+var _user$project$Model_Model$setTotalTestCount = F2(
+	function (event, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				totalTests: _user$project$TestEvent_RunStart$numTotalTests(event)
+			});
+	});
+var _user$project$Model_Model$resetPassedTests = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{passedTests: 0});
+};
 var _user$project$Model_Model$setRunStatusToPassFail = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -8686,15 +8724,6 @@ var _user$project$Model_Model$default = {runStatus: _user$project$State_RunStatu
 var _user$project$Model_Model$Model = F3(
 	function (a, b, c) {
 		return {runStatus: a, totalTests: b, passedTests: c};
-	});
-
-var _user$project$TestEvent_RunStart$RawData = F4(
-	function (a, b, c, d) {
-		return {testCount: a, fuzzRuns: b, paths: c, initialSeed: d};
-	});
-var _user$project$TestEvent_RunStart$ParsedData = F4(
-	function (a, b, c, d) {
-		return {testCount: a, fuzzRuns: b, paths: c, initialSeed: d};
 	});
 
 var _user$project$TestEvent_TestCompleted$RawData = F4(
@@ -8758,7 +8787,7 @@ var _user$project$View_PassingTestsDisplay$render = F2(
 								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('passed'),
+									_0: _elm_lang$html$Html$text(' passed'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
@@ -8920,6 +8949,13 @@ var _user$project$View_Main$Messages = function (a) {
 	return {runAllButtonClickHandler: a};
 };
 
+var _user$project$Main$andPerform = F2(
+	function (command, model) {
+		return {ctor: '_Tuple2', _0: model, _1: command};
+	});
+var _user$project$Main$andNoCommand = function (model) {
+	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+};
 var _user$project$Main$init = A2(
 	_elm_lang$core$Platform_Cmd_ops['!'],
 	_user$project$Model_Model$default,
@@ -8935,30 +8971,24 @@ var _user$project$Main$update = F2(
 		switch (_p0.ctor) {
 			case 'RunAllButtonClicked':
 				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_user$project$Model_Model$setRunStatusToProcessing(model),
-					{
-						ctor: '::',
-						_0: _user$project$Main$runTest(
-							{ctor: '_Tuple0'}),
-						_1: {ctor: '[]'}
-					});
+					_user$project$Main$andPerform,
+					_user$project$Main$runTest(
+						{ctor: '_Tuple0'}),
+					_user$project$Model_Model$resetPassedTests(
+						_user$project$Model_Model$setRunStatusToProcessing(model)));
 			case 'RunStart':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_user$project$Model_Model$setRunStatusToProcessing(model),
-					{ctor: '[]'});
+				var event = _user$project$TestEvent_RunStart$parse(_p0._0);
+				return _user$project$Main$andNoCommand(
+					A2(
+						_user$project$Model_Model$setTotalTestCount,
+						event,
+						_user$project$Model_Model$setRunStatusToProcessing(model)));
 			case 'TestCompleted':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{ctor: '[]'});
+				return _user$project$Main$andNoCommand(model);
 			default:
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					A2(_user$project$Model_Model$setRunStatusToPassFail, event, model),
-					{ctor: '[]'});
+				return _user$project$Main$andNoCommand(
+					A2(_user$project$Model_Model$setRunStatusToPassFail, event, model));
 		}
 	});
 var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(

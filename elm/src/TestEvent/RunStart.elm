@@ -1,4 +1,10 @@
-module TestEvent.RunStart exposing (RawData)
+module TestEvent.RunStart exposing (RawData, RunStart, numTotalTests, parse)
+
+import TestEvent.Util
+
+
+type RunStart
+    = RunStart Parsed
 
 
 type alias RawData =
@@ -9,7 +15,7 @@ type alias RawData =
     }
 
 
-type alias ParsedData =
+type alias Parsed =
     { testCount : Int
     , fuzzRuns : Int
     , paths : List String
@@ -17,7 +23,16 @@ type alias ParsedData =
     }
 
 
+parse : RawData -> RunStart
+parse rawData =
+    RunStart
+        { testCount = TestEvent.Util.parseInt rawData.testCount
+        , fuzzRuns = TestEvent.Util.parseInt rawData.fuzzRuns
+        , paths = rawData.paths
+        , initialSeed = TestEvent.Util.parseInt rawData.initialSeed
+        }
 
--- parse : RawData -> ParsedData
--- parse =
---     {}
+
+numTotalTests : RunStart -> Int
+numTotalTests (RunStart parsed) =
+    parsed.testCount
