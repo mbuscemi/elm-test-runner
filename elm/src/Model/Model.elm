@@ -5,12 +5,18 @@ import TestEvent.RunComplete as RunComplete exposing (RunComplete)
 
 
 type alias Model =
-    { runStatus : RunStatus }
+    { runStatus : RunStatus
+    , totalTests : Int
+    , passedTests : Int
+    }
 
 
 default : Model
 default =
-    { runStatus = RunStatus.noData }
+    { runStatus = RunStatus.noData
+    , totalTests = 0
+    , passedTests = 0
+    }
 
 
 setRunStatusToProcessing : Model -> Model

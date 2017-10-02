@@ -54,6 +54,8 @@ view : Model -> Html Message
 view model =
     View.Main.render
         model.runStatus
+        model.totalTests
+        model.passedTests
         { runAllButtonClickHandler = RunAllButtonClicked }
 
 

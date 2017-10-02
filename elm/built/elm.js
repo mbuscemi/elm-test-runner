@@ -8682,10 +8682,11 @@ var _user$project$Model_Model$setRunStatusToProcessing = function (model) {
 		model,
 		{runStatus: _user$project$State_RunStatus$processing});
 };
-var _user$project$Model_Model$default = {runStatus: _user$project$State_RunStatus$noData};
-var _user$project$Model_Model$Model = function (a) {
-	return {runStatus: a};
-};
+var _user$project$Model_Model$default = {runStatus: _user$project$State_RunStatus$noData, totalTests: 0, passedTests: 0};
+var _user$project$Model_Model$Model = F3(
+	function (a, b, c) {
+		return {runStatus: a, totalTests: b, passedTests: c};
+	});
 
 var _user$project$TestEvent_RunStart$RawData = F4(
 	function (a, b, c, d) {
@@ -8699,6 +8700,72 @@ var _user$project$TestEvent_RunStart$ParsedData = F4(
 var _user$project$TestEvent_TestCompleted$RawData = F4(
 	function (a, b, c, d) {
 		return {status: a, labels: b, failures: c, duration: d};
+	});
+
+var _user$project$View_PassingTestsDisplay$render = F2(
+	function (totalTests, passingTests) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('passing-tests'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$span,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('number-field'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							_elm_lang$core$Basics$toString(passingTests)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$span,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(' / '),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$span,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('number-field'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(totalTests)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$span,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('passed'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
 	});
 
 var _user$project$View_RedGreenDisplay$render = function (runStatus) {
@@ -8815,8 +8882,8 @@ var _user$project$View_Toolbar$render = function (runAllButtonClickHandler) {
 		});
 };
 
-var _user$project$View_Main$render = F2(
-	function (runStatus, messages) {
+var _user$project$View_Main$render = F4(
+	function (runStatus, totalTests, passedTests, messages) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -8840,7 +8907,11 @@ var _user$project$View_Main$render = F2(
 					_1: {
 						ctor: '::',
 						_0: _user$project$View_RedGreenDisplay$render(runStatus),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(_user$project$View_PassingTestsDisplay$render, totalTests, passedTests),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			});
@@ -8993,9 +9064,11 @@ var _user$project$Main$subscriptions = function (model) {
 };
 var _user$project$Main$RunAllButtonClicked = {ctor: 'RunAllButtonClicked'};
 var _user$project$Main$view = function (model) {
-	return A2(
+	return A4(
 		_user$project$View_Main$render,
 		model.runStatus,
+		model.totalTests,
+		model.passedTests,
 		{runAllButtonClickHandler: _user$project$Main$RunAllButtonClicked});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
