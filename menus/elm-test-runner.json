@@ -17,6 +17,10 @@
             {
               "label": "Toggle Dashboard",
               "command": "elm-test-runner:toggle"
+            },
+            {
+              "label": "Run All Tests",
+              "command": "elm-test-runner:run-test"
             }
           ]
         }

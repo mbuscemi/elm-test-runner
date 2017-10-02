@@ -6,7 +6,10 @@
   "keywords": [
   ],
   "activationCommands": {
-    "atom-workspace": "elm-test-runner:toggle"
+    "atom-workspace": [
+        "elm-test-runner:toggle",
+        "elm-test-runner:run-test"
+    ]
   },
   "repository": "https://github.com/atom/elm-test-runner",
   "license": "MIT",

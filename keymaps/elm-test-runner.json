@@ -1,5 +1,6 @@
 {
   "atom-workspace": {
-    "ctrl-alt-t": "elm-test-runner:toggle"
+    "cmd-alt-t": "elm-test-runner:toggle",
+    "cmd-t": "elm-test-runner:run-test"
   }
 }
