@@ -13,7 +13,7 @@ type Message
     | RunAllButtonClicked
     | InitiateRunAll
     | RunStart RunStart.RawData
-    | TestCompleted TestCompleted.RawData
+    | TestCompleted String
     | RunComplete RunComplete.RawData
 
 
@@ -117,7 +117,7 @@ port commandKeyTestStart : (() -> message) -> Sub message
 port runStart : (RunStart.RawData -> message) -> Sub message
 
 
-port testCompleted : (TestCompleted.RawData -> message) -> Sub message
+port testCompleted : (String -> message) -> Sub message
 
 
 port runComplete : (RunComplete.RawData -> message) -> Sub message
