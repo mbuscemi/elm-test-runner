@@ -8620,9 +8620,9 @@ var _user$project$State_RunStatus$toText = function (runStatus) {
 		case 'NoData':
 			return 'No Data';
 		case 'Processing':
-			return '... Processing ...';
+			return '... Running ...';
 		case 'LastPassed':
-			return 'Passed!';
+			return 'Passed';
 		default:
 			return 'Failed';
 	}
@@ -8897,57 +8897,84 @@ var _user$project$View_RedGreenDisplay$render = function (runStatus) {
 		});
 };
 
-var _user$project$View_Toolbar$render = function (runAllButtonClickHandler) {
-	return A2(
-		_elm_lang$html$Html$section,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('input-block'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('button-toolbar'),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('button-group'),
-							_1: {ctor: '[]'}
-						},
-						{
+var _user$project$View_Toolbar$render = F2(
+	function (toggleClickHandler, runAllButtonClickHandler) {
+		return A2(
+			_elm_lang$html$Html$section,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('input-block'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('btn-toolbar'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('btn-group'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('btn icon icon-chevron-right'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(toggleClickHandler),
+											_1: {ctor: '[]'}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
 							ctor: '::',
 							_0: A2(
 								_elm_lang$html$Html$div,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('btn icon icon-sync'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(runAllButtonClickHandler),
-										_1: {ctor: '[]'}
-									}
+									_0: _elm_lang$html$Html_Attributes$class('btn-group right'),
+									_1: {ctor: '[]'}
 								},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Run All'),
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('btn icon icon-sync'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(runAllButtonClickHandler),
+												_1: {ctor: '[]'}
+											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Run All'),
+											_1: {ctor: '[]'}
+										}),
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		});
-};
+						}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
 
 var _user$project$View_Main$render = F4(
 	function (runStatus, totalTests, passedTests, messages) {
@@ -8960,32 +8987,22 @@ var _user$project$View_Main$render = F4(
 			},
 			{
 				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$h2,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Elm Test Runner'),
-						_1: {ctor: '[]'}
-					}),
+				_0: A2(_user$project$View_Toolbar$render, messages.toggleClickHandler, messages.runAllButtonClickHandler),
 				_1: {
 					ctor: '::',
-					_0: _user$project$View_Toolbar$render(messages.runAllButtonClickHandler),
+					_0: _user$project$View_RedGreenDisplay$render(runStatus),
 					_1: {
 						ctor: '::',
-						_0: _user$project$View_RedGreenDisplay$render(runStatus),
-						_1: {
-							ctor: '::',
-							_0: A2(_user$project$View_PassingTestsDisplay$render, totalTests, passedTests),
-							_1: {ctor: '[]'}
-						}
+						_0: A2(_user$project$View_PassingTestsDisplay$render, totalTests, passedTests),
+						_1: {ctor: '[]'}
 					}
 				}
 			});
 	});
-var _user$project$View_Main$Messages = function (a) {
-	return {runAllButtonClickHandler: a};
-};
+var _user$project$View_Main$Messages = F2(
+	function (a, b) {
+		return {toggleClickHandler: a, runAllButtonClickHandler: b};
+	});
 
 var _user$project$Main$andPerform = F2(
 	function (command, model) {
@@ -8998,6 +9015,11 @@ var _user$project$Main$init = A2(
 	_elm_lang$core$Platform_Cmd_ops['!'],
 	_user$project$Model_Model$default,
 	{ctor: '[]'});
+var _user$project$Main$toggle = _elm_lang$core$Native_Platform.outgoingPort(
+	'toggle',
+	function (v) {
+		return null;
+	});
 var _user$project$Main$runTest = _elm_lang$core$Native_Platform.outgoingPort(
 	'runTest',
 	function (v) {
@@ -9007,6 +9029,12 @@ var _user$project$Main$update = F2(
 	function (message, model) {
 		var _p0 = message;
 		switch (_p0.ctor) {
+			case 'ToggleButtonClicked':
+				return A2(
+					_user$project$Main$andPerform,
+					_user$project$Main$toggle(
+						{ctor: '_Tuple0'}),
+					model);
 			case 'RunAllButtonClicked':
 				return A2(
 					_user$project$Main$andPerform,
@@ -9133,13 +9161,14 @@ var _user$project$Main$subscriptions = function (model) {
 		});
 };
 var _user$project$Main$RunAllButtonClicked = {ctor: 'RunAllButtonClicked'};
+var _user$project$Main$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
 var _user$project$Main$view = function (model) {
 	return A4(
 		_user$project$View_Main$render,
 		model.runStatus,
 		model.totalTests,
 		model.passedTests,
-		{runAllButtonClickHandler: _user$project$Main$RunAllButtonClicked});
+		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$RunAllButtonClicked});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();

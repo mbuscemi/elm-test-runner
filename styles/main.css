@@ -1,17 +1,23 @@
 
 .etr-main-view {
+  min-width: 300px;
   height: 100%;
+  margin: 1em 1em;
   display: flex;
   flex-direction: column;
   padding-left: 6px;
 }
 
-.etr-main-view h2 {
-    margin: 0.5em 2em 0 2em;
+.etr-main-view .btn-toolbar {
+    margin: 0 0 0.5em 0;
 }
 
-.etr-main-view .button-toolbar {
-    margin: 1em 0 0.5em 0;
+.etr-main-view .btn-toolbar .btn-group {
+    margin: 0;
+}
+
+.etr-main-view .btn-toolbar .right {
+    float: right;
 }
 
 .etr-main-view .status-bar svg {

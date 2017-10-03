@@ -9,7 +9,8 @@ import View.Main
 
 
 type Message
-    = RunAllButtonClicked
+    = ToggleButtonClicked
+    | RunAllButtonClicked
     | RunStart RunStart.RawData
     | TestCompleted TestCompleted.RawData
     | RunComplete RunComplete.RawData
@@ -43,6 +44,9 @@ andPerform command model =
 update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
+        ToggleButtonClicked ->
+            model |> andPerform (toggle ())
+
         RunAllButtonClicked ->
             setRunStatusToProcessing model
                 |> resetPassedTests
@@ -80,7 +84,9 @@ view model =
         model.runStatus
         model.totalTests
         model.passedTests
-        { runAllButtonClickHandler = RunAllButtonClicked }
+        { toggleClickHandler = ToggleButtonClicked
+        , runAllButtonClickHandler = RunAllButtonClicked
+        }
 
 
 subscriptions : Model -> Sub Message
@@ -90,6 +96,9 @@ subscriptions model =
         , testCompleted TestCompleted
         , runComplete RunComplete
         ]
+
+
+port toggle : () -> Cmd message
 
 
 port runTest : () -> Cmd message

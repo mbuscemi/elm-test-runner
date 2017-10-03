@@ -33,10 +33,10 @@ toText runStatus =
             "No Data"
 
         Processing ->
-            "... Processing ..."
+            "... Running ..."
 
         LastPassed ->
-            "Passed!"
+            "Passed"
 
         LastFailed ->
             "Failed"

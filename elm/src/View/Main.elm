@@ -9,14 +9,15 @@ import View.Toolbar
 
 
 type alias Messages message =
-    { runAllButtonClickHandler : message }
+    { toggleClickHandler : message
+    , runAllButtonClickHandler : message
+    }
 
 
 render : RunStatus -> Int -> Int -> Messages message -> Html message
 render runStatus totalTests passedTests messages =
     div [ class "etr-main-view" ]
-        [ h2 [] [ text "Elm Test Runner" ]
-        , View.Toolbar.render messages.runAllButtonClickHandler
+        [ View.Toolbar.render messages.toggleClickHandler messages.runAllButtonClickHandler
         , View.RedGreenDisplay.render runStatus
         , View.PassingTestsDisplay.render totalTests passedTests
         ]
