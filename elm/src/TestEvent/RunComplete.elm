@@ -15,7 +15,7 @@ type alias RawData =
 
 
 type alias Parsed =
-    { passed : Bool
+    { passed : Int
     , failed : Int
     , duration : Int
     }
@@ -24,7 +24,7 @@ type alias Parsed =
 parse : RawData -> RunComplete
 parse rawData =
     RunComplete
-        { passed = rawData.passed == "1"
+        { passed = TestEvent.Util.parseInt rawData.passed
         , failed = TestEvent.Util.parseInt rawData.failed
         , duration = TestEvent.Util.parseInt rawData.duration
         }
@@ -32,4 +32,4 @@ parse rawData =
 
 passed : RunComplete -> Bool
 passed (RunComplete parsed) =
-    parsed.passed
+    parsed.failed == 0

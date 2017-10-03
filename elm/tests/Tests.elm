@@ -10,4 +10,7 @@ suite =
         [ test "something dumb" <|
             \_ ->
                 Expect.equal (2 + 2) 4
+        , test "something else" <|
+            \_ ->
+                Expect.equal ("a" ++ "b") "ab"
         ]

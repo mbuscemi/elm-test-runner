@@ -8646,7 +8646,7 @@ var _user$project$TestEvent_Util$parseInt = function (string) {
 
 var _user$project$TestEvent_RunComplete$passed = function (_p0) {
 	var _p1 = _p0;
-	return _p1._0.passed;
+	return _elm_lang$core$Native_Utils.eq(_p1._0.failed, 0);
 };
 var _user$project$TestEvent_RunComplete$RawData = F3(
 	function (a, b, c) {
@@ -8662,7 +8662,7 @@ var _user$project$TestEvent_RunComplete$RunComplete = function (a) {
 var _user$project$TestEvent_RunComplete$parse = function (rawData) {
 	return _user$project$TestEvent_RunComplete$RunComplete(
 		{
-			passed: _elm_lang$core$Native_Utils.eq(rawData.passed, '1'),
+			passed: _user$project$TestEvent_Util$parseInt(rawData.passed),
 			failed: _user$project$TestEvent_Util$parseInt(rawData.failed),
 			duration: _user$project$TestEvent_Util$parseInt(rawData.duration)
 		});
