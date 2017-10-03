@@ -1,4 +1,4 @@
-module Model.Model exposing (Model, default, resetPassedTests, setRunStatusToPassFail, setRunStatusToProcessing, setTotalTestCount, updatePassedTestCount)
+module Model.Model exposing (Model, default, resetPassedTests, setRunStatusToCompileError, setRunStatusToPassFail, setRunStatusToProcessing, setTotalTestCount, updatePassedTestCount)
 
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
@@ -29,6 +29,11 @@ setRunStatusToProcessing model =
 setRunStatusToPassFail : RunComplete -> Model -> Model
 setRunStatusToPassFail event model =
     { model | runStatus = RunStatus.passFail <| RunComplete.passed event }
+
+
+setRunStatusToCompileError : Model -> Model
+setRunStatusToCompileError model =
+    { model | runStatus = RunStatus.compileError }
 
 
 resetPassedTests : Model -> Model

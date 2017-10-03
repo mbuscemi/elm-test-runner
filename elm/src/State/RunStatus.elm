@@ -1,4 +1,4 @@
-module State.RunStatus exposing (RunStatus, noData, passFail, processing, toColor, toText)
+module State.RunStatus exposing (RunStatus, compileError, noData, passFail, processing, toColor, toText)
 
 
 type RunStatus
@@ -6,6 +6,7 @@ type RunStatus
     | Processing
     | LastPassed
     | LastFailed
+    | CompileError
 
 
 noData : RunStatus
@@ -16,6 +17,11 @@ noData =
 processing : RunStatus
 processing =
     Processing
+
+
+compileError : RunStatus
+compileError =
+    CompileError
 
 
 passFail : Bool -> RunStatus
@@ -41,6 +47,9 @@ toText runStatus =
         LastFailed ->
             "Failed"
 
+        CompileError ->
+            "Compile Error"
+
 
 toColor : RunStatus -> String
 toColor runStatus =
@@ -56,3 +65,6 @@ toColor runStatus =
 
         LastFailed ->
             "red"
+
+        CompileError ->
+            "orange"

@@ -1,7 +1,7 @@
 port module Main exposing (main)
 
 import Html exposing (Html)
-import Model.Model as Model exposing (Model, resetPassedTests, setRunStatusToPassFail, setRunStatusToProcessing, setTotalTestCount, updatePassedTestCount)
+import Model.Model as Model exposing (Model, resetPassedTests, setRunStatusToCompileError, setRunStatusToPassFail, setRunStatusToProcessing, setTotalTestCount, updatePassedTestCount)
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
@@ -12,6 +12,7 @@ type Message
     = ToggleButtonClicked
     | RunAllButtonClicked
     | InitiateRunAll
+    | CompilerErrored
     | RunStart RunStart.RawData
     | TestCompleted String
     | RunComplete RunComplete.RawData
@@ -58,6 +59,10 @@ update message model =
                 |> resetPassedTests
                 |> andNoCommand
 
+        CompilerErrored ->
+            setRunStatusToCompileError model
+                |> andNoCommand
+
         RunStart data ->
             let
                 event =
@@ -99,6 +104,7 @@ subscriptions : Model -> Sub Message
 subscriptions model =
     Sub.batch
         [ commandKeyTestStart (always InitiateRunAll)
+        , notifyCompilerErrored (always CompilerErrored)
         , runStart RunStart
         , testCompleted TestCompleted
         , runComplete RunComplete
@@ -112,6 +118,9 @@ port runTest : () -> Cmd message
 
 
 port commandKeyTestStart : (() -> message) -> Sub message
+
+
+port notifyCompilerErrored : (() -> message) -> Sub message
 
 
 port runStart : (RunStart.RawData -> message) -> Sub message

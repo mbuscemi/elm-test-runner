@@ -8610,8 +8610,10 @@ var _user$project$State_RunStatus$toColor = function (runStatus) {
 			return 'lightBlue';
 		case 'LastPassed':
 			return 'green';
-		default:
+		case 'LastFailed':
 			return 'red';
+		default:
+			return 'orange';
 	}
 };
 var _user$project$State_RunStatus$toText = function (runStatus) {
@@ -8623,10 +8625,14 @@ var _user$project$State_RunStatus$toText = function (runStatus) {
 			return '... Running ...';
 		case 'LastPassed':
 			return 'Passed';
-		default:
+		case 'LastFailed':
 			return 'Failed';
+		default:
+			return 'Compile Error';
 	}
 };
+var _user$project$State_RunStatus$CompileError = {ctor: 'CompileError'};
+var _user$project$State_RunStatus$compileError = _user$project$State_RunStatus$CompileError;
 var _user$project$State_RunStatus$LastFailed = {ctor: 'LastFailed'};
 var _user$project$State_RunStatus$LastPassed = {ctor: 'LastPassed'};
 var _user$project$State_RunStatus$passFail = function (didPass) {
@@ -8806,6 +8812,11 @@ var _user$project$Model_Model$resetPassedTests = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{passedTests: 0});
+};
+var _user$project$Model_Model$setRunStatusToCompileError = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{runStatus: _user$project$State_RunStatus$compileError});
 };
 var _user$project$Model_Model$setRunStatusToPassFail = F2(
 	function (event, model) {
@@ -9104,6 +9115,9 @@ var _user$project$Main$update = F2(
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Model$resetPassedTests(
 						_user$project$Model_Model$setRunStatusToProcessing(model)));
+			case 'CompilerErrored':
+				return _user$project$Main$andNoCommand(
+					_user$project$Model_Model$setRunStatusToCompileError(model));
 			case 'RunStart':
 				var event = _user$project$TestEvent_RunStart$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
@@ -9123,6 +9137,10 @@ var _user$project$Main$update = F2(
 	});
 var _user$project$Main$commandKeyTestStart = _elm_lang$core$Native_Platform.incomingPort(
 	'commandKeyTestStart',
+	_elm_lang$core$Json_Decode$null(
+		{ctor: '_Tuple0'}));
+var _user$project$Main$notifyCompilerErrored = _elm_lang$core$Native_Platform.incomingPort(
+	'notifyCompilerErrored',
 	_elm_lang$core$Json_Decode$null(
 		{ctor: '_Tuple0'}));
 var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(
@@ -9181,6 +9199,7 @@ var _user$project$Main$TestCompleted = function (a) {
 var _user$project$Main$RunStart = function (a) {
 	return {ctor: 'RunStart', _0: a};
 };
+var _user$project$Main$CompilerErrored = {ctor: 'CompilerErrored'};
 var _user$project$Main$InitiateRunAll = {ctor: 'InitiateRunAll'};
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
@@ -9190,14 +9209,19 @@ var _user$project$Main$subscriptions = function (model) {
 				_elm_lang$core$Basics$always(_user$project$Main$InitiateRunAll)),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Main$runStart(_user$project$Main$RunStart),
+				_0: _user$project$Main$notifyCompilerErrored(
+					_elm_lang$core$Basics$always(_user$project$Main$CompilerErrored)),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+					_0: _user$project$Main$runStart(_user$project$Main$RunStart),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
-						_1: {ctor: '[]'}
+						_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			}
