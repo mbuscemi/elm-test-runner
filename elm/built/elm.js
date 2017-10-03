@@ -9042,6 +9042,10 @@ var _user$project$Main$update = F2(
 						{ctor: '_Tuple0'}),
 					_user$project$Model_Model$resetPassedTests(
 						_user$project$Model_Model$setRunStatusToProcessing(model)));
+			case 'InitiateRunAll':
+				return _user$project$Main$andNoCommand(
+					_user$project$Model_Model$resetPassedTests(
+						_user$project$Model_Model$setRunStatusToProcessing(model)));
 			case 'RunStart':
 				var event = _user$project$TestEvent_RunStart$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
@@ -9059,6 +9063,10 @@ var _user$project$Main$update = F2(
 					A2(_user$project$Model_Model$setRunStatusToPassFail, event, model));
 		}
 	});
+var _user$project$Main$commandKeyTestStart = _elm_lang$core$Native_Platform.incomingPort(
+	'commandKeyTestStart',
+	_elm_lang$core$Json_Decode$null(
+		{ctor: '_Tuple0'}));
 var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(
 	'runStart',
 	A2(
@@ -9144,18 +9152,24 @@ var _user$project$Main$TestCompleted = function (a) {
 var _user$project$Main$RunStart = function (a) {
 	return {ctor: 'RunStart', _0: a};
 };
+var _user$project$Main$InitiateRunAll = {ctor: 'InitiateRunAll'};
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
-			_0: _user$project$Main$runStart(_user$project$Main$RunStart),
+			_0: _user$project$Main$commandKeyTestStart(
+				_elm_lang$core$Basics$always(_user$project$Main$InitiateRunAll)),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+				_0: _user$project$Main$runStart(_user$project$Main$RunStart),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
-					_1: {ctor: '[]'}
+					_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
+						_1: {ctor: '[]'}
+					}
 				}
 			}
 		});

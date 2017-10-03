@@ -11,6 +11,7 @@ import View.Main
 type Message
     = ToggleButtonClicked
     | RunAllButtonClicked
+    | InitiateRunAll
     | RunStart RunStart.RawData
     | TestCompleted TestCompleted.RawData
     | RunComplete RunComplete.RawData
@@ -52,6 +53,11 @@ update message model =
                 |> resetPassedTests
                 |> andPerform (runTest ())
 
+        InitiateRunAll ->
+            setRunStatusToProcessing model
+                |> resetPassedTests
+                |> andNoCommand
+
         RunStart data ->
             let
                 event =
@@ -92,7 +98,8 @@ view model =
 subscriptions : Model -> Sub Message
 subscriptions model =
     Sub.batch
-        [ runStart RunStart
+        [ commandKeyTestStart (always InitiateRunAll)
+        , runStart RunStart
         , testCompleted TestCompleted
         , runComplete RunComplete
         ]
@@ -102,6 +109,9 @@ port toggle : () -> Cmd message
 
 
 port runTest : () -> Cmd message
+
+
+port commandKeyTestStart : (() -> message) -> Sub message
 
 
 port runStart : (RunStart.RawData -> message) -> Sub message
