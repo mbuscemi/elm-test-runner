@@ -33,3 +33,13 @@
     margin: 0 15% 0 0;
     text-align: left;
 }
+
+#test-hierarchy {
+    margin: 1em 0 0 0;
+    padding: 0;
+}
+
+.etr-main-view ul.test-list {
+    padding: 0 0 0 1.5em;
+    list-style-type: none;
+}

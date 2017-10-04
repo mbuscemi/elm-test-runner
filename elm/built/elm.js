@@ -9433,39 +9433,49 @@ var _user$project$View_RedGreenDisplay$render = function (runStatus) {
 		});
 };
 
-var _user$project$View_TestHierarchy$noBullets = _elm_lang$html$Html_Attributes$style(
-	{
-		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'list-style-type', _1: 'none'},
-		_1: {ctor: '[]'}
-	});
-var _user$project$View_TestHierarchy$viewTree = function (_p0) {
-	var _p1 = _p0;
-	var _p3 = _p1._1;
-	var _p2 = _p1._0;
-	var nodeData = _p2._0;
-	var expanded = _p2._1;
-	var nodeId = _p2._2;
-	var childrenListView = expanded ? _user$project$View_TestHierarchy$viewForest(_p3) : {ctor: '[]'};
-	var plusOrMinus = _elm_lang$core$List$isEmpty(_p3) ? '' : (expanded ? '▾ ' : '▸ ');
-	var rootText = A2(_elm_lang$core$Basics_ops['++'], plusOrMinus, nodeData);
-	var rootView = A2(
-		_elm_lang$html$Html$span,
-		{ctor: '[]'},
-		{
+var _user$project$View_TestHierarchy$idField = function (name) {
+	var _p0 = name;
+	if (_p0.ctor === 'Just') {
+		return {
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(rootText),
+			_0: _elm_lang$html$Html_Attributes$id(_p0._0),
 			_1: {ctor: '[]'}
-		});
-	return A2(
-		_elm_lang$html$Html$ul,
-		{
-			ctor: '::',
-			_0: _user$project$View_TestHierarchy$noBullets,
-			_1: {ctor: '[]'}
-		},
-		{ctor: '::', _0: rootView, _1: childrenListView});
+		};
+	} else {
+		return {ctor: '[]'};
+	}
 };
+var _user$project$View_TestHierarchy$viewTree = F2(
+	function (cssId, _p1) {
+		var _p2 = _p1;
+		var _p4 = _p2._1;
+		var _p3 = _p2._0;
+		var nodeData = _p3._0;
+		var expanded = _p3._1;
+		var nodeId = _p3._2;
+		var childrenListView = expanded ? _user$project$View_TestHierarchy$viewForest(_p4) : {ctor: '[]'};
+		var plusOrMinus = _elm_lang$core$List$isEmpty(_p4) ? '' : (expanded ? '▾ ' : '▸ ');
+		var rootText = A2(_elm_lang$core$Basics_ops['++'], plusOrMinus, nodeData);
+		var rootView = A2(
+			_elm_lang$html$Html$span,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(rootText),
+				_1: {ctor: '[]'}
+			});
+		return A2(
+			_elm_lang$html$Html$ul,
+			A2(
+				_elm_lang$core$List$append,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('test-list'),
+					_1: {ctor: '[]'}
+				},
+				_user$project$View_TestHierarchy$idField(cssId)),
+			{ctor: '::', _0: rootView, _1: childrenListView});
+	});
 var _user$project$View_TestHierarchy$viewForest = function (children) {
 	return A2(
 		_elm_lang$core$List$map,
@@ -9475,16 +9485,16 @@ var _user$project$View_TestHierarchy$viewForest = function (children) {
 				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: _user$project$View_TestHierarchy$viewTree(childTree),
+					_0: A2(_user$project$View_TestHierarchy$viewTree, _elm_lang$core$Maybe$Nothing, childTree),
 					_1: {ctor: '[]'}
 				});
 		},
 		children);
 };
 var _user$project$View_TestHierarchy$removeTopNode = function (node) {
-	var _p4 = node;
-	if (_p4._1.ctor === '::') {
-		return _p4._1._0;
+	var _p5 = node;
+	if (_p5._1.ctor === '::') {
+		return _p5._1._0;
 	} else {
 		return A2(
 			_user$project$Tree_Tree$Node,
@@ -9493,7 +9503,9 @@ var _user$project$View_TestHierarchy$removeTopNode = function (node) {
 	}
 };
 var _user$project$View_TestHierarchy$render = function (testRuns) {
-	return _user$project$View_TestHierarchy$viewTree(
+	return A2(
+		_user$project$View_TestHierarchy$viewTree,
+		_elm_lang$core$Maybe$Just('test-hierarchy'),
 		_user$project$Tree_Tree$makeTree(
 			_user$project$View_TestHierarchy$removeTopNode(testRuns)));
 };
