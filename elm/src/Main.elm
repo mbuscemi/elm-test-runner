@@ -1,7 +1,7 @@
 port module Main exposing (main)
 
 import Html exposing (Html)
-import Model.Model as Model exposing (Model, resetPassedTests, setRunStatusToCompileError, setRunStatusToPassFail, setRunStatusToProcessing, setTotalTestCount, updatePassedTestCount)
+import Model.Model as Model exposing (Model, buildTestRunDataTree, resetPassedTests, setRunStatusToCompileError, setRunStatusToPassFail, setRunStatusToProcessing, setTotalTestCount, updatePassedTestCount)
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
@@ -78,6 +78,7 @@ update message model =
                     TestCompleted.parse data
             in
             updatePassedTestCount event model
+                |> buildTestRunDataTree event
                 |> andNoCommand
 
         RunComplete data ->
@@ -95,6 +96,7 @@ view model =
         model.runStatus
         model.totalTests
         model.passedTests
+        model.testRuns
         { toggleClickHandler = ToggleButtonClicked
         , runAllButtonClickHandler = RunAllButtonClicked
         }

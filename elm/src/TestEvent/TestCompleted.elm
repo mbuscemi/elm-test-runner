@@ -1,4 +1,4 @@
-module TestEvent.TestCompleted exposing (RawData, TestCompleted, parse, passedTestCountToIncrement)
+module TestEvent.TestCompleted exposing (RawData, TestCompleted, labels, parse, passed, passedTestCountToIncrement)
 
 import Json.Decode exposing (Decoder, decodeString, field, list, map, map2, map4, map5, maybe, string)
 import TestEvent.Util
@@ -126,3 +126,8 @@ passed (TestCompleted parsed) =
 
         Fail ->
             False
+
+
+labels : TestCompleted -> List String
+labels (TestCompleted parsed) =
+    parsed.labels

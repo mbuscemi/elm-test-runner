@@ -8601,6 +8601,315 @@ var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$a
 var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
 var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
 
+var _folkertdev$elm_state$State$tailRec = function (f) {
+	var go = function (step) {
+		go:
+		while (true) {
+			var _p0 = step;
+			if (_p0.ctor === 'Loop') {
+				var _v1 = f(_p0._0);
+				step = _v1;
+				continue go;
+			} else {
+				return _p0._0;
+			}
+		}
+	};
+	return function (_p1) {
+		return go(
+			f(_p1));
+	};
+};
+var _folkertdev$elm_state$State$run = F2(
+	function (initialState, _p2) {
+		var _p3 = _p2;
+		return _p3._0(initialState);
+	});
+var _folkertdev$elm_state$State$finalValue = function (initialState) {
+	return function (_p4) {
+		return _elm_lang$core$Tuple$first(
+			A2(_folkertdev$elm_state$State$run, initialState, _p4));
+	};
+};
+var _folkertdev$elm_state$State$finalState = function (initialState) {
+	return function (_p5) {
+		return _elm_lang$core$Tuple$second(
+			A2(_folkertdev$elm_state$State$run, initialState, _p5));
+	};
+};
+var _folkertdev$elm_state$State$State = function (a) {
+	return {ctor: 'State', _0: a};
+};
+var _folkertdev$elm_state$State$state = function (value) {
+	return _folkertdev$elm_state$State$State(
+		function (s) {
+			return {ctor: '_Tuple2', _0: value, _1: s};
+		});
+};
+var _folkertdev$elm_state$State$embed = function (f) {
+	return _folkertdev$elm_state$State$State(
+		function (s) {
+			return {
+				ctor: '_Tuple2',
+				_0: f(s),
+				_1: s
+			};
+		});
+};
+var _folkertdev$elm_state$State$advance = function (f) {
+	return _folkertdev$elm_state$State$State(f);
+};
+var _folkertdev$elm_state$State$map = F2(
+	function (f, _p6) {
+		var _p7 = _p6;
+		return _folkertdev$elm_state$State$State(
+			function (currentState) {
+				var _p8 = _p7._0(currentState);
+				var value = _p8._0;
+				var newState = _p8._1;
+				return {
+					ctor: '_Tuple2',
+					_0: f(value),
+					_1: newState
+				};
+			});
+	});
+var _folkertdev$elm_state$State$map2 = F3(
+	function (f, _p10, _p9) {
+		var _p11 = _p10;
+		var _p12 = _p9;
+		return _folkertdev$elm_state$State$State(
+			function (currentState) {
+				var _p13 = _p11._0(currentState);
+				var value1 = _p13._0;
+				var newState = _p13._1;
+				var _p14 = _p12._0(newState);
+				var value2 = _p14._0;
+				var newerState = _p14._1;
+				return {
+					ctor: '_Tuple2',
+					_0: A2(f, value1, value2),
+					_1: newerState
+				};
+			});
+	});
+var _folkertdev$elm_state$State$andMap = _elm_lang$core$Basics$flip(
+	_folkertdev$elm_state$State$map2(
+		F2(
+			function (x, y) {
+				return x(y);
+			})));
+var _folkertdev$elm_state$State$map3 = F4(
+	function (f, step1, step2, step3) {
+		return A2(
+			_folkertdev$elm_state$State$andMap,
+			step3,
+			A2(
+				_folkertdev$elm_state$State$andMap,
+				step2,
+				A2(_folkertdev$elm_state$State$map, f, step1)));
+	});
+var _folkertdev$elm_state$State$andThen = F2(
+	function (f, _p15) {
+		var _p16 = _p15;
+		return _folkertdev$elm_state$State$State(
+			function (s) {
+				var _p17 = _p16._0(s);
+				var a = _p17._0;
+				var newState = _p17._1;
+				var _p18 = f(a);
+				var g = _p18._0;
+				return g(newState);
+			});
+	});
+var _folkertdev$elm_state$State$join = function (_p19) {
+	var _p20 = _p19;
+	return _folkertdev$elm_state$State$State(
+		function (s) {
+			var _p21 = _p20._0(s);
+			var g = _p21._0._0;
+			var newState = _p21._1;
+			return g(newState);
+		});
+};
+var _folkertdev$elm_state$State$get = _folkertdev$elm_state$State$State(
+	function (s) {
+		return {ctor: '_Tuple2', _0: s, _1: s};
+	});
+var _folkertdev$elm_state$State$put = function (x) {
+	return _folkertdev$elm_state$State$State(
+		function (_p22) {
+			return {
+				ctor: '_Tuple2',
+				_0: {ctor: '_Tuple0'},
+				_1: x
+			};
+		});
+};
+var _folkertdev$elm_state$State$modify = function (f) {
+	return _folkertdev$elm_state$State$State(
+		function (s) {
+			return {
+				ctor: '_Tuple2',
+				_0: {ctor: '_Tuple0'},
+				_1: f(s)
+			};
+		});
+};
+var _folkertdev$elm_state$State$Done = function (a) {
+	return {ctor: 'Done', _0: a};
+};
+var _folkertdev$elm_state$State$Loop = function (a) {
+	return {ctor: 'Loop', _0: a};
+};
+var _folkertdev$elm_state$State$tailRecM = F2(
+	function (f, a) {
+		var helper = function (_p23) {
+			var _p24 = _p23;
+			var _p26 = _p24._1;
+			var _p25 = _p24._0;
+			if (_p25.ctor === 'Loop') {
+				return _folkertdev$elm_state$State$Loop(
+					{ctor: '_Tuple2', _0: _p25._0, _1: _p26});
+			} else {
+				return _folkertdev$elm_state$State$Done(
+					{ctor: '_Tuple2', _0: _p25._0, _1: _p26});
+			}
+		};
+		var step = function (_p27) {
+			var _p28 = _p27;
+			var _p29 = f(_p28._0);
+			return helper(
+				_p29._0(_p28._1));
+		};
+		return _folkertdev$elm_state$State$State(
+			function (s) {
+				return A2(
+					_folkertdev$elm_state$State$tailRec,
+					step,
+					{ctor: '_Tuple2', _0: a, _1: s});
+			});
+	});
+var _folkertdev$elm_state$State$replicateM = F2(
+	function (n, s) {
+		var go = function (_p30) {
+			var _p31 = _p30;
+			var _p33 = _p31._1;
+			var _p32 = _p31._0;
+			return (_elm_lang$core$Native_Utils.cmp(_p32, 1) < 0) ? _folkertdev$elm_state$State$state(
+				_folkertdev$elm_state$State$Done(_p33)) : A2(
+				_folkertdev$elm_state$State$map,
+				function (x) {
+					return _folkertdev$elm_state$State$Loop(
+						{
+							ctor: '_Tuple2',
+							_0: _p32 - 1,
+							_1: {ctor: '::', _0: x, _1: _p33}
+						});
+				},
+				s);
+		};
+		return A2(
+			_folkertdev$elm_state$State$tailRecM,
+			go,
+			{
+				ctor: '_Tuple2',
+				_0: n,
+				_1: {ctor: '[]'}
+			});
+	});
+var _folkertdev$elm_state$State$tailRecM2 = F3(
+	function (f, a, b) {
+		return A2(
+			_folkertdev$elm_state$State$tailRecM,
+			_elm_lang$core$Basics$uncurry(f),
+			{ctor: '_Tuple2', _0: a, _1: b});
+	});
+var _folkertdev$elm_state$State$foldlM = function (f) {
+	var step = F2(
+		function (accum, elements) {
+			var _p34 = elements;
+			if (_p34.ctor === '[]') {
+				return _folkertdev$elm_state$State$state(
+					_folkertdev$elm_state$State$Done(accum));
+			} else {
+				return A2(
+					_folkertdev$elm_state$State$map,
+					function (a_) {
+						return _folkertdev$elm_state$State$Loop(
+							{ctor: '_Tuple2', _0: a_, _1: _p34._1});
+					},
+					A2(f, accum, _p34._0));
+			}
+		});
+	return _folkertdev$elm_state$State$tailRecM2(step);
+};
+var _folkertdev$elm_state$State$traverse = function (f) {
+	return function (_p35) {
+		return A2(
+			_folkertdev$elm_state$State$map,
+			_elm_lang$core$List$reverse,
+			A3(
+				_folkertdev$elm_state$State$foldlM,
+				F2(
+					function (accum, elem) {
+						return A3(
+							_folkertdev$elm_state$State$map2,
+							F2(
+								function (x, y) {
+									return {ctor: '::', _0: x, _1: y};
+								}),
+							f(elem),
+							_folkertdev$elm_state$State$state(accum));
+					}),
+				{ctor: '[]'},
+				_p35));
+	};
+};
+var _folkertdev$elm_state$State$combine = _folkertdev$elm_state$State$traverse(_elm_lang$core$Basics$identity);
+var _folkertdev$elm_state$State$zipWithM = F3(
+	function (f, ps, qs) {
+		return _folkertdev$elm_state$State$combine(
+			A3(_elm_lang$core$List$map2, f, ps, qs));
+	});
+var _folkertdev$elm_state$State$mapAndUnzipM = F2(
+	function (f, xs) {
+		return A2(
+			_folkertdev$elm_state$State$map,
+			_elm_lang$core$List$unzip,
+			A2(_folkertdev$elm_state$State$traverse, f, xs));
+	});
+var _folkertdev$elm_state$State$filterM = function (predicate) {
+	var folder = F2(
+		function (elem, accum) {
+			var keepIfTrue = function (verdict) {
+				return verdict ? {ctor: '::', _0: elem, _1: accum} : accum;
+			};
+			return A2(
+				_folkertdev$elm_state$State$map,
+				keepIfTrue,
+				predicate(elem));
+		});
+	return function (_p36) {
+		return A2(
+			_folkertdev$elm_state$State$map,
+			_elm_lang$core$List$reverse,
+			A3(
+				_folkertdev$elm_state$State$foldlM,
+				_elm_lang$core$Basics$flip(folder),
+				{ctor: '[]'},
+				_p36));
+	};
+};
+var _folkertdev$elm_state$State$foldrM = F3(
+	function (f, initialValue, xs) {
+		return A3(
+			_folkertdev$elm_state$State$foldlM,
+			_elm_lang$core$Basics$flip(f),
+			initialValue,
+			_elm_lang$core$List$reverse(xs));
+	});
+
 var _user$project$State_RunStatus$toColor = function (runStatus) {
 	var _p0 = runStatus;
 	switch (_p0.ctor) {
@@ -8699,10 +9008,14 @@ var _user$project$TestEvent_RunStart$parse = function (rawData) {
 		});
 };
 
-var _user$project$TestEvent_TestCompleted$passed = function (_p0) {
+var _user$project$TestEvent_TestCompleted$labels = function (_p0) {
 	var _p1 = _p0;
-	var _p2 = _p1._0.status;
-	if (_p2.ctor === 'Pass') {
+	return _p1._0.labels;
+};
+var _user$project$TestEvent_TestCompleted$passed = function (_p2) {
+	var _p3 = _p2;
+	var _p4 = _p3._0.status;
+	if (_p4.ctor === 'Pass') {
 		return true;
 	} else {
 		return false;
@@ -8792,6 +9105,85 @@ var _user$project$TestEvent_TestCompleted$parse = function (rawData) {
 		});
 };
 
+var _user$project$Tree_Tree$newNodeId = A2(
+	_folkertdev$elm_state$State$andThen,
+	function (_p0) {
+		return _folkertdev$elm_state$State$get;
+	},
+	_folkertdev$elm_state$State$modify(
+		function (x) {
+			return x + 1;
+		}));
+var _user$project$Tree_Tree$Node = F2(
+	function (a, b) {
+		return {ctor: 'Node', _0: a, _1: b};
+	});
+var _user$project$Tree_Tree$toggleNode = F3(
+	function (nodeId, expand, _p1) {
+		var _p2 = _p1;
+		var _p5 = _p2._0;
+		var _p4 = _p2._1;
+		var _p3 = _p5;
+		var x = _p3._0;
+		var nid = _p3._2;
+		return _elm_lang$core$Native_Utils.eq(nodeId, nid) ? A2(
+			_user$project$Tree_Tree$Node,
+			{ctor: '_Tuple3', _0: x, _1: expand, _2: nid},
+			_p4) : A2(
+			_user$project$Tree_Tree$Node,
+			_p5,
+			A2(
+				_elm_lang$core$List$map,
+				A2(_user$project$Tree_Tree$toggleNode, nodeId, expand),
+				_p4));
+	});
+var _user$project$Tree_Tree$labelTree = function (_p6) {
+	var _p7 = _p6;
+	return A3(
+		_folkertdev$elm_state$State$map2,
+		F2(
+			function (nid, collapsibleChildren) {
+				return A2(
+					_user$project$Tree_Tree$Node,
+					{ctor: '_Tuple3', _0: _p7._0, _1: true, _2: nid},
+					collapsibleChildren);
+			}),
+		_user$project$Tree_Tree$newNodeId,
+		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Tree$labelTree, _p7._1));
+};
+var _user$project$Tree_Tree$makeTree = function (tree) {
+	return A2(
+		_folkertdev$elm_state$State$finalValue,
+		0,
+		_user$project$Tree_Tree$labelTree(tree));
+};
+
+var _user$project$Model_Model$toTree = function (_p0) {
+	var _p1 = _p0;
+	return A2(
+		_user$project$Tree_Tree$Node,
+		'',
+		A3(
+			_elm_lang$core$Dict$foldr,
+			_user$project$Model_Model$toLeaf,
+			{ctor: '[]'},
+			_p1._0));
+};
+var _user$project$Model_Model$toLeaf = F3(
+	function (key, testRuns, list) {
+		return {
+			ctor: '::',
+			_0: A2(
+				_user$project$Tree_Tree$Node,
+				key,
+				{
+					ctor: '::',
+					_0: _user$project$Model_Model$toTree(testRuns),
+					_1: {ctor: '[]'}
+				}),
+			_1: list
+		};
+	});
 var _user$project$Model_Model$updatePassedTestCount = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -8832,10 +9224,57 @@ var _user$project$Model_Model$setRunStatusToProcessing = function (model) {
 		model,
 		{runStatus: _user$project$State_RunStatus$processing});
 };
-var _user$project$Model_Model$default = {runStatus: _user$project$State_RunStatus$noData, totalTests: 0, passedTests: 0};
-var _user$project$Model_Model$Model = F3(
-	function (a, b, c) {
-		return {runStatus: a, totalTests: b, passedTests: c};
+var _user$project$Model_Model$Model = F4(
+	function (a, b, c, d) {
+		return {runStatus: a, totalTests: b, passedTests: c, testRuns: d};
+	});
+var _user$project$Model_Model$TestRuns = function (a) {
+	return {ctor: 'TestRuns', _0: a};
+};
+var _user$project$Model_Model$default = {
+	runStatus: _user$project$State_RunStatus$noData,
+	totalTests: 0,
+	passedTests: 0,
+	testRuns: _user$project$Model_Model$TestRuns(_elm_lang$core$Dict$empty)
+};
+var _user$project$Model_Model$buildNodes = F3(
+	function (labels, passed, _p2) {
+		var _p3 = _p2;
+		return A3(
+			_elm_lang$core$List$foldl,
+			F2(
+				function (label, _p4) {
+					var _p5 = _p4;
+					var _p7 = _p5._0;
+					var _p6 = A2(_elm_lang$core$Dict$get, label, _p7);
+					if (_p6.ctor === 'Just') {
+						return _p6._0;
+					} else {
+						return _user$project$Model_Model$TestRuns(
+							A3(
+								_elm_lang$core$Dict$insert,
+								label,
+								_user$project$Model_Model$TestRuns(_elm_lang$core$Dict$empty),
+								_p7));
+					}
+				}),
+			_user$project$Model_Model$TestRuns(_p3._0),
+			labels);
+	});
+var _user$project$Model_Model$buildTestRunDataTree = F2(
+	function (event, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				testRuns: A2(
+					_elm_lang$core$Debug$log,
+					'nodes',
+					A3(
+						_user$project$Model_Model$buildNodes,
+						_user$project$TestEvent_TestCompleted$labels(event),
+						_user$project$TestEvent_TestCompleted$passed(event),
+						model.testRuns))
+			});
 	});
 
 var _user$project$View_PassingTestsDisplay$render = F2(
@@ -8966,6 +9405,63 @@ var _user$project$View_RedGreenDisplay$render = function (runStatus) {
 		});
 };
 
+var _user$project$View_TestHierarchy$noBullets = _elm_lang$html$Html_Attributes$style(
+	{
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'list-style-type', _1: 'none'},
+		_1: {ctor: '[]'}
+	});
+var _user$project$View_TestHierarchy$viewTree = function (_p0) {
+	var _p1 = _p0;
+	var _p3 = _p1._1;
+	var _p2 = _p1._0;
+	var nodeData = _p2._0;
+	var expanded = _p2._1;
+	var nodeId = _p2._2;
+	var childrenListView = expanded ? _user$project$View_TestHierarchy$viewForest(_p3) : {ctor: '[]'};
+	var plusOrMinus = _elm_lang$core$List$isEmpty(_p3) ? '' : (expanded ? '▾ ' : '▸ ');
+	var rootText = A2(_elm_lang$core$Basics_ops['++'], plusOrMinus, nodeData);
+	var rootView = A2(
+		_elm_lang$html$Html$span,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(rootText),
+			_1: {ctor: '[]'}
+		});
+	return A2(
+		_elm_lang$html$Html$ul,
+		{
+			ctor: '::',
+			_0: _user$project$View_TestHierarchy$noBullets,
+			_1: {ctor: '[]'}
+		},
+		{ctor: '::', _0: rootView, _1: childrenListView});
+};
+var _user$project$View_TestHierarchy$viewForest = function (children) {
+	return A2(
+		_elm_lang$core$List$map,
+		function (childTree) {
+			return A2(
+				_elm_lang$html$Html$li,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _user$project$View_TestHierarchy$viewTree(childTree),
+					_1: {ctor: '[]'}
+				});
+		},
+		children);
+};
+var _user$project$View_TestHierarchy$render = function (testRuns) {
+	return _user$project$View_TestHierarchy$viewTree(
+		_user$project$Tree_Tree$makeTree(
+			A2(
+				_elm_lang$core$Debug$log,
+				'nodes',
+				_user$project$Model_Model$toTree(testRuns))));
+};
+
 var _user$project$View_Toolbar$render = F2(
 	function (toggleClickHandler, runAllButtonClickHandler) {
 		return A2(
@@ -9045,8 +9541,8 @@ var _user$project$View_Toolbar$render = F2(
 			});
 	});
 
-var _user$project$View_Main$render = F4(
-	function (runStatus, totalTests, passedTests, messages) {
+var _user$project$View_Main$render = F5(
+	function (runStatus, totalTests, passedTests, testRuns, messages) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -9063,7 +9559,11 @@ var _user$project$View_Main$render = F4(
 					_1: {
 						ctor: '::',
 						_0: A2(_user$project$View_PassingTestsDisplay$render, totalTests, passedTests),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: _user$project$View_TestHierarchy$render(testRuns),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			});
@@ -9128,7 +9628,10 @@ var _user$project$Main$update = F2(
 			case 'TestCompleted':
 				var event = _user$project$TestEvent_TestCompleted$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
-					A2(_user$project$Model_Model$updatePassedTestCount, event, model));
+					A2(
+						_user$project$Model_Model$buildTestRunDataTree,
+						event,
+						A2(_user$project$Model_Model$updatePassedTestCount, event, model)));
 			default:
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
@@ -9230,11 +9733,12 @@ var _user$project$Main$subscriptions = function (model) {
 var _user$project$Main$RunAllButtonClicked = {ctor: 'RunAllButtonClicked'};
 var _user$project$Main$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
 var _user$project$Main$view = function (model) {
-	return A4(
+	return A5(
 		_user$project$View_Main$render,
 		model.runStatus,
 		model.totalTests,
 		model.passedTests,
+		model.testRuns,
 		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$RunAllButtonClicked});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
