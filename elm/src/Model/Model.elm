@@ -27,7 +27,7 @@ default =
 
 topLevelMessage : String
 topLevelMessage =
-    "Test Suite"
+    "::Root::"
 
 
 setRunStatusToProcessing : Model -> Model
@@ -65,6 +65,6 @@ buildTestRunDataTree event model =
     { model
         | testRuns =
             Tree.Merge.fromPath
-                (Debug.log "why" (topLevelMessage :: TestCompleted.labels event))
+                (topLevelMessage :: TestCompleted.labels event)
                 model.testRuns
     }

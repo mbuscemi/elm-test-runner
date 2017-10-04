@@ -7,9 +7,20 @@ import Tree.Tree exposing (CollapsibleTree, Tree(Node), makeTree)
 
 render : Tree String -> Html message
 render testRuns =
-    Debug.log "nodes" testRuns
+    testRuns
+        |> removeTopNode
         |> makeTree
         |> viewTree
+
+
+removeTopNode : Tree String -> Tree String
+removeTopNode node =
+    case node of
+        Node _ (first :: _) ->
+            first
+
+        Node _ [] ->
+            Node "No Tests" []
 
 
 viewTree : CollapsibleTree String -> Html message
