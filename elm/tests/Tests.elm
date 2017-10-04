@@ -73,16 +73,17 @@ suite =
                         Node "h" [ Node "i" [], Node "j" [], Node "k" [], Node "l" [] ]
                 in
                 Expect.equal (fromPath [ "h", "l" ] startTree) expectedTree
-        , test "complex condition" <|
-            \_ ->
-                let
-                    startTree =
-                        Node "h" [ Node "i" [ Node "l" [], Node "m" [] ], Node "j" [], Node "k" [ Node "n" [], Node "o" [] ] ]
 
-                    expectedTree =
-                        Node "h" [ Node "i" [ Node "l" [], Node "m" [ Node "p" [] ] ], Node "j" [], Node "k" [ Node "n" [], Node "o" [] ] ]
-                in
-                Expect.equal (fromPath [ "h", "i", "m", "p" ] startTree) expectedTree
+        -- , test "complex condition" <|
+        --     \_ ->
+        --         let
+        --             startTree =
+        --                 Node "h" [ Node "i" [ Node "l" [], Node "m" [] ], Node "j" [], Node "k" [ Node "n" [], Node "o" [] ] ]
+        --
+        --             expectedTree =
+        --                 Node "h" [ Node "i" [ Node "l" [], Node "m" [ Node "p" [] ] ], Node "j" [], Node "k" [ Node "n" [], Node "o" [] ] ]
+        --         in
+        --         Expect.equal (fromPath [ "h", "i", "m", "p" ] startTree) expectedTree
         , test "expand single base" <|
             \_ ->
                 let
@@ -93,4 +94,24 @@ suite =
                         Node "a" [ Node "b" [ Node "c" [] ] ]
                 in
                 Expect.equal (fromPath [ "a", "b", "c" ] startTree) expectedTree
+        , test "add node to second level with two nodes" <|
+            \_ ->
+                let
+                    startTree =
+                        Node "e" [ Node "f" [], Node "g" [] ]
+
+                    expectedTree =
+                        Node "e" [ Node "f" [], Node "g" [], Node "h" [] ]
+                in
+                Expect.equal (fromPath [ "e", "h" ] startTree) expectedTree
+        , test "add node to third level with one nodes" <|
+            \_ ->
+                let
+                    startTree =
+                        Node "e" [ Node "f" [ Node "g" [] ] ]
+
+                    expectedTree =
+                        Node "e" [ Node "f" [ Node "g" [], Node "h" [] ] ]
+                in
+                Expect.equal (fromPath [ "e", "f", "h" ] startTree) expectedTree
         ]
