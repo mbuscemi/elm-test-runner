@@ -1,105 +1,44 @@
 module Tree.Merge exposing (fromPath)
 
-import List.Extra as List
-import Maybe exposing (withDefault)
 import Tree.Tree exposing (Tree(Node))
 
 
-fromPath : List String -> Tree String -> Tree String
-fromPath list tree =
-    case ( list, tree ) of
-        ( listField :: rest, Node treeField [] ) ->
-            -- let
-            --     check =
-            --         Debug.log "group" "1"
-            --
-            --     check1 =
-            --         Debug.log "listField :: rest" (listField :: rest)
-            --
-            --     check2 =
-            --         Debug.log "Node treeField []" (Node treeField [])
-            -- in
-            if listField == treeField then
-                fromPath rest (Node listField [])
+fromPath : List a -> Tree a -> Tree a
+fromPath path ((Node node children) as tree) =
+    case path of
+        [] ->
+            tree
+
+        x :: xs ->
+            if node == x then
+                Node node (mergeChildren xs children)
             else
-                Node treeField [ fromPath rest (Node listField []) ]
-
-        ( listField :: nextField :: rest, Node treeField subNodes ) ->
-            -- let
-            --     check =
-            --         Debug.log "group" "2"
-            --
-            --     check1 =
-            --         Debug.log "listField :: nextField :: rest" (listField :: nextField :: rest)
-            --
-            --     check2 =
-            --         Debug.log "Node treeField subNodes" (Node treeField subNodes)
-            -- in
-            if listField == treeField then
-                Node treeField (List.append (excludeSubNode nextField subNodes) [ fromPath rest (findSubNode nextField subNodes) ])
-            else
-                Node treeField (List.append subNodes [ fromPath (nextField :: rest) (Node listField []) ])
-
-        ( listField :: rest, Node treeField subNodes ) ->
-            -- let
-            --     check =
-            --         Debug.log "group" "3"
-            --
-            --     check1 =
-            --         Debug.log "listField :: rest" (listField :: rest)
-            --
-            --     check2 =
-            --         Debug.log "Node treeField subNodes" (Node treeField subNodes)
-            -- in
-            Node treeField (List.append (excludeSubNode listField subNodes) [ fromPath rest (Node listField []) ])
-
-        ( [], Node treeField [] ) ->
-            -- let
-            --     check =
-            --         Debug.log "group" "4"
-            --
-            --     check2 =
-            --         Debug.log "Node treeField []" (Node treeField [])
-            -- in
-            Node treeField []
-
-        ( [], Node treeField subNodes ) ->
-            -- let
-            --     check =
-            --         Debug.log "group" "5"
-            --
-            --     check2 =
-            --         Debug.log "Node treeField subNodes" (Node treeField subNodes)
-            -- in
-            Node treeField subNodes
+                Node node (listToTree x xs :: children)
 
 
-excludeSubNode : String -> List (Tree String) -> List (Tree String)
-excludeSubNode field subNodes =
-    List.filter
-        (\(Node nodeField _) -> nodeField /= field)
-        subNodes
+listToTree : a -> List a -> Tree a
+listToTree first path =
+    case path of
+        [] ->
+            Node first []
+
+        x :: xs ->
+            Node first [ listToTree x xs ]
 
 
-findSubNode : String -> List (Tree String) -> Tree String
-findSubNode field subNodes =
-    List.find
-        (\(Node nodeField _) -> nodeField == field)
-        subNodes
-        |> withDefault (Node field [])
+mergeChildren : List a -> List (Tree a) -> List (Tree a)
+mergeChildren path children =
+    case path of
+        [] ->
+            children
 
+        x :: xs ->
+            case children of
+                ((Node node nodeChildren) as current) :: rest ->
+                    if node == x then
+                        Node node (mergeChildren xs nodeChildren) :: rest
+                    else
+                        current :: mergeChildren path rest
 
-merge : String -> Tree String -> Tree String -> Tree String
-merge field (Node _ subNodesA) (Node _ subNodesB) =
-    Node field (List.append subNodesA subNodesB)
-
-
-containsNodeWith : String -> List (Tree String) -> Bool
-containsNodeWith field treeList =
-    List.filter
-        (\(Node nodeField _) ->
-            field == nodeField
-        )
-        treeList
-        |> List.length
-        |> (>=) 1
+                [] ->
+                    [ listToTree x xs ]

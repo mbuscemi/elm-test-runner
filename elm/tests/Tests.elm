@@ -73,17 +73,16 @@ suite =
                         Node "h" [ Node "i" [], Node "j" [], Node "k" [], Node "l" [] ]
                 in
                 Expect.equal (fromPath [ "h", "l" ] startTree) expectedTree
+        , test "complex condition" <|
+            \_ ->
+                let
+                    startTree =
+                        Node "h" [ Node "i" [ Node "l" [], Node "m" [] ], Node "j" [], Node "k" [ Node "n" [], Node "o" [] ] ]
 
-        -- , test "complex condition" <|
-        --     \_ ->
-        --         let
-        --             startTree =
-        --                 Node "h" [ Node "i" [ Node "l" [], Node "m" [] ], Node "j" [], Node "k" [ Node "n" [], Node "o" [] ] ]
-        --
-        --             expectedTree =
-        --                 Node "h" [ Node "i" [ Node "l" [], Node "m" [ Node "p" [] ] ], Node "j" [], Node "k" [ Node "n" [], Node "o" [] ] ]
-        --         in
-        --         Expect.equal (fromPath [ "h", "i", "m", "p" ] startTree) expectedTree
+                    expectedTree =
+                        Node "h" [ Node "i" [ Node "l" [], Node "m" [ Node "p" [] ] ], Node "j" [], Node "k" [ Node "n" [], Node "o" [] ] ]
+                in
+                Expect.equal (fromPath [ "h", "i", "m", "p" ] startTree) expectedTree
         , test "expand single base" <|
             \_ ->
                 let
