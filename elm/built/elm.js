@@ -9158,32 +9158,150 @@ var _user$project$Tree_Tree$makeTree = function (tree) {
 		_user$project$Tree_Tree$labelTree(tree));
 };
 
-var _user$project$Model_Model$toTree = function (_p0) {
-	var _p1 = _p0;
-	return A2(
-		_user$project$Tree_Tree$Node,
-		'',
-		A3(
-			_elm_lang$core$Dict$foldr,
-			_user$project$Model_Model$toLeaf,
-			{ctor: '[]'},
-			_p1._0));
-};
-var _user$project$Model_Model$toLeaf = F3(
-	function (key, testRuns, list) {
-		return {
-			ctor: '::',
-			_0: A2(
-				_user$project$Tree_Tree$Node,
-				key,
-				{
-					ctor: '::',
-					_0: _user$project$Model_Model$toTree(testRuns),
-					_1: {ctor: '[]'}
+var _user$project$Tree_Merge$containsNodeWith = F2(
+	function (field, treeList) {
+		return A2(
+			F2(
+				function (x, y) {
+					return _elm_lang$core$Native_Utils.cmp(x, y) > -1;
 				}),
-			_1: list
-		};
+			1,
+			_elm_lang$core$List$length(
+				A2(
+					_elm_lang$core$List$filter,
+					function (_p0) {
+						var _p1 = _p0;
+						return _elm_lang$core$Native_Utils.eq(field, _p1._0);
+					},
+					treeList)));
 	});
+var _user$project$Tree_Merge$merge = F3(
+	function (field, _p3, _p2) {
+		var _p4 = _p3;
+		var _p5 = _p2;
+		return A2(
+			_user$project$Tree_Tree$Node,
+			field,
+			A2(_elm_lang$core$List$append, _p4._1, _p5._1));
+	});
+var _user$project$Tree_Merge$excludeSubNode = F2(
+	function (field, subNodes) {
+		return A2(
+			_elm_lang$core$List$filter,
+			function (_p6) {
+				var _p7 = _p6;
+				return !_elm_lang$core$Native_Utils.eq(_p7._0, field);
+			},
+			subNodes);
+	});
+var _user$project$Tree_Merge$fromPath = F2(
+	function (list, tree) {
+		fromPath:
+		while (true) {
+			var _p8 = {ctor: '_Tuple2', _0: list, _1: tree};
+			if (_p8._0.ctor === '::') {
+				if (_p8._1._1.ctor === '[]') {
+					var _p11 = _p8._1._0;
+					var _p10 = _p8._0._1;
+					var _p9 = _p8._0._0;
+					if (_elm_lang$core$Native_Utils.eq(_p9, _p11)) {
+						var _v5 = _p10,
+							_v6 = A2(
+							_user$project$Tree_Tree$Node,
+							_p9,
+							{ctor: '[]'});
+						list = _v5;
+						tree = _v6;
+						continue fromPath;
+					} else {
+						return A2(
+							_user$project$Tree_Tree$Node,
+							_p11,
+							{
+								ctor: '::',
+								_0: A2(
+									_user$project$Tree_Merge$fromPath,
+									_p10,
+									A2(
+										_user$project$Tree_Tree$Node,
+										_p9,
+										{ctor: '[]'})),
+								_1: {ctor: '[]'}
+							});
+					}
+				} else {
+					if (_p8._0._1.ctor === '::') {
+						var _p16 = _p8._1._0;
+						var _p15 = _p8._1._1;
+						var _p14 = _p8._0._1._1;
+						var _p13 = _p8._0._1._0;
+						var _p12 = _p8._0._0;
+						return _elm_lang$core$Native_Utils.eq(_p12, _p16) ? A2(
+							_user$project$Tree_Tree$Node,
+							_p16,
+							A2(
+								_elm_lang$core$List$append,
+								A2(_user$project$Tree_Merge$excludeSubNode, _p13, _p15),
+								{
+									ctor: '::',
+									_0: A2(
+										_user$project$Tree_Merge$fromPath,
+										_p14,
+										A2(
+											_user$project$Tree_Tree$Node,
+											_p13,
+											{ctor: '[]'})),
+									_1: {ctor: '[]'}
+								})) : A2(
+							_user$project$Tree_Tree$Node,
+							_p16,
+							A2(
+								_elm_lang$core$List$append,
+								_p15,
+								{
+									ctor: '::',
+									_0: A2(
+										_user$project$Tree_Merge$fromPath,
+										{ctor: '::', _0: _p13, _1: _p14},
+										A2(
+											_user$project$Tree_Tree$Node,
+											_p12,
+											{ctor: '[]'})),
+									_1: {ctor: '[]'}
+								}));
+					} else {
+						return A2(
+							_user$project$Tree_Tree$Node,
+							_p8._1._0,
+							A2(
+								_elm_lang$core$List$append,
+								_p8._1._1,
+								{
+									ctor: '::',
+									_0: A2(
+										_user$project$Tree_Merge$fromPath,
+										_p8._0._1,
+										A2(
+											_user$project$Tree_Tree$Node,
+											_p8._0._0,
+											{ctor: '[]'})),
+									_1: {ctor: '[]'}
+								}));
+					}
+				}
+			} else {
+				if (_p8._1._1.ctor === '[]') {
+					return A2(
+						_user$project$Tree_Tree$Node,
+						_p8._1._0,
+						{ctor: '[]'});
+				} else {
+					return A2(_user$project$Tree_Tree$Node, _p8._1._0, _p8._1._1);
+				}
+			}
+		}
+	});
+
 var _user$project$Model_Model$updatePassedTestCount = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9224,57 +9342,37 @@ var _user$project$Model_Model$setRunStatusToProcessing = function (model) {
 		model,
 		{runStatus: _user$project$State_RunStatus$processing});
 };
-var _user$project$Model_Model$Model = F4(
-	function (a, b, c, d) {
-		return {runStatus: a, totalTests: b, passedTests: c, testRuns: d};
-	});
-var _user$project$Model_Model$TestRuns = function (a) {
-	return {ctor: 'TestRuns', _0: a};
-};
-var _user$project$Model_Model$default = {
-	runStatus: _user$project$State_RunStatus$noData,
-	totalTests: 0,
-	passedTests: 0,
-	testRuns: _user$project$Model_Model$TestRuns(_elm_lang$core$Dict$empty)
-};
-var _user$project$Model_Model$buildNodes = F3(
-	function (labels, passed, _p2) {
-		var _p3 = _p2;
-		return A3(
-			_elm_lang$core$List$foldl,
-			F2(
-				function (label, _p4) {
-					var _p5 = _p4;
-					var _p7 = _p5._0;
-					var _p6 = A2(_elm_lang$core$Dict$get, label, _p7);
-					if (_p6.ctor === 'Just') {
-						return _p6._0;
-					} else {
-						return _user$project$Model_Model$TestRuns(
-							A3(
-								_elm_lang$core$Dict$insert,
-								label,
-								_user$project$Model_Model$TestRuns(_elm_lang$core$Dict$empty),
-								_p7));
-					}
-				}),
-			_user$project$Model_Model$TestRuns(_p3._0),
-			labels);
-	});
+var _user$project$Model_Model$topLevelMessage = 'Test Suite';
 var _user$project$Model_Model$buildTestRunDataTree = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{
 				testRuns: A2(
-					_elm_lang$core$Debug$log,
-					'nodes',
-					A3(
-						_user$project$Model_Model$buildNodes,
-						_user$project$TestEvent_TestCompleted$labels(event),
-						_user$project$TestEvent_TestCompleted$passed(event),
-						model.testRuns))
+					_user$project$Tree_Merge$fromPath,
+					A2(
+						_elm_lang$core$Debug$log,
+						'why',
+						{
+							ctor: '::',
+							_0: _user$project$Model_Model$topLevelMessage,
+							_1: _user$project$TestEvent_TestCompleted$labels(event)
+						}),
+					model.testRuns)
 			});
+	});
+var _user$project$Model_Model$default = {
+	runStatus: _user$project$State_RunStatus$noData,
+	totalTests: 0,
+	passedTests: 0,
+	testRuns: A2(
+		_user$project$Tree_Tree$Node,
+		_user$project$Model_Model$topLevelMessage,
+		{ctor: '[]'})
+};
+var _user$project$Model_Model$Model = F4(
+	function (a, b, c, d) {
+		return {runStatus: a, totalTests: b, passedTests: c, testRuns: d};
 	});
 
 var _user$project$View_PassingTestsDisplay$render = F2(
@@ -9456,10 +9554,7 @@ var _user$project$View_TestHierarchy$viewForest = function (children) {
 var _user$project$View_TestHierarchy$render = function (testRuns) {
 	return _user$project$View_TestHierarchy$viewTree(
 		_user$project$Tree_Tree$makeTree(
-			A2(
-				_elm_lang$core$Debug$log,
-				'nodes',
-				_user$project$Model_Model$toTree(testRuns))));
+			A2(_elm_lang$core$Debug$log, 'nodes', testRuns)));
 };
 
 var _user$project$View_Toolbar$render = F2(

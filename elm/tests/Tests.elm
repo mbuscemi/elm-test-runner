@@ -83,4 +83,14 @@ suite =
                         Node "h" [ Node "i" [ Node "l" [], Node "m" [ Node "p" [] ] ], Node "j" [], Node "k" [ Node "n" [], Node "o" [] ] ]
                 in
                 Expect.equal (fromPath [ "h", "i", "m", "p" ] startTree) expectedTree
+        , test "expand single base" <|
+            \_ ->
+                let
+                    startTree =
+                        Node "a" []
+
+                    expectedTree =
+                        Node "a" [ Node "b" [ Node "c" [] ] ]
+                in
+                Expect.equal (fromPath [ "a", "b", "c" ] startTree) expectedTree
         ]

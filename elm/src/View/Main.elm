@@ -2,8 +2,8 @@ module View.Main exposing (render)
 
 import Html exposing (Html, div, h2, section, span, text)
 import Html.Attributes exposing (class)
-import Model.Model exposing (TestRuns)
 import State.RunStatus as RunStatus exposing (RunStatus)
+import Tree.Tree exposing (Tree)
 import View.PassingTestsDisplay
 import View.RedGreenDisplay
 import View.TestHierarchy
@@ -16,7 +16,7 @@ type alias Messages message =
     }
 
 
-render : RunStatus -> Int -> Int -> TestRuns -> Messages message -> Html message
+render : RunStatus -> Int -> Int -> Tree String -> Messages message -> Html message
 render runStatus totalTests passedTests testRuns messages =
     div [ class "etr-main-view" ]
         [ View.Toolbar.render messages.toggleClickHandler messages.runAllButtonClickHandler

@@ -8,7 +8,7 @@ fromPath list tree =
     case ( list, tree ) of
         ( listField :: rest, Node treeField [] ) ->
             if listField == treeField then
-                tree
+                fromPath rest (Node listField [])
             else
                 Node treeField [ fromPath rest (Node listField []) ]
 

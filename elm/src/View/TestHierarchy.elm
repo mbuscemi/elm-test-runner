@@ -2,13 +2,12 @@ module View.TestHierarchy exposing (render)
 
 import Html exposing (Attribute, Html, li, span, text, ul)
 import Html.Attributes exposing (style)
-import Model.Model as Model exposing (TestRuns)
 import Tree.Tree exposing (CollapsibleTree, Tree(Node), makeTree)
 
 
-render : TestRuns -> Html message
+render : Tree String -> Html message
 render testRuns =
-    Debug.log "nodes" (Model.toTree testRuns)
+    Debug.log "nodes" testRuns
         |> makeTree
         |> viewTree
 
