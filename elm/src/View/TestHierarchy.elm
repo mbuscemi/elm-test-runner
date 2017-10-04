@@ -2,29 +2,23 @@ module View.TestHierarchy exposing (render)
 
 import Html exposing (Attribute, Html, li, span, text, ul)
 import Html.Attributes exposing (class, id)
+import Html.Events exposing (onClick)
 import Tree.Tree exposing (CollapsibleTree, Tree(Node), makeTree)
 
 
-render : Tree String -> Html message
-render testRuns =
-    testRuns
-        |> removeTopNode
-        |> makeTree
-        |> viewTree (Just "test-hierarchy")
+type alias Messages message =
+    { collapse : Int -> message
+    , expand : Int -> message
+    }
 
 
-removeTopNode : Tree String -> Tree String
-removeTopNode node =
-    case node of
-        Node _ (first :: _) ->
-            first
-
-        Node _ [] ->
-            Node "No Tests" []
+render : CollapsibleTree String -> Messages message -> Html message
+render testHierarchy messages =
+    viewTree messages (Just "test-hierarchy") testHierarchy
 
 
-viewTree : Maybe String -> CollapsibleTree String -> Html message
-viewTree cssId (Node root children) =
+viewTree : Messages message -> Maybe String -> CollapsibleTree String -> Html message
+viewTree messages cssId (Node root children) =
     let
         ( nodeData, expanded, nodeId ) =
             root
@@ -34,12 +28,19 @@ viewTree cssId (Node root children) =
 
         childrenListView =
             if expanded then
-                viewForest children
+                viewForest messages children
             else
                 []
 
         rootView =
-            span [] [ text rootText ]
+            span [ expandOrCollapse ] [ text rootText ]
+
+        expandOrCollapse =
+            onClick <|
+                if expanded then
+                    messages.collapse nodeId
+                else
+                    messages.expand nodeId
 
         plusOrMinus =
             if List.isEmpty children then
@@ -54,9 +55,9 @@ viewTree cssId (Node root children) =
         (rootView :: childrenListView)
 
 
-viewForest : List (CollapsibleTree String) -> List (Html message)
-viewForest children =
-    List.map (\childTree -> li [] [ viewTree Nothing childTree ]) children
+viewForest : Messages message -> List (CollapsibleTree String) -> List (Html message)
+viewForest messages children =
+    List.map (\childTree -> li [] [ viewTree messages Nothing childTree ]) children
 
 
 idField : Maybe String -> List (Attribute message)

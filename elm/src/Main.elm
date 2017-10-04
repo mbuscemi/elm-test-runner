@@ -1,7 +1,19 @@
 port module Main exposing (main)
 
 import Html exposing (Html)
-import Model.Model as Model exposing (Model, buildTestRunDataTree, resetPassedTests, setRunStatusToCompileError, setRunStatusToPassFail, setRunStatusToProcessing, setTotalTestCount, updatePassedTestCount)
+import Model.Model as Model
+    exposing
+        ( Model
+        , buildTestRunDataTree
+        , resetPassedTests
+        , setRunStatusToCompileError
+        , setRunStatusToPassFail
+        , setRunStatusToProcessing
+        , setTotalTestCount
+        , toggleNode
+        , updateHierarchy
+        , updatePassedTestCount
+        )
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
@@ -16,6 +28,8 @@ type Message
     | RunStart RunStart.RawData
     | TestCompleted String
     | RunComplete RunComplete.RawData
+    | TestListItemExpand Int
+    | TestListItemCollapse Int
 
 
 main : Program Never Model Message
@@ -47,7 +61,8 @@ update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
         ToggleButtonClicked ->
-            model |> andPerform (toggle ())
+            model
+                |> andPerform (toggle ())
 
         RunAllButtonClicked ->
             setRunStatusToProcessing model
@@ -79,6 +94,7 @@ update message model =
             in
             updatePassedTestCount event model
                 |> buildTestRunDataTree event
+                |> updateHierarchy
                 |> andNoCommand
 
         RunComplete data ->
@@ -89,6 +105,14 @@ update message model =
             setRunStatusToPassFail event model
                 |> andNoCommand
 
+        TestListItemExpand nodeId ->
+            toggleNode nodeId True model
+                |> andNoCommand
+
+        TestListItemCollapse nodeId ->
+            toggleNode nodeId False model
+                |> andNoCommand
+
 
 view : Model -> Html Message
 view model =
@@ -96,9 +120,11 @@ view model =
         model.runStatus
         model.totalTests
         model.passedTests
-        model.testRuns
+        model.testHierarchy
         { toggleClickHandler = ToggleButtonClicked
         , runAllButtonClickHandler = RunAllButtonClicked
+        , testListItemExpand = TestListItemExpand
+        , testListItemCollapse = TestListItemCollapse
         }
 
 

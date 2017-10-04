@@ -9235,6 +9235,14 @@ var _user$project$Tree_Merge$fromPath = F2(
 		}
 	});
 
+var _user$project$Model_Model$toggleNode = F3(
+	function (nodeId, newState, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				testHierarchy: A3(_user$project$Tree_Tree$toggleNode, nodeId, newState, model.testHierarchy)
+			});
+	});
 var _user$project$Model_Model$updatePassedTestCount = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9275,7 +9283,27 @@ var _user$project$Model_Model$setRunStatusToProcessing = function (model) {
 		model,
 		{runStatus: _user$project$State_RunStatus$processing});
 };
-var _user$project$Model_Model$topLevelMessage = '::Root::';
+var _user$project$Model_Model$humanReadableTopLevelMessage = 'No Tests';
+var _user$project$Model_Model$removeTopNode = function (node) {
+	var _p0 = node;
+	if (_p0._1.ctor === '::') {
+		return _p0._1._0;
+	} else {
+		return A2(
+			_user$project$Tree_Tree$Node,
+			_user$project$Model_Model$humanReadableTopLevelMessage,
+			{ctor: '[]'});
+	}
+};
+var _user$project$Model_Model$updateHierarchy = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testHierarchy: _user$project$Tree_Tree$makeTree(
+				_user$project$Model_Model$removeTopNode(model.testRuns))
+		});
+};
+var _user$project$Model_Model$systemTopLevelMessage = '::Root::';
 var _user$project$Model_Model$buildTestRunDataTree = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9285,7 +9313,7 @@ var _user$project$Model_Model$buildTestRunDataTree = F2(
 					_user$project$Tree_Merge$fromPath,
 					{
 						ctor: '::',
-						_0: _user$project$Model_Model$topLevelMessage,
+						_0: _user$project$Model_Model$systemTopLevelMessage,
 						_1: _user$project$TestEvent_TestCompleted$labels(event)
 					},
 					model.testRuns)
@@ -9297,12 +9325,17 @@ var _user$project$Model_Model$default = {
 	passedTests: 0,
 	testRuns: A2(
 		_user$project$Tree_Tree$Node,
-		_user$project$Model_Model$topLevelMessage,
-		{ctor: '[]'})
+		_user$project$Model_Model$systemTopLevelMessage,
+		{ctor: '[]'}),
+	testHierarchy: _user$project$Tree_Tree$makeTree(
+		A2(
+			_user$project$Tree_Tree$Node,
+			_user$project$Model_Model$humanReadableTopLevelMessage,
+			{ctor: '[]'}))
 };
-var _user$project$Model_Model$Model = F4(
-	function (a, b, c, d) {
-		return {runStatus: a, totalTests: b, passedTests: c, testRuns: d};
+var _user$project$Model_Model$Model = F5(
+	function (a, b, c, d, e) {
+		return {runStatus: a, totalTests: b, passedTests: c, testRuns: d, testHierarchy: e};
 	});
 
 var _user$project$View_PassingTestsDisplay$render = F2(
@@ -9445,20 +9478,26 @@ var _user$project$View_TestHierarchy$idField = function (name) {
 		return {ctor: '[]'};
 	}
 };
-var _user$project$View_TestHierarchy$viewTree = F2(
-	function (cssId, _p1) {
+var _user$project$View_TestHierarchy$viewTree = F3(
+	function (messages, cssId, _p1) {
 		var _p2 = _p1;
 		var _p4 = _p2._1;
 		var _p3 = _p2._0;
 		var nodeData = _p3._0;
 		var expanded = _p3._1;
 		var nodeId = _p3._2;
-		var childrenListView = expanded ? _user$project$View_TestHierarchy$viewForest(_p4) : {ctor: '[]'};
+		var childrenListView = expanded ? A2(_user$project$View_TestHierarchy$viewForest, messages, _p4) : {ctor: '[]'};
+		var expandOrCollapse = _elm_lang$html$Html_Events$onClick(
+			expanded ? messages.collapse(nodeId) : messages.expand(nodeId));
 		var plusOrMinus = _elm_lang$core$List$isEmpty(_p4) ? '' : (expanded ? '▾ ' : '▸ ');
 		var rootText = A2(_elm_lang$core$Basics_ops['++'], plusOrMinus, nodeData);
 		var rootView = A2(
 			_elm_lang$html$Html$span,
-			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: expandOrCollapse,
+				_1: {ctor: '[]'}
+			},
 			{
 				ctor: '::',
 				_0: _elm_lang$html$Html$text(rootText),
@@ -9476,39 +9515,34 @@ var _user$project$View_TestHierarchy$viewTree = F2(
 				_user$project$View_TestHierarchy$idField(cssId)),
 			{ctor: '::', _0: rootView, _1: childrenListView});
 	});
-var _user$project$View_TestHierarchy$viewForest = function (children) {
-	return A2(
-		_elm_lang$core$List$map,
-		function (childTree) {
-			return A2(
-				_elm_lang$html$Html$li,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: A2(_user$project$View_TestHierarchy$viewTree, _elm_lang$core$Maybe$Nothing, childTree),
-					_1: {ctor: '[]'}
-				});
-		},
-		children);
-};
-var _user$project$View_TestHierarchy$removeTopNode = function (node) {
-	var _p5 = node;
-	if (_p5._1.ctor === '::') {
-		return _p5._1._0;
-	} else {
+var _user$project$View_TestHierarchy$viewForest = F2(
+	function (messages, children) {
 		return A2(
-			_user$project$Tree_Tree$Node,
-			'No Tests',
-			{ctor: '[]'});
-	}
-};
-var _user$project$View_TestHierarchy$render = function (testRuns) {
-	return A2(
-		_user$project$View_TestHierarchy$viewTree,
-		_elm_lang$core$Maybe$Just('test-hierarchy'),
-		_user$project$Tree_Tree$makeTree(
-			_user$project$View_TestHierarchy$removeTopNode(testRuns)));
-};
+			_elm_lang$core$List$map,
+			function (childTree) {
+				return A2(
+					_elm_lang$html$Html$li,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A3(_user$project$View_TestHierarchy$viewTree, messages, _elm_lang$core$Maybe$Nothing, childTree),
+						_1: {ctor: '[]'}
+					});
+			},
+			children);
+	});
+var _user$project$View_TestHierarchy$render = F2(
+	function (testHierarchy, messages) {
+		return A3(
+			_user$project$View_TestHierarchy$viewTree,
+			messages,
+			_elm_lang$core$Maybe$Just('test-hierarchy'),
+			testHierarchy);
+	});
+var _user$project$View_TestHierarchy$Messages = F2(
+	function (a, b) {
+		return {collapse: a, expand: b};
+	});
 
 var _user$project$View_Toolbar$render = F2(
 	function (toggleClickHandler, runAllButtonClickHandler) {
@@ -9590,7 +9624,7 @@ var _user$project$View_Toolbar$render = F2(
 	});
 
 var _user$project$View_Main$render = F5(
-	function (runStatus, totalTests, passedTests, testRuns, messages) {
+	function (runStatus, totalTests, passedTests, testHierarchy, messages) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -9609,16 +9643,19 @@ var _user$project$View_Main$render = F5(
 						_0: A2(_user$project$View_PassingTestsDisplay$render, totalTests, passedTests),
 						_1: {
 							ctor: '::',
-							_0: _user$project$View_TestHierarchy$render(testRuns),
+							_0: A2(
+								_user$project$View_TestHierarchy$render,
+								testHierarchy,
+								{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse}),
 							_1: {ctor: '[]'}
 						}
 					}
 				}
 			});
 	});
-var _user$project$View_Main$Messages = F2(
-	function (a, b) {
-		return {toggleClickHandler: a, runAllButtonClickHandler: b};
+var _user$project$View_Main$Messages = F4(
+	function (a, b, c, d) {
+		return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d};
 	});
 
 var _user$project$Main$andPerform = F2(
@@ -9676,14 +9713,21 @@ var _user$project$Main$update = F2(
 			case 'TestCompleted':
 				var event = _user$project$TestEvent_TestCompleted$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
-					A2(
-						_user$project$Model_Model$buildTestRunDataTree,
-						event,
-						A2(_user$project$Model_Model$updatePassedTestCount, event, model)));
-			default:
+					_user$project$Model_Model$updateHierarchy(
+						A2(
+							_user$project$Model_Model$buildTestRunDataTree,
+							event,
+							A2(_user$project$Model_Model$updatePassedTestCount, event, model))));
+			case 'RunComplete':
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
 					A2(_user$project$Model_Model$setRunStatusToPassFail, event, model));
+			case 'TestListItemExpand':
+				return _user$project$Main$andNoCommand(
+					A3(_user$project$Model_Model$toggleNode, _p0._0, true, model));
+			default:
+				return _user$project$Main$andNoCommand(
+					A3(_user$project$Model_Model$toggleNode, _p0._0, false, model));
 		}
 	});
 var _user$project$Main$commandKeyTestStart = _elm_lang$core$Native_Platform.incomingPort(
@@ -9741,6 +9785,12 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 				A2(_elm_lang$core$Json_Decode$field, 'failed', _elm_lang$core$Json_Decode$string));
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
+var _user$project$Main$TestListItemCollapse = function (a) {
+	return {ctor: 'TestListItemCollapse', _0: a};
+};
+var _user$project$Main$TestListItemExpand = function (a) {
+	return {ctor: 'TestListItemExpand', _0: a};
+};
 var _user$project$Main$RunComplete = function (a) {
 	return {ctor: 'RunComplete', _0: a};
 };
@@ -9786,8 +9836,8 @@ var _user$project$Main$view = function (model) {
 		model.runStatus,
 		model.totalTests,
 		model.passedTests,
-		model.testRuns,
-		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$RunAllButtonClicked});
+		model.testHierarchy,
+		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$RunAllButtonClicked, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
