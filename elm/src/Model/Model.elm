@@ -17,8 +17,8 @@ import State.RunStatus as RunStatus exposing (RunStatus)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
 import TestEvent.RunStart as RunStart exposing (RunStart)
 import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
+import Tree.Core as Tree exposing (CollapsibleTree, Tree(Node))
 import Tree.Merge
-import Tree.Tree as Tree exposing (CollapsibleTree, Tree(Node))
 
 
 type alias Model =

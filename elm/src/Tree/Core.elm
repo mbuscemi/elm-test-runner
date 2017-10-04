@@ -1,4 +1,4 @@
-module Tree.Tree exposing (CollapsibleTree, NodeId, Tree(Node), makeTree, toggleNode)
+module Tree.Core exposing (CollapsibleTree, NodeId, Tree(Node), makeTree, toggleNode)
 
 import State exposing (State)
 

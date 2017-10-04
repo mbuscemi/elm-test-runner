@@ -1,6 +1,6 @@
 module Tree.Merge exposing (fromPath)
 
-import Tree.Tree exposing (Tree(Node))
+import Tree.Core exposing (Tree(Node))
 
 
 fromPath : List a -> Tree a -> Tree a

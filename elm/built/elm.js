@@ -9105,7 +9105,7 @@ var _user$project$TestEvent_TestCompleted$parse = function (rawData) {
 		});
 };
 
-var _user$project$Tree_Tree$newNodeId = A2(
+var _user$project$Tree_Core$newNodeId = A2(
 	_folkertdev$elm_state$State$andThen,
 	function (_p0) {
 		return _folkertdev$elm_state$State$get;
@@ -9114,11 +9114,11 @@ var _user$project$Tree_Tree$newNodeId = A2(
 		function (x) {
 			return x + 1;
 		}));
-var _user$project$Tree_Tree$Node = F2(
+var _user$project$Tree_Core$Node = F2(
 	function (a, b) {
 		return {ctor: 'Node', _0: a, _1: b};
 	});
-var _user$project$Tree_Tree$toggleNode = F3(
+var _user$project$Tree_Core$toggleNode = F3(
 	function (nodeId, expand, _p1) {
 		var _p2 = _p1;
 		var _p5 = _p2._0;
@@ -9127,35 +9127,35 @@ var _user$project$Tree_Tree$toggleNode = F3(
 		var x = _p3._0;
 		var nid = _p3._2;
 		return _elm_lang$core$Native_Utils.eq(nodeId, nid) ? A2(
-			_user$project$Tree_Tree$Node,
+			_user$project$Tree_Core$Node,
 			{ctor: '_Tuple3', _0: x, _1: expand, _2: nid},
 			_p4) : A2(
-			_user$project$Tree_Tree$Node,
+			_user$project$Tree_Core$Node,
 			_p5,
 			A2(
 				_elm_lang$core$List$map,
-				A2(_user$project$Tree_Tree$toggleNode, nodeId, expand),
+				A2(_user$project$Tree_Core$toggleNode, nodeId, expand),
 				_p4));
 	});
-var _user$project$Tree_Tree$labelTree = function (_p6) {
+var _user$project$Tree_Core$labelTree = function (_p6) {
 	var _p7 = _p6;
 	return A3(
 		_folkertdev$elm_state$State$map2,
 		F2(
 			function (nid, collapsibleChildren) {
 				return A2(
-					_user$project$Tree_Tree$Node,
+					_user$project$Tree_Core$Node,
 					{ctor: '_Tuple3', _0: _p7._0, _1: true, _2: nid},
 					collapsibleChildren);
 			}),
-		_user$project$Tree_Tree$newNodeId,
-		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Tree$labelTree, _p7._1));
+		_user$project$Tree_Core$newNodeId,
+		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Core$labelTree, _p7._1));
 };
-var _user$project$Tree_Tree$makeTree = function (tree) {
+var _user$project$Tree_Core$makeTree = function (tree) {
 	return A2(
 		_folkertdev$elm_state$State$finalValue,
 		0,
-		_user$project$Tree_Tree$labelTree(tree));
+		_user$project$Tree_Core$labelTree(tree));
 };
 
 var _user$project$Tree_Merge$listToTree = F2(
@@ -9163,12 +9163,12 @@ var _user$project$Tree_Merge$listToTree = F2(
 		var _p0 = path;
 		if (_p0.ctor === '[]') {
 			return A2(
-				_user$project$Tree_Tree$Node,
+				_user$project$Tree_Core$Node,
 				first,
 				{ctor: '[]'});
 		} else {
 			return A2(
-				_user$project$Tree_Tree$Node,
+				_user$project$Tree_Core$Node,
 				first,
 				{
 					ctor: '::',
@@ -9192,7 +9192,7 @@ var _user$project$Tree_Merge$mergeChildren = F2(
 				return _elm_lang$core$Native_Utils.eq(_p3, _p5) ? {
 					ctor: '::',
 					_0: A2(
-						_user$project$Tree_Tree$Node,
+						_user$project$Tree_Core$Node,
 						_p3,
 						A2(_user$project$Tree_Merge$mergeChildren, _p6, _p2._0._1)),
 					_1: _p4
@@ -9222,10 +9222,10 @@ var _user$project$Tree_Merge$fromPath = F2(
 			var _p11 = _p9._1;
 			var _p10 = _p9._0;
 			return _elm_lang$core$Native_Utils.eq(_p13, _p10) ? A2(
-				_user$project$Tree_Tree$Node,
+				_user$project$Tree_Core$Node,
 				_p13,
 				A2(_user$project$Tree_Merge$mergeChildren, _p11, _p12)) : A2(
-				_user$project$Tree_Tree$Node,
+				_user$project$Tree_Core$Node,
 				_p13,
 				{
 					ctor: '::',
@@ -9240,7 +9240,7 @@ var _user$project$Model_Model$toggleNode = F3(
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{
-				testHierarchy: A3(_user$project$Tree_Tree$toggleNode, nodeId, newState, model.testHierarchy)
+				testHierarchy: A3(_user$project$Tree_Core$toggleNode, nodeId, newState, model.testHierarchy)
 			});
 	});
 var _user$project$Model_Model$updatePassedTestCount = F2(
@@ -9290,7 +9290,7 @@ var _user$project$Model_Model$removeTopNode = function (node) {
 		return _p0._1._0;
 	} else {
 		return A2(
-			_user$project$Tree_Tree$Node,
+			_user$project$Tree_Core$Node,
 			_user$project$Model_Model$humanReadableTopLevelMessage,
 			{ctor: '[]'});
 	}
@@ -9299,7 +9299,7 @@ var _user$project$Model_Model$updateHierarchy = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{
-			testHierarchy: _user$project$Tree_Tree$makeTree(
+			testHierarchy: _user$project$Tree_Core$makeTree(
 				_user$project$Model_Model$removeTopNode(model.testRuns))
 		});
 };
@@ -9324,12 +9324,12 @@ var _user$project$Model_Model$default = {
 	totalTests: 0,
 	passedTests: 0,
 	testRuns: A2(
-		_user$project$Tree_Tree$Node,
+		_user$project$Tree_Core$Node,
 		_user$project$Model_Model$systemTopLevelMessage,
 		{ctor: '[]'}),
-	testHierarchy: _user$project$Tree_Tree$makeTree(
+	testHierarchy: _user$project$Tree_Core$makeTree(
 		A2(
-			_user$project$Tree_Tree$Node,
+			_user$project$Tree_Core$Node,
 			_user$project$Model_Model$humanReadableTopLevelMessage,
 			{ctor: '[]'}))
 };
