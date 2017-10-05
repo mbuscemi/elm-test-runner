@@ -8952,15 +8952,28 @@ var _user$project$State_RunStatus$processing = _user$project$State_RunStatus$Pro
 var _user$project$State_RunStatus$NoData = {ctor: 'NoData'};
 var _user$project$State_RunStatus$noData = _user$project$State_RunStatus$NoData;
 
+var _user$project$State_TestInstance$toClass = function (instance) {
+	var _p0 = instance.testStatus;
+	if (_p0.ctor === 'Pass') {
+		return 'passed';
+	} else {
+		return 'failed';
+	}
+};
+var _user$project$State_TestInstance$toStatusIcon = function (instance) {
+	var _p1 = instance.testStatus;
+	if (_p1.ctor === 'Pass') {
+		return '✓';
+	} else {
+		return '✗';
+	}
+};
 var _user$project$State_TestInstance$TestInstance = function (a) {
 	return {testStatus: a};
 };
 var _user$project$State_TestInstance$Fail = {ctor: 'Fail'};
 var _user$project$State_TestInstance$Pass = {ctor: 'Pass'};
 var _user$project$State_TestInstance$default = {testStatus: _user$project$State_TestInstance$Pass};
-var _user$project$State_TestInstance$passed = function (test) {
-	return _elm_lang$core$Native_Utils.eq(test.testStatus, _user$project$State_TestInstance$Pass);
-};
 var _user$project$State_TestInstance$setStatus = F2(
 	function (passed, test) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9529,23 +9542,31 @@ var _user$project$View_TestHierarchy$idField = function (name) {
 		return {ctor: '[]'};
 	}
 };
-var _user$project$View_TestHierarchy$statusIndicatorIcon = function (passed) {
-	return passed ? _elm_lang$html$Html$text(' ✓ ') : _elm_lang$html$Html$text(' ✗ ');
+var _user$project$View_TestHierarchy$statusIndicatorIcon = function (nodeData) {
+	return _elm_lang$html$Html$text(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			' ',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_user$project$State_TestInstance$toStatusIcon(nodeData),
+				' ')));
 };
-var _user$project$View_TestHierarchy$statusIndicatorTextColor = function (passed) {
-	return passed ? _elm_lang$html$Html_Attributes$class('passed') : _elm_lang$html$Html_Attributes$class('failed');
+var _user$project$View_TestHierarchy$statusIndicatorTextColor = function (nodeData) {
+	return _elm_lang$html$Html_Attributes$class(
+		_user$project$State_TestInstance$toClass(nodeData));
 };
-var _user$project$View_TestHierarchy$statusIndicator = function (passed) {
+var _user$project$View_TestHierarchy$statusIndicator = function (nodeData) {
 	return A2(
 		_elm_lang$html$Html$span,
 		{
 			ctor: '::',
-			_0: _user$project$View_TestHierarchy$statusIndicatorTextColor(passed),
+			_0: _user$project$View_TestHierarchy$statusIndicatorTextColor(nodeData),
 			_1: {ctor: '[]'}
 		},
 		{
 			ctor: '::',
-			_0: _user$project$View_TestHierarchy$statusIndicatorIcon(passed),
+			_0: _user$project$View_TestHierarchy$statusIndicatorIcon(nodeData),
 			_1: {ctor: '[]'}
 		});
 };
@@ -9571,7 +9592,7 @@ var _user$project$View_TestHierarchy$expandOrCollapse = F3(
 			isExpanded ? messages.collapse(nodeId) : messages.expand(nodeId));
 	});
 var _user$project$View_TestHierarchy$rootText = F4(
-	function (hasChildren, isExpanded, nodePassed, nodeName) {
+	function (nodeData, hasChildren, isExpanded, nodeName) {
 		return A2(
 			_elm_lang$html$Html$span,
 			{ctor: '[]'},
@@ -9580,7 +9601,7 @@ var _user$project$View_TestHierarchy$rootText = F4(
 				_0: A2(_user$project$View_TestHierarchy$togglingArrow, hasChildren, isExpanded),
 				_1: {
 					ctor: '::',
-					_0: _user$project$View_TestHierarchy$statusIndicator(nodePassed),
+					_0: _user$project$View_TestHierarchy$statusIndicator(nodeData),
 					_1: {
 						ctor: '::',
 						_0: A2(_user$project$View_TestHierarchy$conditionallyEmbolden, !hasChildren, nodeName),
@@ -9590,7 +9611,7 @@ var _user$project$View_TestHierarchy$rootText = F4(
 			});
 	});
 var _user$project$View_TestHierarchy$rootView = F6(
-	function (messages, hasChildren, isExpanded, nodePassed, nodeName, nodeId) {
+	function (messages, nodeData, hasChildren, isExpanded, nodeName, nodeId) {
 		return A2(
 			_elm_lang$html$Html$span,
 			{
@@ -9600,7 +9621,7 @@ var _user$project$View_TestHierarchy$rootView = F6(
 			},
 			{
 				ctor: '::',
-				_0: A4(_user$project$View_TestHierarchy$rootText, hasChildren, isExpanded, nodePassed, nodeName),
+				_0: A4(_user$project$View_TestHierarchy$rootText, nodeData, hasChildren, isExpanded, nodeName),
 				_1: {ctor: '[]'}
 			});
 	});
@@ -9627,9 +9648,9 @@ var _user$project$View_TestHierarchy$viewTree = F3(
 				_0: A6(
 					_user$project$View_TestHierarchy$rootView,
 					messages,
+					_p2._1,
 					_elm_lang$core$List$isEmpty(_p4),
 					isExpanded,
-					_user$project$State_TestInstance$passed(_p2._1),
 					nodeName,
 					nodeId),
 				_1: A3(_user$project$View_TestHierarchy$viewChildren, messages, isExpanded, _p4)

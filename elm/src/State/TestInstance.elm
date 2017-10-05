@@ -1,4 +1,4 @@
-module State.TestInstance exposing (TestInstance, default, passed, setStatus)
+module State.TestInstance exposing (TestInstance, default, setStatus, toClass, toStatusIcon)
 
 
 type TestStatus
@@ -16,9 +16,24 @@ default =
     { testStatus = Pass }
 
 
-passed : TestInstance -> Bool
-passed test =
-    test.testStatus == Pass
+toStatusIcon : TestInstance -> String
+toStatusIcon instance =
+    case instance.testStatus of
+        Pass ->
+            "✓"
+
+        Fail ->
+            "✗"
+
+
+toClass : TestInstance -> String
+toClass instance =
+    case instance.testStatus of
+        Pass ->
+            "passed"
+
+        Fail ->
+            "failed"
 
 
 setStatus : Bool -> TestInstance -> TestInstance

@@ -19,14 +19,14 @@ render testHierarchy messages =
 
 
 viewTree : Messages message -> Maybe String -> CollapsibleTree String TestInstance -> Html message
-viewTree messages cssId (Node root testData children) =
+viewTree messages cssId (Node root nodeData children) =
     let
         ( nodeName, isExpanded, nodeId ) =
             root
     in
     ul
         (List.append [ class "test-list" ] (idField cssId))
-        (rootView messages (List.isEmpty children) isExpanded (TestInstance.passed testData) nodeName nodeId
+        (rootView messages nodeData (List.isEmpty children) isExpanded nodeName nodeId
             :: viewChildren messages isExpanded children
         )
 
@@ -44,18 +44,18 @@ viewChildren messages shouldShow children =
         []
 
 
-rootView : Messages message -> Bool -> Bool -> Bool -> String -> NodeId -> Html message
-rootView messages hasChildren isExpanded nodePassed nodeName nodeId =
+rootView : Messages message -> TestInstance -> Bool -> Bool -> String -> NodeId -> Html message
+rootView messages nodeData hasChildren isExpanded nodeName nodeId =
     span
         [ expandOrCollapse messages isExpanded nodeId ]
-        [ rootText hasChildren isExpanded nodePassed nodeName ]
+        [ rootText nodeData hasChildren isExpanded nodeName ]
 
 
-rootText : Bool -> Bool -> Bool -> String -> Html message
-rootText hasChildren isExpanded nodePassed nodeName =
+rootText : TestInstance -> Bool -> Bool -> String -> Html message
+rootText nodeData hasChildren isExpanded nodeName =
     span []
         [ togglingArrow hasChildren isExpanded
-        , statusIndicator nodePassed
+        , statusIndicator nodeData
         , conditionallyEmbolden (not hasChildren) nodeName
         ]
 
@@ -84,27 +84,21 @@ togglingArrowText isVisible isExpanded =
         "▸ "
 
 
-statusIndicator : Bool -> Html message
-statusIndicator passed =
+statusIndicator : TestInstance -> Html message
+statusIndicator nodeData =
     span
-        [ statusIndicatorTextColor passed ]
-        [ statusIndicatorIcon passed ]
+        [ statusIndicatorTextColor nodeData ]
+        [ statusIndicatorIcon nodeData ]
 
 
-statusIndicatorTextColor : Bool -> Attribute message
-statusIndicatorTextColor passed =
-    if passed then
-        class "passed"
-    else
-        class "failed"
+statusIndicatorTextColor : TestInstance -> Attribute message
+statusIndicatorTextColor nodeData =
+    class <| TestInstance.toClass nodeData
 
 
-statusIndicatorIcon : Bool -> Html message
-statusIndicatorIcon passed =
-    if passed then
-        text " ✓ "
-    else
-        text " ✗ "
+statusIndicatorIcon : TestInstance -> Html message
+statusIndicatorIcon nodeData =
+    text <| " " ++ TestInstance.toStatusIcon nodeData ++ " "
 
 
 idField : Maybe String -> List (Attribute message)
