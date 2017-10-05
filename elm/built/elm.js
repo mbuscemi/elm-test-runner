@@ -9198,8 +9198,8 @@ var _user$project$Tree_Merge$listToTree = F3(
 				});
 		}
 	});
-var _user$project$Tree_Merge$mergeChildren = F3(
-	function (newData, path, children) {
+var _user$project$Tree_Merge$mergeChildren = F4(
+	function (path, newData, transformer, children) {
 		var _p1 = path;
 		if (_p1.ctor === '[]') {
 			return children;
@@ -9210,18 +9210,19 @@ var _user$project$Tree_Merge$mergeChildren = F3(
 			if (_p2.ctor === '::') {
 				var _p4 = _p2._1;
 				var _p3 = _p2._0._0;
+				var transformedData = A2(transformer, newData, _p2._0._1);
 				return _elm_lang$core$Native_Utils.eq(_p3, _p5) ? {
 					ctor: '::',
 					_0: A3(
 						_user$project$Tree_Core$Node,
 						_p3,
 						newData,
-						A3(_user$project$Tree_Merge$mergeChildren, newData, _p6, _p2._0._2)),
+						A4(_user$project$Tree_Merge$mergeChildren, _p6, transformedData, transformer, _p2._0._2)),
 					_1: _p4
 				} : {
 					ctor: '::',
 					_0: _p2._0,
-					_1: A3(_user$project$Tree_Merge$mergeChildren, newData, path, _p4)
+					_1: A4(_user$project$Tree_Merge$mergeChildren, path, transformedData, transformer, _p4)
 				};
 			} else {
 				return {
@@ -9232,8 +9233,8 @@ var _user$project$Tree_Merge$mergeChildren = F3(
 			}
 		}
 	});
-var _user$project$Tree_Merge$fromPath = F3(
-	function (path, newData, _p7) {
+var _user$project$Tree_Merge$fromPath = F4(
+	function (path, newData, transformer, _p7) {
 		var _p8 = _p7;
 		var _p14 = _p8._0;
 		var _p13 = _p8._1;
@@ -9248,7 +9249,7 @@ var _user$project$Tree_Merge$fromPath = F3(
 				_user$project$Tree_Core$Node,
 				_p14,
 				_p13,
-				A3(_user$project$Tree_Merge$mergeChildren, newData, _p11, _p12)) : A3(
+				A4(_user$project$Tree_Merge$mergeChildren, _p11, newData, transformer, _p12)) : A3(
 				_user$project$Tree_Core$Node,
 				_p14,
 				_p13,
@@ -9358,7 +9359,7 @@ var _user$project$Model_Core$buildTestRunDataTree = F2(
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{
-				testRuns: A3(
+				testRuns: A4(
 					_user$project$Tree_Merge$fromPath,
 					{
 						ctor: '::',
@@ -9366,6 +9367,10 @@ var _user$project$Model_Core$buildTestRunDataTree = F2(
 						_1: _user$project$TestEvent_TestCompleted$labels(event)
 					},
 					_user$project$TestEvent_TestCompleted$toTestInstance(event),
+					F2(
+						function ($new, old) {
+							return $new;
+						}),
 					model.testRuns)
 			});
 	});
