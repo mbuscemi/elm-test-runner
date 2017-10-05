@@ -1,4 +1,4 @@
-module Tree.Core exposing (CollapsibleTree, NodeId, Tree(Node), makeTree, toggleNode)
+module Tree.Core exposing (CollapsibleTree, NodeId, Tree(Node), make)
 
 import State exposing (State)
 
@@ -19,31 +19,19 @@ type alias IdGen a =
     State NodeId a
 
 
-toggleNode : NodeId -> Bool -> CollapsibleTree a -> CollapsibleTree a
-toggleNode nodeId expand (Node root children) =
-    let
-        ( x, _, nid ) =
-            root
-    in
-    if nodeId == nid then
-        Node ( x, expand, nid ) children
-    else
-        Node root <| List.map (toggleNode nodeId expand) children
+make : Tree a -> CollapsibleTree a
+make tree =
+    State.finalValue 0 (label tree)
 
 
-makeTree : Tree a -> CollapsibleTree a
-makeTree tree =
-    State.finalValue 0 (labelTree tree)
-
-
-labelTree : Tree a -> IdGen (CollapsibleTree a)
-labelTree (Node root children) =
+label : Tree a -> IdGen (CollapsibleTree a)
+label (Node root children) =
     State.map2
         (\nid collapsibleChildren -> Node ( root, True, nid ) collapsibleChildren)
-        newNodeId
-        (State.traverse labelTree children)
+        newId
+        (State.traverse label children)
 
 
-newNodeId : IdGen NodeId
-newNodeId =
+newId : IdGen NodeId
+newId =
     State.modify (\x -> x + 1) |> State.andThen (\_ -> State.get)

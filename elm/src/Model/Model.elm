@@ -19,6 +19,7 @@ import TestEvent.RunStart as RunStart exposing (RunStart)
 import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
 import Tree.Core as Tree exposing (CollapsibleTree, Tree(Node))
 import Tree.Merge
+import Tree.Node
 
 
 type alias Model =
@@ -36,7 +37,7 @@ default =
     , totalTests = 0
     , passedTests = 0
     , testRuns = Node systemTopLevelMessage []
-    , testHierarchy = Tree.makeTree (Node humanReadableTopLevelMessage [])
+    , testHierarchy = Tree.make (Node humanReadableTopLevelMessage [])
     }
 
 
@@ -96,7 +97,7 @@ updateHierarchy model =
         | testHierarchy =
             model.testRuns
                 |> removeTopNode
-                |> Tree.makeTree
+                |> Tree.make
     }
 
 
@@ -112,4 +113,4 @@ removeTopNode node =
 
 toggleNode : Int -> Bool -> Model -> Model
 toggleNode nodeId newState model =
-    { model | testHierarchy = Tree.toggleNode nodeId newState model.testHierarchy }
+    { model | testHierarchy = Tree.Node.toggle nodeId newState model.testHierarchy }

@@ -3,7 +3,7 @@ module View.TestHierarchy exposing (render)
 import Html exposing (Attribute, Html, li, span, text, ul)
 import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
-import Tree.Core exposing (CollapsibleTree, Tree(Node), makeTree)
+import Tree.Core exposing (CollapsibleTree, Tree(Node))
 
 
 type alias Messages message =

@@ -9105,7 +9105,7 @@ var _user$project$TestEvent_TestCompleted$parse = function (rawData) {
 		});
 };
 
-var _user$project$Tree_Core$newNodeId = A2(
+var _user$project$Tree_Core$newId = A2(
 	_folkertdev$elm_state$State$andThen,
 	function (_p0) {
 		return _folkertdev$elm_state$State$get;
@@ -9118,44 +9118,25 @@ var _user$project$Tree_Core$Node = F2(
 	function (a, b) {
 		return {ctor: 'Node', _0: a, _1: b};
 	});
-var _user$project$Tree_Core$toggleNode = F3(
-	function (nodeId, expand, _p1) {
-		var _p2 = _p1;
-		var _p5 = _p2._0;
-		var _p4 = _p2._1;
-		var _p3 = _p5;
-		var x = _p3._0;
-		var nid = _p3._2;
-		return _elm_lang$core$Native_Utils.eq(nodeId, nid) ? A2(
-			_user$project$Tree_Core$Node,
-			{ctor: '_Tuple3', _0: x, _1: expand, _2: nid},
-			_p4) : A2(
-			_user$project$Tree_Core$Node,
-			_p5,
-			A2(
-				_elm_lang$core$List$map,
-				A2(_user$project$Tree_Core$toggleNode, nodeId, expand),
-				_p4));
-	});
-var _user$project$Tree_Core$labelTree = function (_p6) {
-	var _p7 = _p6;
+var _user$project$Tree_Core$label = function (_p1) {
+	var _p2 = _p1;
 	return A3(
 		_folkertdev$elm_state$State$map2,
 		F2(
 			function (nid, collapsibleChildren) {
 				return A2(
 					_user$project$Tree_Core$Node,
-					{ctor: '_Tuple3', _0: _p7._0, _1: true, _2: nid},
+					{ctor: '_Tuple3', _0: _p2._0, _1: true, _2: nid},
 					collapsibleChildren);
 			}),
-		_user$project$Tree_Core$newNodeId,
-		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Core$labelTree, _p7._1));
+		_user$project$Tree_Core$newId,
+		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Core$label, _p2._1));
 };
-var _user$project$Tree_Core$makeTree = function (tree) {
+var _user$project$Tree_Core$make = function (tree) {
 	return A2(
 		_folkertdev$elm_state$State$finalValue,
 		0,
-		_user$project$Tree_Core$labelTree(tree));
+		_user$project$Tree_Core$label(tree));
 };
 
 var _user$project$Tree_Merge$listToTree = F2(
@@ -9235,12 +9216,32 @@ var _user$project$Tree_Merge$fromPath = F2(
 		}
 	});
 
+var _user$project$Tree_Node$toggle = F3(
+	function (nodeId, expand, _p0) {
+		var _p1 = _p0;
+		var _p4 = _p1._0;
+		var _p3 = _p1._1;
+		var _p2 = _p4;
+		var x = _p2._0;
+		var nid = _p2._2;
+		return _elm_lang$core$Native_Utils.eq(nodeId, nid) ? A2(
+			_user$project$Tree_Core$Node,
+			{ctor: '_Tuple3', _0: x, _1: expand, _2: nid},
+			_p3) : A2(
+			_user$project$Tree_Core$Node,
+			_p4,
+			A2(
+				_elm_lang$core$List$map,
+				A2(_user$project$Tree_Node$toggle, nodeId, expand),
+				_p3));
+	});
+
 var _user$project$Model_Model$toggleNode = F3(
 	function (nodeId, newState, model) {
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{
-				testHierarchy: A3(_user$project$Tree_Core$toggleNode, nodeId, newState, model.testHierarchy)
+				testHierarchy: A3(_user$project$Tree_Node$toggle, nodeId, newState, model.testHierarchy)
 			});
 	});
 var _user$project$Model_Model$updatePassedTestCount = F2(
@@ -9299,7 +9300,7 @@ var _user$project$Model_Model$updateHierarchy = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{
-			testHierarchy: _user$project$Tree_Core$makeTree(
+			testHierarchy: _user$project$Tree_Core$make(
 				_user$project$Model_Model$removeTopNode(model.testRuns))
 		});
 };
@@ -9327,7 +9328,7 @@ var _user$project$Model_Model$default = {
 		_user$project$Tree_Core$Node,
 		_user$project$Model_Model$systemTopLevelMessage,
 		{ctor: '[]'}),
-	testHierarchy: _user$project$Tree_Core$makeTree(
+	testHierarchy: _user$project$Tree_Core$make(
 		A2(
 			_user$project$Tree_Core$Node,
 			_user$project$Model_Model$humanReadableTopLevelMessage,
