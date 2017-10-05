@@ -1,4 +1,4 @@
-module Model.Model
+module Model.Core
     exposing
         ( Model
         , buildTestRunDataTree

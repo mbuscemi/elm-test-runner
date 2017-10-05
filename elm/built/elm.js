@@ -9236,7 +9236,7 @@ var _user$project$Tree_Node$toggle = F3(
 				_p3));
 	});
 
-var _user$project$Model_Model$toggleNode = F3(
+var _user$project$Model_Core$toggleNode = F3(
 	function (nodeId, newState, model) {
 		return _elm_lang$core$Native_Utils.update(
 			model,
@@ -9244,7 +9244,7 @@ var _user$project$Model_Model$toggleNode = F3(
 				testHierarchy: A3(_user$project$Tree_Node$toggle, nodeId, newState, model.testHierarchy)
 			});
 	});
-var _user$project$Model_Model$updatePassedTestCount = F2(
+var _user$project$Model_Core$updatePassedTestCount = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
 			model,
@@ -9252,7 +9252,7 @@ var _user$project$Model_Model$updatePassedTestCount = F2(
 				passedTests: model.passedTests + _user$project$TestEvent_TestCompleted$passedTestCountToIncrement(event)
 			});
 	});
-var _user$project$Model_Model$setTotalTestCount = F2(
+var _user$project$Model_Core$setTotalTestCount = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
 			model,
@@ -9260,17 +9260,17 @@ var _user$project$Model_Model$setTotalTestCount = F2(
 				totalTests: _user$project$TestEvent_RunStart$numTotalTests(event)
 			});
 	});
-var _user$project$Model_Model$resetPassedTests = function (model) {
+var _user$project$Model_Core$resetPassedTests = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{passedTests: 0});
 };
-var _user$project$Model_Model$setRunStatusToCompileError = function (model) {
+var _user$project$Model_Core$setRunStatusToCompileError = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{runStatus: _user$project$State_RunStatus$compileError});
 };
-var _user$project$Model_Model$setRunStatusToPassFail = F2(
+var _user$project$Model_Core$setRunStatusToPassFail = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
 			model,
@@ -9279,33 +9279,33 @@ var _user$project$Model_Model$setRunStatusToPassFail = F2(
 					_user$project$TestEvent_RunComplete$passed(event))
 			});
 	});
-var _user$project$Model_Model$setRunStatusToProcessing = function (model) {
+var _user$project$Model_Core$setRunStatusToProcessing = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{runStatus: _user$project$State_RunStatus$processing});
 };
-var _user$project$Model_Model$humanReadableTopLevelMessage = 'No Tests';
-var _user$project$Model_Model$removeTopNode = function (node) {
+var _user$project$Model_Core$humanReadableTopLevelMessage = 'No Tests';
+var _user$project$Model_Core$removeTopNode = function (node) {
 	var _p0 = node;
 	if (_p0._1.ctor === '::') {
 		return _p0._1._0;
 	} else {
 		return A2(
 			_user$project$Tree_Core$Node,
-			_user$project$Model_Model$humanReadableTopLevelMessage,
+			_user$project$Model_Core$humanReadableTopLevelMessage,
 			{ctor: '[]'});
 	}
 };
-var _user$project$Model_Model$updateHierarchy = function (model) {
+var _user$project$Model_Core$updateHierarchy = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{
 			testHierarchy: _user$project$Tree_Core$make(
-				_user$project$Model_Model$removeTopNode(model.testRuns))
+				_user$project$Model_Core$removeTopNode(model.testRuns))
 		});
 };
-var _user$project$Model_Model$systemTopLevelMessage = '::Root::';
-var _user$project$Model_Model$buildTestRunDataTree = F2(
+var _user$project$Model_Core$systemTopLevelMessage = '::Root::';
+var _user$project$Model_Core$buildTestRunDataTree = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
 			model,
@@ -9314,27 +9314,27 @@ var _user$project$Model_Model$buildTestRunDataTree = F2(
 					_user$project$Tree_Merge$fromPath,
 					{
 						ctor: '::',
-						_0: _user$project$Model_Model$systemTopLevelMessage,
+						_0: _user$project$Model_Core$systemTopLevelMessage,
 						_1: _user$project$TestEvent_TestCompleted$labels(event)
 					},
 					model.testRuns)
 			});
 	});
-var _user$project$Model_Model$default = {
+var _user$project$Model_Core$default = {
 	runStatus: _user$project$State_RunStatus$noData,
 	totalTests: 0,
 	passedTests: 0,
 	testRuns: A2(
 		_user$project$Tree_Core$Node,
-		_user$project$Model_Model$systemTopLevelMessage,
+		_user$project$Model_Core$systemTopLevelMessage,
 		{ctor: '[]'}),
 	testHierarchy: _user$project$Tree_Core$make(
 		A2(
 			_user$project$Tree_Core$Node,
-			_user$project$Model_Model$humanReadableTopLevelMessage,
+			_user$project$Model_Core$humanReadableTopLevelMessage,
 			{ctor: '[]'}))
 };
-var _user$project$Model_Model$Model = F5(
+var _user$project$Model_Core$Model = F5(
 	function (a, b, c, d, e) {
 		return {runStatus: a, totalTests: b, passedTests: c, testRuns: d, testHierarchy: e};
 	});
@@ -9668,7 +9668,7 @@ var _user$project$Main$andNoCommand = function (model) {
 };
 var _user$project$Main$init = A2(
 	_elm_lang$core$Platform_Cmd_ops['!'],
-	_user$project$Model_Model$default,
+	_user$project$Model_Core$default,
 	{ctor: '[]'});
 var _user$project$Main$toggle = _elm_lang$core$Native_Platform.outgoingPort(
 	'toggle',
@@ -9695,40 +9695,40 @@ var _user$project$Main$update = F2(
 					_user$project$Main$andPerform,
 					_user$project$Main$runTest(
 						{ctor: '_Tuple0'}),
-					_user$project$Model_Model$resetPassedTests(
-						_user$project$Model_Model$setRunStatusToProcessing(model)));
+					_user$project$Model_Core$resetPassedTests(
+						_user$project$Model_Core$setRunStatusToProcessing(model)));
 			case 'InitiateRunAll':
 				return _user$project$Main$andNoCommand(
-					_user$project$Model_Model$resetPassedTests(
-						_user$project$Model_Model$setRunStatusToProcessing(model)));
+					_user$project$Model_Core$resetPassedTests(
+						_user$project$Model_Core$setRunStatusToProcessing(model)));
 			case 'CompilerErrored':
 				return _user$project$Main$andNoCommand(
-					_user$project$Model_Model$setRunStatusToCompileError(model));
+					_user$project$Model_Core$setRunStatusToCompileError(model));
 			case 'RunStart':
 				var event = _user$project$TestEvent_RunStart$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
 					A2(
-						_user$project$Model_Model$setTotalTestCount,
+						_user$project$Model_Core$setTotalTestCount,
 						event,
-						_user$project$Model_Model$setRunStatusToProcessing(model)));
+						_user$project$Model_Core$setRunStatusToProcessing(model)));
 			case 'TestCompleted':
 				var event = _user$project$TestEvent_TestCompleted$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
-					_user$project$Model_Model$updateHierarchy(
+					_user$project$Model_Core$updateHierarchy(
 						A2(
-							_user$project$Model_Model$buildTestRunDataTree,
+							_user$project$Model_Core$buildTestRunDataTree,
 							event,
-							A2(_user$project$Model_Model$updatePassedTestCount, event, model))));
+							A2(_user$project$Model_Core$updatePassedTestCount, event, model))));
 			case 'RunComplete':
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
-					A2(_user$project$Model_Model$setRunStatusToPassFail, event, model));
+					A2(_user$project$Model_Core$setRunStatusToPassFail, event, model));
 			case 'TestListItemExpand':
 				return _user$project$Main$andNoCommand(
-					A3(_user$project$Model_Model$toggleNode, _p0._0, true, model));
+					A3(_user$project$Model_Core$toggleNode, _p0._0, true, model));
 			default:
 				return _user$project$Main$andNoCommand(
-					A3(_user$project$Model_Model$toggleNode, _p0._0, false, model));
+					A3(_user$project$Model_Core$toggleNode, _p0._0, false, model));
 		}
 	});
 var _user$project$Main$commandKeyTestStart = _elm_lang$core$Native_Platform.incomingPort(

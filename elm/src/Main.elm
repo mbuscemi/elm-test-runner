@@ -1,7 +1,7 @@
 port module Main exposing (main)
 
 import Html exposing (Html)
-import Model.Model as Model
+import Model.Core as Model
     exposing
         ( Model
         , buildTestRunDataTree
