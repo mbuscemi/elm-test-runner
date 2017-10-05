@@ -1,4 +1,4 @@
-module State.TestInstance exposing (TestInstance, default, passed)
+module State.TestInstance exposing (TestInstance, default, passed, setStatus)
 
 
 type TestStatus
@@ -19,3 +19,14 @@ default =
 passed : TestInstance -> Bool
 passed test =
     test.testStatus == Pass
+
+
+setStatus : Bool -> TestInstance -> TestInstance
+setStatus passed test =
+    { test
+        | testStatus =
+            if passed then
+                Pass
+            else
+                Fail
+    }

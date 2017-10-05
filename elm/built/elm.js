@@ -8961,6 +8961,14 @@ var _user$project$State_TestInstance$default = {testStatus: _user$project$State_
 var _user$project$State_TestInstance$passed = function (test) {
 	return _elm_lang$core$Native_Utils.eq(test.testStatus, _user$project$State_TestInstance$Pass);
 };
+var _user$project$State_TestInstance$setStatus = F2(
+	function (passed, test) {
+		return _elm_lang$core$Native_Utils.update(
+			test,
+			{
+				testStatus: passed ? _user$project$State_TestInstance$Pass : _user$project$State_TestInstance$Fail
+			});
+	});
 
 var _user$project$TestEvent_Util$parseInt = function (string) {
 	return A2(
@@ -9030,6 +9038,12 @@ var _user$project$TestEvent_TestCompleted$passed = function (_p2) {
 	} else {
 		return false;
 	}
+};
+var _user$project$TestEvent_TestCompleted$toTestInstance = function (event) {
+	return A2(
+		_user$project$State_TestInstance$setStatus,
+		_user$project$TestEvent_TestCompleted$passed(event),
+		_user$project$State_TestInstance$default);
 };
 var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
 	return _user$project$TestEvent_TestCompleted$passed(event) ? 1 : 0;
@@ -9172,64 +9186,63 @@ var _user$project$Tree_Merge$listToTree = F3(
 		}
 	});
 var _user$project$Tree_Merge$mergeChildren = F3(
-	function (data, path, children) {
+	function (newData, path, children) {
 		var _p1 = path;
 		if (_p1.ctor === '[]') {
 			return children;
 		} else {
-			var _p7 = _p1._1;
-			var _p6 = _p1._0;
+			var _p6 = _p1._1;
+			var _p5 = _p1._0;
 			var _p2 = children;
 			if (_p2.ctor === '::') {
-				var _p5 = _p2._1;
-				var _p4 = _p2._0._0;
-				var _p3 = _p2._0._1;
-				return _elm_lang$core$Native_Utils.eq(_p4, _p6) ? {
+				var _p4 = _p2._1;
+				var _p3 = _p2._0._0;
+				return _elm_lang$core$Native_Utils.eq(_p3, _p5) ? {
 					ctor: '::',
 					_0: A3(
 						_user$project$Tree_Core$Node,
-						_p4,
 						_p3,
-						A3(_user$project$Tree_Merge$mergeChildren, _p3, _p7, _p2._0._2)),
-					_1: _p5
+						newData,
+						A3(_user$project$Tree_Merge$mergeChildren, newData, _p6, _p2._0._2)),
+					_1: _p4
 				} : {
 					ctor: '::',
 					_0: _p2._0,
-					_1: A3(_user$project$Tree_Merge$mergeChildren, _p3, path, _p5)
+					_1: A3(_user$project$Tree_Merge$mergeChildren, newData, path, _p4)
 				};
 			} else {
 				return {
 					ctor: '::',
-					_0: A3(_user$project$Tree_Merge$listToTree, _p6, data, _p7),
+					_0: A3(_user$project$Tree_Merge$listToTree, _p5, newData, _p6),
 					_1: {ctor: '[]'}
 				};
 			}
 		}
 	});
-var _user$project$Tree_Merge$fromPath = F2(
-	function (path, _p8) {
-		var _p9 = _p8;
-		var _p15 = _p9._0;
-		var _p14 = _p9._1;
-		var _p13 = _p9._2;
-		var _p10 = path;
-		if (_p10.ctor === '[]') {
-			return _p9;
+var _user$project$Tree_Merge$fromPath = F3(
+	function (path, newData, _p7) {
+		var _p8 = _p7;
+		var _p14 = _p8._0;
+		var _p13 = _p8._1;
+		var _p12 = _p8._2;
+		var _p9 = path;
+		if (_p9.ctor === '[]') {
+			return _p8;
 		} else {
-			var _p12 = _p10._1;
-			var _p11 = _p10._0;
-			return _elm_lang$core$Native_Utils.eq(_p15, _p11) ? A3(
+			var _p11 = _p9._1;
+			var _p10 = _p9._0;
+			return _elm_lang$core$Native_Utils.eq(_p14, _p10) ? A3(
 				_user$project$Tree_Core$Node,
-				_p15,
 				_p14,
-				A3(_user$project$Tree_Merge$mergeChildren, _p14, _p12, _p13)) : A3(
+				_p13,
+				A3(_user$project$Tree_Merge$mergeChildren, newData, _p11, _p12)) : A3(
 				_user$project$Tree_Core$Node,
-				_p15,
 				_p14,
+				_p13,
 				{
 					ctor: '::',
-					_0: A3(_user$project$Tree_Merge$listToTree, _p11, _p14, _p12),
-					_1: _p13
+					_0: A3(_user$project$Tree_Merge$listToTree, _p10, newData, _p11),
+					_1: _p12
 				});
 		}
 	});
@@ -9332,13 +9345,14 @@ var _user$project$Model_Core$buildTestRunDataTree = F2(
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{
-				testRuns: A2(
+				testRuns: A3(
 					_user$project$Tree_Merge$fromPath,
 					{
 						ctor: '::',
 						_0: _user$project$Model_Core$systemTopLevelMessage,
 						_1: _user$project$TestEvent_TestCompleted$labels(event)
 					},
+					_user$project$TestEvent_TestCompleted$toTestInstance(event),
 					model.testRuns)
 			});
 	});

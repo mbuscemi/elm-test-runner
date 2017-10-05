@@ -88,6 +88,7 @@ buildTestRunDataTree event model =
         | testRuns =
             Tree.Merge.fromPath
                 (systemTopLevelMessage :: TestCompleted.labels event)
+                (TestCompleted.toTestInstance event)
                 model.testRuns
     }
 
