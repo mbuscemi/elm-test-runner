@@ -137,4 +137,9 @@ labels (TestCompleted parsed) =
 toTestInstance : TestCompleted -> TestInstance
 toTestInstance event =
     TestInstance.default
-        |> TestInstance.setStatus (passed event)
+        |> TestInstance.setStatus
+            (if passed event then
+                "pass"
+             else
+                "fail"
+            )

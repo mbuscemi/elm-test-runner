@@ -14,10 +14,14 @@ fromPath path newData transformer ((Node node data children) as tree) =
             tree
 
         x :: xs ->
+            let
+                transformedData =
+                    transformer newData data
+            in
             if node == x then
-                Node node data (mergeChildren xs newData transformer children)
+                Node node transformedData (mergeChildren xs newData transformedData transformer children)
             else
-                Node node data (listToTree x newData xs :: children)
+                Node node transformedData (listToTree x newData xs :: children)
 
 
 listToTree : a -> b -> List a -> Tree a b
@@ -30,8 +34,8 @@ listToTree first data path =
             Node first data [ listToTree x data xs ]
 
 
-mergeChildren : List a -> b -> DataTransformer b -> List (Tree a b) -> List (Tree a b)
-mergeChildren path newData transformer children =
+mergeChildren : List a -> b -> b -> DataTransformer b -> List (Tree a b) -> List (Tree a b)
+mergeChildren path originalData newData transformer children =
     case path of
         [] ->
             children
@@ -39,14 +43,10 @@ mergeChildren path newData transformer children =
         x :: xs ->
             case children of
                 ((Node node data nodeChildren) as current) :: rest ->
-                    let
-                        transformedData =
-                            transformer newData data
-                    in
                     if node == x then
-                        Node node newData (mergeChildren xs transformedData transformer nodeChildren) :: rest
+                        Node node newData (mergeChildren xs originalData newData transformer nodeChildren) :: rest
                     else
-                        current :: mergeChildren path transformedData transformer rest
+                        current :: mergeChildren path originalData originalData transformer rest
 
                 [] ->
-                    [ listToTree x newData xs ]
+                    [ listToTree x originalData xs ]

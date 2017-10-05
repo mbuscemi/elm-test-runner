@@ -6,6 +6,7 @@ import Model.Core as Model
         ( Model
         , buildTestRunDataTree
         , resetPassedTests
+        , resetTestRuns
         , setRunStatusToCompileError
         , setRunStatusToPassFail
         , setRunStatusToProcessing
@@ -67,11 +68,15 @@ update message model =
         RunAllButtonClicked ->
             setRunStatusToProcessing model
                 |> resetPassedTests
+                |> resetTestRuns
+                |> updateHierarchy
                 |> andPerform (runTest ())
 
         InitiateRunAll ->
             setRunStatusToProcessing model
                 |> resetPassedTests
+                |> resetTestRuns
+                |> updateHierarchy
                 |> andNoCommand
 
         CompilerErrored ->

@@ -50,6 +50,11 @@
     font-weight: bold;
 }
 
+#test-hierarchy span.pending {
+    color: gray;
+    font-weight: bold;
+}
+
 .etr-main-view ul.test-list {
     padding: 0 0 0 1.5em;
     list-style-type: none;

@@ -4,6 +4,7 @@ module Model.Core
         , buildTestRunDataTree
         , default
         , resetPassedTests
+        , resetTestRuns
         , setRunStatusToCompileError
         , setRunStatusToPassFail
         , setRunStatusToProcessing
@@ -22,6 +23,7 @@ import TestInstance.Reconcile
 import Tree.Core as Tree exposing (CollapsibleTree, Tree(Node))
 import Tree.Merge
 import Tree.Node
+import Tree.Traverse
 
 
 type alias Model =
@@ -71,6 +73,16 @@ setRunStatusToCompileError model =
 resetPassedTests : Model -> Model
 resetPassedTests model =
     { model | passedTests = 0 }
+
+
+resetTestRuns : Model -> Model
+resetTestRuns model =
+    { model
+        | testRuns =
+            Tree.Traverse.update
+                (TestInstance.setStatus "pending")
+                model.testRuns
+    }
 
 
 setTotalTestCount : RunStart -> Model -> Model

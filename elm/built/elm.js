@@ -9008,35 +9008,67 @@ var _user$project$TestEvent_RunStart$parse = function (rawData) {
 		});
 };
 
-var _user$project$TestInstance_Core$toClass = function (instance) {
+var _user$project$TestInstance_Core$isFailing = function (instance) {
 	var _p0 = instance.testStatus;
-	if (_p0.ctor === 'Pass') {
-		return 'passed';
-	} else {
-		return 'failed';
+	switch (_p0.ctor) {
+		case 'Pass':
+			return false;
+		case 'Fail':
+			return true;
+		default:
+			return false;
+	}
+};
+var _user$project$TestInstance_Core$toClass = function (instance) {
+	var _p1 = instance.testStatus;
+	switch (_p1.ctor) {
+		case 'Pass':
+			return 'passed';
+		case 'Fail':
+			return 'failed';
+		default:
+			return 'pending';
 	}
 };
 var _user$project$TestInstance_Core$toStatusIcon = function (instance) {
-	var _p1 = instance.testStatus;
-	if (_p1.ctor === 'Pass') {
-		return '✓';
-	} else {
-		return '✗';
+	var _p2 = instance.testStatus;
+	switch (_p2.ctor) {
+		case 'Pass':
+			return '✓';
+		case 'Fail':
+			return '✗';
+		default:
+			return '○';
 	}
 };
 var _user$project$TestInstance_Core$TestInstance = function (a) {
 	return {testStatus: a};
 };
+var _user$project$TestInstance_Core$Pending = {ctor: 'Pending'};
+var _user$project$TestInstance_Core$default = {testStatus: _user$project$TestInstance_Core$Pending};
 var _user$project$TestInstance_Core$Fail = {ctor: 'Fail'};
 var _user$project$TestInstance_Core$Pass = {ctor: 'Pass'};
-var _user$project$TestInstance_Core$default = {testStatus: _user$project$TestInstance_Core$Pass};
 var _user$project$TestInstance_Core$setStatus = F2(
-	function (passed, test) {
-		return _elm_lang$core$Native_Utils.update(
-			test,
-			{
-				testStatus: passed ? _user$project$TestInstance_Core$Pass : _user$project$TestInstance_Core$Fail
-			});
+	function (newStatus, test) {
+		var _p3 = newStatus;
+		switch (_p3) {
+			case 'pass':
+				return _elm_lang$core$Native_Utils.update(
+					test,
+					{testStatus: _user$project$TestInstance_Core$Pass});
+			case 'fail':
+				return _elm_lang$core$Native_Utils.update(
+					test,
+					{testStatus: _user$project$TestInstance_Core$Fail});
+			case 'pending':
+				return _elm_lang$core$Native_Utils.update(
+					test,
+					{testStatus: _user$project$TestInstance_Core$Pending});
+			default:
+				return _elm_lang$core$Native_Utils.update(
+					test,
+					{testStatus: _user$project$TestInstance_Core$Pending});
+		}
 	});
 
 var _user$project$TestEvent_TestCompleted$labels = function (_p0) {
@@ -9055,7 +9087,7 @@ var _user$project$TestEvent_TestCompleted$passed = function (_p2) {
 var _user$project$TestEvent_TestCompleted$toTestInstance = function (event) {
 	return A2(
 		_user$project$TestInstance_Core$setStatus,
-		_user$project$TestEvent_TestCompleted$passed(event),
+		_user$project$TestEvent_TestCompleted$passed(event) ? 'pass' : 'fail',
 		_user$project$TestInstance_Core$default);
 };
 var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
@@ -9142,9 +9174,13 @@ var _user$project$TestEvent_TestCompleted$parse = function (rawData) {
 		});
 };
 
+var _user$project$TestInstance_Reconcile$updateStatusPreferringFail = F2(
+	function ($new, old) {
+		return (_user$project$TestInstance_Core$isFailing($new) || _user$project$TestInstance_Core$isFailing(old)) ? A2(_user$project$TestInstance_Core$setStatus, 'fail', old) : A2(_user$project$TestInstance_Core$setStatus, 'pass', old);
+	});
 var _user$project$TestInstance_Reconcile$transform = F2(
 	function ($new, old) {
-		return $new;
+		return A2(_user$project$TestInstance_Reconcile$updateStatusPreferringFail, $new, old);
 	});
 
 var _user$project$Tree_Core$newId = A2(
@@ -9203,8 +9239,8 @@ var _user$project$Tree_Merge$listToTree = F3(
 				});
 		}
 	});
-var _user$project$Tree_Merge$mergeChildren = F4(
-	function (path, newData, transformer, children) {
+var _user$project$Tree_Merge$mergeChildren = F5(
+	function (path, originalData, newData, transformer, children) {
 		var _p1 = path;
 		if (_p1.ctor === '[]') {
 			return children;
@@ -9215,24 +9251,23 @@ var _user$project$Tree_Merge$mergeChildren = F4(
 			if (_p2.ctor === '::') {
 				var _p4 = _p2._1;
 				var _p3 = _p2._0._0;
-				var transformedData = A2(transformer, newData, _p2._0._1);
 				return _elm_lang$core$Native_Utils.eq(_p3, _p5) ? {
 					ctor: '::',
 					_0: A3(
 						_user$project$Tree_Core$Node,
 						_p3,
 						newData,
-						A4(_user$project$Tree_Merge$mergeChildren, _p6, transformedData, transformer, _p2._0._2)),
+						A5(_user$project$Tree_Merge$mergeChildren, _p6, originalData, newData, transformer, _p2._0._2)),
 					_1: _p4
 				} : {
 					ctor: '::',
 					_0: _p2._0,
-					_1: A4(_user$project$Tree_Merge$mergeChildren, path, transformedData, transformer, _p4)
+					_1: A5(_user$project$Tree_Merge$mergeChildren, path, originalData, originalData, transformer, _p4)
 				};
 			} else {
 				return {
 					ctor: '::',
-					_0: A3(_user$project$Tree_Merge$listToTree, _p5, newData, _p6),
+					_0: A3(_user$project$Tree_Merge$listToTree, _p5, originalData, _p6),
 					_1: {ctor: '[]'}
 				};
 			}
@@ -9241,8 +9276,7 @@ var _user$project$Tree_Merge$mergeChildren = F4(
 var _user$project$Tree_Merge$fromPath = F4(
 	function (path, newData, transformer, _p7) {
 		var _p8 = _p7;
-		var _p14 = _p8._0;
-		var _p13 = _p8._1;
+		var _p13 = _p8._0;
 		var _p12 = _p8._2;
 		var _p9 = path;
 		if (_p9.ctor === '[]') {
@@ -9250,14 +9284,15 @@ var _user$project$Tree_Merge$fromPath = F4(
 		} else {
 			var _p11 = _p9._1;
 			var _p10 = _p9._0;
-			return _elm_lang$core$Native_Utils.eq(_p14, _p10) ? A3(
+			var transformedData = A2(transformer, newData, _p8._1);
+			return _elm_lang$core$Native_Utils.eq(_p13, _p10) ? A3(
 				_user$project$Tree_Core$Node,
-				_p14,
 				_p13,
-				A4(_user$project$Tree_Merge$mergeChildren, _p11, newData, transformer, _p12)) : A3(
+				transformedData,
+				A5(_user$project$Tree_Merge$mergeChildren, _p11, newData, transformedData, transformer, _p12)) : A3(
 				_user$project$Tree_Core$Node,
-				_p14,
 				_p13,
+				transformedData,
 				{
 					ctor: '::',
 					_0: A3(_user$project$Tree_Merge$listToTree, _p10, newData, _p11),
@@ -9289,6 +9324,20 @@ var _user$project$Tree_Node$toggle = F3(
 				_p3));
 	});
 
+var _user$project$Tree_Traverse$update = F2(
+	function (updater, _p0) {
+		var _p1 = _p0;
+		var updatedData = updater(_p1._1);
+		return A3(
+			_user$project$Tree_Core$Node,
+			_p1._0,
+			updatedData,
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Tree_Traverse$update(updater),
+				_p1._2));
+	});
+
 var _user$project$Model_Core$toggleNode = F3(
 	function (nodeId, newState, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9313,6 +9362,16 @@ var _user$project$Model_Core$setTotalTestCount = F2(
 				totalTests: _user$project$TestEvent_RunStart$numTotalTests(event)
 			});
 	});
+var _user$project$Model_Core$resetTestRuns = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testRuns: A2(
+				_user$project$Tree_Traverse$update,
+				_user$project$TestInstance_Core$setStatus('pending'),
+				model.testRuns)
+		});
+};
 var _user$project$Model_Core$resetPassedTests = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -9846,12 +9905,16 @@ var _user$project$Main$update = F2(
 					_user$project$Main$andPerform,
 					_user$project$Main$runTest(
 						{ctor: '_Tuple0'}),
-					_user$project$Model_Core$resetPassedTests(
-						_user$project$Model_Core$setRunStatusToProcessing(model)));
+					_user$project$Model_Core$updateHierarchy(
+						_user$project$Model_Core$resetTestRuns(
+							_user$project$Model_Core$resetPassedTests(
+								_user$project$Model_Core$setRunStatusToProcessing(model)))));
 			case 'InitiateRunAll':
 				return _user$project$Main$andNoCommand(
-					_user$project$Model_Core$resetPassedTests(
-						_user$project$Model_Core$setRunStatusToProcessing(model)));
+					_user$project$Model_Core$updateHierarchy(
+						_user$project$Model_Core$resetTestRuns(
+							_user$project$Model_Core$resetPassedTests(
+								_user$project$Model_Core$setRunStatusToProcessing(model)))));
 			case 'CompilerErrored':
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$setRunStatusToCompileError(model));
