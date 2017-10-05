@@ -9114,9 +9114,9 @@ var _user$project$Tree_Core$newId = A2(
 		function (x) {
 			return x + 1;
 		}));
-var _user$project$Tree_Core$Node = F2(
-	function (a, b) {
-		return {ctor: 'Node', _0: a, _1: b};
+var _user$project$Tree_Core$Node = F3(
+	function (a, b, c) {
+		return {ctor: 'Node', _0: a, _1: b, _2: c};
 	});
 var _user$project$Tree_Core$label = function (_p1) {
 	var _p2 = _p1;
@@ -9124,13 +9124,14 @@ var _user$project$Tree_Core$label = function (_p1) {
 		_folkertdev$elm_state$State$map2,
 		F2(
 			function (nid, collapsibleChildren) {
-				return A2(
+				return A3(
 					_user$project$Tree_Core$Node,
 					{ctor: '_Tuple3', _0: _p2._0, _1: true, _2: nid},
+					_p2._1,
 					collapsibleChildren);
 			}),
 		_user$project$Tree_Core$newId,
-		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Core$label, _p2._1));
+		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Core$label, _p2._2));
 };
 var _user$project$Tree_Core$make = function (tree) {
 	return A2(
@@ -9139,79 +9140,86 @@ var _user$project$Tree_Core$make = function (tree) {
 		_user$project$Tree_Core$label(tree));
 };
 
-var _user$project$Tree_Merge$listToTree = F2(
-	function (first, path) {
+var _user$project$Tree_Merge$listToTree = F3(
+	function (first, data, path) {
 		var _p0 = path;
 		if (_p0.ctor === '[]') {
-			return A2(
+			return A3(
 				_user$project$Tree_Core$Node,
 				first,
+				data,
 				{ctor: '[]'});
 		} else {
-			return A2(
+			return A3(
 				_user$project$Tree_Core$Node,
 				first,
+				data,
 				{
 					ctor: '::',
-					_0: A2(_user$project$Tree_Merge$listToTree, _p0._0, _p0._1),
+					_0: A3(_user$project$Tree_Merge$listToTree, _p0._0, data, _p0._1),
 					_1: {ctor: '[]'}
 				});
 		}
 	});
-var _user$project$Tree_Merge$mergeChildren = F2(
-	function (path, children) {
+var _user$project$Tree_Merge$mergeChildren = F3(
+	function (data, path, children) {
 		var _p1 = path;
 		if (_p1.ctor === '[]') {
 			return children;
 		} else {
-			var _p6 = _p1._1;
-			var _p5 = _p1._0;
+			var _p7 = _p1._1;
+			var _p6 = _p1._0;
 			var _p2 = children;
 			if (_p2.ctor === '::') {
-				var _p4 = _p2._1;
-				var _p3 = _p2._0._0;
-				return _elm_lang$core$Native_Utils.eq(_p3, _p5) ? {
+				var _p5 = _p2._1;
+				var _p4 = _p2._0._0;
+				var _p3 = _p2._0._1;
+				return _elm_lang$core$Native_Utils.eq(_p4, _p6) ? {
 					ctor: '::',
-					_0: A2(
+					_0: A3(
 						_user$project$Tree_Core$Node,
+						_p4,
 						_p3,
-						A2(_user$project$Tree_Merge$mergeChildren, _p6, _p2._0._1)),
-					_1: _p4
+						A3(_user$project$Tree_Merge$mergeChildren, _p3, _p7, _p2._0._2)),
+					_1: _p5
 				} : {
 					ctor: '::',
 					_0: _p2._0,
-					_1: A2(_user$project$Tree_Merge$mergeChildren, path, _p4)
+					_1: A3(_user$project$Tree_Merge$mergeChildren, _p3, path, _p5)
 				};
 			} else {
 				return {
 					ctor: '::',
-					_0: A2(_user$project$Tree_Merge$listToTree, _p5, _p6),
+					_0: A3(_user$project$Tree_Merge$listToTree, _p6, data, _p7),
 					_1: {ctor: '[]'}
 				};
 			}
 		}
 	});
 var _user$project$Tree_Merge$fromPath = F2(
-	function (path, _p7) {
-		var _p8 = _p7;
-		var _p13 = _p8._0;
-		var _p12 = _p8._1;
-		var _p9 = path;
-		if (_p9.ctor === '[]') {
-			return _p8;
+	function (path, _p8) {
+		var _p9 = _p8;
+		var _p15 = _p9._0;
+		var _p14 = _p9._1;
+		var _p13 = _p9._2;
+		var _p10 = path;
+		if (_p10.ctor === '[]') {
+			return _p9;
 		} else {
-			var _p11 = _p9._1;
-			var _p10 = _p9._0;
-			return _elm_lang$core$Native_Utils.eq(_p13, _p10) ? A2(
+			var _p12 = _p10._1;
+			var _p11 = _p10._0;
+			return _elm_lang$core$Native_Utils.eq(_p15, _p11) ? A3(
 				_user$project$Tree_Core$Node,
-				_p13,
-				A2(_user$project$Tree_Merge$mergeChildren, _p11, _p12)) : A2(
+				_p15,
+				_p14,
+				A3(_user$project$Tree_Merge$mergeChildren, _p14, _p12, _p13)) : A3(
 				_user$project$Tree_Core$Node,
-				_p13,
+				_p15,
+				_p14,
 				{
 					ctor: '::',
-					_0: A2(_user$project$Tree_Merge$listToTree, _p10, _p11),
-					_1: _p12
+					_0: A3(_user$project$Tree_Merge$listToTree, _p11, _p14, _p12),
+					_1: _p13
 				});
 		}
 	});
@@ -9219,16 +9227,19 @@ var _user$project$Tree_Merge$fromPath = F2(
 var _user$project$Tree_Node$toggle = F3(
 	function (nodeId, expand, _p0) {
 		var _p1 = _p0;
-		var _p4 = _p1._0;
-		var _p3 = _p1._1;
-		var _p2 = _p4;
+		var _p5 = _p1._0;
+		var _p4 = _p1._1;
+		var _p3 = _p1._2;
+		var _p2 = _p5;
 		var x = _p2._0;
 		var nid = _p2._2;
-		return _elm_lang$core$Native_Utils.eq(nodeId, nid) ? A2(
+		return _elm_lang$core$Native_Utils.eq(nodeId, nid) ? A3(
 			_user$project$Tree_Core$Node,
 			{ctor: '_Tuple3', _0: x, _1: expand, _2: nid},
-			_p3) : A2(
+			_p4,
+			_p3) : A3(
 			_user$project$Tree_Core$Node,
+			_p5,
 			_p4,
 			A2(
 				_elm_lang$core$List$map,
@@ -9287,12 +9298,13 @@ var _user$project$Model_Core$setRunStatusToProcessing = function (model) {
 var _user$project$Model_Core$humanReadableTopLevelMessage = 'No Tests';
 var _user$project$Model_Core$removeTopNode = function (node) {
 	var _p0 = node;
-	if (_p0._1.ctor === '::') {
-		return _p0._1._0;
+	if (_p0._2.ctor === '::') {
+		return _p0._2._0;
 	} else {
-		return A2(
+		return A3(
 			_user$project$Tree_Core$Node,
 			_user$project$Model_Core$humanReadableTopLevelMessage,
+			_p0._1,
 			{ctor: '[]'});
 	}
 };
@@ -9324,14 +9336,16 @@ var _user$project$Model_Core$default = {
 	runStatus: _user$project$State_RunStatus$noData,
 	totalTests: 0,
 	passedTests: 0,
-	testRuns: A2(
+	testRuns: A3(
 		_user$project$Tree_Core$Node,
 		_user$project$Model_Core$systemTopLevelMessage,
+		{},
 		{ctor: '[]'}),
 	testHierarchy: _user$project$Tree_Core$make(
-		A2(
+		A3(
 			_user$project$Tree_Core$Node,
 			_user$project$Model_Core$humanReadableTopLevelMessage,
+			{},
 			{ctor: '[]'}))
 };
 var _user$project$Model_Core$Model = F5(
@@ -9494,7 +9508,7 @@ var _user$project$View_TestHierarchy$idField = function (name) {
 var _user$project$View_TestHierarchy$viewTree = F3(
 	function (messages, cssId, _p1) {
 		var _p2 = _p1;
-		var _p4 = _p2._1;
+		var _p4 = _p2._2;
 		var hasChildren = _elm_lang$core$List$isEmpty(_p4);
 		var _p3 = _p2._0;
 		var nodeData = _p3._0;

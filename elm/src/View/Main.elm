@@ -18,7 +18,7 @@ type alias Messages message =
     }
 
 
-render : RunStatus -> Int -> Int -> CollapsibleTree String -> Messages message -> Html message
+render : RunStatus -> Int -> Int -> CollapsibleTree String {} -> Messages message -> Html message
 render runStatus totalTests passedTests testHierarchy messages =
     div [ class "etr-main-view" ]
         [ View.Toolbar.render messages.toggleClickHandler messages.runAllButtonClickHandler

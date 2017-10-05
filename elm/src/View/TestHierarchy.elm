@@ -12,13 +12,13 @@ type alias Messages message =
     }
 
 
-render : CollapsibleTree String -> Messages message -> Html message
+render : CollapsibleTree String {} -> Messages message -> Html message
 render testHierarchy messages =
     viewTree messages (Just "test-hierarchy") testHierarchy
 
 
-viewTree : Messages message -> Maybe String -> CollapsibleTree String -> Html message
-viewTree messages cssId (Node root children) =
+viewTree : Messages message -> Maybe String -> CollapsibleTree String {} -> Html message
+viewTree messages cssId (Node root data children) =
     let
         ( nodeData, expanded, nodeId ) =
             root
@@ -59,7 +59,7 @@ viewTree messages cssId (Node root children) =
         (rootView :: childrenListView)
 
 
-viewForest : Messages message -> List (CollapsibleTree String) -> List (Html message)
+viewForest : Messages message -> List (CollapsibleTree String {}) -> List (Html message)
 viewForest messages children =
     List.map (\childTree -> li [] [ viewTree messages Nothing childTree ]) children
 

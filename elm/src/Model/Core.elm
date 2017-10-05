@@ -26,8 +26,8 @@ type alias Model =
     { runStatus : RunStatus
     , totalTests : Int
     , passedTests : Int
-    , testRuns : Tree String
-    , testHierarchy : CollapsibleTree String
+    , testRuns : Tree String {}
+    , testHierarchy : CollapsibleTree String {}
     }
 
 
@@ -36,8 +36,8 @@ default =
     { runStatus = RunStatus.noData
     , totalTests = 0
     , passedTests = 0
-    , testRuns = Node systemTopLevelMessage []
-    , testHierarchy = Tree.make (Node humanReadableTopLevelMessage [])
+    , testRuns = Node systemTopLevelMessage {} []
+    , testHierarchy = Tree.make (Node humanReadableTopLevelMessage {} [])
     }
 
 
@@ -101,14 +101,14 @@ updateHierarchy model =
     }
 
 
-removeTopNode : Tree String -> Tree String
+removeTopNode : Tree String b -> Tree String b
 removeTopNode node =
     case node of
-        Node _ (first :: _) ->
+        Node _ _ (first :: _) ->
             first
 
-        Node _ [] ->
-            Node humanReadableTopLevelMessage []
+        Node _ data [] ->
+            Node humanReadableTopLevelMessage data []
 
 
 toggleNode : Int -> Bool -> Model -> Model

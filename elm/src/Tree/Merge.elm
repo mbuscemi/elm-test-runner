@@ -3,42 +3,42 @@ module Tree.Merge exposing (fromPath)
 import Tree.Core exposing (Tree(Node))
 
 
-fromPath : List a -> Tree a -> Tree a
-fromPath path ((Node node children) as tree) =
+fromPath : List a -> Tree a b -> Tree a b
+fromPath path ((Node node data children) as tree) =
     case path of
         [] ->
             tree
 
         x :: xs ->
             if node == x then
-                Node node (mergeChildren xs children)
+                Node node data (mergeChildren data xs children)
             else
-                Node node (listToTree x xs :: children)
+                Node node data (listToTree x data xs :: children)
 
 
-listToTree : a -> List a -> Tree a
-listToTree first path =
+listToTree : a -> b -> List a -> Tree a b
+listToTree first data path =
     case path of
         [] ->
-            Node first []
+            Node first data []
 
         x :: xs ->
-            Node first [ listToTree x xs ]
+            Node first data [ listToTree x data xs ]
 
 
-mergeChildren : List a -> List (Tree a) -> List (Tree a)
-mergeChildren path children =
+mergeChildren : b -> List a -> List (Tree a b) -> List (Tree a b)
+mergeChildren data path children =
     case path of
         [] ->
             children
 
         x :: xs ->
             case children of
-                ((Node node nodeChildren) as current) :: rest ->
+                ((Node node data nodeChildren) as current) :: rest ->
                     if node == x then
-                        Node node (mergeChildren xs nodeChildren) :: rest
+                        Node node data (mergeChildren data xs nodeChildren) :: rest
                     else
-                        current :: mergeChildren path rest
+                        current :: mergeChildren data path rest
 
                 [] ->
-                    [ listToTree x xs ]
+                    [ listToTree x data xs ]
