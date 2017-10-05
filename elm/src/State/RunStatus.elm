@@ -1,4 +1,4 @@
-module State.RunStatus exposing (RunStatus, compileError, noData, passFail, processing, toColor, toText)
+module State.RunStatus exposing (RunStatus, compileError, noData, passFail, processing, toClass, toText)
 
 
 type RunStatus
@@ -51,20 +51,20 @@ toText runStatus =
             "Compile Error"
 
 
-toColor : RunStatus -> String
-toColor runStatus =
+toClass : RunStatus -> String
+toClass runStatus =
     case runStatus of
         NoData ->
-            "grey"
+            "no-data"
 
         Processing ->
-            "lightBlue"
+            "processing"
 
         LastPassed ->
-            "green"
+            "last-passed"
 
         LastFailed ->
-            "red"
+            "last-failed"
 
         CompileError ->
-            "orange"
+            "compile-error"

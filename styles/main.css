@@ -1,11 +1,11 @@
 
 .etr-main-view {
-  min-width: 300px;
-  height: 100%;
-  margin: 1em 1em;
-  display: flex;
-  flex-direction: column;
-  padding-left: 6px;
+    min-width: 300px;
+    height: 100%;
+    margin: 1em 1em;
+    display: flex;
+    flex-direction: column;
+    padding-left: 6px;
 }
 
 .etr-main-view .btn-toolbar {
@@ -20,13 +20,30 @@
     float: right;
 }
 
-.etr-main-view .status-bar svg {
-    vertical-align: middle;
+.etr-main-view .status-bar {
+    width: 100%;
+    text-align: center;
+    margin: 1em 0;
 }
 
-.etr-main-view .status-bar span {
-    margin-left: 8px;
-    vertical-align: middle;
+.etr-main-view .status-bar.no-data {
+    background-color: #101318;
+}
+
+.etr-main-view .status-bar.processing {
+    background-color: #303023;
+}
+
+.etr-main-view .status-bar.last-passed {
+    background-color: #204020;
+}
+
+.etr-main-view .status-bar.last-failed {
+    background-color: #620c0c;
+}
+
+.etr-main-view .status-bar.compile-error {
+    background-color: #55360a;
 }
 
 .etr-main-view .passing-tests .number-field {
