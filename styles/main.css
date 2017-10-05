@@ -37,6 +37,7 @@
 #test-hierarchy {
     margin: 1em 0 0 0;
     padding: 0;
+    cursor: default;
 }
 
 #test-hierarchy span.passed {
