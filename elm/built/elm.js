@@ -8952,37 +8952,6 @@ var _user$project$State_RunStatus$processing = _user$project$State_RunStatus$Pro
 var _user$project$State_RunStatus$NoData = {ctor: 'NoData'};
 var _user$project$State_RunStatus$noData = _user$project$State_RunStatus$NoData;
 
-var _user$project$State_TestInstance$toClass = function (instance) {
-	var _p0 = instance.testStatus;
-	if (_p0.ctor === 'Pass') {
-		return 'passed';
-	} else {
-		return 'failed';
-	}
-};
-var _user$project$State_TestInstance$toStatusIcon = function (instance) {
-	var _p1 = instance.testStatus;
-	if (_p1.ctor === 'Pass') {
-		return '✓';
-	} else {
-		return '✗';
-	}
-};
-var _user$project$State_TestInstance$TestInstance = function (a) {
-	return {testStatus: a};
-};
-var _user$project$State_TestInstance$Fail = {ctor: 'Fail'};
-var _user$project$State_TestInstance$Pass = {ctor: 'Pass'};
-var _user$project$State_TestInstance$default = {testStatus: _user$project$State_TestInstance$Pass};
-var _user$project$State_TestInstance$setStatus = F2(
-	function (passed, test) {
-		return _elm_lang$core$Native_Utils.update(
-			test,
-			{
-				testStatus: passed ? _user$project$State_TestInstance$Pass : _user$project$State_TestInstance$Fail
-			});
-	});
-
 var _user$project$TestEvent_Util$parseInt = function (string) {
 	return A2(
 		_elm_lang$core$Result$withDefault,
@@ -9039,6 +9008,37 @@ var _user$project$TestEvent_RunStart$parse = function (rawData) {
 		});
 };
 
+var _user$project$TestInstance_Core$toClass = function (instance) {
+	var _p0 = instance.testStatus;
+	if (_p0.ctor === 'Pass') {
+		return 'passed';
+	} else {
+		return 'failed';
+	}
+};
+var _user$project$TestInstance_Core$toStatusIcon = function (instance) {
+	var _p1 = instance.testStatus;
+	if (_p1.ctor === 'Pass') {
+		return '✓';
+	} else {
+		return '✗';
+	}
+};
+var _user$project$TestInstance_Core$TestInstance = function (a) {
+	return {testStatus: a};
+};
+var _user$project$TestInstance_Core$Fail = {ctor: 'Fail'};
+var _user$project$TestInstance_Core$Pass = {ctor: 'Pass'};
+var _user$project$TestInstance_Core$default = {testStatus: _user$project$TestInstance_Core$Pass};
+var _user$project$TestInstance_Core$setStatus = F2(
+	function (passed, test) {
+		return _elm_lang$core$Native_Utils.update(
+			test,
+			{
+				testStatus: passed ? _user$project$TestInstance_Core$Pass : _user$project$TestInstance_Core$Fail
+			});
+	});
+
 var _user$project$TestEvent_TestCompleted$labels = function (_p0) {
 	var _p1 = _p0;
 	return _p1._0.labels;
@@ -9054,9 +9054,9 @@ var _user$project$TestEvent_TestCompleted$passed = function (_p2) {
 };
 var _user$project$TestEvent_TestCompleted$toTestInstance = function (event) {
 	return A2(
-		_user$project$State_TestInstance$setStatus,
+		_user$project$TestInstance_Core$setStatus,
 		_user$project$TestEvent_TestCompleted$passed(event),
-		_user$project$State_TestInstance$default);
+		_user$project$TestInstance_Core$default);
 };
 var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
 	return _user$project$TestEvent_TestCompleted$passed(event) ? 1 : 0;
@@ -9141,6 +9141,11 @@ var _user$project$TestEvent_TestCompleted$parse = function (rawData) {
 			duration: _user$project$TestEvent_Util$parseInt(parsed.duration)
 		});
 };
+
+var _user$project$TestInstance_Reconcile$transform = F2(
+	function ($new, old) {
+		return $new;
+	});
 
 var _user$project$Tree_Core$newId = A2(
 	_folkertdev$elm_state$State$andThen,
@@ -9367,10 +9372,7 @@ var _user$project$Model_Core$buildTestRunDataTree = F2(
 						_1: _user$project$TestEvent_TestCompleted$labels(event)
 					},
 					_user$project$TestEvent_TestCompleted$toTestInstance(event),
-					F2(
-						function ($new, old) {
-							return $new;
-						}),
+					_user$project$TestInstance_Reconcile$transform,
 					model.testRuns)
 			});
 	});
@@ -9381,13 +9383,13 @@ var _user$project$Model_Core$default = {
 	testRuns: A3(
 		_user$project$Tree_Core$Node,
 		_user$project$Model_Core$systemTopLevelMessage,
-		_user$project$State_TestInstance$default,
+		_user$project$TestInstance_Core$default,
 		{ctor: '[]'}),
 	testHierarchy: _user$project$Tree_Core$make(
 		A3(
 			_user$project$Tree_Core$Node,
 			_user$project$Model_Core$humanReadableTopLevelMessage,
-			_user$project$State_TestInstance$default,
+			_user$project$TestInstance_Core$default,
 			{ctor: '[]'}))
 };
 var _user$project$Model_Core$Model = F5(
@@ -9554,12 +9556,12 @@ var _user$project$View_TestHierarchy$statusIndicatorIcon = function (nodeData) {
 			' ',
 			A2(
 				_elm_lang$core$Basics_ops['++'],
-				_user$project$State_TestInstance$toStatusIcon(nodeData),
+				_user$project$TestInstance_Core$toStatusIcon(nodeData),
 				' ')));
 };
 var _user$project$View_TestHierarchy$statusIndicatorTextColor = function (nodeData) {
 	return _elm_lang$html$Html_Attributes$class(
-		_user$project$State_TestInstance$toClass(nodeData));
+		_user$project$TestInstance_Core$toClass(nodeData));
 };
 var _user$project$View_TestHierarchy$statusIndicator = function (nodeData) {
 	return A2(

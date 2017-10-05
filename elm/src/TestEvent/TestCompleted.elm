@@ -1,8 +1,8 @@
 module TestEvent.TestCompleted exposing (RawData, TestCompleted, labels, parse, passed, passedTestCountToIncrement, toTestInstance)
 
 import Json.Decode exposing (Decoder, decodeString, field, list, map, map2, map4, map5, maybe, string)
-import State.TestInstance as TestInstance exposing (TestInstance)
 import TestEvent.Util
+import TestInstance.Core as TestInstance exposing (TestInstance)
 
 
 type TestCompleted

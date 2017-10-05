@@ -14,10 +14,11 @@ module Model.Core
         )
 
 import State.RunStatus as RunStatus exposing (RunStatus)
-import State.TestInstance as TestInstance exposing (TestInstance)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
 import TestEvent.RunStart as RunStart exposing (RunStart)
 import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
+import TestInstance.Core as TestInstance exposing (TestInstance)
+import TestInstance.Reconcile
 import Tree.Core as Tree exposing (CollapsibleTree, Tree(Node))
 import Tree.Merge
 import Tree.Node
@@ -89,7 +90,7 @@ buildTestRunDataTree event model =
             Tree.Merge.fromPath
                 (systemTopLevelMessage :: TestCompleted.labels event)
                 (TestCompleted.toTestInstance event)
-                (\new old -> new)
+                TestInstance.Reconcile.transform
                 model.testRuns
     }
 

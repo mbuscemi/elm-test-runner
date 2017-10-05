@@ -1,4 +1,4 @@
-module State.TestInstance exposing (TestInstance, default, setStatus, toClass, toStatusIcon)
+module TestInstance.Core exposing (TestInstance, default, setStatus, toClass, toStatusIcon)
 
 
 type TestStatus

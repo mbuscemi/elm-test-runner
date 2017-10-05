@@ -3,7 +3,7 @@ module View.Main exposing (render)
 import Html exposing (Html, div, h2, section, span, text)
 import Html.Attributes exposing (class)
 import State.RunStatus as RunStatus exposing (RunStatus)
-import State.TestInstance as TestInstance exposing (TestInstance)
+import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree)
 import View.PassingTestsDisplay
 import View.RedGreenDisplay

@@ -3,7 +3,7 @@ module View.TestHierarchy exposing (render)
 import Html exposing (Attribute, Html, li, span, strong, text, ul)
 import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
-import State.TestInstance as TestInstance exposing (TestInstance)
+import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree, NodeId, Tree(Node))
 
 
