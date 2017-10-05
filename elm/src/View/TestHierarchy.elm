@@ -1,6 +1,6 @@
 module View.TestHierarchy exposing (render)
 
-import Html exposing (Attribute, Html, li, span, text, ul)
+import Html exposing (Attribute, Html, li, span, strong, text, ul)
 import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
 import Tree.Core exposing (CollapsibleTree, Tree(Node))
@@ -23,8 +23,12 @@ viewTree messages cssId (Node root children) =
         ( nodeData, expanded, nodeId ) =
             root
 
+        hasChildren =
+            List.isEmpty children
+
         rootText =
-            plusOrMinus ++ nodeData
+            (plusOrMinus ++ nodeData)
+                |> conditionallyEmbolden (not hasChildren)
 
         childrenListView =
             if expanded then
@@ -33,7 +37,7 @@ viewTree messages cssId (Node root children) =
                 []
 
         rootView =
-            span [ expandOrCollapse ] [ text rootText ]
+            span [ expandOrCollapse ] [ rootText ]
 
         expandOrCollapse =
             onClick <|
@@ -43,7 +47,7 @@ viewTree messages cssId (Node root children) =
                     messages.expand nodeId
 
         plusOrMinus =
-            if List.isEmpty children then
+            if hasChildren then
                 ""
             else if expanded then
                 "▾ "
@@ -68,3 +72,15 @@ idField name =
 
         Nothing ->
             []
+
+
+conditionallyEmbolden : Bool -> String -> Html message
+conditionallyEmbolden shouldEmbolden string =
+    let
+        htmlText =
+            text string
+    in
+    if shouldEmbolden then
+        strong [] [ htmlText ]
+    else
+        htmlText

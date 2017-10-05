@@ -2,8 +2,8 @@ module Tests exposing (suite)
 
 import Expect
 import Test exposing (Test, describe, test)
+import Tree.Core exposing (Tree(Node))
 import Tree.Merge exposing (fromPath)
-import Tree.Tree exposing (Tree(Node))
 
 
 suite : Test

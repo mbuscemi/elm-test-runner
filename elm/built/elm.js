@@ -9467,6 +9467,18 @@ var _user$project$View_RedGreenDisplay$render = function (runStatus) {
 		});
 };
 
+var _user$project$View_TestHierarchy$conditionallyEmbolden = F2(
+	function (shouldEmbolden, string) {
+		var htmlText = _elm_lang$html$Html$text(string);
+		return shouldEmbolden ? A2(
+			_elm_lang$html$Html$strong,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: htmlText,
+				_1: {ctor: '[]'}
+			}) : htmlText;
+	});
 var _user$project$View_TestHierarchy$idField = function (name) {
 	var _p0 = name;
 	if (_p0.ctor === 'Just') {
@@ -9483,6 +9495,7 @@ var _user$project$View_TestHierarchy$viewTree = F3(
 	function (messages, cssId, _p1) {
 		var _p2 = _p1;
 		var _p4 = _p2._1;
+		var hasChildren = _elm_lang$core$List$isEmpty(_p4);
 		var _p3 = _p2._0;
 		var nodeData = _p3._0;
 		var expanded = _p3._1;
@@ -9490,8 +9503,11 @@ var _user$project$View_TestHierarchy$viewTree = F3(
 		var childrenListView = expanded ? A2(_user$project$View_TestHierarchy$viewForest, messages, _p4) : {ctor: '[]'};
 		var expandOrCollapse = _elm_lang$html$Html_Events$onClick(
 			expanded ? messages.collapse(nodeId) : messages.expand(nodeId));
-		var plusOrMinus = _elm_lang$core$List$isEmpty(_p4) ? '' : (expanded ? '▾ ' : '▸ ');
-		var rootText = A2(_elm_lang$core$Basics_ops['++'], plusOrMinus, nodeData);
+		var plusOrMinus = hasChildren ? '' : (expanded ? '▾ ' : '▸ ');
+		var rootText = A2(
+			_user$project$View_TestHierarchy$conditionallyEmbolden,
+			!hasChildren,
+			A2(_elm_lang$core$Basics_ops['++'], plusOrMinus, nodeData));
 		var rootView = A2(
 			_elm_lang$html$Html$span,
 			{
@@ -9501,7 +9517,7 @@ var _user$project$View_TestHierarchy$viewTree = F3(
 			},
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html$text(rootText),
+				_0: rootText,
 				_1: {ctor: '[]'}
 			});
 		return A2(
