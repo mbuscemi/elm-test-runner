@@ -4,7 +4,7 @@ import Html exposing (Attribute, Html, li, span, strong, text, ul)
 import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
 import State.TestInstance as TestInstance exposing (TestInstance)
-import Tree.Core exposing (CollapsibleTree, Tree(Node))
+import Tree.Core exposing (CollapsibleTree, NodeId, Tree(Node))
 
 
 type alias Messages message =
@@ -19,50 +19,61 @@ render testHierarchy messages =
 
 
 viewTree : Messages message -> Maybe String -> CollapsibleTree String TestInstance -> Html message
-viewTree messages cssId (Node root data children) =
+viewTree messages cssId (Node root testData children) =
     let
-        ( nodeData, expanded, nodeId ) =
+        ( nodeName, isExpanded, nodeId ) =
             root
-
-        hasChildren =
-            List.isEmpty children
-
-        rootText =
-            (plusOrMinus ++ nodeData)
-                |> conditionallyEmbolden (not hasChildren)
-
-        childrenListView =
-            if expanded then
-                viewForest messages children
-            else
-                []
-
-        rootView =
-            span [ expandOrCollapse ] [ rootText ]
-
-        expandOrCollapse =
-            onClick <|
-                if expanded then
-                    messages.collapse nodeId
-                else
-                    messages.expand nodeId
-
-        plusOrMinus =
-            if hasChildren then
-                ""
-            else if expanded then
-                "▾ "
-            else
-                "▸ "
     in
     ul
         (List.append [ class "test-list" ] (idField cssId))
-        (rootView :: childrenListView)
+        (rootView messages (List.isEmpty children) isExpanded nodeName nodeId
+            :: viewChildren messages isExpanded children
+        )
 
 
 viewForest : Messages message -> List (CollapsibleTree String TestInstance) -> List (Html message)
 viewForest messages children =
     List.map (\childTree -> li [] [ viewTree messages Nothing childTree ]) children
+
+
+viewChildren : Messages message -> Bool -> List (CollapsibleTree String TestInstance) -> List (Html message)
+viewChildren messages shouldShow children =
+    if shouldShow then
+        viewForest messages children
+    else
+        []
+
+
+rootView : Messages message -> Bool -> Bool -> String -> NodeId -> Html message
+rootView messages hasChildren isExpanded nodeName nodeId =
+    span
+        [ expandOrCollapse messages isExpanded nodeId ]
+        [ rootText hasChildren isExpanded nodeName ]
+
+
+rootText : Bool -> Bool -> String -> Html message
+rootText hasChildren isExpanded nodeName =
+    (togglingArrow hasChildren isExpanded ++ nodeName)
+        |> conditionallyEmbolden (not hasChildren)
+
+
+expandOrCollapse : Messages message -> Bool -> NodeId -> Attribute message
+expandOrCollapse messages isExpanded nodeId =
+    onClick <|
+        if isExpanded then
+            messages.collapse nodeId
+        else
+            messages.expand nodeId
+
+
+togglingArrow : Bool -> Bool -> String
+togglingArrow isVisible isExpanded =
+    if isVisible then
+        ""
+    else if isExpanded then
+        "▾ "
+    else
+        "▸ "
 
 
 idField : Maybe String -> List (Attribute message)

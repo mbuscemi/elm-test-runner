@@ -9512,35 +9512,48 @@ var _user$project$View_TestHierarchy$idField = function (name) {
 		return {ctor: '[]'};
 	}
 };
-var _user$project$View_TestHierarchy$viewTree = F3(
-	function (messages, cssId, _p1) {
-		var _p2 = _p1;
-		var _p4 = _p2._2;
-		var hasChildren = _elm_lang$core$List$isEmpty(_p4);
-		var _p3 = _p2._0;
-		var nodeData = _p3._0;
-		var expanded = _p3._1;
-		var nodeId = _p3._2;
-		var childrenListView = expanded ? A2(_user$project$View_TestHierarchy$viewForest, messages, _p4) : {ctor: '[]'};
-		var expandOrCollapse = _elm_lang$html$Html_Events$onClick(
-			expanded ? messages.collapse(nodeId) : messages.expand(nodeId));
-		var plusOrMinus = hasChildren ? '' : (expanded ? '▾ ' : '▸ ');
-		var rootText = A2(
+var _user$project$View_TestHierarchy$togglingArrow = F2(
+	function (isVisible, isExpanded) {
+		return isVisible ? '' : (isExpanded ? '▾ ' : '▸ ');
+	});
+var _user$project$View_TestHierarchy$expandOrCollapse = F3(
+	function (messages, isExpanded, nodeId) {
+		return _elm_lang$html$Html_Events$onClick(
+			isExpanded ? messages.collapse(nodeId) : messages.expand(nodeId));
+	});
+var _user$project$View_TestHierarchy$rootText = F3(
+	function (hasChildren, isExpanded, nodeName) {
+		return A2(
 			_user$project$View_TestHierarchy$conditionallyEmbolden,
 			!hasChildren,
-			A2(_elm_lang$core$Basics_ops['++'], plusOrMinus, nodeData));
-		var rootView = A2(
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(_user$project$View_TestHierarchy$togglingArrow, hasChildren, isExpanded),
+				nodeName));
+	});
+var _user$project$View_TestHierarchy$rootView = F5(
+	function (messages, hasChildren, isExpanded, nodeName, nodeId) {
+		return A2(
 			_elm_lang$html$Html$span,
 			{
 				ctor: '::',
-				_0: expandOrCollapse,
+				_0: A3(_user$project$View_TestHierarchy$expandOrCollapse, messages, isExpanded, nodeId),
 				_1: {ctor: '[]'}
 			},
 			{
 				ctor: '::',
-				_0: rootText,
+				_0: A3(_user$project$View_TestHierarchy$rootText, hasChildren, isExpanded, nodeName),
 				_1: {ctor: '[]'}
 			});
+	});
+var _user$project$View_TestHierarchy$viewTree = F3(
+	function (messages, cssId, _p1) {
+		var _p2 = _p1;
+		var _p4 = _p2._2;
+		var _p3 = _p2._0;
+		var nodeName = _p3._0;
+		var isExpanded = _p3._1;
+		var nodeId = _p3._2;
 		return A2(
 			_elm_lang$html$Html$ul,
 			A2(
@@ -9551,7 +9564,21 @@ var _user$project$View_TestHierarchy$viewTree = F3(
 					_1: {ctor: '[]'}
 				},
 				_user$project$View_TestHierarchy$idField(cssId)),
-			{ctor: '::', _0: rootView, _1: childrenListView});
+			{
+				ctor: '::',
+				_0: A5(
+					_user$project$View_TestHierarchy$rootView,
+					messages,
+					_elm_lang$core$List$isEmpty(_p4),
+					isExpanded,
+					nodeName,
+					nodeId),
+				_1: A3(_user$project$View_TestHierarchy$viewChildren, messages, isExpanded, _p4)
+			});
+	});
+var _user$project$View_TestHierarchy$viewChildren = F3(
+	function (messages, shouldShow, children) {
+		return shouldShow ? A2(_user$project$View_TestHierarchy$viewForest, messages, children) : {ctor: '[]'};
 	});
 var _user$project$View_TestHierarchy$viewForest = F2(
 	function (messages, children) {
