@@ -39,6 +39,16 @@
     padding: 0;
 }
 
+#test-hierarchy span.passed {
+    color: green;
+    font-weight: bold;
+}
+
+#test-hierarchy span.failed {
+    color: red;
+    font-weight: bold;
+}
+
 .etr-main-view ul.test-list {
     padding: 0 0 0 1.5em;
     list-style-type: none;

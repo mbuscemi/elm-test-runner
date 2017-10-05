@@ -26,7 +26,7 @@ viewTree messages cssId (Node root testData children) =
     in
     ul
         (List.append [ class "test-list" ] (idField cssId))
-        (rootView messages (List.isEmpty children) isExpanded nodeName nodeId
+        (rootView messages (List.isEmpty children) isExpanded (TestInstance.passed testData) nodeName nodeId
             :: viewChildren messages isExpanded children
         )
 
@@ -44,17 +44,20 @@ viewChildren messages shouldShow children =
         []
 
 
-rootView : Messages message -> Bool -> Bool -> String -> NodeId -> Html message
-rootView messages hasChildren isExpanded nodeName nodeId =
+rootView : Messages message -> Bool -> Bool -> Bool -> String -> NodeId -> Html message
+rootView messages hasChildren isExpanded nodePassed nodeName nodeId =
     span
         [ expandOrCollapse messages isExpanded nodeId ]
-        [ rootText hasChildren isExpanded nodeName ]
+        [ rootText hasChildren isExpanded nodePassed nodeName ]
 
 
-rootText : Bool -> Bool -> String -> Html message
-rootText hasChildren isExpanded nodeName =
-    (togglingArrow hasChildren isExpanded ++ nodeName)
-        |> conditionallyEmbolden (not hasChildren)
+rootText : Bool -> Bool -> Bool -> String -> Html message
+rootText hasChildren isExpanded nodePassed nodeName =
+    span []
+        [ togglingArrow hasChildren isExpanded
+        , statusIndicator nodePassed
+        , conditionallyEmbolden (not hasChildren) nodeName
+        ]
 
 
 expandOrCollapse : Messages message -> Bool -> NodeId -> Attribute message
@@ -66,14 +69,42 @@ expandOrCollapse messages isExpanded nodeId =
             messages.expand nodeId
 
 
-togglingArrow : Bool -> Bool -> String
+togglingArrow : Bool -> Bool -> Html message
 togglingArrow isVisible isExpanded =
+    strong [] [ text <| togglingArrowText isVisible isExpanded ]
+
+
+togglingArrowText : Bool -> Bool -> String
+togglingArrowText isVisible isExpanded =
     if isVisible then
         ""
     else if isExpanded then
         "▾ "
     else
         "▸ "
+
+
+statusIndicator : Bool -> Html message
+statusIndicator passed =
+    span
+        [ statusIndicatorTextColor passed ]
+        [ statusIndicatorIcon passed ]
+
+
+statusIndicatorTextColor : Bool -> Attribute message
+statusIndicatorTextColor passed =
+    if passed then
+        class "passed"
+    else
+        class "failed"
+
+
+statusIndicatorIcon : Bool -> Html message
+statusIndicatorIcon passed =
+    if passed then
+        text " ✓ "
+    else
+        text " ✗ "
 
 
 idField : Maybe String -> List (Attribute message)

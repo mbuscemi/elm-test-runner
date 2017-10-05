@@ -8958,6 +8958,9 @@ var _user$project$State_TestInstance$TestInstance = function (a) {
 var _user$project$State_TestInstance$Fail = {ctor: 'Fail'};
 var _user$project$State_TestInstance$Pass = {ctor: 'Pass'};
 var _user$project$State_TestInstance$default = {testStatus: _user$project$State_TestInstance$Pass};
+var _user$project$State_TestInstance$passed = function (test) {
+	return _elm_lang$core$Native_Utils.eq(test.testStatus, _user$project$State_TestInstance$Pass);
+};
 
 var _user$project$TestEvent_Util$parseInt = function (string) {
 	return A2(
@@ -9512,27 +9515,68 @@ var _user$project$View_TestHierarchy$idField = function (name) {
 		return {ctor: '[]'};
 	}
 };
-var _user$project$View_TestHierarchy$togglingArrow = F2(
+var _user$project$View_TestHierarchy$statusIndicatorIcon = function (passed) {
+	return passed ? _elm_lang$html$Html$text(' ✓ ') : _elm_lang$html$Html$text(' ✗ ');
+};
+var _user$project$View_TestHierarchy$statusIndicatorTextColor = function (passed) {
+	return passed ? _elm_lang$html$Html_Attributes$class('passed') : _elm_lang$html$Html_Attributes$class('failed');
+};
+var _user$project$View_TestHierarchy$statusIndicator = function (passed) {
+	return A2(
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _user$project$View_TestHierarchy$statusIndicatorTextColor(passed),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _user$project$View_TestHierarchy$statusIndicatorIcon(passed),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$View_TestHierarchy$togglingArrowText = F2(
 	function (isVisible, isExpanded) {
 		return isVisible ? '' : (isExpanded ? '▾ ' : '▸ ');
+	});
+var _user$project$View_TestHierarchy$togglingArrow = F2(
+	function (isVisible, isExpanded) {
+		return A2(
+			_elm_lang$html$Html$strong,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					A2(_user$project$View_TestHierarchy$togglingArrowText, isVisible, isExpanded)),
+				_1: {ctor: '[]'}
+			});
 	});
 var _user$project$View_TestHierarchy$expandOrCollapse = F3(
 	function (messages, isExpanded, nodeId) {
 		return _elm_lang$html$Html_Events$onClick(
 			isExpanded ? messages.collapse(nodeId) : messages.expand(nodeId));
 	});
-var _user$project$View_TestHierarchy$rootText = F3(
-	function (hasChildren, isExpanded, nodeName) {
+var _user$project$View_TestHierarchy$rootText = F4(
+	function (hasChildren, isExpanded, nodePassed, nodeName) {
 		return A2(
-			_user$project$View_TestHierarchy$conditionallyEmbolden,
-			!hasChildren,
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				A2(_user$project$View_TestHierarchy$togglingArrow, hasChildren, isExpanded),
-				nodeName));
+			_elm_lang$html$Html$span,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(_user$project$View_TestHierarchy$togglingArrow, hasChildren, isExpanded),
+				_1: {
+					ctor: '::',
+					_0: _user$project$View_TestHierarchy$statusIndicator(nodePassed),
+					_1: {
+						ctor: '::',
+						_0: A2(_user$project$View_TestHierarchy$conditionallyEmbolden, !hasChildren, nodeName),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
 	});
-var _user$project$View_TestHierarchy$rootView = F5(
-	function (messages, hasChildren, isExpanded, nodeName, nodeId) {
+var _user$project$View_TestHierarchy$rootView = F6(
+	function (messages, hasChildren, isExpanded, nodePassed, nodeName, nodeId) {
 		return A2(
 			_elm_lang$html$Html$span,
 			{
@@ -9542,7 +9586,7 @@ var _user$project$View_TestHierarchy$rootView = F5(
 			},
 			{
 				ctor: '::',
-				_0: A3(_user$project$View_TestHierarchy$rootText, hasChildren, isExpanded, nodeName),
+				_0: A4(_user$project$View_TestHierarchy$rootText, hasChildren, isExpanded, nodePassed, nodeName),
 				_1: {ctor: '[]'}
 			});
 	});
@@ -9566,11 +9610,12 @@ var _user$project$View_TestHierarchy$viewTree = F3(
 				_user$project$View_TestHierarchy$idField(cssId)),
 			{
 				ctor: '::',
-				_0: A5(
+				_0: A6(
 					_user$project$View_TestHierarchy$rootView,
 					messages,
 					_elm_lang$core$List$isEmpty(_p4),
 					isExpanded,
+					_user$project$State_TestInstance$passed(_p2._1),
 					nodeName,
 					nodeId),
 				_1: A3(_user$project$View_TestHierarchy$viewChildren, messages, isExpanded, _p4)

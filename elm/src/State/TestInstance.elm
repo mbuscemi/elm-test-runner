@@ -1,4 +1,4 @@
-module State.TestInstance exposing (TestInstance, default)
+module State.TestInstance exposing (TestInstance, default, passed)
 
 
 type TestStatus
@@ -14,3 +14,8 @@ type alias TestInstance =
 default : TestInstance
 default =
     { testStatus = Pass }
+
+
+passed : TestInstance -> Bool
+passed test =
+    test.testStatus == Pass
