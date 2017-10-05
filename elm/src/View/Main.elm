@@ -3,6 +3,7 @@ module View.Main exposing (render)
 import Html exposing (Html, div, h2, section, span, text)
 import Html.Attributes exposing (class)
 import State.RunStatus as RunStatus exposing (RunStatus)
+import State.TestInstance as TestInstance exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree)
 import View.PassingTestsDisplay
 import View.RedGreenDisplay
@@ -18,7 +19,7 @@ type alias Messages message =
     }
 
 
-render : RunStatus -> Int -> Int -> CollapsibleTree String {} -> Messages message -> Html message
+render : RunStatus -> Int -> Int -> CollapsibleTree String TestInstance -> Messages message -> Html message
 render runStatus totalTests passedTests testHierarchy messages =
     div [ class "etr-main-view" ]
         [ View.Toolbar.render messages.toggleClickHandler messages.runAllButtonClickHandler

@@ -14,6 +14,7 @@ module Model.Core
         )
 
 import State.RunStatus as RunStatus exposing (RunStatus)
+import State.TestInstance as TestInstance exposing (TestInstance)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
 import TestEvent.RunStart as RunStart exposing (RunStart)
 import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
@@ -26,8 +27,8 @@ type alias Model =
     { runStatus : RunStatus
     , totalTests : Int
     , passedTests : Int
-    , testRuns : Tree String {}
-    , testHierarchy : CollapsibleTree String {}
+    , testRuns : Tree String TestInstance
+    , testHierarchy : CollapsibleTree String TestInstance
     }
 
 
@@ -36,8 +37,8 @@ default =
     { runStatus = RunStatus.noData
     , totalTests = 0
     , passedTests = 0
-    , testRuns = Node systemTopLevelMessage {} []
-    , testHierarchy = Tree.make (Node humanReadableTopLevelMessage {} [])
+    , testRuns = Node systemTopLevelMessage TestInstance.default []
+    , testHierarchy = Tree.make (Node humanReadableTopLevelMessage TestInstance.default [])
     }
 
 

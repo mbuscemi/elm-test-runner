@@ -3,6 +3,7 @@ module View.TestHierarchy exposing (render)
 import Html exposing (Attribute, Html, li, span, strong, text, ul)
 import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
+import State.TestInstance as TestInstance exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree, Tree(Node))
 
 
@@ -12,12 +13,12 @@ type alias Messages message =
     }
 
 
-render : CollapsibleTree String {} -> Messages message -> Html message
+render : CollapsibleTree String TestInstance -> Messages message -> Html message
 render testHierarchy messages =
     viewTree messages (Just "test-hierarchy") testHierarchy
 
 
-viewTree : Messages message -> Maybe String -> CollapsibleTree String {} -> Html message
+viewTree : Messages message -> Maybe String -> CollapsibleTree String TestInstance -> Html message
 viewTree messages cssId (Node root data children) =
     let
         ( nodeData, expanded, nodeId ) =
@@ -59,7 +60,7 @@ viewTree messages cssId (Node root data children) =
         (rootView :: childrenListView)
 
 
-viewForest : Messages message -> List (CollapsibleTree String {}) -> List (Html message)
+viewForest : Messages message -> List (CollapsibleTree String TestInstance) -> List (Html message)
 viewForest messages children =
     List.map (\childTree -> li [] [ viewTree messages Nothing childTree ]) children
 

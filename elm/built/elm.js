@@ -8952,6 +8952,13 @@ var _user$project$State_RunStatus$processing = _user$project$State_RunStatus$Pro
 var _user$project$State_RunStatus$NoData = {ctor: 'NoData'};
 var _user$project$State_RunStatus$noData = _user$project$State_RunStatus$NoData;
 
+var _user$project$State_TestInstance$TestInstance = function (a) {
+	return {testStatus: a};
+};
+var _user$project$State_TestInstance$Fail = {ctor: 'Fail'};
+var _user$project$State_TestInstance$Pass = {ctor: 'Pass'};
+var _user$project$State_TestInstance$default = {testStatus: _user$project$State_TestInstance$Pass};
+
 var _user$project$TestEvent_Util$parseInt = function (string) {
 	return A2(
 		_elm_lang$core$Result$withDefault,
@@ -9339,13 +9346,13 @@ var _user$project$Model_Core$default = {
 	testRuns: A3(
 		_user$project$Tree_Core$Node,
 		_user$project$Model_Core$systemTopLevelMessage,
-		{},
+		_user$project$State_TestInstance$default,
 		{ctor: '[]'}),
 	testHierarchy: _user$project$Tree_Core$make(
 		A3(
 			_user$project$Tree_Core$Node,
 			_user$project$Model_Core$humanReadableTopLevelMessage,
-			{},
+			_user$project$State_TestInstance$default,
 			{ctor: '[]'}))
 };
 var _user$project$Model_Core$Model = F5(
