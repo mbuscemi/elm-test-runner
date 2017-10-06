@@ -1,4 +1,13 @@
-module TestInstance.Core exposing (TestInstance, default, isFailing, setStatus, toClass, toStatusIcon)
+module TestInstance.Core
+    exposing
+        ( TestInstance
+        , default
+        , isFailing
+        , isPending
+        , setStatus
+        , toClass
+        , toStatusIcon
+        )
 
 
 type TestStatus
@@ -14,7 +23,8 @@ type alias TestInstance =
 
 default : TestInstance
 default =
-    { testStatus = Pending }
+    { testStatus = Pending
+    }
 
 
 toStatusIcon : TestInstance -> String
@@ -45,15 +55,12 @@ toClass instance =
 
 isFailing : TestInstance -> Bool
 isFailing instance =
-    case instance.testStatus of
-        Pass ->
-            False
+    instance.testStatus == Fail
 
-        Fail ->
-            True
 
-        Pending ->
-            False
+isPending : TestInstance -> Bool
+isPending instance =
+    instance.testStatus == Pending
 
 
 setStatus : String -> TestInstance -> TestInstance

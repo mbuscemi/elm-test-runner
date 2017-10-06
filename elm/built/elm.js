@@ -8667,20 +8667,9 @@ var _user$project$TestEvent_RunStart$parse = function (rawData) {
 		});
 };
 
-var _user$project$TestInstance_Core$isFailing = function (instance) {
+var _user$project$TestInstance_Core$toClass = function (instance) {
 	var _p0 = instance.testStatus;
 	switch (_p0.ctor) {
-		case 'Pass':
-			return false;
-		case 'Fail':
-			return true;
-		default:
-			return false;
-	}
-};
-var _user$project$TestInstance_Core$toClass = function (instance) {
-	var _p1 = instance.testStatus;
-	switch (_p1.ctor) {
 		case 'Pass':
 			return 'passed';
 		case 'Fail':
@@ -8690,8 +8679,8 @@ var _user$project$TestInstance_Core$toClass = function (instance) {
 	}
 };
 var _user$project$TestInstance_Core$toStatusIcon = function (instance) {
-	var _p2 = instance.testStatus;
-	switch (_p2.ctor) {
+	var _p1 = instance.testStatus;
+	switch (_p1.ctor) {
 		case 'Pass':
 			return '✓';
 		case 'Fail':
@@ -8705,12 +8694,18 @@ var _user$project$TestInstance_Core$TestInstance = function (a) {
 };
 var _user$project$TestInstance_Core$Pending = {ctor: 'Pending'};
 var _user$project$TestInstance_Core$default = {testStatus: _user$project$TestInstance_Core$Pending};
+var _user$project$TestInstance_Core$isPending = function (instance) {
+	return _elm_lang$core$Native_Utils.eq(instance.testStatus, _user$project$TestInstance_Core$Pending);
+};
 var _user$project$TestInstance_Core$Fail = {ctor: 'Fail'};
+var _user$project$TestInstance_Core$isFailing = function (instance) {
+	return _elm_lang$core$Native_Utils.eq(instance.testStatus, _user$project$TestInstance_Core$Fail);
+};
 var _user$project$TestInstance_Core$Pass = {ctor: 'Pass'};
 var _user$project$TestInstance_Core$setStatus = F2(
 	function (newStatus, test) {
-		var _p3 = newStatus;
-		switch (_p3) {
+		var _p2 = newStatus;
+		switch (_p2) {
 			case 'pass':
 				return _elm_lang$core$Native_Utils.update(
 					test,
@@ -8983,18 +8978,40 @@ var _user$project$Tree_Node$toggle = F3(
 				_p3));
 	});
 
-var _user$project$Tree_Traverse$update = F2(
-	function (updater, _p0) {
-		var _p1 = _p0;
-		var updatedData = updater(_p1._1);
+var _user$project$Tree_Traverse$purgeNodes = F2(
+	function (evaluator, nodeList) {
+		return A2(
+			_elm_lang$core$List$filter,
+			function (_p0) {
+				var _p1 = _p0;
+				return evaluator(_p1._1);
+			},
+			nodeList);
+	});
+var _user$project$Tree_Traverse$purge = F2(
+	function (evaluator, _p2) {
+		var _p3 = _p2;
 		return A3(
 			_user$project$Tree_Core$Node,
-			_p1._0,
+			_p3._0,
+			_p3._1,
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Tree_Traverse$purge(evaluator),
+				A2(_user$project$Tree_Traverse$purgeNodes, evaluator, _p3._2)));
+	});
+var _user$project$Tree_Traverse$update = F2(
+	function (updater, _p4) {
+		var _p5 = _p4;
+		var updatedData = updater(_p5._1);
+		return A3(
+			_user$project$Tree_Core$Node,
+			_p5._0,
 			updatedData,
 			A2(
 				_elm_lang$core$List$map,
 				_user$project$Tree_Traverse$update(updater),
-				_p1._2));
+				_p5._2));
 	});
 
 var _user$project$Model_Core$toggleNode = F3(
@@ -9005,6 +9022,18 @@ var _user$project$Model_Core$toggleNode = F3(
 				testHierarchy: A3(_user$project$Tree_Node$toggle, nodeId, newState, model.testHierarchy)
 			});
 	});
+var _user$project$Model_Core$purgeObsoleteNodes = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testRuns: A2(
+				_user$project$Tree_Traverse$purge,
+				function (_p0) {
+					return !_user$project$TestInstance_Core$isPending(_p0);
+				},
+				model.testRuns)
+		});
+};
 var _user$project$Model_Core$updatePassedTestCount = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9057,14 +9086,14 @@ var _user$project$Model_Core$setRunStatusToProcessing = function (model) {
 };
 var _user$project$Model_Core$humanReadableTopLevelMessage = 'No Tests';
 var _user$project$Model_Core$removeTopNode = function (node) {
-	var _p0 = node;
-	if (_p0._2.ctor === '::') {
-		return _p0._2._0;
+	var _p1 = node;
+	if (_p1._2.ctor === '::') {
+		return _p1._2._0;
 	} else {
 		return A3(
 			_user$project$Tree_Core$Node,
 			_user$project$Model_Core$humanReadableTopLevelMessage,
-			_p0._1,
+			_p1._1,
 			{ctor: '[]'});
 	}
 };
@@ -9560,7 +9589,9 @@ var _user$project$Main$update = F2(
 			case 'RunComplete':
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
-					A2(_user$project$Model_Core$setRunStatusToPassFail, event, model));
+					_user$project$Model_Core$updateHierarchy(
+						_user$project$Model_Core$purgeObsoleteNodes(
+							A2(_user$project$Model_Core$setRunStatusToPassFail, event, model))));
 			case 'TestListItemExpand':
 				return _user$project$Main$andNoCommand(
 					A3(_user$project$Model_Core$toggleNode, _p0._0, true, model));

@@ -1,10 +1,14 @@
-module Tree.Traverse exposing (update)
+module Tree.Traverse exposing (purge, update)
 
 import Tree.Core exposing (Tree(Node))
 
 
 type alias DataUpdater b =
     b -> b
+
+
+type alias DataEvaluator b =
+    b -> Bool
 
 
 update : DataUpdater b -> Tree a b -> Tree a b
@@ -14,3 +18,17 @@ update updater (Node node data children) =
             updater data
     in
     Node node updatedData (List.map (update updater) children)
+
+
+purge : DataEvaluator b -> Tree a b -> Tree a b
+purge evaluator (Node node data children) =
+    purgeNodes evaluator children
+        |> List.map (purge evaluator)
+        |> Node node data
+
+
+purgeNodes : DataEvaluator b -> List (Tree a b) -> List (Tree a b)
+purgeNodes evaluator nodeList =
+    List.filter
+        (\(Node _ data _) -> evaluator data)
+        nodeList

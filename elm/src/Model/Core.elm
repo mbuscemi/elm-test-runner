@@ -3,6 +3,7 @@ module Model.Core
         ( Model
         , buildTestRunDataTree
         , default
+        , purgeObsoleteNodes
         , resetPassedTests
         , resetTestRuns
         , setRunStatusToCompileError
@@ -103,6 +104,16 @@ buildTestRunDataTree event model =
                 (systemTopLevelMessage :: TestCompleted.labels event)
                 (TestCompleted.toTestInstance event)
                 TestInstance.Reconcile.transform
+                model.testRuns
+    }
+
+
+purgeObsoleteNodes : Model -> Model
+purgeObsoleteNodes model =
+    { model
+        | testRuns =
+            Tree.Traverse.purge
+                (not << TestInstance.isPending)
                 model.testRuns
     }
 

@@ -5,6 +5,7 @@ import Model.Core as Model
     exposing
         ( Model
         , buildTestRunDataTree
+        , purgeObsoleteNodes
         , resetPassedTests
         , resetTestRuns
         , setRunStatusToCompileError
@@ -108,6 +109,8 @@ update message model =
                     RunComplete.parse data
             in
             setRunStatusToPassFail event model
+                |> purgeObsoleteNodes
+                |> updateHierarchy
                 |> andNoCommand
 
         TestListItemExpand nodeId ->
