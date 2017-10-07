@@ -111,3 +111,4 @@ toTestInstance ((TestCompleted parsed) as event) =
                 "fail"
             )
         |> TestInstance.setDuration parsed.duration
+        |> TestInstance.setFailure (List.head parsed.failures)

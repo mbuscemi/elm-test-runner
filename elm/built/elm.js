@@ -9045,13 +9045,17 @@ var _user$project$TestEvent_TestCompleted$passed = function (_p2) {
 };
 var _user$project$TestEvent_TestCompleted$toTestInstance = function (_p5) {
 	var _p6 = _p5;
+	var _p7 = _p6._0;
 	return A2(
-		_user$project$TestInstance_Core$setDuration,
-		_p6._0.duration,
+		_user$project$TestInstance_Core$setFailure,
+		_elm_lang$core$List$head(_p7.failures),
 		A2(
-			_user$project$TestInstance_Core$setStatus,
-			_user$project$TestEvent_TestCompleted$passed(_p6) ? 'pass' : 'fail',
-			_user$project$TestInstance_Core$default));
+			_user$project$TestInstance_Core$setDuration,
+			_p7.duration,
+			A2(
+				_user$project$TestInstance_Core$setStatus,
+				_user$project$TestEvent_TestCompleted$passed(_p6) ? 'pass' : 'fail',
+				_user$project$TestInstance_Core$default)));
 };
 var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
 	return _user$project$TestEvent_TestCompleted$passed(event) ? 1 : 0;
