@@ -10,5 +10,5 @@ render totalTests passingTests =
         [ span [ class "number-field" ] [ text <| toString passingTests ]
         , span [] [ text " / " ]
         , span [ class "number-field" ] [ text <| toString totalTests ]
-        , span [] [ text " passed" ]
+        , span [] [ text " tests passed" ]
         ]

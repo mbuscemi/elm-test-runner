@@ -39,7 +39,9 @@ render data messages =
             , View.RedGreenDisplay.render data.runStatus
             , View.PassingTestsDisplay.render data.totalTests data.passedTests
             , View.DurationAndSeedDisplay.render data.runDuration data.runSeed
-            , View.TestHierarchy.render data.testHierarchy { expand = messages.testListItemExpand, collapse = messages.testListItemCollapse }
+            ]
+        , div [ class "test-hierarchy" ]
+            [ View.TestHierarchy.render data.testHierarchy { expand = messages.testListItemExpand, collapse = messages.testListItemCollapse }
             ]
         , div [ class "output-display" ] []
         , div [ class "footer" ] []

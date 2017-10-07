@@ -9,12 +9,16 @@
 }
 
 .etr-main-view .core {
-    height: 60vh;
+    
+}
+
+.etr-main-view .test-hierarchy {
+    height: 66vh;
     overflow: scroll;
 }
 
 .etr-main-view .output-display {
-    height: 40vh;
+    height: 34vh;
     border-width: 1px 0;
     border-style: solid;
     border-color: black;
