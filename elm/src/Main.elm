@@ -6,10 +6,12 @@ import Model.Core as Model
         ( Model
         , buildTestRunDataTree
         , clearRunDuration
+        , clearRunSeed
         , purgeObsoleteNodes
         , resetPassedTests
         , resetTestRuns
         , setRunDuration
+        , setRunSeed
         , setRunStatusToCompileError
         , setRunStatusToPassFail
         , setRunStatusToProcessing
@@ -72,6 +74,7 @@ update message model =
             setRunStatusToProcessing model
                 |> resetPassedTests
                 |> clearRunDuration
+                |> clearRunSeed
                 |> resetTestRuns
                 |> updateHierarchy
                 |> andPerform (runTest ())
@@ -95,6 +98,7 @@ update message model =
             in
             setRunStatusToProcessing model
                 |> setTotalTestCount event
+                |> setRunSeed event
                 |> andNoCommand
 
         TestCompleted data ->
@@ -134,6 +138,7 @@ view model =
         , totalTests = model.totalTests
         , passedTests = model.passedTests
         , runDuration = model.runDuration
+        , runSeed = model.runSeed
         , testHierarchy = model.testHierarchy
         }
         { toggleClickHandler = ToggleButtonClicked

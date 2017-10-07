@@ -8881,9 +8881,13 @@ var _user$project$TestEvent_RunComplete$parse = function (rawData) {
 		});
 };
 
-var _user$project$TestEvent_RunStart$numTotalTests = function (_p0) {
+var _user$project$TestEvent_RunStart$initialSeed = function (_p0) {
 	var _p1 = _p0;
-	return _p1._0.testCount;
+	return _p1._0.initialSeed;
+};
+var _user$project$TestEvent_RunStart$numTotalTests = function (_p2) {
+	var _p3 = _p2;
+	return _p3._0.testCount;
 };
 var _user$project$TestEvent_RunStart$RawData = F4(
 	function (a, b, c, d) {
@@ -9315,6 +9319,20 @@ var _user$project$Model_Core$updatePassedTestCount = F2(
 				passedTests: model.passedTests + _user$project$TestEvent_TestCompleted$passedTestCountToIncrement(event)
 			});
 	});
+var _user$project$Model_Core$clearRunSeed = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{runSeed: _elm_lang$core$Maybe$Nothing});
+};
+var _user$project$Model_Core$setRunSeed = F2(
+	function (event, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				runSeed: _elm_lang$core$Maybe$Just(
+					_user$project$TestEvent_RunStart$initialSeed(event))
+			});
+	});
 var _user$project$Model_Core$setTotalTestCount = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9433,38 +9451,40 @@ var _user$project$View_DurationAndSeedDisplay$formattedSeconds = function (durat
 			2,
 			_user$project$Duration_Core$asSeconds(duration)));
 };
-var _user$project$View_DurationAndSeedDisplay$runTimeDisplay = function (runDuration) {
-	var _p0 = runDuration;
+var _user$project$View_DurationAndSeedDisplay$runSeedDisplay = function (runSeed) {
+	var _p0 = runSeed;
 	if (_p0.ctor === 'Just') {
 		return _elm_lang$html$Html$text(
-			_user$project$View_DurationAndSeedDisplay$formattedSeconds(_p0._0));
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'Seed: ',
+				_elm_lang$core$Basics$toString(_p0._0)));
 	} else {
 		return _elm_lang$html$Html$text('');
 	}
 };
-var _user$project$View_DurationAndSeedDisplay$render = function (runDuration) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('run-data-row'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _user$project$View_DurationAndSeedDisplay$runDataClass,
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Total Run Time:'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
+var _user$project$View_DurationAndSeedDisplay$runTimeDisplay = function (runDuration) {
+	var _p1 = runDuration;
+	if (_p1.ctor === 'Just') {
+		return _elm_lang$html$Html$text(
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'Total Run Time: ',
+				_user$project$View_DurationAndSeedDisplay$formattedSeconds(_p1._0)));
+	} else {
+		return _elm_lang$html$Html$text('');
+	}
+};
+var _user$project$View_DurationAndSeedDisplay$render = F2(
+	function (runDuration, runSeed) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('run-data-row'),
+				_1: {ctor: '[]'}
+			},
+			{
 				ctor: '::',
 				_0: A2(
 					_elm_lang$html$Html$div,
@@ -9478,10 +9498,24 @@ var _user$project$View_DurationAndSeedDisplay$render = function (runDuration) {
 						_0: _user$project$View_DurationAndSeedDisplay$runTimeDisplay(runDuration),
 						_1: {ctor: '[]'}
 					}),
-				_1: {ctor: '[]'}
-			}
-		});
-};
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _user$project$View_DurationAndSeedDisplay$runDataClass,
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _user$project$View_DurationAndSeedDisplay$runSeedDisplay(runSeed),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
 
 var _user$project$View_PassingTestsDisplay$render = F2(
 	function (totalTests, passingTests) {
@@ -9864,7 +9898,7 @@ var _user$project$View_Main$render = F2(
 						_0: A2(_user$project$View_PassingTestsDisplay$render, data.totalTests, data.passedTests),
 						_1: {
 							ctor: '::',
-							_0: _user$project$View_DurationAndSeedDisplay$render(data.runDuration),
+							_0: A2(_user$project$View_DurationAndSeedDisplay$render, data.runDuration, data.runSeed),
 							_1: {
 								ctor: '::',
 								_0: A2(
@@ -9882,9 +9916,9 @@ var _user$project$View_Main$Messages = F4(
 	function (a, b, c, d) {
 		return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d};
 	});
-var _user$project$View_Main$DisplayData = F5(
-	function (a, b, c, d, e) {
-		return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, testHierarchy: e};
+var _user$project$View_Main$DisplayData = F6(
+	function (a, b, c, d, e, f) {
+		return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testHierarchy: f};
 	});
 
 var _user$project$Main$andPerform = F2(
@@ -9925,9 +9959,10 @@ var _user$project$Main$update = F2(
 						{ctor: '_Tuple0'}),
 					_user$project$Model_Core$updateHierarchy(
 						_user$project$Model_Core$resetTestRuns(
-							_user$project$Model_Core$clearRunDuration(
-								_user$project$Model_Core$resetPassedTests(
-									_user$project$Model_Core$setRunStatusToProcessing(model))))));
+							_user$project$Model_Core$clearRunSeed(
+								_user$project$Model_Core$clearRunDuration(
+									_user$project$Model_Core$resetPassedTests(
+										_user$project$Model_Core$setRunStatusToProcessing(model)))))));
 			case 'InitiateRunAll':
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$updateHierarchy(
@@ -9942,9 +9977,12 @@ var _user$project$Main$update = F2(
 				var event = _user$project$TestEvent_RunStart$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
 					A2(
-						_user$project$Model_Core$setTotalTestCount,
+						_user$project$Model_Core$setRunSeed,
 						event,
-						_user$project$Model_Core$setRunStatusToProcessing(model)));
+						A2(
+							_user$project$Model_Core$setTotalTestCount,
+							event,
+							_user$project$Model_Core$setRunStatusToProcessing(model))));
 			case 'TestCompleted':
 				var event = _user$project$TestEvent_TestCompleted$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
@@ -10073,7 +10111,7 @@ var _user$project$Main$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View_Main$render,
-		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, testHierarchy: model.testHierarchy},
+		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy},
 		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$RunAllButtonClicked, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(

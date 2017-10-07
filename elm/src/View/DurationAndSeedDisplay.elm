@@ -6,11 +6,11 @@ import Html.Attributes exposing (class)
 import Round exposing (round)
 
 
-render : Maybe Duration -> Html message
-render runDuration =
+render : Maybe Duration -> Maybe Int -> Html message
+render runDuration runSeed =
     div [ class "run-data-row" ]
-        [ div [ runDataClass ] [ text "Total Run Time:" ]
-        , div [ runDataClass ] [ runTimeDisplay runDuration ]
+        [ div [ runDataClass ] [ runTimeDisplay runDuration ]
+        , div [ runDataClass ] [ runSeedDisplay runSeed ]
         ]
 
 
@@ -18,7 +18,17 @@ runTimeDisplay : Maybe Duration -> Html message
 runTimeDisplay runDuration =
     case runDuration of
         Just duration ->
-            text <| formattedSeconds duration
+            text <| "Total Run Time: " ++ formattedSeconds duration
+
+        Nothing ->
+            text ""
+
+
+runSeedDisplay : Maybe Int -> Html message
+runSeedDisplay runSeed =
+    case runSeed of
+        Just seed ->
+            text <| "Seed: " ++ toString seed
 
         Nothing ->
             text ""

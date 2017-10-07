@@ -3,11 +3,13 @@ module Model.Core
         ( Model
         , buildTestRunDataTree
         , clearRunDuration
+        , clearRunSeed
         , default
         , purgeObsoleteNodes
         , resetPassedTests
         , resetTestRuns
         , setRunDuration
+        , setRunSeed
         , setRunStatusToCompileError
         , setRunStatusToPassFail
         , setRunStatusToProcessing
@@ -96,6 +98,16 @@ resetTestRuns model =
 setTotalTestCount : RunStart -> Model -> Model
 setTotalTestCount event model =
     { model | totalTests = RunStart.numTotalTests event }
+
+
+setRunSeed : RunStart -> Model -> Model
+setRunSeed event model =
+    { model | runSeed = Just <| RunStart.initialSeed event }
+
+
+clearRunSeed : Model -> Model
+clearRunSeed model =
+    { model | runSeed = Nothing }
 
 
 updatePassedTestCount : TestCompleted -> Model -> Model

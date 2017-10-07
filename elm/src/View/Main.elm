@@ -26,6 +26,7 @@ type alias DisplayData =
     , totalTests : Int
     , passedTests : Int
     , runDuration : Maybe Duration
+    , runSeed : Maybe Int
     , testHierarchy : CollapsibleTree String TestInstance
     }
 
@@ -36,6 +37,6 @@ render data messages =
         [ View.Toolbar.render messages.toggleClickHandler messages.runAllButtonClickHandler
         , View.RedGreenDisplay.render data.runStatus
         , View.PassingTestsDisplay.render data.totalTests data.passedTests
-        , View.DurationAndSeedDisplay.render data.runDuration
+        , View.DurationAndSeedDisplay.render data.runDuration data.runSeed
         , View.TestHierarchy.render data.testHierarchy { expand = messages.testListItemExpand, collapse = messages.testListItemCollapse }
         ]

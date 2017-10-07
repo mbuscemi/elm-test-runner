@@ -1,4 +1,4 @@
-module TestEvent.RunStart exposing (RawData, RunStart, numTotalTests, parse)
+module TestEvent.RunStart exposing (RawData, RunStart, initialSeed, numTotalTests, parse)
 
 import TestEvent.Util
 
@@ -36,3 +36,8 @@ parse rawData =
 numTotalTests : RunStart -> Int
 numTotalTests (RunStart parsed) =
     parsed.testCount
+
+
+initialSeed : RunStart -> Int
+initialSeed (RunStart parsed) =
+    parsed.initialSeed
