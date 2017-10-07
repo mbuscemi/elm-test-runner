@@ -10033,7 +10033,7 @@ var _user$project$Main$update = F2(
 					_user$project$Main$toggle(
 						{ctor: '_Tuple0'}),
 					model);
-			case 'RunAllButtonClicked':
+			case 'InitiateRunAll':
 				return A2(
 					_user$project$Main$andPerform,
 					_user$project$Main$runTest(
@@ -10044,13 +10044,6 @@ var _user$project$Main$update = F2(
 								_user$project$Model_Core$clearRunDuration(
 									_user$project$Model_Core$resetPassedTests(
 										_user$project$Model_Core$setRunStatusToProcessing(model)))))));
-			case 'InitiateRunAll':
-				return _user$project$Main$andNoCommand(
-					_user$project$Model_Core$updateHierarchy(
-						_user$project$Model_Core$resetTestRuns(
-							_user$project$Model_Core$clearRunDuration(
-								_user$project$Model_Core$resetPassedTests(
-									_user$project$Model_Core$setRunStatusToProcessing(model))))));
 			case 'CompilerErrored':
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$setRunStatusToCompileError(model));
@@ -10087,9 +10080,11 @@ var _user$project$Main$update = F2(
 			case 'TestListItemCollapse':
 				return _user$project$Main$andNoCommand(
 					A3(_user$project$Model_Core$toggleNode, _p0._0, false, model));
-			default:
+			case 'ToggleAutoRun':
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$invertAutoRun(model));
+			default:
+				return _user$project$Main$andNoCommand(model);
 		}
 	});
 var _user$project$Main$commandKeyTestStart = _elm_lang$core$Native_Platform.incomingPort(
@@ -10102,6 +10097,10 @@ var _user$project$Main$notifyCompilerErrored = _elm_lang$core$Native_Platform.in
 		{ctor: '_Tuple0'}));
 var _user$project$Main$toggleAutoRun = _elm_lang$core$Native_Platform.incomingPort(
 	'toggleAutoRun',
+	_elm_lang$core$Json_Decode$null(
+		{ctor: '_Tuple0'}));
+var _user$project$Main$notifySaveEvent = _elm_lang$core$Native_Platform.incomingPort(
+	'notifySaveEvent',
 	_elm_lang$core$Json_Decode$null(
 		{ctor: '_Tuple0'}));
 var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(
@@ -10151,6 +10150,7 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 				A2(_elm_lang$core$Json_Decode$field, 'failed', _elm_lang$core$Json_Decode$string));
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
+var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
 var _user$project$Main$ToggleAutoRun = {ctor: 'ToggleAutoRun'};
 var _user$project$Main$TestListItemCollapse = function (a) {
 	return {ctor: 'TestListItemCollapse', _0: a};
@@ -10169,6 +10169,10 @@ var _user$project$Main$RunStart = function (a) {
 };
 var _user$project$Main$CompilerErrored = {ctor: 'CompilerErrored'};
 var _user$project$Main$InitiateRunAll = {ctor: 'InitiateRunAll'};
+var _user$project$Main$saveEventCommand = F2(
+	function (model, _p1) {
+		return model.autoRunEnabled ? _user$project$Main$InitiateRunAll : _user$project$Main$DoNothing;
+	});
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
@@ -10185,14 +10189,19 @@ var _user$project$Main$subscriptions = function (model) {
 						_elm_lang$core$Basics$always(_user$project$Main$ToggleAutoRun)),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Main$runStart(_user$project$Main$RunStart),
+						_0: _user$project$Main$notifySaveEvent(
+							_user$project$Main$saveEventCommand(model)),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+							_0: _user$project$Main$runStart(_user$project$Main$RunStart),
 							_1: {
 								ctor: '::',
-								_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
-								_1: {ctor: '[]'}
+								_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+								_1: {
+									ctor: '::',
+									_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
 					}
@@ -10200,13 +10209,12 @@ var _user$project$Main$subscriptions = function (model) {
 			}
 		});
 };
-var _user$project$Main$RunAllButtonClicked = {ctor: 'RunAllButtonClicked'};
 var _user$project$Main$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View_Main$render,
 		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, autoRunEnabled: model.autoRunEnabled},
-		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$RunAllButtonClicked, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse});
+		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();

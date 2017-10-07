@@ -29,7 +29,6 @@ import View.Main
 
 type Message
     = ToggleButtonClicked
-    | RunAllButtonClicked
     | InitiateRunAll
     | CompilerErrored
     | RunStart RunStart.RawData
@@ -38,6 +37,7 @@ type Message
     | TestListItemExpand Int
     | TestListItemCollapse Int
     | ToggleAutoRun
+    | DoNothing
 
 
 main : Program Never Model Message
@@ -72,7 +72,7 @@ update message model =
             model
                 |> andPerform (toggle ())
 
-        RunAllButtonClicked ->
+        InitiateRunAll ->
             setRunStatusToProcessing model
                 |> resetPassedTests
                 |> clearRunDuration
@@ -80,14 +80,6 @@ update message model =
                 |> resetTestRuns
                 |> updateHierarchy
                 |> andPerform (runTest ())
-
-        InitiateRunAll ->
-            setRunStatusToProcessing model
-                |> resetPassedTests
-                |> clearRunDuration
-                |> resetTestRuns
-                |> updateHierarchy
-                |> andNoCommand
 
         CompilerErrored ->
             setRunStatusToCompileError model
@@ -136,6 +128,9 @@ update message model =
             invertAutoRun model
                 |> andNoCommand
 
+        DoNothing ->
+            model |> andNoCommand
+
 
 view : Model -> Html Message
 view model =
@@ -149,7 +144,7 @@ view model =
         , autoRunEnabled = model.autoRunEnabled
         }
         { toggleClickHandler = ToggleButtonClicked
-        , runAllButtonClickHandler = RunAllButtonClicked
+        , runAllButtonClickHandler = InitiateRunAll
         , testListItemExpand = TestListItemExpand
         , testListItemCollapse = TestListItemCollapse
         }
@@ -161,10 +156,19 @@ subscriptions model =
         [ commandKeyTestStart (always InitiateRunAll)
         , notifyCompilerErrored (always CompilerErrored)
         , toggleAutoRun (always ToggleAutoRun)
+        , notifySaveEvent <| saveEventCommand model
         , runStart RunStart
         , testCompleted TestCompleted
         , runComplete RunComplete
         ]
+
+
+saveEventCommand : Model -> () -> Message
+saveEventCommand model _ =
+    if model.autoRunEnabled then
+        InitiateRunAll
+    else
+        DoNothing
 
 
 port toggle : () -> Cmd message
@@ -180,6 +184,9 @@ port notifyCompilerErrored : (() -> message) -> Sub message
 
 
 port toggleAutoRun : (() -> message) -> Sub message
+
+
+port notifySaveEvent : (() -> message) -> Sub message
 
 
 port runStart : (RunStart.RawData -> message) -> Sub message
