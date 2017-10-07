@@ -14,6 +14,7 @@ module Model.Core
         , setRunStatusToCompileError
         , setRunStatusToPassFail
         , setRunStatusToProcessing
+        , setSelectedTest
         , setTestMouseIsOver
         , setTotalTestCount
         , toggleNode
@@ -43,6 +44,7 @@ type alias Model =
     , testRuns : Tree String TestInstance
     , testHierarchy : CollapsibleTree String TestInstance
     , testMouseIsOver : Maybe Int
+    , selectedTest : Maybe Int
     , autoRunEnabled : Bool
     }
 
@@ -57,6 +59,7 @@ default =
     , testRuns = Node systemTopLevelMessage TestInstance.default []
     , testHierarchy = Tree.make (Node humanReadableTopLevelMessage TestInstance.default [])
     , testMouseIsOver = Nothing
+    , selectedTest = Nothing
     , autoRunEnabled = False
     }
 
@@ -141,6 +144,11 @@ buildTestRunDataTree event model =
 setTestMouseIsOver : Maybe Int -> Model -> Model
 setTestMouseIsOver nodeId model =
     { model | testMouseIsOver = nodeId }
+
+
+setSelectedTest : Maybe Int -> Model -> Model
+setSelectedTest nodeId model =
+    { model | selectedTest = nodeId }
 
 
 setRunDuration : RunComplete -> Model -> Model

@@ -14,43 +14,50 @@ type alias ToggleMessages message =
     }
 
 
-type alias HighlightMessages message =
+type alias HighlightAndSelectionMessages message =
     { mouseIn : Int -> message
     , mouseOut : message
+    , testClick : Int -> message
     }
 
 
-render : Maybe Int -> CollapsibleTree String TestInstance -> ToggleMessages message -> HighlightMessages message -> Html message
-render nodeMouseIsOver testHierarchy toggleMessages highlightMessages =
-    viewTree toggleMessages highlightMessages nodeMouseIsOver testHierarchy
+type alias NodeData =
+    { nodeMouseIsOver : Maybe Int
+    , selectedNode : Maybe Int
+    }
 
 
-viewTree : ToggleMessages message -> HighlightMessages message -> Maybe Int -> CollapsibleTree String TestInstance -> Html message
-viewTree toggleMessages highlightMessages nodeMouseIsOver (Node ( nodeName, isExpanded, nodeId ) nodeData children) =
+render : ToggleMessages message -> HighlightAndSelectionMessages message -> NodeData -> CollapsibleTree String TestInstance -> Html message
+render toggleMessages highlightMessages nodeData testHierarchy =
+    viewTree toggleMessages highlightMessages nodeData testHierarchy
+
+
+viewTree : ToggleMessages message -> HighlightAndSelectionMessages message -> NodeData -> CollapsibleTree String TestInstance -> Html message
+viewTree toggleMessages highlightMessages nodeData (Node ( nodeName, isExpanded, nodeId ) nodeInternals children) =
     ul
         [ class "test-list" ]
-        (View.TestHierarchy.Root.render toggleMessages nodeData (List.isEmpty children) isExpanded nodeName nodeId
-            :: viewChildren toggleMessages highlightMessages isExpanded nodeMouseIsOver children
+        (View.TestHierarchy.Root.render toggleMessages nodeInternals (List.isEmpty children) isExpanded nodeName nodeId
+            :: viewChildren toggleMessages highlightMessages isExpanded nodeData children
         )
 
 
-viewChildren : ToggleMessages message -> HighlightMessages message -> Bool -> Maybe Int -> List (CollapsibleTree String TestInstance) -> List (Html message)
-viewChildren toggleMessages highlightMessages shouldShow nodeMouseIsOver children =
+viewChildren : ToggleMessages message -> HighlightAndSelectionMessages message -> Bool -> NodeData -> List (CollapsibleTree String TestInstance) -> List (Html message)
+viewChildren toggleMessages highlightMessages shouldShow nodeData children =
     if shouldShow then
-        viewForest toggleMessages highlightMessages nodeMouseIsOver children
+        viewForest toggleMessages highlightMessages nodeData children
     else
         []
 
 
-viewForest : ToggleMessages message -> HighlightMessages message -> Maybe Int -> List (CollapsibleTree String TestInstance) -> List (Html message)
-viewForest toggleMessages highlightMessages nodeMouseIsOver children =
-    List.map (childTree toggleMessages highlightMessages nodeMouseIsOver) children
+viewForest : ToggleMessages message -> HighlightAndSelectionMessages message -> NodeData -> List (CollapsibleTree String TestInstance) -> List (Html message)
+viewForest toggleMessages highlightMessages nodeData children =
+    List.map (childTree toggleMessages highlightMessages nodeData) children
 
 
-childTree : ToggleMessages message -> HighlightMessages message -> Maybe Int -> CollapsibleTree String TestInstance -> Html message
-childTree toggleMessages highlightMessages nodeMouseIsOver tree =
+childTree : ToggleMessages message -> HighlightAndSelectionMessages message -> NodeData -> CollapsibleTree String TestInstance -> Html message
+childTree toggleMessages highlightMessages nodeData tree =
     View.TestHierarchy.ChildTree.render
         highlightMessages
-        nodeMouseIsOver
+        nodeData
         tree
-        (viewTree toggleMessages highlightMessages nodeMouseIsOver tree)
+        (viewTree toggleMessages highlightMessages nodeData tree)

@@ -21,6 +21,7 @@ type alias Messages message =
     , testListItemCollapse : Int -> message
     , testListItemMouseEnter : Int -> message
     , testListItemMouseLeave : message
+    , testClickHandler : Int -> message
     }
 
 
@@ -32,6 +33,7 @@ type alias DisplayData =
     , runSeed : Maybe Int
     , testHierarchy : CollapsibleTree String TestInstance
     , nodeMouseIsOver : Maybe Int
+    , selectedNode : Maybe Int
     , autoRunEnabled : Bool
     }
 
@@ -46,14 +48,18 @@ render data messages =
             , View.DurationAndSeedDisplay.render data.runDuration data.runSeed
             ]
         , div [ class "test-hierarchy" ]
-            [ View.TestHierarchy.Core.render data.nodeMouseIsOver
-                data.testHierarchy
+            [ View.TestHierarchy.Core.render
                 { expand = messages.testListItemExpand
                 , collapse = messages.testListItemCollapse
                 }
                 { mouseIn = messages.testListItemMouseEnter
                 , mouseOut = messages.testListItemMouseLeave
+                , testClick = messages.testClickHandler
                 }
+                { nodeMouseIsOver = data.nodeMouseIsOver
+                , selectedNode = data.selectedNode
+                }
+                data.testHierarchy
             ]
         , div [ class "output-display" ] []
         , div [ class "footer" ]

@@ -9311,6 +9311,12 @@ var _user$project$Model_Core$setRunDuration = F2(
 					_user$project$TestEvent_RunComplete$duration(event))
 			});
 	});
+var _user$project$Model_Core$setSelectedTest = F2(
+	function (nodeId, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{selectedTest: nodeId});
+	});
 var _user$project$Model_Core$setTestMouseIsOver = F2(
 	function (nodeId, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9443,12 +9449,30 @@ var _user$project$Model_Core$default = {
 			_user$project$TestInstance_Core$default,
 			{ctor: '[]'})),
 	testMouseIsOver: _elm_lang$core$Maybe$Nothing,
+	selectedTest: _elm_lang$core$Maybe$Nothing,
 	autoRunEnabled: false
 };
-var _user$project$Model_Core$Model = F9(
-	function (a, b, c, d, e, f, g, h, i) {
-		return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testRuns: f, testHierarchy: g, testMouseIsOver: h, autoRunEnabled: i};
-	});
+var _user$project$Model_Core$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testRuns: f, testHierarchy: g, testMouseIsOver: h, selectedTest: i, autoRunEnabled: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 
 var _user$project$View_AutoRunOnSave$enabledString = function (enabled) {
 	return enabled ? 'enabled' : 'disabled';
@@ -9650,22 +9674,41 @@ var _user$project$View_RedGreenDisplay$render = function (runStatus) {
 		});
 };
 
-var _user$project$View_TestHierarchy_ChildTree$mouseOverHighlight = F2(
-	function (nodeId, nodeMouseIsOver) {
-		var _p0 = nodeMouseIsOver;
-		if (_p0.ctor === 'Just') {
-			return _elm_lang$core$Native_Utils.eq(nodeId, _p0._0) ? {
+var _user$project$View_TestHierarchy_ChildTree$mouseOverHexColor = '2c333e';
+var _user$project$View_TestHierarchy_ChildTree$selectedHexColor = '343f51';
+var _user$project$View_TestHierarchy_ChildTree$testNodeBackgroundColorStyle = function (hexColor) {
+	return {
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$style(
+			{
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$style(
-					{
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'background-color', _1: '#2c333e'},
-						_1: {ctor: '[]'}
-					}),
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'background-color',
+					_1: A2(_elm_lang$core$Basics_ops['++'], '#', hexColor)
+				},
 				_1: {ctor: '[]'}
-			} : {ctor: '[]'};
+			}),
+		_1: {ctor: '[]'}
+	};
+};
+var _user$project$View_TestHierarchy_ChildTree$selectedNodeBackgroundColorStyle = _user$project$View_TestHierarchy_ChildTree$testNodeBackgroundColorStyle(_user$project$View_TestHierarchy_ChildTree$selectedHexColor);
+var _user$project$View_TestHierarchy_ChildTree$mouseOverNodeBackgroundColorStyle = _user$project$View_TestHierarchy_ChildTree$testNodeBackgroundColorStyle(_user$project$View_TestHierarchy_ChildTree$mouseOverHexColor);
+var _user$project$View_TestHierarchy_ChildTree$mouseOverHighlight = F2(
+	function (nodeId, nodeData) {
+		var _p0 = {ctor: '_Tuple2', _0: nodeData.nodeMouseIsOver, _1: nodeData.selectedNode};
+		if (_p0._0.ctor === 'Just') {
+			if (_p0._1.ctor === 'Just') {
+				return _elm_lang$core$Native_Utils.eq(nodeId, _p0._1._0) ? _user$project$View_TestHierarchy_ChildTree$selectedNodeBackgroundColorStyle : (_elm_lang$core$Native_Utils.eq(nodeId, _p0._0._0) ? _user$project$View_TestHierarchy_ChildTree$mouseOverNodeBackgroundColorStyle : {ctor: '[]'});
+			} else {
+				return _elm_lang$core$Native_Utils.eq(nodeId, _p0._0._0) ? _user$project$View_TestHierarchy_ChildTree$mouseOverNodeBackgroundColorStyle : {ctor: '[]'};
+			}
 		} else {
-			return {ctor: '[]'};
+			if (_p0._1.ctor === 'Just') {
+				return _elm_lang$core$Native_Utils.eq(nodeId, _p0._1._0) ? _user$project$View_TestHierarchy_ChildTree$selectedNodeBackgroundColorStyle : {ctor: '[]'};
+			} else {
+				return {ctor: '[]'};
+			}
 		}
 	});
 var _user$project$View_TestHierarchy_ChildTree$mouseEvents = F3(
@@ -9677,12 +9720,17 @@ var _user$project$View_TestHierarchy_ChildTree$mouseEvents = F3(
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html_Events$onMouseLeave(messages.mouseOut),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						messages.testClick(nodeId)),
+					_1: {ctor: '[]'}
+				}
 			}
 		} : {ctor: '[]'};
 	});
 var _user$project$View_TestHierarchy_ChildTree$render = F4(
-	function (highlightMessages, nodeMouseIsOver, _p1, renderedChildren) {
+	function (highlightMessages, nodeData, _p1, renderedChildren) {
 		var _p2 = _p1;
 		var _p3 = _p2._0._2;
 		return A2(
@@ -9690,16 +9738,20 @@ var _user$project$View_TestHierarchy_ChildTree$render = F4(
 			A2(
 				_elm_lang$core$List$append,
 				A3(_user$project$View_TestHierarchy_ChildTree$mouseEvents, highlightMessages, _p3, _p2._2),
-				A2(_user$project$View_TestHierarchy_ChildTree$mouseOverHighlight, _p3, nodeMouseIsOver)),
+				A2(_user$project$View_TestHierarchy_ChildTree$mouseOverHighlight, _p3, nodeData)),
 			{
 				ctor: '::',
 				_0: renderedChildren,
 				_1: {ctor: '[]'}
 			});
 	});
-var _user$project$View_TestHierarchy_ChildTree$Messages = F2(
+var _user$project$View_TestHierarchy_ChildTree$Messages = F3(
+	function (a, b, c) {
+		return {mouseIn: a, mouseOut: b, testClick: c};
+	});
+var _user$project$View_TestHierarchy_ChildTree$NodeData = F2(
 	function (a, b) {
-		return {mouseIn: a, mouseOut: b};
+		return {nodeMouseIsOver: a, selectedNode: b};
 	});
 
 var _user$project$View_TestHierarchy_Root$timeReport = function (nodeData) {
@@ -9814,7 +9866,7 @@ var _user$project$View_TestHierarchy_Root$Messages = F2(
 	});
 
 var _user$project$View_TestHierarchy_Core$viewTree = F4(
-	function (toggleMessages, highlightMessages, nodeMouseIsOver, _p0) {
+	function (toggleMessages, highlightMessages, nodeData, _p0) {
 		var _p1 = _p0;
 		var _p3 = _p1._0._1;
 		var _p2 = _p1._2;
@@ -9835,40 +9887,44 @@ var _user$project$View_TestHierarchy_Core$viewTree = F4(
 					_p3,
 					_p1._0._0,
 					_p1._0._2),
-				_1: A5(_user$project$View_TestHierarchy_Core$viewChildren, toggleMessages, highlightMessages, _p3, nodeMouseIsOver, _p2)
+				_1: A5(_user$project$View_TestHierarchy_Core$viewChildren, toggleMessages, highlightMessages, _p3, nodeData, _p2)
 			});
 	});
 var _user$project$View_TestHierarchy_Core$viewChildren = F5(
-	function (toggleMessages, highlightMessages, shouldShow, nodeMouseIsOver, children) {
-		return shouldShow ? A4(_user$project$View_TestHierarchy_Core$viewForest, toggleMessages, highlightMessages, nodeMouseIsOver, children) : {ctor: '[]'};
+	function (toggleMessages, highlightMessages, shouldShow, nodeData, children) {
+		return shouldShow ? A4(_user$project$View_TestHierarchy_Core$viewForest, toggleMessages, highlightMessages, nodeData, children) : {ctor: '[]'};
 	});
 var _user$project$View_TestHierarchy_Core$viewForest = F4(
-	function (toggleMessages, highlightMessages, nodeMouseIsOver, children) {
+	function (toggleMessages, highlightMessages, nodeData, children) {
 		return A2(
 			_elm_lang$core$List$map,
-			A3(_user$project$View_TestHierarchy_Core$childTree, toggleMessages, highlightMessages, nodeMouseIsOver),
+			A3(_user$project$View_TestHierarchy_Core$childTree, toggleMessages, highlightMessages, nodeData),
 			children);
 	});
 var _user$project$View_TestHierarchy_Core$childTree = F4(
-	function (toggleMessages, highlightMessages, nodeMouseIsOver, tree) {
+	function (toggleMessages, highlightMessages, nodeData, tree) {
 		return A4(
 			_user$project$View_TestHierarchy_ChildTree$render,
 			highlightMessages,
-			nodeMouseIsOver,
+			nodeData,
 			tree,
-			A4(_user$project$View_TestHierarchy_Core$viewTree, toggleMessages, highlightMessages, nodeMouseIsOver, tree));
+			A4(_user$project$View_TestHierarchy_Core$viewTree, toggleMessages, highlightMessages, nodeData, tree));
 	});
 var _user$project$View_TestHierarchy_Core$render = F4(
-	function (nodeMouseIsOver, testHierarchy, toggleMessages, highlightMessages) {
-		return A4(_user$project$View_TestHierarchy_Core$viewTree, toggleMessages, highlightMessages, nodeMouseIsOver, testHierarchy);
+	function (toggleMessages, highlightMessages, nodeData, testHierarchy) {
+		return A4(_user$project$View_TestHierarchy_Core$viewTree, toggleMessages, highlightMessages, nodeData, testHierarchy);
 	});
 var _user$project$View_TestHierarchy_Core$ToggleMessages = F2(
 	function (a, b) {
 		return {collapse: a, expand: b};
 	});
-var _user$project$View_TestHierarchy_Core$HighlightMessages = F2(
+var _user$project$View_TestHierarchy_Core$HighlightAndSelectionMessages = F3(
+	function (a, b, c) {
+		return {mouseIn: a, mouseOut: b, testClick: c};
+	});
+var _user$project$View_TestHierarchy_Core$NodeData = F2(
 	function (a, b) {
-		return {mouseIn: a, mouseOut: b};
+		return {nodeMouseIsOver: a, selectedNode: b};
 	});
 
 var _user$project$View_Toolbar$render = F2(
@@ -9998,10 +10054,10 @@ var _user$project$View_Core$render = F2(
 							ctor: '::',
 							_0: A4(
 								_user$project$View_TestHierarchy_Core$render,
-								data.nodeMouseIsOver,
-								data.testHierarchy,
 								{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse},
-								{mouseIn: messages.testListItemMouseEnter, mouseOut: messages.testListItemMouseLeave}),
+								{mouseIn: messages.testListItemMouseEnter, mouseOut: messages.testListItemMouseLeave, testClick: messages.testClickHandler},
+								{nodeMouseIsOver: data.nodeMouseIsOver, selectedNode: data.selectedNode},
+								data.testHierarchy),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
@@ -10034,13 +10090,13 @@ var _user$project$View_Core$render = F2(
 				}
 			});
 	});
-var _user$project$View_Core$Messages = F6(
-	function (a, b, c, d, e, f) {
-		return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d, testListItemMouseEnter: e, testListItemMouseLeave: f};
+var _user$project$View_Core$Messages = F7(
+	function (a, b, c, d, e, f, g) {
+		return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d, testListItemMouseEnter: e, testListItemMouseLeave: f, testClickHandler: g};
 	});
-var _user$project$View_Core$DisplayData = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testHierarchy: f, nodeMouseIsOver: g, autoRunEnabled: h};
+var _user$project$View_Core$DisplayData = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testHierarchy: f, nodeMouseIsOver: g, selectedNode: h, autoRunEnabled: i};
 	});
 
 var _user$project$Main$andPerform = F2(
@@ -10130,6 +10186,12 @@ var _user$project$Main$update = F2(
 			case 'TestListItemMouseLeave':
 				return _user$project$Main$andNoCommand(
 					A2(_user$project$Model_Core$setTestMouseIsOver, _elm_lang$core$Maybe$Nothing, model));
+			case 'TestListItemSelect':
+				return _user$project$Main$andNoCommand(
+					A2(
+						_user$project$Model_Core$setSelectedTest,
+						_elm_lang$core$Maybe$Just(_p0._0),
+						model));
 			case 'ToggleAutoRun':
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$invertAutoRun(model));
@@ -10202,6 +10264,9 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
 var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
 var _user$project$Main$ToggleAutoRun = {ctor: 'ToggleAutoRun'};
+var _user$project$Main$TestListItemSelect = function (a) {
+	return {ctor: 'TestListItemSelect', _0: a};
+};
 var _user$project$Main$TestListItemMouseLeave = {ctor: 'TestListItemMouseLeave'};
 var _user$project$Main$TestListItemMouseEnter = function (a) {
 	return {ctor: 'TestListItemMouseEnter', _0: a};
@@ -10267,8 +10332,8 @@ var _user$project$Main$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View_Core$render,
-		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, autoRunEnabled: model.autoRunEnabled},
-		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave});
+		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, autoRunEnabled: model.autoRunEnabled},
+		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();

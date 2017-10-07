@@ -16,6 +16,7 @@ import Model.Core as Model
         , setRunStatusToCompileError
         , setRunStatusToPassFail
         , setRunStatusToProcessing
+        , setSelectedTest
         , setTestMouseIsOver
         , setTotalTestCount
         , toggleNode
@@ -39,6 +40,7 @@ type Message
     | TestListItemCollapse Int
     | TestListItemMouseEnter Int
     | TestListItemMouseLeave
+    | TestListItemSelect Int
     | ToggleAutoRun
     | DoNothing
 
@@ -135,6 +137,10 @@ update message model =
             setTestMouseIsOver Nothing model
                 |> andNoCommand
 
+        TestListItemSelect nodeId ->
+            setSelectedTest (Just nodeId) model
+                |> andNoCommand
+
         ToggleAutoRun ->
             invertAutoRun model
                 |> andNoCommand
@@ -153,6 +159,7 @@ view model =
         , runSeed = model.runSeed
         , testHierarchy = model.testHierarchy
         , nodeMouseIsOver = model.testMouseIsOver
+        , selectedNode = model.selectedTest
         , autoRunEnabled = model.autoRunEnabled
         }
         { toggleClickHandler = ToggleButtonClicked
@@ -161,6 +168,7 @@ view model =
         , testListItemCollapse = TestListItemCollapse
         , testListItemMouseEnter = TestListItemMouseEnter
         , testListItemMouseLeave = TestListItemMouseLeave
+        , testClickHandler = TestListItemSelect
         }
 
 
