@@ -9585,6 +9585,37 @@ var _user$project$View_DurationAndSeedDisplay$render = F2(
 			});
 	});
 
+var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
+	var _p0 = maybeFailure;
+	if (_p0.ctor === 'Just') {
+		return {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$strong,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						_user$project$State_Failure$getMessage(_p0._0)),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		};
+	} else {
+		return {
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(''),
+			_1: {ctor: '[]'}
+		};
+	}
+};
+var _user$project$View_OutputDisplay$render = function (failure) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		_user$project$View_OutputDisplay$failureText(failure));
+};
+
 var _user$project$View_PassingTestsDisplay$render = F2(
 	function (totalTests, passingTests) {
 		return A2(
@@ -10073,7 +10104,11 @@ var _user$project$View_Core$render = F2(
 								_0: _elm_lang$html$Html_Attributes$class('output-display'),
 								_1: {ctor: '[]'}
 							},
-							{ctor: '[]'}),
+							{
+								ctor: '::',
+								_0: _user$project$View_OutputDisplay$render(data.selectedNodeFailure),
+								_1: {ctor: '[]'}
+							}),
 						_1: {
 							ctor: '::',
 							_0: A2(
@@ -10098,10 +10133,27 @@ var _user$project$View_Core$Messages = F7(
 	function (a, b, c, d, e, f, g) {
 		return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d, testListItemMouseEnter: e, testListItemMouseLeave: f, testClickHandler: g};
 	});
-var _user$project$View_Core$DisplayData = F9(
-	function (a, b, c, d, e, f, g, h, i) {
-		return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testHierarchy: f, nodeMouseIsOver: g, selectedNode: h, autoRunEnabled: i};
-	});
+var _user$project$View_Core$DisplayData = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testHierarchy: f, nodeMouseIsOver: g, selectedNode: h, selectedNodeFailure: i, autoRunEnabled: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 
 var _user$project$Main$andPerform = F2(
 	function (command, model) {
@@ -10336,7 +10388,7 @@ var _user$project$Main$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View_Core$render,
-		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, autoRunEnabled: model.autoRunEnabled},
+		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, autoRunEnabled: model.autoRunEnabled, selectedNodeFailure: _elm_lang$core$Maybe$Nothing},
 		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(

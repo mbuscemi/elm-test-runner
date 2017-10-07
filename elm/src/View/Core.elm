@@ -3,11 +3,13 @@ module View.Core exposing (render)
 import Duration.Core exposing (Duration)
 import Html exposing (Html, div, h2, section, span, text)
 import Html.Attributes exposing (class)
+import State.Failure exposing (Failure)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree)
 import View.AutoRunOnSave
 import View.DurationAndSeedDisplay
+import View.OutputDisplay
 import View.PassingTestsDisplay
 import View.RedGreenDisplay
 import View.TestHierarchy.Core
@@ -34,6 +36,7 @@ type alias DisplayData =
     , testHierarchy : CollapsibleTree String TestInstance
     , nodeMouseIsOver : Maybe Int
     , selectedNode : Maybe Int
+    , selectedNodeFailure : Maybe Failure
     , autoRunEnabled : Bool
     }
 
@@ -61,7 +64,8 @@ render data messages =
                 }
                 data.testHierarchy
             ]
-        , div [ class "output-display" ] []
+        , div [ class "output-display" ]
+            [ View.OutputDisplay.render data.selectedNodeFailure ]
         , div [ class "footer" ]
             [ View.AutoRunOnSave.render data.autoRunEnabled
             ]

@@ -161,6 +161,7 @@ view model =
         , nodeMouseIsOver = model.testMouseIsOver
         , selectedNode = model.selectedTest
         , autoRunEnabled = model.autoRunEnabled
+        , selectedNodeFailure = Nothing
         }
         { toggleClickHandler = ToggleButtonClicked
         , runAllButtonClickHandler = InitiateRunAll
