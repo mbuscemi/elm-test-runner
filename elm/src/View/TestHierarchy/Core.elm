@@ -21,11 +21,7 @@ render testHierarchy messages nodeMouseIsOver =
 
 
 viewTree : Messages message -> Maybe String -> Maybe Int -> CollapsibleTree String TestInstance -> Html message
-viewTree messages className nodeMouseIsOver (Node root nodeData children) =
-    let
-        ( nodeName, isExpanded, nodeId ) =
-            root
-    in
+viewTree messages className nodeMouseIsOver (Node ( nodeName, isExpanded, nodeId ) nodeData children) =
     ul
         (List.append [ class "test-list" ] (additionalClass className))
         (rootView messages nodeData (List.isEmpty children) isExpanded nodeName nodeId
