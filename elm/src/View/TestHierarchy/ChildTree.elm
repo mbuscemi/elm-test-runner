@@ -3,14 +3,15 @@ module View.TestHierarchy.ChildTree exposing (render)
 import Html exposing (Attribute, Html, li)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick, onMouseEnter, onMouseLeave)
-import TestInstance.Core exposing (TestInstance)
+import State.Failure exposing (Failure)
+import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree, Tree(Node))
 
 
 type alias Messages message =
     { mouseIn : Int -> message
     , mouseOut : message
-    , testClick : Int -> message
+    , testClick : Int -> Maybe Failure -> message
     }
 
 
@@ -21,21 +22,21 @@ type alias NodeData =
 
 
 render : Messages message -> NodeData -> CollapsibleTree String TestInstance -> Html message -> Html message
-render highlightMessages nodeData ((Node ( _, _, nodeId ) _ children) as tree) renderedChildren =
+render highlightMessages nodeData ((Node ( _, _, nodeId ) testInstance children) as tree) renderedChildren =
     li
         (List.append
-            (mouseEvents highlightMessages nodeId children)
+            (mouseEvents highlightMessages nodeId testInstance children)
             (mouseOverHighlight nodeId nodeData)
         )
         [ renderedChildren ]
 
 
-mouseEvents : Messages message -> Int -> List (CollapsibleTree String TestInstance) -> List (Attribute message)
-mouseEvents messages nodeId children =
+mouseEvents : Messages message -> Int -> TestInstance -> List (CollapsibleTree String TestInstance) -> List (Attribute message)
+mouseEvents messages nodeId testInstance children =
     if List.isEmpty children then
         [ onMouseEnter <| messages.mouseIn nodeId
         , onMouseLeave <| messages.mouseOut
-        , onClick <| messages.testClick nodeId
+        , onClick <| messages.testClick nodeId (TestInstance.getFailure testInstance)
         ]
     else
         []

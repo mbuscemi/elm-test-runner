@@ -9769,8 +9769,8 @@ var _user$project$View_TestHierarchy_ChildTree$mouseOverHighlight = F2(
 			}
 		}
 	});
-var _user$project$View_TestHierarchy_ChildTree$mouseEvents = F3(
-	function (messages, nodeId, children) {
+var _user$project$View_TestHierarchy_ChildTree$mouseEvents = F4(
+	function (messages, nodeId, testInstance, children) {
 		return _elm_lang$core$List$isEmpty(children) ? {
 			ctor: '::',
 			_0: _elm_lang$html$Html_Events$onMouseEnter(
@@ -9781,7 +9781,10 @@ var _user$project$View_TestHierarchy_ChildTree$mouseEvents = F3(
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Events$onClick(
-						messages.testClick(nodeId)),
+						A2(
+							messages.testClick,
+							nodeId,
+							_user$project$TestInstance_Core$getFailure(testInstance))),
 					_1: {ctor: '[]'}
 				}
 			}
@@ -9795,7 +9798,7 @@ var _user$project$View_TestHierarchy_ChildTree$render = F4(
 			_elm_lang$html$Html$li,
 			A2(
 				_elm_lang$core$List$append,
-				A3(_user$project$View_TestHierarchy_ChildTree$mouseEvents, highlightMessages, _p3, _p2._2),
+				A4(_user$project$View_TestHierarchy_ChildTree$mouseEvents, highlightMessages, _p3, _p2._1, _p2._2),
 				A2(_user$project$View_TestHierarchy_ChildTree$mouseOverHighlight, _p3, nodeData)),
 			{
 				ctor: '::',
@@ -10343,9 +10346,10 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
 var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
 var _user$project$Main$ToggleAutoRun = {ctor: 'ToggleAutoRun'};
-var _user$project$Main$TestListItemSelect = function (a) {
-	return {ctor: 'TestListItemSelect', _0: a};
-};
+var _user$project$Main$TestListItemSelect = F2(
+	function (a, b) {
+		return {ctor: 'TestListItemSelect', _0: a, _1: b};
+	});
 var _user$project$Main$TestListItemMouseLeave = {ctor: 'TestListItemMouseLeave'};
 var _user$project$Main$TestListItemMouseEnter = function (a) {
 	return {ctor: 'TestListItemMouseEnter', _0: a};

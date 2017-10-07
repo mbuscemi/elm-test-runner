@@ -23,7 +23,7 @@ type alias Messages message =
     , testListItemCollapse : Int -> message
     , testListItemMouseEnter : Int -> message
     , testListItemMouseLeave : message
-    , testClickHandler : Int -> message
+    , testClickHandler : Int -> Maybe Failure -> message
     }
 
 

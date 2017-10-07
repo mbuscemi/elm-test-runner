@@ -23,6 +23,7 @@ import Model.Core as Model
         , updateHierarchy
         , updatePassedTestCount
         )
+import State.Failure exposing (Failure)
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
@@ -40,7 +41,7 @@ type Message
     | TestListItemCollapse Int
     | TestListItemMouseEnter Int
     | TestListItemMouseLeave
-    | TestListItemSelect Int
+    | TestListItemSelect Int (Maybe Failure)
     | ToggleAutoRun
     | DoNothing
 
@@ -137,7 +138,7 @@ update message model =
             setTestMouseIsOver Nothing model
                 |> andNoCommand
 
-        TestListItemSelect nodeId ->
+        TestListItemSelect nodeId failure ->
             setSelectedTest (Just nodeId) model
                 |> andNoCommand
 
