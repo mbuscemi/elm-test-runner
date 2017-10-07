@@ -46,13 +46,14 @@ render data messages =
             , View.DurationAndSeedDisplay.render data.runDuration data.runSeed
             ]
         , div [ class "test-hierarchy" ]
-            [ View.TestHierarchy.Core.render data.testHierarchy
+            [ View.TestHierarchy.Core.render data.nodeMouseIsOver
+                data.testHierarchy
                 { expand = messages.testListItemExpand
                 , collapse = messages.testListItemCollapse
-                , mouseIn = messages.testListItemMouseEnter
+                }
+                { mouseIn = messages.testListItemMouseEnter
                 , mouseOut = messages.testListItemMouseLeave
                 }
-                data.nodeMouseIsOver
             ]
         , div [ class "output-display" ] []
         , div [ class "footer" ]

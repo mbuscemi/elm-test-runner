@@ -9650,129 +9650,11 @@ var _user$project$View_RedGreenDisplay$render = function (runStatus) {
 		});
 };
 
-var _user$project$View_TestHierarchy_Core$timeReport = function (nodeData) {
-	return A2(
-		_elm_lang$core$Basics_ops['++'],
-		' (',
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			_user$project$TestInstance_Core$durationAsString(nodeData),
-			' ms)'));
-};
-var _user$project$View_TestHierarchy_Core$htmlText = F2(
-	function (string, nodeData) {
-		return _elm_lang$html$Html$text(string);
-	});
-var _user$project$View_TestHierarchy_Core$conditionallyEmbolden = F3(
-	function (hasChildren, string, nodeData) {
-		return hasChildren ? A2(
-			_elm_lang$html$Html$strong,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(_user$project$View_TestHierarchy_Core$htmlText, string, nodeData),
-				_1: {ctor: '[]'}
-			}) : A2(
-			_user$project$View_TestHierarchy_Core$htmlText,
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				string,
-				_user$project$View_TestHierarchy_Core$timeReport(nodeData)),
-			nodeData);
-	});
-var _user$project$View_TestHierarchy_Core$additionalClass = function (name) {
-	var _p0 = name;
-	if (_p0.ctor === 'Just') {
-		return {
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class(_p0._0),
-			_1: {ctor: '[]'}
-		};
-	} else {
-		return {ctor: '[]'};
-	}
-};
-var _user$project$View_TestHierarchy_Core$statusIndicatorIcon = function (nodeData) {
-	return _elm_lang$html$Html$text(
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			' ',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_user$project$TestInstance_Core$toStatusIcon(nodeData),
-				' ')));
-};
-var _user$project$View_TestHierarchy_Core$statusIndicatorTextColor = function (nodeData) {
-	return _elm_lang$html$Html_Attributes$class(
-		_user$project$TestInstance_Core$toClass(nodeData));
-};
-var _user$project$View_TestHierarchy_Core$statusIndicator = function (nodeData) {
-	return A2(
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _user$project$View_TestHierarchy_Core$statusIndicatorTextColor(nodeData),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _user$project$View_TestHierarchy_Core$statusIndicatorIcon(nodeData),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$View_TestHierarchy_Core$togglingArrowText = F2(
-	function (isVisible, isExpanded) {
-		return isVisible ? '' : (isExpanded ? '▾ ' : '▸ ');
-	});
-var _user$project$View_TestHierarchy_Core$togglingArrow = F2(
-	function (isVisible, isExpanded) {
-		return A2(
-			_elm_lang$html$Html$strong,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(
-					A2(_user$project$View_TestHierarchy_Core$togglingArrowText, isVisible, isExpanded)),
-				_1: {ctor: '[]'}
-			});
-	});
-var _user$project$View_TestHierarchy_Core$expandOrCollapse = F3(
-	function (messages, isExpanded, nodeId) {
-		return _elm_lang$html$Html_Events$onClick(
-			isExpanded ? messages.collapse(nodeId) : messages.expand(nodeId));
-	});
-var _user$project$View_TestHierarchy_Core$rootText = F4(
-	function (nodeData, hasChildren, isExpanded, nodeName) {
-		return {
-			ctor: '::',
-			_0: A2(_user$project$View_TestHierarchy_Core$togglingArrow, hasChildren, isExpanded),
-			_1: {
-				ctor: '::',
-				_0: _user$project$View_TestHierarchy_Core$statusIndicator(nodeData),
-				_1: {
-					ctor: '::',
-					_0: A3(_user$project$View_TestHierarchy_Core$conditionallyEmbolden, !hasChildren, nodeName, nodeData),
-					_1: {ctor: '[]'}
-				}
-			}
-		};
-	});
-var _user$project$View_TestHierarchy_Core$rootView = F6(
-	function (messages, nodeData, hasChildren, isExpanded, nodeName, nodeId) {
-		return A2(
-			_elm_lang$html$Html$span,
-			{
-				ctor: '::',
-				_0: A3(_user$project$View_TestHierarchy_Core$expandOrCollapse, messages, isExpanded, nodeId),
-				_1: {ctor: '[]'}
-			},
-			A4(_user$project$View_TestHierarchy_Core$rootText, nodeData, hasChildren, isExpanded, nodeName));
-	});
-var _user$project$View_TestHierarchy_Core$mouseOverHighlight = F2(
+var _user$project$View_TestHierarchy_ChildTree$mouseOverHighlight = F2(
 	function (nodeId, nodeMouseIsOver) {
-		var _p1 = nodeMouseIsOver;
-		if (_p1.ctor === 'Just') {
-			return _elm_lang$core$Native_Utils.eq(nodeId, _p1._0) ? {
+		var _p0 = nodeMouseIsOver;
+		if (_p0.ctor === 'Just') {
+			return _elm_lang$core$Native_Utils.eq(nodeId, _p0._0) ? {
 				ctor: '::',
 				_0: _elm_lang$html$Html_Attributes$style(
 					{
@@ -9786,7 +9668,7 @@ var _user$project$View_TestHierarchy_Core$mouseOverHighlight = F2(
 			return {ctor: '[]'};
 		}
 	});
-var _user$project$View_TestHierarchy_Core$mouseEvents = F3(
+var _user$project$View_TestHierarchy_ChildTree$mouseEvents = F3(
 	function (messages, nodeId, children) {
 		return _elm_lang$core$List$isEmpty(children) ? {
 			ctor: '::',
@@ -9799,11 +9681,143 @@ var _user$project$View_TestHierarchy_Core$mouseEvents = F3(
 			}
 		} : {ctor: '[]'};
 	});
-var _user$project$View_TestHierarchy_Core$viewTree = F3(
-	function (messages, nodeMouseIsOver, _p2) {
-		var _p3 = _p2;
-		var _p5 = _p3._0._1;
-		var _p4 = _p3._2;
+var _user$project$View_TestHierarchy_ChildTree$render = F4(
+	function (highlightMessages, nodeMouseIsOver, _p1, renderedChildren) {
+		var _p2 = _p1;
+		var _p3 = _p2._0._2;
+		return A2(
+			_elm_lang$html$Html$li,
+			A2(
+				_elm_lang$core$List$append,
+				A3(_user$project$View_TestHierarchy_ChildTree$mouseEvents, highlightMessages, _p3, _p2._2),
+				A2(_user$project$View_TestHierarchy_ChildTree$mouseOverHighlight, _p3, nodeMouseIsOver)),
+			{
+				ctor: '::',
+				_0: renderedChildren,
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$View_TestHierarchy_ChildTree$Messages = F2(
+	function (a, b) {
+		return {mouseIn: a, mouseOut: b};
+	});
+
+var _user$project$View_TestHierarchy_Root$timeReport = function (nodeData) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		' (',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_user$project$TestInstance_Core$durationAsString(nodeData),
+			' ms)'));
+};
+var _user$project$View_TestHierarchy_Root$htmlText = F2(
+	function (string, nodeData) {
+		return _elm_lang$html$Html$text(string);
+	});
+var _user$project$View_TestHierarchy_Root$conditionallyEmbolden = F3(
+	function (hasChildren, string, nodeData) {
+		return hasChildren ? A2(
+			_elm_lang$html$Html$strong,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(_user$project$View_TestHierarchy_Root$htmlText, string, nodeData),
+				_1: {ctor: '[]'}
+			}) : A2(
+			_user$project$View_TestHierarchy_Root$htmlText,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				string,
+				_user$project$View_TestHierarchy_Root$timeReport(nodeData)),
+			nodeData);
+	});
+var _user$project$View_TestHierarchy_Root$statusIndicatorIcon = function (nodeData) {
+	return _elm_lang$html$Html$text(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			' ',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_user$project$TestInstance_Core$toStatusIcon(nodeData),
+				' ')));
+};
+var _user$project$View_TestHierarchy_Root$statusIndicatorTextColor = function (nodeData) {
+	return _elm_lang$html$Html_Attributes$class(
+		_user$project$TestInstance_Core$toClass(nodeData));
+};
+var _user$project$View_TestHierarchy_Root$statusIndicator = function (nodeData) {
+	return A2(
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _user$project$View_TestHierarchy_Root$statusIndicatorTextColor(nodeData),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _user$project$View_TestHierarchy_Root$statusIndicatorIcon(nodeData),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$View_TestHierarchy_Root$togglingArrowText = F2(
+	function (isVisible, isExpanded) {
+		return isVisible ? '' : (isExpanded ? '▾ ' : '▸ ');
+	});
+var _user$project$View_TestHierarchy_Root$togglingArrow = F2(
+	function (isVisible, isExpanded) {
+		return A2(
+			_elm_lang$html$Html$strong,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					A2(_user$project$View_TestHierarchy_Root$togglingArrowText, isVisible, isExpanded)),
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$View_TestHierarchy_Root$rootText = F4(
+	function (nodeData, hasChildren, isExpanded, nodeName) {
+		return {
+			ctor: '::',
+			_0: A2(_user$project$View_TestHierarchy_Root$togglingArrow, hasChildren, isExpanded),
+			_1: {
+				ctor: '::',
+				_0: _user$project$View_TestHierarchy_Root$statusIndicator(nodeData),
+				_1: {
+					ctor: '::',
+					_0: A3(_user$project$View_TestHierarchy_Root$conditionallyEmbolden, !hasChildren, nodeName, nodeData),
+					_1: {ctor: '[]'}
+				}
+			}
+		};
+	});
+var _user$project$View_TestHierarchy_Root$expandOrCollapse = F3(
+	function (messages, isExpanded, nodeId) {
+		return _elm_lang$html$Html_Events$onClick(
+			isExpanded ? messages.collapse(nodeId) : messages.expand(nodeId));
+	});
+var _user$project$View_TestHierarchy_Root$render = F6(
+	function (messages, nodeData, hasChildren, isExpanded, nodeName, nodeId) {
+		return A2(
+			_elm_lang$html$Html$span,
+			{
+				ctor: '::',
+				_0: A3(_user$project$View_TestHierarchy_Root$expandOrCollapse, messages, isExpanded, nodeId),
+				_1: {ctor: '[]'}
+			},
+			A4(_user$project$View_TestHierarchy_Root$rootText, nodeData, hasChildren, isExpanded, nodeName));
+	});
+var _user$project$View_TestHierarchy_Root$Messages = F2(
+	function (a, b) {
+		return {collapse: a, expand: b};
+	});
+
+var _user$project$View_TestHierarchy_Core$viewTree = F4(
+	function (toggleMessages, highlightMessages, nodeMouseIsOver, _p0) {
+		var _p1 = _p0;
+		var _p3 = _p1._0._1;
+		var _p2 = _p1._2;
 		return A2(
 			_elm_lang$html$Html$ul,
 			{
@@ -9814,50 +9828,47 @@ var _user$project$View_TestHierarchy_Core$viewTree = F3(
 			{
 				ctor: '::',
 				_0: A6(
-					_user$project$View_TestHierarchy_Core$rootView,
-					messages,
-					_p3._1,
-					_elm_lang$core$List$isEmpty(_p4),
-					_p5,
-					_p3._0._0,
-					_p3._0._2),
-				_1: A4(_user$project$View_TestHierarchy_Core$viewChildren, messages, _p5, nodeMouseIsOver, _p4)
+					_user$project$View_TestHierarchy_Root$render,
+					toggleMessages,
+					_p1._1,
+					_elm_lang$core$List$isEmpty(_p2),
+					_p3,
+					_p1._0._0,
+					_p1._0._2),
+				_1: A5(_user$project$View_TestHierarchy_Core$viewChildren, toggleMessages, highlightMessages, _p3, nodeMouseIsOver, _p2)
 			});
 	});
-var _user$project$View_TestHierarchy_Core$viewChildren = F4(
-	function (messages, shouldShow, nodeMouseIsOver, children) {
-		return shouldShow ? A3(_user$project$View_TestHierarchy_Core$viewForest, messages, nodeMouseIsOver, children) : {ctor: '[]'};
+var _user$project$View_TestHierarchy_Core$viewChildren = F5(
+	function (toggleMessages, highlightMessages, shouldShow, nodeMouseIsOver, children) {
+		return shouldShow ? A4(_user$project$View_TestHierarchy_Core$viewForest, toggleMessages, highlightMessages, nodeMouseIsOver, children) : {ctor: '[]'};
 	});
-var _user$project$View_TestHierarchy_Core$viewForest = F3(
-	function (messages, nodeMouseIsOver, children) {
+var _user$project$View_TestHierarchy_Core$viewForest = F4(
+	function (toggleMessages, highlightMessages, nodeMouseIsOver, children) {
 		return A2(
 			_elm_lang$core$List$map,
-			A2(_user$project$View_TestHierarchy_Core$childTree, messages, nodeMouseIsOver),
+			A3(_user$project$View_TestHierarchy_Core$childTree, toggleMessages, highlightMessages, nodeMouseIsOver),
 			children);
 	});
-var _user$project$View_TestHierarchy_Core$childTree = F3(
-	function (messages, nodeMouseIsOver, _p6) {
-		var _p7 = _p6;
-		var _p8 = _p7._0._2;
-		return A2(
-			_elm_lang$html$Html$li,
-			A2(
-				_elm_lang$core$List$append,
-				A3(_user$project$View_TestHierarchy_Core$mouseEvents, messages, _p8, _p7._2),
-				A2(_user$project$View_TestHierarchy_Core$mouseOverHighlight, _p8, nodeMouseIsOver)),
-			{
-				ctor: '::',
-				_0: A3(_user$project$View_TestHierarchy_Core$viewTree, messages, nodeMouseIsOver, _p7),
-				_1: {ctor: '[]'}
-			});
+var _user$project$View_TestHierarchy_Core$childTree = F4(
+	function (toggleMessages, highlightMessages, nodeMouseIsOver, tree) {
+		return A4(
+			_user$project$View_TestHierarchy_ChildTree$render,
+			highlightMessages,
+			nodeMouseIsOver,
+			tree,
+			A4(_user$project$View_TestHierarchy_Core$viewTree, toggleMessages, highlightMessages, nodeMouseIsOver, tree));
 	});
-var _user$project$View_TestHierarchy_Core$render = F3(
-	function (testHierarchy, messages, nodeMouseIsOver) {
-		return A3(_user$project$View_TestHierarchy_Core$viewTree, messages, nodeMouseIsOver, testHierarchy);
+var _user$project$View_TestHierarchy_Core$render = F4(
+	function (nodeMouseIsOver, testHierarchy, toggleMessages, highlightMessages) {
+		return A4(_user$project$View_TestHierarchy_Core$viewTree, toggleMessages, highlightMessages, nodeMouseIsOver, testHierarchy);
 	});
-var _user$project$View_TestHierarchy_Core$Messages = F4(
-	function (a, b, c, d) {
-		return {collapse: a, expand: b, mouseIn: c, mouseOut: d};
+var _user$project$View_TestHierarchy_Core$ToggleMessages = F2(
+	function (a, b) {
+		return {collapse: a, expand: b};
+	});
+var _user$project$View_TestHierarchy_Core$HighlightMessages = F2(
+	function (a, b) {
+		return {mouseIn: a, mouseOut: b};
 	});
 
 var _user$project$View_Toolbar$render = F2(
@@ -9985,11 +9996,12 @@ var _user$project$View_Core$render = F2(
 						},
 						{
 							ctor: '::',
-							_0: A3(
+							_0: A4(
 								_user$project$View_TestHierarchy_Core$render,
+								data.nodeMouseIsOver,
 								data.testHierarchy,
-								{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse, mouseIn: messages.testListItemMouseEnter, mouseOut: messages.testListItemMouseLeave},
-								data.nodeMouseIsOver),
+								{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse},
+								{mouseIn: messages.testListItemMouseEnter, mouseOut: messages.testListItemMouseLeave}),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
