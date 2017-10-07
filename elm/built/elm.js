@@ -8804,6 +8804,42 @@ var _user$project$Duration_Core$Seconds = function (a) {
 	return {ctor: 'Seconds', _0: a};
 };
 
+var _user$project$State_Failure$getMessage = function (failure) {
+	return failure.message;
+};
+var _user$project$State_Failure$Comparison = F5(
+	function (a, b, c, d, e) {
+		return {comparison: a, actual: b, expected: c, first: d, second: e};
+	});
+var _user$project$State_Failure$comparison = A6(
+	_elm_lang$core$Json_Decode$map5,
+	_user$project$State_Failure$Comparison,
+	A2(_elm_lang$core$Json_Decode$field, 'comparison', _elm_lang$core$Json_Decode$string),
+	_elm_lang$core$Json_Decode$maybe(
+		A2(_elm_lang$core$Json_Decode$field, 'actual', _elm_lang$core$Json_Decode$string)),
+	_elm_lang$core$Json_Decode$maybe(
+		A2(_elm_lang$core$Json_Decode$field, 'expected', _elm_lang$core$Json_Decode$string)),
+	_elm_lang$core$Json_Decode$maybe(
+		A2(_elm_lang$core$Json_Decode$field, 'first', _elm_lang$core$Json_Decode$string)),
+	_elm_lang$core$Json_Decode$maybe(
+		A2(_elm_lang$core$Json_Decode$field, 'second', _elm_lang$core$Json_Decode$string)));
+var _user$project$State_Failure$Reason = function (a) {
+	return {data: a};
+};
+var _user$project$State_Failure$reason = A2(
+	_elm_lang$core$Json_Decode$map,
+	_user$project$State_Failure$Reason,
+	A2(_elm_lang$core$Json_Decode$field, 'data', _user$project$State_Failure$comparison));
+var _user$project$State_Failure$Failure = F2(
+	function (a, b) {
+		return {message: a, reason: b};
+	});
+var _user$project$State_Failure$failure = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$State_Failure$Failure,
+	A2(_elm_lang$core$Json_Decode$field, 'message', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'reason', _user$project$State_Failure$reason));
+
 var _user$project$State_RunStatus$toClass = function (runStatus) {
 	var _p0 = runStatus;
 	switch (_p0.ctor) {
@@ -8909,42 +8945,6 @@ var _user$project$TestEvent_RunStart$parse = function (rawData) {
 			initialSeed: _user$project$TestEvent_Util$parseInt(rawData.initialSeed)
 		});
 };
-
-var _user$project$State_Failure$getMessage = function (failure) {
-	return failure.message;
-};
-var _user$project$State_Failure$Comparison = F5(
-	function (a, b, c, d, e) {
-		return {comparison: a, actual: b, expected: c, first: d, second: e};
-	});
-var _user$project$State_Failure$comparison = A6(
-	_elm_lang$core$Json_Decode$map5,
-	_user$project$State_Failure$Comparison,
-	A2(_elm_lang$core$Json_Decode$field, 'comparison', _elm_lang$core$Json_Decode$string),
-	_elm_lang$core$Json_Decode$maybe(
-		A2(_elm_lang$core$Json_Decode$field, 'actual', _elm_lang$core$Json_Decode$string)),
-	_elm_lang$core$Json_Decode$maybe(
-		A2(_elm_lang$core$Json_Decode$field, 'expected', _elm_lang$core$Json_Decode$string)),
-	_elm_lang$core$Json_Decode$maybe(
-		A2(_elm_lang$core$Json_Decode$field, 'first', _elm_lang$core$Json_Decode$string)),
-	_elm_lang$core$Json_Decode$maybe(
-		A2(_elm_lang$core$Json_Decode$field, 'second', _elm_lang$core$Json_Decode$string)));
-var _user$project$State_Failure$Reason = function (a) {
-	return {data: a};
-};
-var _user$project$State_Failure$reason = A2(
-	_elm_lang$core$Json_Decode$map,
-	_user$project$State_Failure$Reason,
-	A2(_elm_lang$core$Json_Decode$field, 'data', _user$project$State_Failure$comparison));
-var _user$project$State_Failure$Failure = F2(
-	function (a, b) {
-		return {message: a, reason: b};
-	});
-var _user$project$State_Failure$failure = A3(
-	_elm_lang$core$Json_Decode$map2,
-	_user$project$State_Failure$Failure,
-	A2(_elm_lang$core$Json_Decode$field, 'message', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'reason', _user$project$State_Failure$reason));
 
 var _user$project$TestInstance_Core$durationAsString = function (instance) {
 	return _elm_lang$core$Basics$toString(
@@ -9315,6 +9315,12 @@ var _user$project$Model_Core$setRunDuration = F2(
 					_user$project$TestEvent_RunComplete$duration(event))
 			});
 	});
+var _user$project$Model_Core$setSelectedTestFailure = F2(
+	function (failure, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{selectedTestFailure: failure});
+	});
 var _user$project$Model_Core$setSelectedTest = F2(
 	function (nodeId, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9454,6 +9460,7 @@ var _user$project$Model_Core$default = {
 			{ctor: '[]'})),
 	testMouseIsOver: _elm_lang$core$Maybe$Nothing,
 	selectedTest: _elm_lang$core$Maybe$Nothing,
+	selectedTestFailure: _elm_lang$core$Maybe$Nothing,
 	autoRunEnabled: false
 };
 var _user$project$Model_Core$Model = function (a) {
@@ -9466,7 +9473,9 @@ var _user$project$Model_Core$Model = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testRuns: f, testHierarchy: g, testMouseIsOver: h, selectedTest: i, autoRunEnabled: j};
+										return function (k) {
+											return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testRuns: f, testHierarchy: g, testMouseIsOver: h, selectedTest: i, selectedTestFailure: j, autoRunEnabled: k};
+										};
 									};
 								};
 							};

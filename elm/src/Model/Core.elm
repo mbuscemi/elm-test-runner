@@ -15,6 +15,7 @@ module Model.Core
         , setRunStatusToPassFail
         , setRunStatusToProcessing
         , setSelectedTest
+        , setSelectedTestFailure
         , setTestMouseIsOver
         , setTotalTestCount
         , toggleNode
@@ -23,6 +24,7 @@ module Model.Core
         )
 
 import Duration.Core exposing (Duration)
+import State.Failure exposing (Failure)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
 import TestEvent.RunStart as RunStart exposing (RunStart)
@@ -45,6 +47,7 @@ type alias Model =
     , testHierarchy : CollapsibleTree String TestInstance
     , testMouseIsOver : Maybe Int
     , selectedTest : Maybe Int
+    , selectedTestFailure : Maybe Failure
     , autoRunEnabled : Bool
     }
 
@@ -60,6 +63,7 @@ default =
     , testHierarchy = Tree.make (Node humanReadableTopLevelMessage TestInstance.default [])
     , testMouseIsOver = Nothing
     , selectedTest = Nothing
+    , selectedTestFailure = Nothing
     , autoRunEnabled = False
     }
 
@@ -149,6 +153,11 @@ setTestMouseIsOver nodeId model =
 setSelectedTest : Maybe Int -> Model -> Model
 setSelectedTest nodeId model =
     { model | selectedTest = nodeId }
+
+
+setSelectedTestFailure : Maybe Failure -> Model -> Model
+setSelectedTestFailure failure model =
+    { model | selectedTestFailure = failure }
 
 
 setRunDuration : RunComplete -> Model -> Model
