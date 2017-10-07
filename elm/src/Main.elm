@@ -7,6 +7,7 @@ import Model.Core as Model
         , buildTestRunDataTree
         , clearRunDuration
         , clearRunSeed
+        , invertAutoRun
         , purgeObsoleteNodes
         , resetPassedTests
         , resetTestRuns
@@ -36,6 +37,7 @@ type Message
     | RunComplete RunComplete.RawData
     | TestListItemExpand Int
     | TestListItemCollapse Int
+    | ToggleAutoRun
 
 
 main : Program Never Model Message
@@ -130,6 +132,10 @@ update message model =
             toggleNode nodeId False model
                 |> andNoCommand
 
+        ToggleAutoRun ->
+            invertAutoRun model
+                |> andNoCommand
+
 
 view : Model -> Html Message
 view model =
@@ -140,6 +146,7 @@ view model =
         , runDuration = model.runDuration
         , runSeed = model.runSeed
         , testHierarchy = model.testHierarchy
+        , autoRunEnabled = model.autoRunEnabled
         }
         { toggleClickHandler = ToggleButtonClicked
         , runAllButtonClickHandler = RunAllButtonClicked
@@ -153,6 +160,7 @@ subscriptions model =
     Sub.batch
         [ commandKeyTestStart (always InitiateRunAll)
         , notifyCompilerErrored (always CompilerErrored)
+        , toggleAutoRun (always ToggleAutoRun)
         , runStart RunStart
         , testCompleted TestCompleted
         , runComplete RunComplete
@@ -169,6 +177,9 @@ port commandKeyTestStart : (() -> message) -> Sub message
 
 
 port notifyCompilerErrored : (() -> message) -> Sub message
+
+
+port toggleAutoRun : (() -> message) -> Sub message
 
 
 port runStart : (RunStart.RawData -> message) -> Sub message

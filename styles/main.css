@@ -9,7 +9,7 @@
 }
 
 .etr-main-view .core {
-    
+
 }
 
 .etr-main-view .test-hierarchy {
@@ -104,4 +104,18 @@
 .etr-main-view ul.test-list {
     padding: 0 0 0 1.5em;
     list-style-type: none;
+}
+
+.etr-main-view .auto-run-display {
+    margin-top: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.etr-main-view .auto-run-display.disabled {
+    color: #545961;
+}
+
+.etr-main-view .auto-run-display.enabled {
+    text-shadow: #af9738 1px 0 10px;
 }

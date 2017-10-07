@@ -6,6 +6,7 @@ import Html.Attributes exposing (class)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree)
+import View.AutoRunOnSave
 import View.DurationAndSeedDisplay
 import View.PassingTestsDisplay
 import View.RedGreenDisplay
@@ -28,6 +29,7 @@ type alias DisplayData =
     , runDuration : Maybe Duration
     , runSeed : Maybe Int
     , testHierarchy : CollapsibleTree String TestInstance
+    , autoRunEnabled : Bool
     }
 
 
@@ -44,5 +46,7 @@ render data messages =
             [ View.TestHierarchy.render data.testHierarchy { expand = messages.testListItemExpand, collapse = messages.testListItemCollapse }
             ]
         , div [ class "output-display" ] []
-        , div [ class "footer" ] []
+        , div [ class "footer" ]
+            [ View.AutoRunOnSave.render data.autoRunEnabled
+            ]
         ]

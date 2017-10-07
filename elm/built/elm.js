@@ -9156,8 +9156,8 @@ var _user$project$Tree_Merge$listToTree = F3(
 				});
 		}
 	});
-var _user$project$Tree_Merge$mergeChildren = F5(
-	function (path, originalData, newData, transformer, children) {
+var _user$project$Tree_Merge$mergeChildren = F4(
+	function (path, originalData, newData, children) {
 		var _p1 = path;
 		if (_p1.ctor === '[]') {
 			return children;
@@ -9174,12 +9174,12 @@ var _user$project$Tree_Merge$mergeChildren = F5(
 						_user$project$Tree_Core$Node,
 						_p3,
 						newData,
-						A5(_user$project$Tree_Merge$mergeChildren, _p6, originalData, newData, transformer, _p2._0._2)),
+						A4(_user$project$Tree_Merge$mergeChildren, _p6, originalData, newData, _p2._0._2)),
 					_1: _p4
 				} : {
 					ctor: '::',
 					_0: _p2._0,
-					_1: A5(_user$project$Tree_Merge$mergeChildren, path, originalData, originalData, transformer, _p4)
+					_1: A4(_user$project$Tree_Merge$mergeChildren, path, originalData, originalData, _p4)
 				};
 			} else {
 				return {
@@ -9206,7 +9206,7 @@ var _user$project$Tree_Merge$fromPath = F4(
 				_user$project$Tree_Core$Node,
 				_p13,
 				transformedData,
-				A5(_user$project$Tree_Merge$mergeChildren, _p11, newData, transformedData, transformer, _p12)) : A3(
+				A4(_user$project$Tree_Merge$mergeChildren, _p11, newData, transformedData, _p12)) : A3(
 				_user$project$Tree_Core$Node,
 				_p13,
 				transformedData,
@@ -9375,6 +9375,11 @@ var _user$project$Model_Core$setRunStatusToProcessing = function (model) {
 		model,
 		{runStatus: _user$project$State_RunStatus$processing});
 };
+var _user$project$Model_Core$invertAutoRun = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{autoRunEnabled: !model.autoRunEnabled});
+};
 var _user$project$Model_Core$humanReadableTopLevelMessage = 'No Tests';
 var _user$project$Model_Core$removeTopNode = function (node) {
 	var _p1 = node;
@@ -9430,12 +9435,40 @@ var _user$project$Model_Core$default = {
 			_user$project$Tree_Core$Node,
 			_user$project$Model_Core$humanReadableTopLevelMessage,
 			_user$project$TestInstance_Core$default,
-			{ctor: '[]'}))
+			{ctor: '[]'})),
+	autoRunEnabled: false
 };
-var _user$project$Model_Core$Model = F7(
-	function (a, b, c, d, e, f, g) {
-		return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testRuns: f, testHierarchy: g};
+var _user$project$Model_Core$Model = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testRuns: f, testHierarchy: g, autoRunEnabled: h};
 	});
+
+var _user$project$View_AutoRunOnSave$enabledString = function (enabled) {
+	return enabled ? 'enabled' : 'disabled';
+};
+var _user$project$View_AutoRunOnSave$render = function (enabled) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'auto-run-display ',
+					_user$project$View_AutoRunOnSave$enabledString(enabled))),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'AUTO RUN ',
+					_elm_lang$core$String$toUpper(
+						_user$project$View_AutoRunOnSave$enabledString(enabled)))),
+			_1: {ctor: '[]'}
+		});
+};
 
 var _user$project$View_DurationAndSeedDisplay$runDataClass = _elm_lang$html$Html_Attributes$class('run-data-field');
 var _user$project$View_DurationAndSeedDisplay$formattedSeconds = function (duration) {
@@ -9949,7 +9982,11 @@ var _user$project$View_Main$render = F2(
 									_0: _elm_lang$html$Html_Attributes$class('footer'),
 									_1: {ctor: '[]'}
 								},
-								{ctor: '[]'}),
+								{
+									ctor: '::',
+									_0: _user$project$View_AutoRunOnSave$render(data.autoRunEnabled),
+									_1: {ctor: '[]'}
+								}),
 							_1: {ctor: '[]'}
 						}
 					}
@@ -9960,9 +9997,9 @@ var _user$project$View_Main$Messages = F4(
 	function (a, b, c, d) {
 		return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d};
 	});
-var _user$project$View_Main$DisplayData = F6(
-	function (a, b, c, d, e, f) {
-		return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testHierarchy: f};
+var _user$project$View_Main$DisplayData = F7(
+	function (a, b, c, d, e, f, g) {
+		return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testHierarchy: f, autoRunEnabled: g};
 	});
 
 var _user$project$Main$andPerform = F2(
@@ -10047,9 +10084,12 @@ var _user$project$Main$update = F2(
 			case 'TestListItemExpand':
 				return _user$project$Main$andNoCommand(
 					A3(_user$project$Model_Core$toggleNode, _p0._0, true, model));
-			default:
+			case 'TestListItemCollapse':
 				return _user$project$Main$andNoCommand(
 					A3(_user$project$Model_Core$toggleNode, _p0._0, false, model));
+			default:
+				return _user$project$Main$andNoCommand(
+					_user$project$Model_Core$invertAutoRun(model));
 		}
 	});
 var _user$project$Main$commandKeyTestStart = _elm_lang$core$Native_Platform.incomingPort(
@@ -10058,6 +10098,10 @@ var _user$project$Main$commandKeyTestStart = _elm_lang$core$Native_Platform.inco
 		{ctor: '_Tuple0'}));
 var _user$project$Main$notifyCompilerErrored = _elm_lang$core$Native_Platform.incomingPort(
 	'notifyCompilerErrored',
+	_elm_lang$core$Json_Decode$null(
+		{ctor: '_Tuple0'}));
+var _user$project$Main$toggleAutoRun = _elm_lang$core$Native_Platform.incomingPort(
+	'toggleAutoRun',
 	_elm_lang$core$Json_Decode$null(
 		{ctor: '_Tuple0'}));
 var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(
@@ -10107,6 +10151,7 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 				A2(_elm_lang$core$Json_Decode$field, 'failed', _elm_lang$core$Json_Decode$string));
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
+var _user$project$Main$ToggleAutoRun = {ctor: 'ToggleAutoRun'};
 var _user$project$Main$TestListItemCollapse = function (a) {
 	return {ctor: 'TestListItemCollapse', _0: a};
 };
@@ -10136,14 +10181,19 @@ var _user$project$Main$subscriptions = function (model) {
 					_elm_lang$core$Basics$always(_user$project$Main$CompilerErrored)),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Main$runStart(_user$project$Main$RunStart),
+					_0: _user$project$Main$toggleAutoRun(
+						_elm_lang$core$Basics$always(_user$project$Main$ToggleAutoRun)),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+						_0: _user$project$Main$runStart(_user$project$Main$RunStart),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
-							_1: {ctor: '[]'}
+							_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
@@ -10155,7 +10205,7 @@ var _user$project$Main$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View_Main$render,
-		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy},
+		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, autoRunEnabled: model.autoRunEnabled},
 		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$RunAllButtonClicked, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(

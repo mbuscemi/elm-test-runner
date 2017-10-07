@@ -5,6 +5,7 @@ module Model.Core
         , clearRunDuration
         , clearRunSeed
         , default
+        , invertAutoRun
         , purgeObsoleteNodes
         , resetPassedTests
         , resetTestRuns
@@ -40,6 +41,7 @@ type alias Model =
     , runSeed : Maybe Int
     , testRuns : Tree String TestInstance
     , testHierarchy : CollapsibleTree String TestInstance
+    , autoRunEnabled : Bool
     }
 
 
@@ -52,6 +54,7 @@ default =
     , runSeed = Nothing
     , testRuns = Node systemTopLevelMessage TestInstance.default []
     , testHierarchy = Tree.make (Node humanReadableTopLevelMessage TestInstance.default [])
+    , autoRunEnabled = False
     }
 
 
@@ -63,6 +66,11 @@ systemTopLevelMessage =
 humanReadableTopLevelMessage : String
 humanReadableTopLevelMessage =
     "No Tests"
+
+
+invertAutoRun : Model -> Model
+invertAutoRun model =
+    { model | autoRunEnabled = not model.autoRunEnabled }
 
 
 setRunStatusToProcessing : Model -> Model

@@ -1,22 +1,29 @@
 {
-  "menu": [
-    {
-      "label": "Packages",
-      "submenu": [
+    "menu": [
         {
-          "label": "Elm Test Runner",
-          "submenu": [
-            {
-              "label": "Toggle Dashboard",
-              "command": "elm-test-runner:toggle"
-            },
-            {
-              "label": "Run All Tests",
-              "command": "elm-test-runner:run-test"
-            }
-          ]
+        "label": "Packages",
+            "submenu": [
+                {
+                    "label": "Elm Test Runner",
+                    "submenu": [
+                        {
+                            "label": "Run All Tests",
+                            "command": "elm-test-runner:run-test"
+                        },
+
+                        { "type" : "separator" },
+
+                        {
+                            "label": "Toggle Dashboard",
+                            "command": "elm-test-runner:toggle"
+                        },
+                        {
+                            "label": "Toggle Auto-Run on Save",
+                            "command": "elm-test-runner:toggle-auto-run"
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }
