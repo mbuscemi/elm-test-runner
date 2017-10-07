@@ -80,30 +80,35 @@
     display: inline-block;
 }
 
-#test-hierarchy {
+.etr-main-view ul.test-list {
+    padding: 0 0 0 1.5em;
+    list-style-type: none;
+}
+
+.etr-main-view ul.test-hierarchy {
     margin: 1em 0 0 0;
     padding: 0;
     cursor: default;
 }
 
-#test-hierarchy span.passed {
+.etr-main-view ul.test-hierarchy span.passed {
     color: green;
     font-weight: bold;
 }
 
-#test-hierarchy span.failed {
+.etr-main-view ul.test-hierarchy span.failed {
     color: red;
     font-weight: bold;
 }
 
-#test-hierarchy span.pending {
+.etr-main-view ul.test-hierarchy span.pending {
     color: gray;
     font-weight: bold;
 }
 
-.etr-main-view ul.test-list {
-    padding: 0 0 0 1.5em;
-    list-style-type: none;
+.etr-main-view ul.test-list li {
+    background-color: inherit;
+    transition: background-color 0.3s ease-in-out;
 }
 
 .etr-main-view .auto-run-display {

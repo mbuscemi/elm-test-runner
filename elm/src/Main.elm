@@ -16,6 +16,7 @@ import Model.Core as Model
         , setRunStatusToCompileError
         , setRunStatusToPassFail
         , setRunStatusToProcessing
+        , setTestMouseIsOver
         , setTotalTestCount
         , toggleNode
         , updateHierarchy
@@ -36,6 +37,8 @@ type Message
     | RunComplete RunComplete.RawData
     | TestListItemExpand Int
     | TestListItemCollapse Int
+    | TestListItemMouseEnter Int
+    | TestListItemMouseLeave
     | ToggleAutoRun
     | DoNothing
 
@@ -124,6 +127,14 @@ update message model =
             toggleNode nodeId False model
                 |> andNoCommand
 
+        TestListItemMouseEnter nodeId ->
+            setTestMouseIsOver (Just nodeId) model
+                |> andNoCommand
+
+        TestListItemMouseLeave ->
+            setTestMouseIsOver Nothing model
+                |> andNoCommand
+
         ToggleAutoRun ->
             invertAutoRun model
                 |> andNoCommand
@@ -141,12 +152,15 @@ view model =
         , runDuration = model.runDuration
         , runSeed = model.runSeed
         , testHierarchy = model.testHierarchy
+        , nodeMouseIsOver = model.testMouseIsOver
         , autoRunEnabled = model.autoRunEnabled
         }
         { toggleClickHandler = ToggleButtonClicked
         , runAllButtonClickHandler = InitiateRunAll
         , testListItemExpand = TestListItemExpand
         , testListItemCollapse = TestListItemCollapse
+        , testListItemMouseEnter = TestListItemMouseEnter
+        , testListItemMouseLeave = TestListItemMouseLeave
         }
 
 
