@@ -156,15 +156,15 @@ subscriptions model =
         [ commandKeyTestStart (always InitiateRunAll)
         , notifyCompilerErrored (always CompilerErrored)
         , toggleAutoRun (always ToggleAutoRun)
-        , notifySaveEvent <| saveEventCommand model
+        , notifySaveEvent <| saveEventMessage model
         , runStart RunStart
         , testCompleted TestCompleted
         , runComplete RunComplete
         ]
 
 
-saveEventCommand : Model -> () -> Message
-saveEventCommand model _ =
+saveEventMessage : Model -> () -> Message
+saveEventMessage model _ =
     if model.autoRunEnabled then
         InitiateRunAll
     else
