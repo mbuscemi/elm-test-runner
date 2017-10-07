@@ -1,4 +1,4 @@
-module View.TestHierarchy exposing (render)
+module View.TestHierarchy.Core exposing (render)
 
 import Html exposing (Attribute, Html, li, span, strong, text, ul)
 import Html.Attributes exposing (class, style)

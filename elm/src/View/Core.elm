@@ -1,4 +1,4 @@
-module View.Main exposing (render)
+module View.Core exposing (render)
 
 import Duration.Core exposing (Duration)
 import Html exposing (Html, div, h2, section, span, text)
@@ -10,7 +10,7 @@ import View.AutoRunOnSave
 import View.DurationAndSeedDisplay
 import View.PassingTestsDisplay
 import View.RedGreenDisplay
-import View.TestHierarchy
+import View.TestHierarchy.Core
 import View.Toolbar
 
 
@@ -46,7 +46,7 @@ render data messages =
             , View.DurationAndSeedDisplay.render data.runDuration data.runSeed
             ]
         , div [ class "test-hierarchy" ]
-            [ View.TestHierarchy.render data.testHierarchy
+            [ View.TestHierarchy.Core.render data.testHierarchy
                 { expand = messages.testListItemExpand
                 , collapse = messages.testListItemCollapse
                 , mouseIn = messages.testListItemMouseEnter

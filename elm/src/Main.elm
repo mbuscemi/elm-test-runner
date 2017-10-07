@@ -25,7 +25,7 @@ import Model.Core as Model
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
-import View.Main
+import View.Core
 
 
 type Message
@@ -145,7 +145,7 @@ update message model =
 
 view : Model -> Html Message
 view model =
-    View.Main.render
+    View.Core.render
         { runStatus = model.runStatus
         , totalTests = model.totalTests
         , passedTests = model.passedTests
