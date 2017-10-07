@@ -17,13 +17,13 @@ type alias Messages message =
 
 render : CollapsibleTree String TestInstance -> Messages message -> Maybe Int -> Html message
 render testHierarchy messages nodeMouseIsOver =
-    viewTree messages (Just "test-hierarchy") nodeMouseIsOver testHierarchy
+    viewTree messages nodeMouseIsOver testHierarchy
 
 
-viewTree : Messages message -> Maybe String -> Maybe Int -> CollapsibleTree String TestInstance -> Html message
-viewTree messages className nodeMouseIsOver (Node ( nodeName, isExpanded, nodeId ) nodeData children) =
+viewTree : Messages message -> Maybe Int -> CollapsibleTree String TestInstance -> Html message
+viewTree messages nodeMouseIsOver (Node ( nodeName, isExpanded, nodeId ) nodeData children) =
     ul
-        (List.append [ class "test-list" ] (additionalClass className))
+        [ class "test-list" ]
         (rootView messages nodeData (List.isEmpty children) isExpanded nodeName nodeId
             :: viewChildren messages isExpanded nodeMouseIsOver children
         )
@@ -49,7 +49,7 @@ childTree messages nodeMouseIsOver ((Node ( _, _, nodeId ) _ children) as tree) 
             (mouseEvents messages nodeId children)
             (mouseOverHighlight nodeId nodeMouseIsOver)
         )
-        [ viewTree messages Nothing nodeMouseIsOver tree ]
+        [ viewTree messages nodeMouseIsOver tree ]
 
 
 mouseEvents : Messages message -> Int -> List (CollapsibleTree String TestInstance) -> List (Attribute message)

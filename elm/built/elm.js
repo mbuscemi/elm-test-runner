@@ -9799,21 +9799,18 @@ var _user$project$View_TestHierarchy_Core$mouseEvents = F3(
 			}
 		} : {ctor: '[]'};
 	});
-var _user$project$View_TestHierarchy_Core$viewTree = F4(
-	function (messages, className, nodeMouseIsOver, _p2) {
+var _user$project$View_TestHierarchy_Core$viewTree = F3(
+	function (messages, nodeMouseIsOver, _p2) {
 		var _p3 = _p2;
 		var _p5 = _p3._0._1;
 		var _p4 = _p3._2;
 		return A2(
 			_elm_lang$html$Html$ul,
-			A2(
-				_elm_lang$core$List$append,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('test-list'),
-					_1: {ctor: '[]'}
-				},
-				_user$project$View_TestHierarchy_Core$additionalClass(className)),
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('test-list'),
+				_1: {ctor: '[]'}
+			},
 			{
 				ctor: '::',
 				_0: A6(
@@ -9850,18 +9847,13 @@ var _user$project$View_TestHierarchy_Core$childTree = F3(
 				A2(_user$project$View_TestHierarchy_Core$mouseOverHighlight, _p8, nodeMouseIsOver)),
 			{
 				ctor: '::',
-				_0: A4(_user$project$View_TestHierarchy_Core$viewTree, messages, _elm_lang$core$Maybe$Nothing, nodeMouseIsOver, _p7),
+				_0: A3(_user$project$View_TestHierarchy_Core$viewTree, messages, nodeMouseIsOver, _p7),
 				_1: {ctor: '[]'}
 			});
 	});
 var _user$project$View_TestHierarchy_Core$render = F3(
 	function (testHierarchy, messages, nodeMouseIsOver) {
-		return A4(
-			_user$project$View_TestHierarchy_Core$viewTree,
-			messages,
-			_elm_lang$core$Maybe$Just('test-hierarchy'),
-			nodeMouseIsOver,
-			testHierarchy);
+		return A3(_user$project$View_TestHierarchy_Core$viewTree, messages, nodeMouseIsOver, testHierarchy);
 	});
 var _user$project$View_TestHierarchy_Core$Messages = F4(
 	function (a, b, c, d) {

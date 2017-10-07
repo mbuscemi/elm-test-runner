@@ -85,23 +85,27 @@
     list-style-type: none;
 }
 
-.etr-main-view ul.test-hierarchy {
+.etr-main-view ul.test-list li {
+    padding: 1px 0;
+}
+
+.etr-main-view div.test-hierarchy > ul.test-list {
     margin: 1em 0 0 0;
     padding: 0;
     cursor: default;
 }
 
-.etr-main-view ul.test-hierarchy span.passed {
+.etr-main-view ul.test-list span.passed {
     color: green;
     font-weight: bold;
 }
 
-.etr-main-view ul.test-hierarchy span.failed {
+.etr-main-view ul.test-list span.failed {
     color: red;
     font-weight: bold;
 }
 
-.etr-main-view ul.test-hierarchy span.pending {
+.etr-main-view ul.test-list span.pending {
     color: gray;
     font-weight: bold;
 }
