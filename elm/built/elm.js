@@ -8569,12 +8569,229 @@ var _folkertdev$elm_state$State$foldrM = F3(
 			_elm_lang$core$List$reverse(xs));
 	});
 
-var _user$project$Duration_Core$asMilliseconds = function (duration) {
+var _myrho$elm_round$Round$funNum = F3(
+	function (fun, s, fl) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			1 / 0,
+			_elm_lang$core$Result$toMaybe(
+				_elm_lang$core$String$toFloat(
+					A2(fun, s, fl))));
+	});
+var _myrho$elm_round$Round$splitComma = function (str) {
+	var _p0 = A2(_elm_lang$core$String$split, '.', str);
+	if (_p0.ctor === '::') {
+		if (_p0._1.ctor === '::') {
+			return {ctor: '_Tuple2', _0: _p0._0, _1: _p0._1._0};
+		} else {
+			return {ctor: '_Tuple2', _0: _p0._0, _1: '0'};
+		}
+	} else {
+		return {ctor: '_Tuple2', _0: '0', _1: '0'};
+	}
+};
+var _myrho$elm_round$Round$toDecimal = function (fl) {
+	var _p1 = A2(
+		_elm_lang$core$String$split,
+		'e',
+		_elm_lang$core$Basics$toString(fl));
+	if (_p1.ctor === '::') {
+		if (_p1._1.ctor === '::') {
+			var _p4 = _p1._1._0;
+			var _p2 = function () {
+				var hasSign = _elm_lang$core$Native_Utils.cmp(fl, 0) < 0;
+				var _p3 = _myrho$elm_round$Round$splitComma(_p1._0);
+				var b = _p3._0;
+				var a = _p3._1;
+				return {
+					ctor: '_Tuple3',
+					_0: hasSign ? '-' : '',
+					_1: hasSign ? A2(_elm_lang$core$String$dropLeft, 1, b) : b,
+					_2: a
+				};
+			}();
+			var sign = _p2._0;
+			var before = _p2._1;
+			var after = _p2._2;
+			var e = A2(
+				_elm_lang$core$Maybe$withDefault,
+				0,
+				_elm_lang$core$Result$toMaybe(
+					_elm_lang$core$String$toInt(
+						A2(_elm_lang$core$String$startsWith, '+', _p4) ? A2(_elm_lang$core$String$dropLeft, 1, _p4) : _p4)));
+			var newBefore = (_elm_lang$core$Native_Utils.cmp(e, 0) > -1) ? before : ((_elm_lang$core$Native_Utils.cmp(
+				_elm_lang$core$Basics$abs(e),
+				_elm_lang$core$String$length(before)) < 0) ? A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(
+					_elm_lang$core$String$left,
+					_elm_lang$core$String$length(before) - _elm_lang$core$Basics$abs(e),
+					before),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'.',
+					A2(
+						_elm_lang$core$String$right,
+						_elm_lang$core$Basics$abs(e),
+						before))) : A2(
+				_elm_lang$core$Basics_ops['++'],
+				'0.',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(
+						_elm_lang$core$String$repeat,
+						_elm_lang$core$Basics$abs(e) - _elm_lang$core$String$length(before),
+						'0'),
+					before)));
+			var newAfter = (_elm_lang$core$Native_Utils.cmp(e, 0) < 1) ? after : ((_elm_lang$core$Native_Utils.cmp(
+				e,
+				_elm_lang$core$String$length(after)) < 0) ? A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(_elm_lang$core$String$left, e, after),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'.',
+					A2(
+						_elm_lang$core$String$right,
+						_elm_lang$core$String$length(after) - e,
+						after))) : A2(
+				_elm_lang$core$Basics_ops['++'],
+				after,
+				A2(
+					_elm_lang$core$String$repeat,
+					e - _elm_lang$core$String$length(after),
+					'0')));
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				sign,
+				A2(_elm_lang$core$Basics_ops['++'], newBefore, newAfter));
+		} else {
+			return _p1._0;
+		}
+	} else {
+		return '';
+	}
+};
+var _myrho$elm_round$Round$truncate = function (n) {
+	return (_elm_lang$core$Native_Utils.cmp(n, 0) < 0) ? _elm_lang$core$Basics$ceiling(n) : _elm_lang$core$Basics$floor(n);
+};
+var _myrho$elm_round$Round$roundFun = F3(
+	function (functor, s, fl) {
+		if (_elm_lang$core$Native_Utils.eq(s, 0)) {
+			return _elm_lang$core$Basics$toString(
+				functor(fl));
+		} else {
+			if (_elm_lang$core$Native_Utils.cmp(s, 0) < 0) {
+				return function (r) {
+					return (!_elm_lang$core$Native_Utils.eq(r, '0')) ? A2(
+						_elm_lang$core$Basics_ops['++'],
+						r,
+						A2(
+							_elm_lang$core$String$repeat,
+							_elm_lang$core$Basics$abs(s),
+							'0')) : r;
+				}(
+					A3(
+						_myrho$elm_round$Round$roundFun,
+						functor,
+						0,
+						A2(
+							F2(
+								function (x, y) {
+									return x / y;
+								}),
+							fl,
+							A2(
+								F2(
+									function (x, y) {
+										return Math.pow(x, y);
+									}),
+								10,
+								_elm_lang$core$Basics$abs(
+									_elm_lang$core$Basics$toFloat(s))))));
+			} else {
+				var dd = (_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) ? 2 : 1;
+				var n = (_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) ? -1 : 1;
+				var e = Math.pow(10, s);
+				var _p5 = _myrho$elm_round$Round$splitComma(
+					_myrho$elm_round$Round$toDecimal(fl));
+				var before = _p5._0;
+				var after = _p5._1;
+				var a = A3(
+					_elm_lang$core$String$padRight,
+					s + 1,
+					_elm_lang$core$Native_Utils.chr('0'),
+					after);
+				var b = A2(_elm_lang$core$String$left, s, a);
+				var c = A2(_elm_lang$core$String$dropLeft, s, a);
+				var f = functor(
+					A2(
+						_elm_lang$core$Maybe$withDefault,
+						_elm_lang$core$Basics$toFloat(e),
+						_elm_lang$core$Result$toMaybe(
+							_elm_lang$core$String$toFloat(
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									(_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) ? '-' : '',
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'1',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											b,
+											A2(_elm_lang$core$Basics_ops['++'], '.', c))))))));
+				var g = A2(
+					_elm_lang$core$String$dropLeft,
+					dd,
+					_elm_lang$core$Basics$toString(f));
+				var h = _myrho$elm_round$Round$truncate(fl) + (_elm_lang$core$Native_Utils.eq(f - (e * n), e * n) ? ((_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) ? -1 : 1) : 0);
+				var j = _elm_lang$core$Basics$toString(h);
+				var i = (_elm_lang$core$Native_Utils.eq(j, '0') && ((!_elm_lang$core$Native_Utils.eq(f - (e * n), 0)) && ((_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) && (_elm_lang$core$Native_Utils.cmp(fl, -1) > 0)))) ? A2(_elm_lang$core$Basics_ops['++'], '-', j) : j;
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					i,
+					A2(_elm_lang$core$Basics_ops['++'], '.', g));
+			}
+		}
+	});
+var _myrho$elm_round$Round$round = _myrho$elm_round$Round$roundFun(_elm_lang$core$Basics$round);
+var _myrho$elm_round$Round$roundNum = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$round);
+var _myrho$elm_round$Round$ceiling = _myrho$elm_round$Round$roundFun(_elm_lang$core$Basics$ceiling);
+var _myrho$elm_round$Round$ceilingNum = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$ceiling);
+var _myrho$elm_round$Round$floor = _myrho$elm_round$Round$roundFun(_elm_lang$core$Basics$floor);
+var _myrho$elm_round$Round$floorCom = F2(
+	function (s, fl) {
+		return (_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) ? A2(_myrho$elm_round$Round$ceiling, s, fl) : A2(_myrho$elm_round$Round$floor, s, fl);
+	});
+var _myrho$elm_round$Round$floorNumCom = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$floorCom);
+var _myrho$elm_round$Round$ceilingCom = F2(
+	function (s, fl) {
+		return (_elm_lang$core$Native_Utils.cmp(fl, 0) < 0) ? A2(_myrho$elm_round$Round$floor, s, fl) : A2(_myrho$elm_round$Round$ceiling, s, fl);
+	});
+var _myrho$elm_round$Round$ceilingNumCom = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$ceilingCom);
+var _myrho$elm_round$Round$floorNum = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$floor);
+var _myrho$elm_round$Round$roundCom = _myrho$elm_round$Round$roundFun(
+	function (fl) {
+		var dec = fl - _elm_lang$core$Basics$toFloat(
+			_myrho$elm_round$Round$truncate(fl));
+		return (_elm_lang$core$Native_Utils.cmp(dec, 0.5) > -1) ? _elm_lang$core$Basics$ceiling(fl) : ((_elm_lang$core$Native_Utils.cmp(dec, -0.5) < 1) ? _elm_lang$core$Basics$floor(fl) : _elm_lang$core$Basics$round(fl));
+	});
+var _myrho$elm_round$Round$roundNumCom = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$roundCom);
+
+var _user$project$Duration_Core$asSeconds = function (duration) {
 	var _p0 = duration;
 	if (_p0.ctor === 'Milliseconds') {
-		return _p0._0;
+		return _elm_lang$core$Basics$toFloat(_p0._0) / 1000;
 	} else {
-		return _elm_lang$core$Basics$round(_p0._0 * 1000);
+		return _p0._0;
+	}
+};
+var _user$project$Duration_Core$asMilliseconds = function (duration) {
+	var _p1 = duration;
+	if (_p1.ctor === 'Milliseconds') {
+		return _p1._0;
+	} else {
+		return _elm_lang$core$Basics$round(_p1._0 * 1000);
 	}
 };
 var _user$project$Duration_Core$Milliseconds = function (a) {
@@ -8636,9 +8853,13 @@ var _user$project$TestEvent_Util$parseInt = function (string) {
 		_elm_lang$core$String$toInt(string));
 };
 
-var _user$project$TestEvent_RunComplete$passed = function (_p0) {
+var _user$project$TestEvent_RunComplete$duration = function (_p0) {
 	var _p1 = _p0;
-	return _elm_lang$core$Native_Utils.eq(_p1._0.failed, 0);
+	return _user$project$Duration_Core$inMilliseconds(_p1._0.duration);
+};
+var _user$project$TestEvent_RunComplete$passed = function (_p2) {
+	var _p3 = _p2;
+	return _elm_lang$core$Native_Utils.eq(_p3._0.failed, 0);
 };
 var _user$project$TestEvent_RunComplete$RawData = F3(
 	function (a, b, c) {
@@ -9072,6 +9293,20 @@ var _user$project$Model_Core$purgeObsoleteNodes = function (model) {
 				model.testRuns)
 		});
 };
+var _user$project$Model_Core$clearRunDuration = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{runDuration: _elm_lang$core$Maybe$Nothing});
+};
+var _user$project$Model_Core$setRunDuration = F2(
+	function (event, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				runDuration: _elm_lang$core$Maybe$Just(
+					_user$project$TestEvent_RunComplete$duration(event))
+			});
+	});
 var _user$project$Model_Core$updatePassedTestCount = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9165,6 +9400,8 @@ var _user$project$Model_Core$default = {
 	runStatus: _user$project$State_RunStatus$noData,
 	totalTests: 0,
 	passedTests: 0,
+	runDuration: _elm_lang$core$Maybe$Nothing,
+	runSeed: _elm_lang$core$Maybe$Nothing,
 	testRuns: A3(
 		_user$project$Tree_Core$Node,
 		_user$project$Model_Core$systemTopLevelMessage,
@@ -9177,10 +9414,74 @@ var _user$project$Model_Core$default = {
 			_user$project$TestInstance_Core$default,
 			{ctor: '[]'}))
 };
-var _user$project$Model_Core$Model = F5(
-	function (a, b, c, d, e) {
-		return {runStatus: a, totalTests: b, passedTests: c, testRuns: d, testHierarchy: e};
+var _user$project$Model_Core$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testRuns: f, testHierarchy: g};
 	});
+
+var _user$project$View_DurationAndSeedDisplay$runDataClass = _elm_lang$html$Html_Attributes$class('run-data-field');
+var _user$project$View_DurationAndSeedDisplay$formattedSeconds = function (duration) {
+	return A3(
+		_elm_lang$core$Basics$flip,
+		F2(
+			function (x, y) {
+				return A2(_elm_lang$core$Basics_ops['++'], x, y);
+			}),
+		' s',
+		A2(
+			_myrho$elm_round$Round$round,
+			2,
+			_user$project$Duration_Core$asSeconds(duration)));
+};
+var _user$project$View_DurationAndSeedDisplay$runTimeDisplay = function (runDuration) {
+	var _p0 = runDuration;
+	if (_p0.ctor === 'Just') {
+		return _elm_lang$html$Html$text(
+			_user$project$View_DurationAndSeedDisplay$formattedSeconds(_p0._0));
+	} else {
+		return _elm_lang$html$Html$text('');
+	}
+};
+var _user$project$View_DurationAndSeedDisplay$render = function (runDuration) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('run-data-row'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _user$project$View_DurationAndSeedDisplay$runDataClass,
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Total Run Time:'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _user$project$View_DurationAndSeedDisplay$runDataClass,
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _user$project$View_DurationAndSeedDisplay$runTimeDisplay(runDuration),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
 
 var _user$project$View_PassingTestsDisplay$render = F2(
 	function (totalTests, passingTests) {
@@ -9543,8 +9844,8 @@ var _user$project$View_Toolbar$render = F2(
 			});
 	});
 
-var _user$project$View_Main$render = F5(
-	function (runStatus, totalTests, passedTests, testHierarchy, messages) {
+var _user$project$View_Main$render = F2(
+	function (data, messages) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -9557,17 +9858,21 @@ var _user$project$View_Main$render = F5(
 				_0: A2(_user$project$View_Toolbar$render, messages.toggleClickHandler, messages.runAllButtonClickHandler),
 				_1: {
 					ctor: '::',
-					_0: _user$project$View_RedGreenDisplay$render(runStatus),
+					_0: _user$project$View_RedGreenDisplay$render(data.runStatus),
 					_1: {
 						ctor: '::',
-						_0: A2(_user$project$View_PassingTestsDisplay$render, totalTests, passedTests),
+						_0: A2(_user$project$View_PassingTestsDisplay$render, data.totalTests, data.passedTests),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_user$project$View_TestHierarchy$render,
-								testHierarchy,
-								{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse}),
-							_1: {ctor: '[]'}
+							_0: _user$project$View_DurationAndSeedDisplay$render(data.runDuration),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_user$project$View_TestHierarchy$render,
+									data.testHierarchy,
+									{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse}),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
@@ -9576,6 +9881,10 @@ var _user$project$View_Main$render = F5(
 var _user$project$View_Main$Messages = F4(
 	function (a, b, c, d) {
 		return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d};
+	});
+var _user$project$View_Main$DisplayData = F5(
+	function (a, b, c, d, e) {
+		return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, testHierarchy: e};
 	});
 
 var _user$project$Main$andPerform = F2(
@@ -9616,14 +9925,16 @@ var _user$project$Main$update = F2(
 						{ctor: '_Tuple0'}),
 					_user$project$Model_Core$updateHierarchy(
 						_user$project$Model_Core$resetTestRuns(
-							_user$project$Model_Core$resetPassedTests(
-								_user$project$Model_Core$setRunStatusToProcessing(model)))));
+							_user$project$Model_Core$clearRunDuration(
+								_user$project$Model_Core$resetPassedTests(
+									_user$project$Model_Core$setRunStatusToProcessing(model))))));
 			case 'InitiateRunAll':
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$updateHierarchy(
 						_user$project$Model_Core$resetTestRuns(
-							_user$project$Model_Core$resetPassedTests(
-								_user$project$Model_Core$setRunStatusToProcessing(model)))));
+							_user$project$Model_Core$clearRunDuration(
+								_user$project$Model_Core$resetPassedTests(
+									_user$project$Model_Core$setRunStatusToProcessing(model))))));
 			case 'CompilerErrored':
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$setRunStatusToCompileError(model));
@@ -9647,7 +9958,10 @@ var _user$project$Main$update = F2(
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$updateHierarchy(
 						_user$project$Model_Core$purgeObsoleteNodes(
-							A2(_user$project$Model_Core$setRunStatusToPassFail, event, model))));
+							A2(
+								_user$project$Model_Core$setRunDuration,
+								event,
+								A2(_user$project$Model_Core$setRunStatusToPassFail, event, model)))));
 			case 'TestListItemExpand':
 				return _user$project$Main$andNoCommand(
 					A3(_user$project$Model_Core$toggleNode, _p0._0, true, model));
@@ -9757,12 +10071,9 @@ var _user$project$Main$subscriptions = function (model) {
 var _user$project$Main$RunAllButtonClicked = {ctor: 'RunAllButtonClicked'};
 var _user$project$Main$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
 var _user$project$Main$view = function (model) {
-	return A5(
+	return A2(
 		_user$project$View_Main$render,
-		model.runStatus,
-		model.totalTests,
-		model.passedTests,
-		model.testHierarchy,
+		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, testHierarchy: model.testHierarchy},
 		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$RunAllButtonClicked, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(

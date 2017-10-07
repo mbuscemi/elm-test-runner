@@ -2,10 +2,12 @@ module Model.Core
     exposing
         ( Model
         , buildTestRunDataTree
+        , clearRunDuration
         , default
         , purgeObsoleteNodes
         , resetPassedTests
         , resetTestRuns
+        , setRunDuration
         , setRunStatusToCompileError
         , setRunStatusToPassFail
         , setRunStatusToProcessing
@@ -15,6 +17,7 @@ module Model.Core
         , updatePassedTestCount
         )
 
+import Duration.Core exposing (Duration)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
 import TestEvent.RunStart as RunStart exposing (RunStart)
@@ -31,6 +34,8 @@ type alias Model =
     { runStatus : RunStatus
     , totalTests : Int
     , passedTests : Int
+    , runDuration : Maybe Duration
+    , runSeed : Maybe Int
     , testRuns : Tree String TestInstance
     , testHierarchy : CollapsibleTree String TestInstance
     }
@@ -41,6 +46,8 @@ default =
     { runStatus = RunStatus.noData
     , totalTests = 0
     , passedTests = 0
+    , runDuration = Nothing
+    , runSeed = Nothing
     , testRuns = Node systemTopLevelMessage TestInstance.default []
     , testHierarchy = Tree.make (Node humanReadableTopLevelMessage TestInstance.default [])
     }
@@ -106,6 +113,16 @@ buildTestRunDataTree event model =
                 TestInstance.Reconcile.transform
                 model.testRuns
     }
+
+
+setRunDuration : RunComplete -> Model -> Model
+setRunDuration event model =
+    { model | runDuration = Just <| RunComplete.duration event }
+
+
+clearRunDuration : Model -> Model
+clearRunDuration model =
+    { model | runDuration = Nothing }
 
 
 purgeObsoleteNodes : Model -> Model

@@ -1,5 +1,6 @@
-module TestEvent.RunComplete exposing (RawData, RunComplete, parse, passed)
+module TestEvent.RunComplete exposing (RawData, RunComplete, duration, parse, passed)
 
+import Duration.Core as Duration exposing (Duration)
 import TestEvent.Util
 
 
@@ -33,3 +34,8 @@ parse rawData =
 passed : RunComplete -> Bool
 passed (RunComplete parsed) =
     parsed.failed == 0
+
+
+duration : RunComplete -> Duration
+duration (RunComplete parsed) =
+    Duration.inMilliseconds parsed.duration

@@ -51,6 +51,15 @@
     text-align: left;
 }
 
+.etr-main-view div.run-data-row {
+    margin: 0.75em 0;
+}
+
+.etr-main-view div.run-data-field {
+    width: 24%;
+    display: inline-block;
+}
+
 #test-hierarchy {
     margin: 1em 0 0 0;
     padding: 0;

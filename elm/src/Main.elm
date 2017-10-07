@@ -5,9 +5,11 @@ import Model.Core as Model
     exposing
         ( Model
         , buildTestRunDataTree
+        , clearRunDuration
         , purgeObsoleteNodes
         , resetPassedTests
         , resetTestRuns
+        , setRunDuration
         , setRunStatusToCompileError
         , setRunStatusToPassFail
         , setRunStatusToProcessing
@@ -69,6 +71,7 @@ update message model =
         RunAllButtonClicked ->
             setRunStatusToProcessing model
                 |> resetPassedTests
+                |> clearRunDuration
                 |> resetTestRuns
                 |> updateHierarchy
                 |> andPerform (runTest ())
@@ -76,6 +79,7 @@ update message model =
         InitiateRunAll ->
             setRunStatusToProcessing model
                 |> resetPassedTests
+                |> clearRunDuration
                 |> resetTestRuns
                 |> updateHierarchy
                 |> andNoCommand
@@ -109,6 +113,7 @@ update message model =
                     RunComplete.parse data
             in
             setRunStatusToPassFail event model
+                |> setRunDuration event
                 |> purgeObsoleteNodes
                 |> updateHierarchy
                 |> andNoCommand
@@ -125,10 +130,12 @@ update message model =
 view : Model -> Html Message
 view model =
     View.Main.render
-        model.runStatus
-        model.totalTests
-        model.passedTests
-        model.testHierarchy
+        { runStatus = model.runStatus
+        , totalTests = model.totalTests
+        , passedTests = model.passedTests
+        , runDuration = model.runDuration
+        , testHierarchy = model.testHierarchy
+        }
         { toggleClickHandler = ToggleButtonClicked
         , runAllButtonClickHandler = RunAllButtonClicked
         , testListItemExpand = TestListItemExpand

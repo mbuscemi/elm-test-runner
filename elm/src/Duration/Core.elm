@@ -1,4 +1,4 @@
-module Duration.Core exposing (Duration, asMilliseconds, inMilliseconds)
+module Duration.Core exposing (Duration, asMilliseconds, asSeconds, inMilliseconds)
 
 
 type Duration
@@ -19,3 +19,13 @@ asMilliseconds duration =
 
         Seconds s ->
             round <| s * 1000
+
+
+asSeconds : Duration -> Float
+asSeconds duration =
+    case duration of
+        Milliseconds ms ->
+            toFloat ms / 1000
+
+        Seconds s ->
+            s
