@@ -8910,6 +8910,42 @@ var _user$project$TestEvent_RunStart$parse = function (rawData) {
 		});
 };
 
+var _user$project$State_Failure$getMessage = function (failure) {
+	return failure.message;
+};
+var _user$project$State_Failure$Comparison = F5(
+	function (a, b, c, d, e) {
+		return {comparison: a, actual: b, expected: c, first: d, second: e};
+	});
+var _user$project$State_Failure$comparison = A6(
+	_elm_lang$core$Json_Decode$map5,
+	_user$project$State_Failure$Comparison,
+	A2(_elm_lang$core$Json_Decode$field, 'comparison', _elm_lang$core$Json_Decode$string),
+	_elm_lang$core$Json_Decode$maybe(
+		A2(_elm_lang$core$Json_Decode$field, 'actual', _elm_lang$core$Json_Decode$string)),
+	_elm_lang$core$Json_Decode$maybe(
+		A2(_elm_lang$core$Json_Decode$field, 'expected', _elm_lang$core$Json_Decode$string)),
+	_elm_lang$core$Json_Decode$maybe(
+		A2(_elm_lang$core$Json_Decode$field, 'first', _elm_lang$core$Json_Decode$string)),
+	_elm_lang$core$Json_Decode$maybe(
+		A2(_elm_lang$core$Json_Decode$field, 'second', _elm_lang$core$Json_Decode$string)));
+var _user$project$State_Failure$Reason = function (a) {
+	return {data: a};
+};
+var _user$project$State_Failure$reason = A2(
+	_elm_lang$core$Json_Decode$map,
+	_user$project$State_Failure$Reason,
+	A2(_elm_lang$core$Json_Decode$field, 'data', _user$project$State_Failure$comparison));
+var _user$project$State_Failure$Failure = F2(
+	function (a, b) {
+		return {message: a, reason: b};
+	});
+var _user$project$State_Failure$failure = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$State_Failure$Failure,
+	A2(_elm_lang$core$Json_Decode$field, 'message', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'reason', _user$project$State_Failure$reason));
+
 var _user$project$TestInstance_Core$durationAsString = function (instance) {
 	return _elm_lang$core$Basics$toString(
 		_user$project$Duration_Core$asMilliseconds(instance.duration));
@@ -9016,38 +9052,6 @@ var _user$project$TestEvent_TestCompleted$defaultRawData = {
 	failures: {ctor: '[]'},
 	duration: ''
 };
-var _user$project$TestEvent_TestCompleted$Comparison = F5(
-	function (a, b, c, d, e) {
-		return {comparison: a, actual: b, expected: c, first: d, second: e};
-	});
-var _user$project$TestEvent_TestCompleted$comparison = A6(
-	_elm_lang$core$Json_Decode$map5,
-	_user$project$TestEvent_TestCompleted$Comparison,
-	A2(_elm_lang$core$Json_Decode$field, 'comparison', _elm_lang$core$Json_Decode$string),
-	_elm_lang$core$Json_Decode$maybe(
-		A2(_elm_lang$core$Json_Decode$field, 'actual', _elm_lang$core$Json_Decode$string)),
-	_elm_lang$core$Json_Decode$maybe(
-		A2(_elm_lang$core$Json_Decode$field, 'expected', _elm_lang$core$Json_Decode$string)),
-	_elm_lang$core$Json_Decode$maybe(
-		A2(_elm_lang$core$Json_Decode$field, 'first', _elm_lang$core$Json_Decode$string)),
-	_elm_lang$core$Json_Decode$maybe(
-		A2(_elm_lang$core$Json_Decode$field, 'second', _elm_lang$core$Json_Decode$string)));
-var _user$project$TestEvent_TestCompleted$Reason = function (a) {
-	return {data: a};
-};
-var _user$project$TestEvent_TestCompleted$reason = A2(
-	_elm_lang$core$Json_Decode$map,
-	_user$project$TestEvent_TestCompleted$Reason,
-	A2(_elm_lang$core$Json_Decode$field, 'data', _user$project$TestEvent_TestCompleted$comparison));
-var _user$project$TestEvent_TestCompleted$Failure = F2(
-	function (a, b) {
-		return {message: a, reason: b};
-	});
-var _user$project$TestEvent_TestCompleted$failure = A3(
-	_elm_lang$core$Json_Decode$map2,
-	_user$project$TestEvent_TestCompleted$Failure,
-	A2(_elm_lang$core$Json_Decode$field, 'message', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'reason', _user$project$TestEvent_TestCompleted$reason));
 var _user$project$TestEvent_TestCompleted$RawData = F4(
 	function (a, b, c, d) {
 		return {status: a, labels: b, failures: c, duration: d};
@@ -9063,7 +9067,7 @@ var _user$project$TestEvent_TestCompleted$rawData = A5(
 	A2(
 		_elm_lang$core$Json_Decode$field,
 		'failures',
-		_elm_lang$core$Json_Decode$list(_user$project$TestEvent_TestCompleted$failure)),
+		_elm_lang$core$Json_Decode$list(_user$project$State_Failure$failure)),
 	A2(_elm_lang$core$Json_Decode$field, 'duration', _elm_lang$core$Json_Decode$string));
 var _user$project$TestEvent_TestCompleted$parseJson = function (jsonString) {
 	return A2(
