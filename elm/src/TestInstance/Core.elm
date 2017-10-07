@@ -3,15 +3,18 @@ module TestInstance.Core
         ( TestInstance
         , default
         , durationAsString
+        , getFailure
         , isFailing
         , isPending
         , setDuration
+        , setFailure
         , setStatus
         , toClass
         , toStatusIcon
         )
 
 import Duration.Core as Duration exposing (Duration, inMilliseconds)
+import State.Failure exposing (Failure)
 
 
 type TestStatus
@@ -23,6 +26,7 @@ type TestStatus
 type alias TestInstance =
     { testStatus : TestStatus
     , duration : Duration
+    , failure : Maybe Failure
     }
 
 
@@ -30,6 +34,7 @@ default : TestInstance
 default =
     { testStatus = Pending
     , duration = inMilliseconds 0
+    , failure = Nothing
     }
 
 
@@ -69,6 +74,11 @@ isPending instance =
     instance.testStatus == Pending
 
 
+getFailure : TestInstance -> Maybe Failure
+getFailure instance =
+    instance.failure
+
+
 setStatus : String -> TestInstance -> TestInstance
 setStatus newStatus instance =
     case newStatus of
@@ -93,3 +103,8 @@ setDuration duration instance =
 durationAsString : TestInstance -> String
 durationAsString instance =
     toString <| Duration.asMilliseconds instance.duration
+
+
+setFailure : Maybe Failure -> TestInstance -> TestInstance
+setFailure failure instance =
+    { instance | failure = failure }

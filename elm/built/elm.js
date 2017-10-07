@@ -8946,6 +8946,12 @@ var _user$project$TestEvent_RunStart$parse = function (rawData) {
 		});
 };
 
+var _user$project$TestInstance_Core$setFailure = F2(
+	function (failure, instance) {
+		return _elm_lang$core$Native_Utils.update(
+			instance,
+			{failure: failure});
+	});
 var _user$project$TestInstance_Core$durationAsString = function (instance) {
 	return _elm_lang$core$Basics$toString(
 		_user$project$Duration_Core$asMilliseconds(instance.duration));
@@ -8958,6 +8964,9 @@ var _user$project$TestInstance_Core$setDuration = F2(
 				duration: _user$project$Duration_Core$inMilliseconds(duration)
 			});
 	});
+var _user$project$TestInstance_Core$getFailure = function (instance) {
+	return instance.failure;
+};
 var _user$project$TestInstance_Core$toClass = function (instance) {
 	var _p0 = instance.testStatus;
 	switch (_p0.ctor) {
@@ -8980,14 +8989,15 @@ var _user$project$TestInstance_Core$toStatusIcon = function (instance) {
 			return '○';
 	}
 };
-var _user$project$TestInstance_Core$TestInstance = F2(
-	function (a, b) {
-		return {testStatus: a, duration: b};
+var _user$project$TestInstance_Core$TestInstance = F3(
+	function (a, b, c) {
+		return {testStatus: a, duration: b, failure: c};
 	});
 var _user$project$TestInstance_Core$Pending = {ctor: 'Pending'};
 var _user$project$TestInstance_Core$default = {
 	testStatus: _user$project$TestInstance_Core$Pending,
-	duration: _user$project$Duration_Core$inMilliseconds(0)
+	duration: _user$project$Duration_Core$inMilliseconds(0),
+	failure: _elm_lang$core$Maybe$Nothing
 };
 var _user$project$TestInstance_Core$isPending = function (instance) {
 	return _elm_lang$core$Native_Utils.eq(instance.testStatus, _user$project$TestInstance_Core$Pending);
