@@ -34,9 +34,13 @@ type alias DisplayData =
 render : DisplayData -> Messages message -> Html message
 render data messages =
     div [ class "etr-main-view" ]
-        [ View.Toolbar.render messages.toggleClickHandler messages.runAllButtonClickHandler
-        , View.RedGreenDisplay.render data.runStatus
-        , View.PassingTestsDisplay.render data.totalTests data.passedTests
-        , View.DurationAndSeedDisplay.render data.runDuration data.runSeed
-        , View.TestHierarchy.render data.testHierarchy { expand = messages.testListItemExpand, collapse = messages.testListItemCollapse }
+        [ div [ class "core" ]
+            [ View.Toolbar.render messages.toggleClickHandler messages.runAllButtonClickHandler
+            , View.RedGreenDisplay.render data.runStatus
+            , View.PassingTestsDisplay.render data.totalTests data.passedTests
+            , View.DurationAndSeedDisplay.render data.runDuration data.runSeed
+            , View.TestHierarchy.render data.testHierarchy { expand = messages.testListItemExpand, collapse = messages.testListItemCollapse }
+            ]
+        , div [ class "output-display" ] []
+        , div [ class "footer" ] []
         ]

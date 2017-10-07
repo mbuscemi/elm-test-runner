@@ -9889,25 +9889,58 @@ var _user$project$View_Main$render = F2(
 			},
 			{
 				ctor: '::',
-				_0: A2(_user$project$View_Toolbar$render, messages.toggleClickHandler, messages.runAllButtonClickHandler),
-				_1: {
-					ctor: '::',
-					_0: _user$project$View_RedGreenDisplay$render(data.runStatus),
-					_1: {
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
 						ctor: '::',
-						_0: A2(_user$project$View_PassingTestsDisplay$render, data.totalTests, data.passedTests),
+						_0: _elm_lang$html$Html_Attributes$class('core'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(_user$project$View_Toolbar$render, messages.toggleClickHandler, messages.runAllButtonClickHandler),
 						_1: {
 							ctor: '::',
-							_0: A2(_user$project$View_DurationAndSeedDisplay$render, data.runDuration, data.runSeed),
+							_0: _user$project$View_RedGreenDisplay$render(data.runStatus),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_user$project$View_TestHierarchy$render,
-									data.testHierarchy,
-									{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse}),
-								_1: {ctor: '[]'}
+								_0: A2(_user$project$View_PassingTestsDisplay$render, data.totalTests, data.passedTests),
+								_1: {
+									ctor: '::',
+									_0: A2(_user$project$View_DurationAndSeedDisplay$render, data.runDuration, data.runSeed),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_user$project$View_TestHierarchy$render,
+											data.testHierarchy,
+											{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse}),
+										_1: {ctor: '[]'}
+									}
+								}
 							}
 						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('output-display'),
+							_1: {ctor: '[]'}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('footer'),
+								_1: {ctor: '[]'}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
 					}
 				}
 			});

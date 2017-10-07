@@ -8,6 +8,22 @@
     padding-left: 6px;
 }
 
+.etr-main-view .core {
+    height: 60vh;
+    overflow: scroll;
+}
+
+.etr-main-view .output-display {
+    height: 40vh;
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: black;
+}
+
+.etr-main-view .footer {
+    height: 50px;
+}
+
 .etr-main-view .btn-toolbar {
     margin: 0 0 0.5em 0;
 }
