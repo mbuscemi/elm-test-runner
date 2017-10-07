@@ -56,7 +56,7 @@ rootText nodeData hasChildren isExpanded nodeName =
     span []
         [ togglingArrow hasChildren isExpanded
         , statusIndicator nodeData
-        , conditionallyEmbolden (not hasChildren) nodeName
+        , conditionallyEmbolden (not hasChildren) nodeName nodeData
         ]
 
 
@@ -111,13 +111,19 @@ idField name =
             []
 
 
-conditionallyEmbolden : Bool -> String -> Html message
-conditionallyEmbolden shouldEmbolden string =
-    let
-        htmlText =
-            text string
-    in
-    if shouldEmbolden then
-        strong [] [ htmlText ]
+conditionallyEmbolden : Bool -> String -> TestInstance -> Html message
+conditionallyEmbolden hasChildren string nodeData =
+    if hasChildren then
+        strong [] [ htmlText string nodeData ]
     else
-        htmlText
+        htmlText (string ++ timeReport nodeData) nodeData
+
+
+htmlText : String -> TestInstance -> Html message
+htmlText string nodeData =
+    text <| string
+
+
+timeReport : TestInstance -> String
+timeReport nodeData =
+    " (" ++ TestInstance.durationAsString nodeData ++ " ms)"

@@ -2,12 +2,16 @@ module TestInstance.Core
     exposing
         ( TestInstance
         , default
+        , durationAsString
         , isFailing
         , isPending
+        , setDuration
         , setStatus
         , toClass
         , toStatusIcon
         )
+
+import Duration.Core as Duration exposing (Duration, inMilliseconds)
 
 
 type TestStatus
@@ -18,12 +22,14 @@ type TestStatus
 
 type alias TestInstance =
     { testStatus : TestStatus
+    , duration : Duration
     }
 
 
 default : TestInstance
 default =
     { testStatus = Pending
+    , duration = inMilliseconds 0
     }
 
 
@@ -64,16 +70,26 @@ isPending instance =
 
 
 setStatus : String -> TestInstance -> TestInstance
-setStatus newStatus test =
+setStatus newStatus instance =
     case newStatus of
         "pass" ->
-            { test | testStatus = Pass }
+            { instance | testStatus = Pass }
 
         "fail" ->
-            { test | testStatus = Fail }
+            { instance | testStatus = Fail }
 
         "pending" ->
-            { test | testStatus = Pending }
+            { instance | testStatus = Pending }
 
         _ ->
-            { test | testStatus = Pending }
+            { instance | testStatus = Pending }
+
+
+setDuration : Int -> TestInstance -> TestInstance
+setDuration duration instance =
+    { instance | duration = inMilliseconds duration }
+
+
+durationAsString : TestInstance -> String
+durationAsString instance =
+    toString <| Duration.asMilliseconds instance.duration

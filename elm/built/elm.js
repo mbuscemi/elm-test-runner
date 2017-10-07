@@ -8569,6 +8569,24 @@ var _folkertdev$elm_state$State$foldrM = F3(
 			_elm_lang$core$List$reverse(xs));
 	});
 
+var _user$project$Duration_Core$asMilliseconds = function (duration) {
+	var _p0 = duration;
+	if (_p0.ctor === 'Milliseconds') {
+		return _p0._0;
+	} else {
+		return _elm_lang$core$Basics$round(_p0._0 * 1000);
+	}
+};
+var _user$project$Duration_Core$Milliseconds = function (a) {
+	return {ctor: 'Milliseconds', _0: a};
+};
+var _user$project$Duration_Core$inMilliseconds = function (milliseconds) {
+	return _user$project$Duration_Core$Milliseconds(milliseconds);
+};
+var _user$project$Duration_Core$Seconds = function (a) {
+	return {ctor: 'Seconds', _0: a};
+};
+
 var _user$project$State_RunStatus$toClass = function (runStatus) {
 	var _p0 = runStatus;
 	switch (_p0.ctor) {
@@ -8667,6 +8685,18 @@ var _user$project$TestEvent_RunStart$parse = function (rawData) {
 		});
 };
 
+var _user$project$TestInstance_Core$durationAsString = function (instance) {
+	return _elm_lang$core$Basics$toString(
+		_user$project$Duration_Core$asMilliseconds(instance.duration));
+};
+var _user$project$TestInstance_Core$setDuration = F2(
+	function (duration, instance) {
+		return _elm_lang$core$Native_Utils.update(
+			instance,
+			{
+				duration: _user$project$Duration_Core$inMilliseconds(duration)
+			});
+	});
 var _user$project$TestInstance_Core$toClass = function (instance) {
 	var _p0 = instance.testStatus;
 	switch (_p0.ctor) {
@@ -8689,11 +8719,15 @@ var _user$project$TestInstance_Core$toStatusIcon = function (instance) {
 			return '○';
 	}
 };
-var _user$project$TestInstance_Core$TestInstance = function (a) {
-	return {testStatus: a};
-};
+var _user$project$TestInstance_Core$TestInstance = F2(
+	function (a, b) {
+		return {testStatus: a, duration: b};
+	});
 var _user$project$TestInstance_Core$Pending = {ctor: 'Pending'};
-var _user$project$TestInstance_Core$default = {testStatus: _user$project$TestInstance_Core$Pending};
+var _user$project$TestInstance_Core$default = {
+	testStatus: _user$project$TestInstance_Core$Pending,
+	duration: _user$project$Duration_Core$inMilliseconds(0)
+};
 var _user$project$TestInstance_Core$isPending = function (instance) {
 	return _elm_lang$core$Native_Utils.eq(instance.testStatus, _user$project$TestInstance_Core$Pending);
 };
@@ -8703,24 +8737,24 @@ var _user$project$TestInstance_Core$isFailing = function (instance) {
 };
 var _user$project$TestInstance_Core$Pass = {ctor: 'Pass'};
 var _user$project$TestInstance_Core$setStatus = F2(
-	function (newStatus, test) {
+	function (newStatus, instance) {
 		var _p2 = newStatus;
 		switch (_p2) {
 			case 'pass':
 				return _elm_lang$core$Native_Utils.update(
-					test,
+					instance,
 					{testStatus: _user$project$TestInstance_Core$Pass});
 			case 'fail':
 				return _elm_lang$core$Native_Utils.update(
-					test,
+					instance,
 					{testStatus: _user$project$TestInstance_Core$Fail});
 			case 'pending':
 				return _elm_lang$core$Native_Utils.update(
-					test,
+					instance,
 					{testStatus: _user$project$TestInstance_Core$Pending});
 			default:
 				return _elm_lang$core$Native_Utils.update(
-					test,
+					instance,
 					{testStatus: _user$project$TestInstance_Core$Pending});
 		}
 	});
@@ -8738,11 +8772,15 @@ var _user$project$TestEvent_TestCompleted$passed = function (_p2) {
 		return false;
 	}
 };
-var _user$project$TestEvent_TestCompleted$toTestInstance = function (event) {
+var _user$project$TestEvent_TestCompleted$toTestInstance = function (_p5) {
+	var _p6 = _p5;
 	return A2(
-		_user$project$TestInstance_Core$setStatus,
-		_user$project$TestEvent_TestCompleted$passed(event) ? 'pass' : 'fail',
-		_user$project$TestInstance_Core$default);
+		_user$project$TestInstance_Core$setDuration,
+		_p6._0.duration,
+		A2(
+			_user$project$TestInstance_Core$setStatus,
+			_user$project$TestEvent_TestCompleted$passed(_p6) ? 'pass' : 'fail',
+			_user$project$TestInstance_Core$default));
 };
 var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
 	return _user$project$TestEvent_TestCompleted$passed(event) ? 1 : 0;
@@ -9237,17 +9275,35 @@ var _user$project$View_RedGreenDisplay$render = function (runStatus) {
 		});
 };
 
-var _user$project$View_TestHierarchy$conditionallyEmbolden = F2(
-	function (shouldEmbolden, string) {
-		var htmlText = _elm_lang$html$Html$text(string);
-		return shouldEmbolden ? A2(
+var _user$project$View_TestHierarchy$timeReport = function (nodeData) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		' (',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_user$project$TestInstance_Core$durationAsString(nodeData),
+			' ms)'));
+};
+var _user$project$View_TestHierarchy$htmlText = F2(
+	function (string, nodeData) {
+		return _elm_lang$html$Html$text(string);
+	});
+var _user$project$View_TestHierarchy$conditionallyEmbolden = F3(
+	function (hasChildren, string, nodeData) {
+		return hasChildren ? A2(
 			_elm_lang$html$Html$strong,
 			{ctor: '[]'},
 			{
 				ctor: '::',
-				_0: htmlText,
+				_0: A2(_user$project$View_TestHierarchy$htmlText, string, nodeData),
 				_1: {ctor: '[]'}
-			}) : htmlText;
+			}) : A2(
+			_user$project$View_TestHierarchy$htmlText,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				string,
+				_user$project$View_TestHierarchy$timeReport(nodeData)),
+			nodeData);
 	});
 var _user$project$View_TestHierarchy$idField = function (name) {
 	var _p0 = name;
@@ -9323,7 +9379,7 @@ var _user$project$View_TestHierarchy$rootText = F4(
 					_0: _user$project$View_TestHierarchy$statusIndicator(nodeData),
 					_1: {
 						ctor: '::',
-						_0: A2(_user$project$View_TestHierarchy$conditionallyEmbolden, !hasChildren, nodeName),
+						_0: A3(_user$project$View_TestHierarchy$conditionallyEmbolden, !hasChildren, nodeName, nodeData),
 						_1: {ctor: '[]'}
 					}
 				}
