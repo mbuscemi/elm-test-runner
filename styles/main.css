@@ -138,10 +138,34 @@
     background-color: #5c2121;
 }
 
+.etr-main-view .seed-settings,
 .etr-main-view .auto-run-display {
     margin-top: 5px;
-    text-align: center;
+    display: inline-block;
+}
+
+.etr-main-view .seed-settings {
+    text-align: left;
+    float: left;
+}
+
+.etr-main-view .seed-settings span {
+    padding: 0 8px;
+}
+
+.etr-main-view .seed-settings input {
+    border-width: 1px;
+    border-style: groove;
+}
+
+.etr-main-view .seed-settings input:disabled {
+    background-color: rgb(84, 84, 84);
+}
+
+.etr-main-view .auto-run-display {
+    text-align: right;
     font-weight: bold;
+    float: right;
 }
 
 .etr-main-view .auto-run-display.disabled {

@@ -7,11 +7,11 @@ import State.Failure exposing (Failure)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree)
-import View.AutoRunOnSave
 import View.DurationAndSeedDisplay
 import View.OutputDisplay
 import View.PassingTestsDisplay
 import View.RedGreenDisplay
+import View.SeedAndAutoRun
 import View.TestHierarchy.Core
 import View.Toolbar
 
@@ -71,6 +71,5 @@ render data messages =
         , div [ class "output-display" ]
             [ View.OutputDisplay.render data.selectedNodeFailure ]
         , div [ class "footer" ]
-            [ View.AutoRunOnSave.render data.autoRunEnabled
-            ]
+            (View.SeedAndAutoRun.render data.autoRunEnabled)
         ]

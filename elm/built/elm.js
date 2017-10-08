@@ -9898,33 +9898,6 @@ var _user$project$Model_Core$Model = function (a) {
 	};
 };
 
-var _user$project$View_AutoRunOnSave$enabledString = function (enabled) {
-	return enabled ? 'enabled' : 'disabled';
-};
-var _user$project$View_AutoRunOnSave$render = function (enabled) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class(
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'auto-run-display ',
-					_user$project$View_AutoRunOnSave$enabledString(enabled))),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'AUTO RUN ',
-					_elm_lang$core$String$toUpper(
-						_user$project$View_AutoRunOnSave$enabledString(enabled)))),
-			_1: {ctor: '[]'}
-		});
-};
-
 var _user$project$View_DurationAndSeedDisplay$runDataClass = function (additionalField) {
 	return _elm_lang$html$Html_Attributes$class(
 		A2(_elm_lang$core$Basics_ops['++'], 'run-data-field ', additionalField));
@@ -10326,6 +10299,89 @@ var _user$project$View_RedGreenDisplay$render = function (runStatus) {
 				}),
 			_1: {ctor: '[]'}
 		});
+};
+
+var _user$project$View_SeedAndAutoRun$enabledString = function (enabled) {
+	return enabled ? 'enabled' : 'disabled';
+};
+var _user$project$View_SeedAndAutoRun$render = function (enabled) {
+	return {
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('seed-settings'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$input,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+						_1: {ctor: '[]'}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$span,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Seed:'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$input,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$type_('number'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$placeholder('Generate Random'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$disabled(true),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'auto-run-display ',
+							_user$project$View_SeedAndAutoRun$enabledString(enabled))),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'AUTO RUN ',
+							_elm_lang$core$String$toUpper(
+								_user$project$View_SeedAndAutoRun$enabledString(enabled)))),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		}
+	};
 };
 
 var _user$project$View_TestHierarchy_ChildTree$mouseOverHexColor = '2c333e';
@@ -10744,11 +10800,7 @@ var _user$project$View_Core$render = F2(
 									_0: _elm_lang$html$Html_Attributes$class('footer'),
 									_1: {ctor: '[]'}
 								},
-								{
-									ctor: '::',
-									_0: _user$project$View_AutoRunOnSave$render(data.autoRunEnabled),
-									_1: {ctor: '[]'}
-								}),
+								_user$project$View_SeedAndAutoRun$render(data.autoRunEnabled)),
 							_1: {ctor: '[]'}
 						}
 					}
