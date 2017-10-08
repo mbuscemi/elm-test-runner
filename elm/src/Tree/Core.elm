@@ -27,7 +27,7 @@ make tree =
 label : Tree a b -> IdGen (CollapsibleTree a b)
 label (Node root data children) =
     State.map2
-        (\nid collapsibleChildren -> Node ( root, True, nid ) data collapsibleChildren)
+        (\nid collapsibleChildren -> Node ( root, False, nid ) data collapsibleChildren)
         newId
         (State.traverse label children)
 

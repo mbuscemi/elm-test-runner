@@ -9536,7 +9536,7 @@ var _user$project$Tree_Core$label = function (_p1) {
 			function (nid, collapsibleChildren) {
 				return A3(
 					_user$project$Tree_Core$Node,
-					{ctor: '_Tuple3', _0: _p2._0, _1: true, _2: nid},
+					{ctor: '_Tuple3', _0: _p2._0, _1: false, _2: nid},
 					_p2._1,
 					collapsibleChildren);
 			}),
