@@ -5,6 +5,7 @@ module Model.Core
         , clearRunDuration
         , clearRunSeed
         , default
+        , expandFailingNodes
         , invertAutoRun
         , purgeObsoleteNodes
         , randomSeedForJS
@@ -205,6 +206,21 @@ removeTopNode node =
 
         Node _ data [] ->
             Node humanReadableTopLevelMessage data []
+
+
+expandFailingNodes : Model -> Model
+expandFailingNodes model =
+    { model | testHierarchy = toggleFailingNodes model.testHierarchy }
+
+
+toggleFailingNodes : CollapsibleTree String TestInstance -> CollapsibleTree String TestInstance
+toggleFailingNodes (Node ( name, isExpanded, nodeId ) testInstance children) =
+    let
+        expanded =
+            TestInstance.isFailing testInstance
+    in
+    Node ( name, expanded, nodeId ) testInstance <|
+        List.map toggleFailingNodes children
 
 
 toggleNode : Int -> Bool -> Model -> Model

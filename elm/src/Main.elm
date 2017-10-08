@@ -7,6 +7,7 @@ import Model.Core as Model
         , buildTestRunDataTree
         , clearRunDuration
         , clearRunSeed
+        , expandFailingNodes
         , invertAutoRun
         , purgeObsoleteNodes
         , randomSeedForJS
@@ -129,6 +130,7 @@ update message model =
                 |> setRunDuration event
                 |> purgeObsoleteNodes
                 |> updateHierarchy
+                |> expandFailingNodes
                 |> andNoCommand
 
         TestListItemExpand nodeId ->

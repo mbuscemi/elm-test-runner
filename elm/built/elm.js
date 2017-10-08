@@ -9720,14 +9720,31 @@ var _user$project$Model_Core$toggleNode = F3(
 				testHierarchy: A3(_user$project$Tree_Node$toggle, nodeId, newState, model.testHierarchy)
 			});
 	});
+var _user$project$Model_Core$toggleFailingNodes = function (_p1) {
+	var _p2 = _p1;
+	var _p3 = _p2._1;
+	var expanded = _user$project$TestInstance_Core$isFailing(_p3);
+	return A3(
+		_user$project$Tree_Core$Node,
+		{ctor: '_Tuple3', _0: _p2._0._0, _1: expanded, _2: _p2._0._2},
+		_p3,
+		A2(_elm_lang$core$List$map, _user$project$Model_Core$toggleFailingNodes, _p2._2));
+};
+var _user$project$Model_Core$expandFailingNodes = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testHierarchy: _user$project$Model_Core$toggleFailingNodes(model.testHierarchy)
+		});
+};
 var _user$project$Model_Core$purgeObsoleteNodes = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{
 			testRuns: A2(
 				_user$project$Tree_Traverse$purge,
-				function (_p1) {
-					return !_user$project$TestInstance_Core$isPending(_p1);
+				function (_p4) {
+					return !_user$project$TestInstance_Core$isPending(_p4);
 				},
 				model.testRuns)
 		});
@@ -9835,14 +9852,14 @@ var _user$project$Model_Core$invertAutoRun = function (model) {
 };
 var _user$project$Model_Core$humanReadableTopLevelMessage = 'No Tests';
 var _user$project$Model_Core$removeTopNode = function (node) {
-	var _p2 = node;
-	if (_p2._2.ctor === '::') {
-		return _p2._2._0;
+	var _p5 = node;
+	if (_p5._2.ctor === '::') {
+		return _p5._2._0;
 	} else {
 		return A3(
 			_user$project$Tree_Core$Node,
 			_user$project$Model_Core$humanReadableTopLevelMessage,
-			_p2._1,
+			_p5._1,
 			{ctor: '[]'});
 	}
 };
@@ -10998,12 +11015,13 @@ var _user$project$Main$update = F2(
 			case 'RunComplete':
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
-					_user$project$Model_Core$updateHierarchy(
-						_user$project$Model_Core$purgeObsoleteNodes(
-							A2(
-								_user$project$Model_Core$setRunDuration,
-								event,
-								A2(_user$project$Model_Core$setRunStatusToPassFail, event, model)))));
+					_user$project$Model_Core$expandFailingNodes(
+						_user$project$Model_Core$updateHierarchy(
+							_user$project$Model_Core$purgeObsoleteNodes(
+								A2(
+									_user$project$Model_Core$setRunDuration,
+									event,
+									A2(_user$project$Model_Core$setRunStatusToPassFail, event, model))))));
 			case 'TestListItemExpand':
 				return _user$project$Main$andNoCommand(
 					A3(_user$project$Model_Core$toggleNode, _p0._0, true, model));
