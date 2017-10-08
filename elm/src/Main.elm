@@ -17,6 +17,7 @@ import Model.Core as Model
         , setRunStatusToPassFail
         , setRunStatusToProcessing
         , setSelectedTest
+        , setSelectedTestFailure
         , setTestMouseIsOver
         , setTotalTestCount
         , toggleNode
@@ -140,6 +141,7 @@ update message model =
 
         TestListItemSelect nodeId failure ->
             setSelectedTest (Just nodeId) model
+                |> setSelectedTestFailure failure
                 |> andNoCommand
 
         ToggleAutoRun ->
@@ -161,8 +163,8 @@ view model =
         , testHierarchy = model.testHierarchy
         , nodeMouseIsOver = model.testMouseIsOver
         , selectedNode = model.selectedTest
+        , selectedNodeFailure = model.selectedTestFailure
         , autoRunEnabled = model.autoRunEnabled
-        , selectedNodeFailure = Nothing
         }
         { toggleClickHandler = ToggleButtonClicked
         , runAllButtonClickHandler = InitiateRunAll

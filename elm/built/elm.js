@@ -10271,9 +10271,12 @@ var _user$project$Main$update = F2(
 			case 'TestListItemSelect':
 				return _user$project$Main$andNoCommand(
 					A2(
-						_user$project$Model_Core$setSelectedTest,
-						_elm_lang$core$Maybe$Just(_p0._0),
-						model));
+						_user$project$Model_Core$setSelectedTestFailure,
+						_p0._1,
+						A2(
+							_user$project$Model_Core$setSelectedTest,
+							_elm_lang$core$Maybe$Just(_p0._0),
+							model)));
 			case 'ToggleAutoRun':
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$invertAutoRun(model));
@@ -10415,7 +10418,7 @@ var _user$project$Main$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View_Core$render,
-		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, autoRunEnabled: model.autoRunEnabled, selectedNodeFailure: _elm_lang$core$Maybe$Nothing},
+		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, selectedNodeFailure: model.selectedTestFailure, autoRunEnabled: model.autoRunEnabled},
 		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(

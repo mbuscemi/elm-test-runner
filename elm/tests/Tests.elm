@@ -115,6 +115,11 @@ suite =
                     in
                     Expect.equal (fromPath [ "e", "f", "h" ] {} nonTransformer startTree) expectedTree
             ]
+        , describe "Helper Tests" <|
+            [ test "basic addition" <|
+                \_ ->
+                    Expect.equal (1 + 2) 3
+            ]
         ]
 
 
