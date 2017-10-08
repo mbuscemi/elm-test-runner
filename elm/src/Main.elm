@@ -9,6 +9,7 @@ import Model.Core as Model
         , clearRunSeed
         , invertAutoRun
         , purgeObsoleteNodes
+        , randomSeedForJS
         , resetPassedTests
         , resetTestRuns
         , setRandomSeed
@@ -93,7 +94,7 @@ update message model =
                 |> clearRunSeed
                 |> resetTestRuns
                 |> updateHierarchy
-                |> andPerform (runTest ())
+                |> andPerform (runTest <| randomSeedForJS model)
 
         CompilerErrored ->
             setRunStatusToCompileError model
@@ -225,7 +226,7 @@ saveEventMessage model _ =
 port toggle : () -> Cmd message
 
 
-port runTest : () -> Cmd message
+port runTest : String -> Cmd message
 
 
 port copySeed : String -> Cmd message

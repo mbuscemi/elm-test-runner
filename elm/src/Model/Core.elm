@@ -7,6 +7,7 @@ module Model.Core
         , default
         , invertAutoRun
         , purgeObsoleteNodes
+        , randomSeedForJS
         , resetPassedTests
         , resetTestRuns
         , setRandomSeed
@@ -219,3 +220,13 @@ setRandomSeed randomSeed model =
 setRandomSeedForcing : Bool -> Model -> Model
 setRandomSeedForcing setting model =
     { model | forceRandomSeedEnabled = setting }
+
+
+randomSeedForJS : Model -> String
+randomSeedForJS model =
+    case ( model.forceRandomSeedEnabled, model.randomSeed ) of
+        ( True, Just seed ) ->
+            toString seed
+
+        _ ->
+            ""

@@ -9692,6 +9692,14 @@ var _user$project$Tree_Traverse$update = F2(
 				_p5._2));
 	});
 
+var _user$project$Model_Core$randomSeedForJS = function (model) {
+	var _p0 = {ctor: '_Tuple2', _0: model.forceRandomSeedEnabled, _1: model.randomSeed};
+	if (((_p0.ctor === '_Tuple2') && (_p0._0 === true)) && (_p0._1.ctor === 'Just')) {
+		return _elm_lang$core$Basics$toString(_p0._1._0);
+	} else {
+		return '';
+	}
+};
 var _user$project$Model_Core$setRandomSeedForcing = F2(
 	function (setting, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9718,8 +9726,8 @@ var _user$project$Model_Core$purgeObsoleteNodes = function (model) {
 		{
 			testRuns: A2(
 				_user$project$Tree_Traverse$purge,
-				function (_p0) {
-					return !_user$project$TestInstance_Core$isPending(_p0);
+				function (_p1) {
+					return !_user$project$TestInstance_Core$isPending(_p1);
 				},
 				model.testRuns)
 		});
@@ -9827,14 +9835,14 @@ var _user$project$Model_Core$invertAutoRun = function (model) {
 };
 var _user$project$Model_Core$humanReadableTopLevelMessage = 'No Tests';
 var _user$project$Model_Core$removeTopNode = function (node) {
-	var _p1 = node;
-	if (_p1._2.ctor === '::') {
-		return _p1._2._0;
+	var _p2 = node;
+	if (_p2._2.ctor === '::') {
+		return _p2._2._0;
 	} else {
 		return A3(
 			_user$project$Tree_Core$Node,
 			_user$project$Model_Core$humanReadableTopLevelMessage,
-			_p1._1,
+			_p2._1,
 			{ctor: '[]'});
 	}
 };
@@ -10932,7 +10940,7 @@ var _user$project$Main$toggle = _elm_lang$core$Native_Platform.outgoingPort(
 var _user$project$Main$runTest = _elm_lang$core$Native_Platform.outgoingPort(
 	'runTest',
 	function (v) {
-		return null;
+		return v;
 	});
 var _user$project$Main$copySeed = _elm_lang$core$Native_Platform.outgoingPort(
 	'copySeed',
@@ -10953,7 +10961,7 @@ var _user$project$Main$update = F2(
 				return A2(
 					_user$project$Main$andPerform,
 					_user$project$Main$runTest(
-						{ctor: '_Tuple0'}),
+						_user$project$Model_Core$randomSeedForJS(model)),
 					_user$project$Model_Core$updateHierarchy(
 						_user$project$Model_Core$resetTestRuns(
 							_user$project$Model_Core$clearRunSeed(
