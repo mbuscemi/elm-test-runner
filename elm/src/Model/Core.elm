@@ -10,6 +10,7 @@ module Model.Core
         , resetPassedTests
         , resetTestRuns
         , setRandomSeed
+        , setRandomSeedForcing
         , setRunDuration
         , setRunSeed
         , setRunStatusToCompileError
@@ -51,6 +52,7 @@ type alias Model =
     , selectedTestFailure : Maybe Failure
     , autoRunEnabled : Bool
     , randomSeed : Maybe Int
+    , forceRandomSeedEnabled : Bool
     }
 
 
@@ -68,6 +70,7 @@ default =
     , selectedTestFailure = Nothing
     , autoRunEnabled = False
     , randomSeed = Nothing
+    , forceRandomSeedEnabled = False
     }
 
 
@@ -211,3 +214,8 @@ toggleNode nodeId newState model =
 setRandomSeed : Maybe Int -> Model -> Model
 setRandomSeed randomSeed model =
     { model | randomSeed = randomSeed }
+
+
+setRandomSeedForcing : Bool -> Model -> Model
+setRandomSeedForcing setting model =
+    { model | forceRandomSeedEnabled = setting }

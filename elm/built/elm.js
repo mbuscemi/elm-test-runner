@@ -9692,6 +9692,12 @@ var _user$project$Tree_Traverse$update = F2(
 				_p5._2));
 	});
 
+var _user$project$Model_Core$setRandomSeedForcing = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{forceRandomSeedEnabled: setting});
+	});
 var _user$project$Model_Core$setRandomSeed = F2(
 	function (randomSeed, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9879,7 +9885,8 @@ var _user$project$Model_Core$default = {
 	selectedTest: _elm_lang$core$Maybe$Nothing,
 	selectedTestFailure: _elm_lang$core$Maybe$Nothing,
 	autoRunEnabled: false,
-	randomSeed: _elm_lang$core$Maybe$Nothing
+	randomSeed: _elm_lang$core$Maybe$Nothing,
+	forceRandomSeedEnabled: false
 };
 var _user$project$Model_Core$Model = function (a) {
 	return function (b) {
@@ -9893,7 +9900,9 @@ var _user$project$Model_Core$Model = function (a) {
 									return function (j) {
 										return function (k) {
 											return function (l) {
-												return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testRuns: f, testHierarchy: g, testMouseIsOver: h, selectedTest: i, selectedTestFailure: j, autoRunEnabled: k, randomSeed: l};
+												return function (m) {
+													return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testRuns: f, testHierarchy: g, testMouseIsOver: h, selectedTest: i, selectedTestFailure: j, autoRunEnabled: k, randomSeed: l, forceRandomSeedEnabled: m};
+												};
 											};
 										};
 									};
@@ -10329,8 +10338,22 @@ var _user$project$View_SeedAndAutoRun$seedInputValue = function (randomSeed) {
 		return _elm_lang$html$Html_Attributes$value('');
 	}
 };
-var _user$project$View_SeedAndAutoRun$render = F2(
-	function (autoRunEnabled, randomSeed) {
+var _user$project$View_SeedAndAutoRun$seedTextInputStyles = function (forceRandomSeedEnabled) {
+	return {
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$disabled(!forceRandomSeedEnabled),
+		_1: {ctor: '[]'}
+	};
+};
+var _user$project$View_SeedAndAutoRun$seedCheckboxStyles = function (forceRandomSeedEnabled) {
+	return {
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$checked(forceRandomSeedEnabled),
+		_1: {ctor: '[]'}
+	};
+};
+var _user$project$View_SeedAndAutoRun$render = F4(
+	function (setForceSeedHandler, autoRunEnabled, forceRandomSeedEnabled, randomSeed) {
 		return {
 			ctor: '::',
 			_0: A2(
@@ -10344,11 +10367,18 @@ var _user$project$View_SeedAndAutoRun$render = F2(
 					ctor: '::',
 					_0: A2(
 						_elm_lang$html$Html$input,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
-							_1: {ctor: '[]'}
-						},
+						A2(
+							_elm_lang$core$List$append,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onCheck(setForceSeedHandler),
+									_1: {ctor: '[]'}
+								}
+							},
+							_user$project$View_SeedAndAutoRun$seedCheckboxStyles(forceRandomSeedEnabled)),
 						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
@@ -10364,23 +10394,22 @@ var _user$project$View_SeedAndAutoRun$render = F2(
 							ctor: '::',
 							_0: A2(
 								_elm_lang$html$Html$input,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$type_('number'),
-									_1: {
+								A2(
+									_elm_lang$core$List$append,
+									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$placeholder('Generate Random'),
+										_0: _elm_lang$html$Html_Attributes$type_('number'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$disabled(true),
+											_0: _elm_lang$html$Html_Attributes$placeholder('Generate Random'),
 											_1: {
 												ctor: '::',
 												_0: _user$project$View_SeedAndAutoRun$seedInputValue(randomSeed),
 												_1: {ctor: '[]'}
 											}
 										}
-									}
-								},
+									},
+									_user$project$View_SeedAndAutoRun$seedTextInputStyles(forceRandomSeedEnabled)),
 								{ctor: '[]'}),
 							_1: {ctor: '[]'}
 						}
@@ -10830,17 +10859,34 @@ var _user$project$View_Core$render = F2(
 									_0: _elm_lang$html$Html_Attributes$class('footer'),
 									_1: {ctor: '[]'}
 								},
-								A2(_user$project$View_SeedAndAutoRun$render, data.autoRunEnabled, data.randomSeed)),
+								A4(_user$project$View_SeedAndAutoRun$render, messages.setForceSeedHandler, data.autoRunEnabled, data.forceRandomSeedEnabled, data.randomSeed)),
 							_1: {ctor: '[]'}
 						}
 					}
 				}
 			});
 	});
-var _user$project$View_Core$Messages = F9(
-	function (a, b, c, d, e, f, g, h, i) {
-		return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d, testListItemMouseEnter: e, testListItemMouseLeave: f, testClickHandler: g, copySeedClickHandler: h, setSeedClickHandler: i};
-	});
+var _user$project$View_Core$Messages = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d, testListItemMouseEnter: e, testListItemMouseLeave: f, testClickHandler: g, copySeedClickHandler: h, setSeedClickHandler: i, setForceSeedHandler: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var _user$project$View_Core$DisplayData = function (a) {
 	return function (b) {
 		return function (c) {
@@ -10852,7 +10898,9 @@ var _user$project$View_Core$DisplayData = function (a) {
 								return function (i) {
 									return function (j) {
 										return function (k) {
-											return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testHierarchy: f, nodeMouseIsOver: g, selectedNode: h, selectedNodeFailure: i, autoRunEnabled: j, randomSeed: k};
+											return function (l) {
+												return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testHierarchy: f, nodeMouseIsOver: g, selectedNode: h, selectedNodeFailure: i, autoRunEnabled: j, randomSeed: k, forceRandomSeedEnabled: l};
+											};
 										};
 									};
 								};
@@ -10983,9 +11031,15 @@ var _user$project$Main$update = F2(
 			case 'SetRandomSeed':
 				return _user$project$Main$andNoCommand(
 					A2(
-						_user$project$Model_Core$setRandomSeed,
-						_elm_lang$core$Maybe$Just(_p0._0),
-						model));
+						_user$project$Model_Core$setRandomSeedForcing,
+						true,
+						A2(
+							_user$project$Model_Core$setRandomSeed,
+							_elm_lang$core$Maybe$Just(_p0._0),
+							model)));
+			case 'SetForceSeed':
+				return _user$project$Main$andNoCommand(
+					A2(_user$project$Model_Core$setRandomSeedForcing, _p0._0, model));
 			default:
 				return _user$project$Main$andNoCommand(model);
 		}
@@ -11054,6 +11108,9 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
 var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
+var _user$project$Main$SetForceSeed = function (a) {
+	return {ctor: 'SetForceSeed', _0: a};
+};
 var _user$project$Main$SetRandomSeed = function (a) {
 	return {ctor: 'SetRandomSeed', _0: a};
 };
@@ -11130,8 +11187,8 @@ var _user$project$Main$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View_Core$render,
-		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, selectedNodeFailure: model.selectedTestFailure, autoRunEnabled: model.autoRunEnabled, randomSeed: model.randomSeed},
-		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed});
+		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, selectedNodeFailure: model.selectedTestFailure, autoRunEnabled: model.autoRunEnabled, randomSeed: model.randomSeed, forceRandomSeedEnabled: model.forceRandomSeedEnabled},
+		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();

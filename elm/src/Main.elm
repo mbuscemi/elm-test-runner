@@ -12,6 +12,7 @@ import Model.Core as Model
         , resetPassedTests
         , resetTestRuns
         , setRandomSeed
+        , setRandomSeedForcing
         , setRunDuration
         , setRunSeed
         , setRunStatusToCompileError
@@ -47,6 +48,7 @@ type Message
     | ToggleAutoRun
     | CopySeed String
     | SetRandomSeed Int
+    | SetForceSeed Bool
     | DoNothing
 
 
@@ -159,6 +161,11 @@ update message model =
 
         SetRandomSeed seed ->
             setRandomSeed (Just seed) model
+                |> setRandomSeedForcing True
+                |> andNoCommand
+
+        SetForceSeed setting ->
+            setRandomSeedForcing setting model
                 |> andNoCommand
 
         DoNothing ->
@@ -179,6 +186,7 @@ view model =
         , selectedNodeFailure = model.selectedTestFailure
         , autoRunEnabled = model.autoRunEnabled
         , randomSeed = model.randomSeed
+        , forceRandomSeedEnabled = model.forceRandomSeedEnabled
         }
         { toggleClickHandler = ToggleButtonClicked
         , runAllButtonClickHandler = InitiateRunAll
@@ -189,6 +197,7 @@ view model =
         , testClickHandler = TestListItemSelect
         , copySeedClickHandler = CopySeed
         , setSeedClickHandler = SetRandomSeed
+        , setForceSeedHandler = SetForceSeed
         }
 
 

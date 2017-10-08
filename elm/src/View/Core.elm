@@ -26,6 +26,7 @@ type alias Messages message =
     , testClickHandler : Int -> Maybe Failure -> message
     , copySeedClickHandler : String -> message
     , setSeedClickHandler : Int -> message
+    , setForceSeedHandler : Bool -> message
     }
 
 
@@ -41,6 +42,7 @@ type alias DisplayData =
     , selectedNodeFailure : Maybe Failure
     , autoRunEnabled : Bool
     , randomSeed : Maybe Int
+    , forceRandomSeedEnabled : Bool
     }
 
 
@@ -76,7 +78,9 @@ render data messages =
             [ View.OutputDisplay.render data.selectedNodeFailure ]
         , div [ class "footer" ]
             (View.SeedAndAutoRun.render
+                messages.setForceSeedHandler
                 data.autoRunEnabled
+                data.forceRandomSeedEnabled
                 data.randomSeed
             )
         ]
