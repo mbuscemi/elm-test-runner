@@ -8778,6 +8778,384 @@ var _myrho$elm_round$Round$roundCom = _myrho$elm_round$Round$roundFun(
 	});
 var _myrho$elm_round$Round$roundNumCom = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$roundCom);
 
+var _user$project$Diff_Core$snake = F5(
+	function (getA, getB, nextX, nextY, path) {
+		snake:
+		while (true) {
+			var _p0 = {
+				ctor: '_Tuple2',
+				_0: getA(nextX),
+				_1: getB(nextY)
+			};
+			_v0_2:
+			do {
+				if (_p0.ctor === '_Tuple2') {
+					if (_p0._0.ctor === 'Just') {
+						if (_p0._1.ctor === 'Just') {
+							if (_elm_lang$core$Native_Utils.eq(_p0._0._0, _p0._1._0)) {
+								var _v1 = getA,
+									_v2 = getB,
+									_v3 = nextX + 1,
+									_v4 = nextY + 1,
+									_v5 = {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: nextX, _1: nextY},
+									_1: path
+								};
+								getA = _v1;
+								getB = _v2;
+								nextX = _v3;
+								nextY = _v4;
+								path = _v5;
+								continue snake;
+							} else {
+								return {ctor: '_Tuple2', _0: path, _1: false};
+							}
+						} else {
+							break _v0_2;
+						}
+					} else {
+						if (_p0._1.ctor === 'Nothing') {
+							return {ctor: '_Tuple2', _0: path, _1: true};
+						} else {
+							break _v0_2;
+						}
+					}
+				} else {
+					break _v0_2;
+				}
+			} while(false);
+			return {ctor: '_Tuple2', _0: path, _1: false};
+		}
+	});
+var _user$project$Diff_Core$NoChange = function (a) {
+	return {ctor: 'NoChange', _0: a};
+};
+var _user$project$Diff_Core$Removed = function (a) {
+	return {ctor: 'Removed', _0: a};
+};
+var _user$project$Diff_Core$Added = function (a) {
+	return {ctor: 'Added', _0: a};
+};
+var _user$project$Diff_Core$makeChangesHelp = F5(
+	function (changes, getA, getB, _p1, path) {
+		makeChangesHelp:
+		while (true) {
+			var _p2 = _p1;
+			var _p7 = _p2._1;
+			var _p6 = _p2._0;
+			var _p3 = path;
+			if (_p3.ctor === '[]') {
+				return changes;
+			} else {
+				var _p5 = _p3._0._1;
+				var _p4 = _p3._0._0;
+				var change = (_elm_lang$core$Native_Utils.eq(_p6 - 1, _p4) && _elm_lang$core$Native_Utils.eq(_p7 - 1, _p5)) ? _user$project$Diff_Core$NoChange(
+					getA(_p6)) : (_elm_lang$core$Native_Utils.eq(_p6, _p4) ? _user$project$Diff_Core$Added(
+					getB(_p7)) : (_elm_lang$core$Native_Utils.eq(_p7, _p5) ? _user$project$Diff_Core$Removed(
+					getA(_p6)) : _elm_lang$core$Native_Utils.crash(
+					'Diff.Core',
+					{
+						start: {line: 154, column: 25},
+						end: {line: 154, column: 36}
+					})(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'Unexpected path: ',
+						_elm_lang$core$Basics$toString(
+							{
+								ctor: '_Tuple2',
+								_0: {ctor: '_Tuple2', _0: _p6, _1: _p7},
+								_1: path
+							})))));
+				var _v8 = {ctor: '::', _0: change, _1: changes},
+					_v9 = getA,
+					_v10 = getB,
+					_v11 = {ctor: '_Tuple2', _0: _p4, _1: _p5},
+					_v12 = _p3._1;
+				changes = _v8;
+				getA = _v9;
+				getB = _v10;
+				_p1 = _v11;
+				path = _v12;
+				continue makeChangesHelp;
+			}
+		}
+	});
+var _user$project$Diff_Core$makeChanges = F3(
+	function (getA, getB, path) {
+		var _p8 = path;
+		if (_p8.ctor === '[]') {
+			return {ctor: '[]'};
+		} else {
+			return A5(
+				_user$project$Diff_Core$makeChangesHelp,
+				{ctor: '[]'},
+				getA,
+				getB,
+				_p8._0,
+				_p8._1);
+		}
+	});
+var _user$project$Diff_Core$Found = function (a) {
+	return {ctor: 'Found', _0: a};
+};
+var _user$project$Diff_Core$Continue = function (a) {
+	return {ctor: 'Continue', _0: a};
+};
+var _user$project$Diff_Core$step = F4(
+	function (snake, offset, k, v) {
+		var fromTop = A2(
+			_elm_lang$core$Maybe$withDefault,
+			{ctor: '[]'},
+			A2(_elm_lang$core$Array$get, (k + 1) + offset, v));
+		var fromLeft = A2(
+			_elm_lang$core$Maybe$withDefault,
+			{ctor: '[]'},
+			A2(_elm_lang$core$Array$get, (k - 1) + offset, v));
+		var _p9 = function () {
+			var _p10 = {ctor: '_Tuple2', _0: fromLeft, _1: fromTop};
+			if (_p10._0.ctor === '[]') {
+				if (_p10._1.ctor === '[]') {
+					return {
+						ctor: '_Tuple2',
+						_0: {ctor: '[]'},
+						_1: {ctor: '_Tuple2', _0: 0, _1: 0}
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: fromTop,
+						_1: {ctor: '_Tuple2', _0: _p10._1._0._0 + 1, _1: _p10._1._0._1}
+					};
+				}
+			} else {
+				if (_p10._1.ctor === '[]') {
+					return {
+						ctor: '_Tuple2',
+						_0: fromLeft,
+						_1: {ctor: '_Tuple2', _0: _p10._0._0._0, _1: _p10._0._0._1 + 1}
+					};
+				} else {
+					var _p12 = _p10._1._0._1;
+					var _p11 = _p10._0._0._1;
+					return (_elm_lang$core$Native_Utils.cmp(_p11 + 1, _p12) > -1) ? {
+						ctor: '_Tuple2',
+						_0: fromLeft,
+						_1: {ctor: '_Tuple2', _0: _p10._0._0._0, _1: _p11 + 1}
+					} : {
+						ctor: '_Tuple2',
+						_0: fromTop,
+						_1: {ctor: '_Tuple2', _0: _p10._1._0._0 + 1, _1: _p12}
+					};
+				}
+			}
+		}();
+		var path = _p9._0;
+		var x = _p9._1._0;
+		var y = _p9._1._1;
+		var _p13 = A3(
+			snake,
+			x + 1,
+			y + 1,
+			{
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: x, _1: y},
+				_1: path
+			});
+		var newPath = _p13._0;
+		var goal = _p13._1;
+		return goal ? _user$project$Diff_Core$Found(newPath) : _user$project$Diff_Core$Continue(
+			A3(_elm_lang$core$Array$set, k + offset, newPath, v));
+	});
+var _user$project$Diff_Core$ondLoopDK = F5(
+	function (snake, offset, d, k, v) {
+		ondLoopDK:
+		while (true) {
+			if (_elm_lang$core$Native_Utils.cmp(k, d) > 0) {
+				var _v15 = snake,
+					_v16 = offset,
+					_v17 = d + 1,
+					_v18 = (0 - d) - 1,
+					_v19 = v;
+				snake = _v15;
+				offset = _v16;
+				d = _v17;
+				k = _v18;
+				v = _v19;
+				continue ondLoopDK;
+			} else {
+				var _p14 = A4(_user$project$Diff_Core$step, snake, offset, k, v);
+				if (_p14.ctor === 'Found') {
+					return _p14._0;
+				} else {
+					var _v21 = snake,
+						_v22 = offset,
+						_v23 = d,
+						_v24 = k + 2,
+						_v25 = _p14._0;
+					snake = _v21;
+					offset = _v22;
+					d = _v23;
+					k = _v24;
+					v = _v25;
+					continue ondLoopDK;
+				}
+			}
+		}
+	});
+var _user$project$Diff_Core$ond = F4(
+	function (getA, getB, m, n) {
+		var v = A2(
+			_elm_lang$core$Array$initialize,
+			(m + n) + 1,
+			_elm_lang$core$Basics$always(
+				{ctor: '[]'}));
+		return A5(
+			_user$project$Diff_Core$ondLoopDK,
+			A2(_user$project$Diff_Core$snake, getA, getB),
+			m,
+			0,
+			0,
+			v);
+	});
+var _user$project$Diff_Core$onpLoopK = F4(
+	function (snake, offset, ks, v) {
+		onpLoopK:
+		while (true) {
+			var _p15 = ks;
+			if (_p15.ctor === '[]') {
+				return _user$project$Diff_Core$Continue(v);
+			} else {
+				var _p16 = A4(_user$project$Diff_Core$step, snake, offset, _p15._0, v);
+				if (_p16.ctor === 'Found') {
+					return _user$project$Diff_Core$Found(_p16._0);
+				} else {
+					var _v28 = snake,
+						_v29 = offset,
+						_v30 = _p15._1,
+						_v31 = _p16._0;
+					snake = _v28;
+					offset = _v29;
+					ks = _v30;
+					v = _v31;
+					continue onpLoopK;
+				}
+			}
+		}
+	});
+var _user$project$Diff_Core$onpLoopP = F5(
+	function (snake, delta, offset, p, v) {
+		onpLoopP:
+		while (true) {
+			var ks = (_elm_lang$core$Native_Utils.cmp(delta, 0) > 0) ? A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$List$reverse(
+					A2(_elm_lang$core$List$range, delta + 1, delta + p)),
+				A2(_elm_lang$core$List$range, 0 - p, delta)) : A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$List$reverse(
+					A2(_elm_lang$core$List$range, delta + 1, p)),
+				A2(_elm_lang$core$List$range, (0 - p) + delta, delta));
+			var _p17 = A4(_user$project$Diff_Core$onpLoopK, snake, offset, ks, v);
+			if (_p17.ctor === 'Found') {
+				return _p17._0;
+			} else {
+				var _v33 = snake,
+					_v34 = delta,
+					_v35 = offset,
+					_v36 = p + 1,
+					_v37 = _p17._0;
+				snake = _v33;
+				delta = _v34;
+				offset = _v35;
+				p = _v36;
+				v = _v37;
+				continue onpLoopP;
+			}
+		}
+	});
+var _user$project$Diff_Core$onp = F4(
+	function (getA, getB, m, n) {
+		var delta = n - m;
+		var v = A2(
+			_elm_lang$core$Array$initialize,
+			(m + n) + 1,
+			_elm_lang$core$Basics$always(
+				{ctor: '[]'}));
+		return A5(
+			_user$project$Diff_Core$onpLoopP,
+			A2(_user$project$Diff_Core$snake, getA, getB),
+			delta,
+			m,
+			0,
+			v);
+	});
+var _user$project$Diff_Core$diff = F2(
+	function (a, b) {
+		var arrB = _elm_lang$core$Array$fromList(b);
+		var n = _elm_lang$core$Array$length(arrB);
+		var getB = function (y) {
+			return A2(_elm_lang$core$Array$get, y - 1, arrB);
+		};
+		var getBOrCrash = function (y) {
+			var _p18 = getB(y);
+			if (_p18.ctor === 'Just') {
+				return _p18._0;
+			} else {
+				return _elm_lang$core$Native_Utils.crashCase(
+					'Diff.Core',
+					{
+						start: {line: 113, column: 13},
+						end: {line: 118, column: 71}
+					},
+					_p18)(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'Cannot get B[',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(y),
+							']')));
+			}
+		};
+		var arrA = _elm_lang$core$Array$fromList(a);
+		var m = _elm_lang$core$Array$length(arrA);
+		var getA = function (x) {
+			return A2(_elm_lang$core$Array$get, x - 1, arrA);
+		};
+		var getAOrCrash = function (x) {
+			var _p20 = getA(x);
+			if (_p20.ctor === 'Just') {
+				return _p20._0;
+			} else {
+				return _elm_lang$core$Native_Utils.crashCase(
+					'Diff.Core',
+					{
+						start: {line: 105, column: 13},
+						end: {line: 110, column: 71}
+					},
+					_p20)(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'Cannot get A[',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(x),
+							']')));
+			}
+		};
+		var path = A4(_user$project$Diff_Core$onp, getA, getB, m, n);
+		return A3(_user$project$Diff_Core$makeChanges, getAOrCrash, getBOrCrash, path);
+	});
+var _user$project$Diff_Core$diffLines = F2(
+	function (a, b) {
+		return A2(
+			_user$project$Diff_Core$diff,
+			_elm_lang$core$String$lines(a),
+			_elm_lang$core$String$lines(b));
+	});
+
 var _user$project$Duration_Core$asSeconds = function (duration) {
 	var _p0 = duration;
 	if (_p0.ctor === 'Milliseconds') {
@@ -9627,89 +10005,167 @@ var _user$project$View_DurationAndSeedDisplay$render = F2(
 			});
 	});
 
-var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
-	var _p0 = maybeFailure;
-	if (_p0.ctor === 'Just') {
-		var _p1 = _p0._0;
+var _user$project$View_OutputDisplay$toHtml = function (change) {
+	var _p0 = change;
+	switch (_p0.ctor) {
+		case 'Added':
+			return A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('addition'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						_elm_lang$core$String$fromChar(_p0._0)),
+					_1: {ctor: '[]'}
+				});
+		case 'Removed':
+			return A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('removal'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						_elm_lang$core$String$fromChar(_p0._0)),
+					_1: {ctor: '[]'}
+				});
+		default:
+			return _elm_lang$html$Html$text(
+				_elm_lang$core$String$fromChar(_p0._0));
+	}
+};
+var _user$project$View_OutputDisplay$foldChangeIntoHtml = F2(
+	function (change, list) {
 		return {
 			ctor: '::',
-			_0: _elm_lang$html$Html$text('Failed on: '),
-			_1: {
-				ctor: '::',
+			_0: _user$project$View_OutputDisplay$toHtml(change),
+			_1: list
+		};
+	});
+var _user$project$View_OutputDisplay$foldChanges = function (list) {
+	return A3(
+		_elm_lang$core$List$foldr,
+		_user$project$View_OutputDisplay$foldChangeIntoHtml,
+		{ctor: '[]'},
+		list);
+};
+var _user$project$View_OutputDisplay$diffedHtml = F2(
+	function (expected, actual) {
+		return function (diffedActual) {
+			return {
+				ctor: '_Tuple2',
 				_0: A2(
-					_elm_lang$html$Html$strong,
-					{ctor: '[]'},
+					_elm_lang$html$Html$div,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							_user$project$State_Failure$getMessage(_p1)),
+						_0: _elm_lang$html$Html_Attributes$class('expected'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(expected),
 						_1: {ctor: '[]'}
 					}),
-				_1: {
+				_1: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('actual'),
+						_1: {ctor: '[]'}
+					},
+					diffedActual)
+			};
+		}(
+			_user$project$View_OutputDisplay$foldChanges(
+				A2(
+					_user$project$Diff_Core$diff,
+					_elm_lang$core$String$toList(expected),
+					_elm_lang$core$String$toList(actual))));
+	});
+var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
+	var _p1 = maybeFailure;
+	if (_p1.ctor === 'Just') {
+		var _p3 = _p1._0;
+		var _p2 = A2(
+			_user$project$View_OutputDisplay$diffedHtml,
+			_user$project$State_Failure$getExpected(_p3),
+			_user$project$State_Failure$getActual(_p3));
+		var expectedHtml = _p2._0;
+		var actualHtml = _p2._1;
+		return {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$br,
-						{ctor: '[]'},
-						{ctor: '[]'}),
+					_0: _elm_lang$html$Html_Attributes$class('failure-header'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Failed on: '),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$br,
+							_elm_lang$html$Html$strong,
 							{ctor: '[]'},
-							{ctor: '[]'}),
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									_user$project$State_Failure$getMessage(_p3)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: actualHtml,
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('╷'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'│ ',
+										_user$project$State_Failure$getComparison(_p3))),
+								_1: {ctor: '[]'}
+							}),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$html$Html$text(
-								_user$project$State_Failure$getActual(_p1)),
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('╵'),
+									_1: {ctor: '[]'}
+								}),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$br,
-									{ctor: '[]'},
-									{ctor: '[]'}),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('╷'),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$br,
-											{ctor: '[]'},
-											{ctor: '[]'}),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html$text(
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													'│ ',
-													_user$project$State_Failure$getComparison(_p1))),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$br,
-													{ctor: '[]'},
-													{ctor: '[]'}),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('╵'),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$br,
-															{ctor: '[]'},
-															{ctor: '[]'}),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$html$Html$text(
-																_user$project$State_Failure$getExpected(_p1)),
-															_1: {ctor: '[]'}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
+								_0: expectedHtml,
+								_1: {ctor: '[]'}
 							}
 						}
 					}
@@ -9727,7 +10183,11 @@ var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
 var _user$project$View_OutputDisplay$render = function (failure) {
 	return A2(
 		_elm_lang$html$Html$div,
-		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('failure'),
+			_1: {ctor: '[]'}
+		},
 		_user$project$View_OutputDisplay$failureText(failure));
 };
 
