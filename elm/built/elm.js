@@ -9942,13 +9942,51 @@ var _user$project$View_DurationAndSeedDisplay$formattedSeconds = function (durat
 var _user$project$View_DurationAndSeedDisplay$runSeedDisplay = function (runSeed) {
 	var _p0 = runSeed;
 	if (_p0.ctor === 'Just') {
-		return _elm_lang$html$Html$text(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'Seed: ',
-				_elm_lang$core$Basics$toString(_p0._0)));
+		return {
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'Seed: ',
+					_elm_lang$core$Basics$toString(_p0._0))),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('btn btn-xs icon icon-file-symlink-file'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Copy'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('btn btn-xs icon icon-arrow-down'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Set'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
+		};
 	} else {
-		return _elm_lang$html$Html$text('');
+		return {
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(''),
+			_1: {ctor: '[]'}
+		};
 	}
 };
 var _user$project$View_DurationAndSeedDisplay$runTimeDisplay = function (runDuration) {
@@ -9995,11 +10033,7 @@ var _user$project$View_DurationAndSeedDisplay$render = F2(
 							_0: _user$project$View_DurationAndSeedDisplay$runDataClass,
 							_1: {ctor: '[]'}
 						},
-						{
-							ctor: '::',
-							_0: _user$project$View_DurationAndSeedDisplay$runSeedDisplay(runSeed),
-							_1: {ctor: '[]'}
-						}),
+						_user$project$View_DurationAndSeedDisplay$runSeedDisplay(runSeed)),
 					_1: {ctor: '[]'}
 				}
 			});

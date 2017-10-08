@@ -8,10 +8,6 @@
     padding-left: 6px;
 }
 
-.etr-main-view .core {
-
-}
-
 .etr-main-view .test-hierarchy {
     height: 66vh;
     overflow: scroll;
@@ -75,6 +71,10 @@
 
 .etr-main-view div.run-data-row {
     margin: 0.75em 0;
+}
+
+.etr-main-view div.run-data-row .btn {
+    margin-left: 1em;
 }
 
 .etr-main-view div.run-data-field {

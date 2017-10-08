@@ -10,7 +10,7 @@ render : Maybe Duration -> Maybe Int -> Html message
 render runDuration runSeed =
     div [ class "run-data-row" ]
         [ div [ runDataClass ] [ runTimeDisplay runDuration ]
-        , div [ runDataClass ] [ runSeedDisplay runSeed ]
+        , div [ runDataClass ] (runSeedDisplay runSeed)
         ]
 
 
@@ -24,14 +24,17 @@ runTimeDisplay runDuration =
             text ""
 
 
-runSeedDisplay : Maybe Int -> Html message
+runSeedDisplay : Maybe Int -> List (Html message)
 runSeedDisplay runSeed =
     case runSeed of
         Just seed ->
-            text <| "Seed: " ++ toString seed
+            [ text <| "Seed: " ++ toString seed
+            , div [ class "btn btn-xs icon icon-file-symlink-file" ] [ text "Copy" ]
+            , div [ class "btn btn-xs icon icon-arrow-down" ] [ text "Set" ]
+            ]
 
         Nothing ->
-            text ""
+            [ text "" ]
 
 
 formattedSeconds : Duration -> String
