@@ -10313,8 +10313,11 @@ var _user$project$Main$update = F2(
 						_user$project$Model_Core$resetTestRuns(
 							_user$project$Model_Core$clearRunSeed(
 								_user$project$Model_Core$clearRunDuration(
-									_user$project$Model_Core$resetPassedTests(
-										_user$project$Model_Core$setRunStatusToProcessing(model)))))));
+									A2(
+										_user$project$Model_Core$setSelectedTest,
+										_elm_lang$core$Maybe$Nothing,
+										_user$project$Model_Core$resetPassedTests(
+											_user$project$Model_Core$setRunStatusToProcessing(model))))))));
 			case 'CompilerErrored':
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$setRunStatusToCompileError(model));
