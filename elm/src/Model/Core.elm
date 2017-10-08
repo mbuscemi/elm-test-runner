@@ -9,6 +9,7 @@ module Model.Core
         , purgeObsoleteNodes
         , resetPassedTests
         , resetTestRuns
+        , setRandomSeed
         , setRunDuration
         , setRunSeed
         , setRunStatusToCompileError
@@ -49,6 +50,7 @@ type alias Model =
     , selectedTest : Maybe Int
     , selectedTestFailure : Maybe Failure
     , autoRunEnabled : Bool
+    , randomSeed : Maybe Int
     }
 
 
@@ -65,6 +67,7 @@ default =
     , selectedTest = Nothing
     , selectedTestFailure = Nothing
     , autoRunEnabled = False
+    , randomSeed = Nothing
     }
 
 
@@ -203,3 +206,8 @@ removeTopNode node =
 toggleNode : Int -> Bool -> Model -> Model
 toggleNode nodeId newState model =
     { model | testHierarchy = Tree.Node.toggle nodeId newState model.testHierarchy }
+
+
+setRandomSeed : Maybe Int -> Model -> Model
+setRandomSeed randomSeed model =
+    { model | randomSeed = randomSeed }

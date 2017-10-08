@@ -25,6 +25,7 @@ type alias Messages message =
     , testListItemMouseLeave : message
     , testClickHandler : Int -> Maybe Failure -> message
     , copySeedClickHandler : String -> message
+    , setSeedClickHandler : Int -> message
     }
 
 
@@ -39,6 +40,7 @@ type alias DisplayData =
     , selectedNode : Maybe Int
     , selectedNodeFailure : Maybe Failure
     , autoRunEnabled : Bool
+    , randomSeed : Maybe Int
     }
 
 
@@ -52,7 +54,9 @@ render data messages =
             , View.DurationAndSeedDisplay.render
                 data.runDuration
                 data.runSeed
-                { copySeedClickHandler = messages.copySeedClickHandler }
+                { copySeedClickHandler = messages.copySeedClickHandler
+                , setSeedClickHandler = messages.setSeedClickHandler
+                }
             ]
         , div [ class "test-hierarchy" ]
             [ View.TestHierarchy.Core.render
@@ -71,5 +75,8 @@ render data messages =
         , div [ class "output-display" ]
             [ View.OutputDisplay.render data.selectedNodeFailure ]
         , div [ class "footer" ]
-            (View.SeedAndAutoRun.render data.autoRunEnabled)
+            (View.SeedAndAutoRun.render
+                data.autoRunEnabled
+                data.randomSeed
+            )
         ]

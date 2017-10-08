@@ -9692,6 +9692,12 @@ var _user$project$Tree_Traverse$update = F2(
 				_p5._2));
 	});
 
+var _user$project$Model_Core$setRandomSeed = F2(
+	function (randomSeed, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{randomSeed: randomSeed});
+	});
 var _user$project$Model_Core$toggleNode = F3(
 	function (nodeId, newState, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -9872,7 +9878,8 @@ var _user$project$Model_Core$default = {
 	testMouseIsOver: _elm_lang$core$Maybe$Nothing,
 	selectedTest: _elm_lang$core$Maybe$Nothing,
 	selectedTestFailure: _elm_lang$core$Maybe$Nothing,
-	autoRunEnabled: false
+	autoRunEnabled: false,
+	randomSeed: _elm_lang$core$Maybe$Nothing
 };
 var _user$project$Model_Core$Model = function (a) {
 	return function (b) {
@@ -9885,7 +9892,9 @@ var _user$project$Model_Core$Model = function (a) {
 								return function (i) {
 									return function (j) {
 										return function (k) {
-											return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testRuns: f, testHierarchy: g, testMouseIsOver: h, selectedTest: i, selectedTestFailure: j, autoRunEnabled: k};
+											return function (l) {
+												return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testRuns: f, testHierarchy: g, testMouseIsOver: h, selectedTest: i, selectedTestFailure: j, autoRunEnabled: k, randomSeed: l};
+											};
 										};
 									};
 								};
@@ -9919,7 +9928,8 @@ var _user$project$View_DurationAndSeedDisplay$runSeedDisplay = F2(
 	function (runSeed, messages) {
 		var _p0 = runSeed;
 		if (_p0.ctor === 'Just') {
-			var seedString = _elm_lang$core$Basics$toString(_p0._0);
+			var _p1 = _p0._0;
+			var seedString = _elm_lang$core$Basics$toString(_p1);
 			return {
 				ctor: '::',
 				_0: _elm_lang$html$Html$text(
@@ -9950,7 +9960,12 @@ var _user$project$View_DurationAndSeedDisplay$runSeedDisplay = F2(
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html_Attributes$class('btn btn-xs icon icon-arrow-down'),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(
+										messages.setSeedClickHandler(_p1)),
+									_1: {ctor: '[]'}
+								}
 							},
 							{
 								ctor: '::',
@@ -9970,13 +9985,13 @@ var _user$project$View_DurationAndSeedDisplay$runSeedDisplay = F2(
 		}
 	});
 var _user$project$View_DurationAndSeedDisplay$runTimeDisplay = function (runDuration) {
-	var _p1 = runDuration;
-	if (_p1.ctor === 'Just') {
+	var _p2 = runDuration;
+	if (_p2.ctor === 'Just') {
 		return _elm_lang$html$Html$text(
 			A2(
 				_elm_lang$core$Basics_ops['++'],
 				'Total Run Time: ',
-				_user$project$View_DurationAndSeedDisplay$formattedSeconds(_p1._0)));
+				_user$project$View_DurationAndSeedDisplay$formattedSeconds(_p2._0)));
 	} else {
 		return _elm_lang$html$Html$text('');
 	}
@@ -10018,9 +10033,10 @@ var _user$project$View_DurationAndSeedDisplay$render = F3(
 				}
 			});
 	});
-var _user$project$View_DurationAndSeedDisplay$Messages = function (a) {
-	return {copySeedClickHandler: a};
-};
+var _user$project$View_DurationAndSeedDisplay$Messages = F2(
+	function (a, b) {
+		return {copySeedClickHandler: a, setSeedClickHandler: b};
+	});
 
 var _user$project$View_OutputDisplay$toHtml = function (change) {
 	var _p0 = change;
@@ -10304,85 +10320,99 @@ var _user$project$View_RedGreenDisplay$render = function (runStatus) {
 var _user$project$View_SeedAndAutoRun$enabledString = function (enabled) {
 	return enabled ? 'enabled' : 'disabled';
 };
-var _user$project$View_SeedAndAutoRun$render = function (enabled) {
-	return {
-		ctor: '::',
-		_0: A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('seed-settings'),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$input,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
-						_1: {ctor: '[]'}
-					},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$span,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Seed:'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$input,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$type_('number'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$placeholder('Generate Random'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$disabled(true),
-										_1: {ctor: '[]'}
-									}
-								}
-							},
-							{ctor: '[]'}),
-						_1: {ctor: '[]'}
-					}
-				}
-			}),
-		_1: {
+var _user$project$View_SeedAndAutoRun$seedInputValue = function (randomSeed) {
+	var _p0 = randomSeed;
+	if (_p0.ctor === 'Just') {
+		return _elm_lang$html$Html_Attributes$value(
+			_elm_lang$core$Basics$toString(_p0._0));
+	} else {
+		return _elm_lang$html$Html_Attributes$value('');
+	}
+};
+var _user$project$View_SeedAndAutoRun$render = F2(
+	function (autoRunEnabled, randomSeed) {
+		return {
 			ctor: '::',
 			_0: A2(
 				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class(
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'auto-run-display ',
-							_user$project$View_SeedAndAutoRun$enabledString(enabled))),
+					_0: _elm_lang$html$Html_Attributes$class('seed-settings'),
 					_1: {ctor: '[]'}
 				},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text(
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'AUTO RUN ',
-							_elm_lang$core$String$toUpper(
-								_user$project$View_SeedAndAutoRun$enabledString(enabled)))),
-					_1: {ctor: '[]'}
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+							_1: {ctor: '[]'}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$span,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Seed:'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$input,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$type_('number'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$placeholder('Generate Random'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$disabled(true),
+											_1: {
+												ctor: '::',
+												_0: _user$project$View_SeedAndAutoRun$seedInputValue(randomSeed),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
+						}
+					}
 				}),
-			_1: {ctor: '[]'}
-		}
-	};
-};
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'auto-run-display ',
+								_user$project$View_SeedAndAutoRun$enabledString(autoRunEnabled))),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'AUTO RUN ',
+								_elm_lang$core$String$toUpper(
+									_user$project$View_SeedAndAutoRun$enabledString(autoRunEnabled)))),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		};
+	});
 
 var _user$project$View_TestHierarchy_ChildTree$mouseOverHexColor = '2c333e';
 var _user$project$View_TestHierarchy_ChildTree$selectedHexColor = '343f51';
@@ -10752,7 +10782,7 @@ var _user$project$View_Core$render = F2(
 										_user$project$View_DurationAndSeedDisplay$render,
 										data.runDuration,
 										data.runSeed,
-										{copySeedClickHandler: messages.copySeedClickHandler}),
+										{copySeedClickHandler: messages.copySeedClickHandler, setSeedClickHandler: messages.setSeedClickHandler}),
 									_1: {ctor: '[]'}
 								}
 							}
@@ -10800,16 +10830,16 @@ var _user$project$View_Core$render = F2(
 									_0: _elm_lang$html$Html_Attributes$class('footer'),
 									_1: {ctor: '[]'}
 								},
-								_user$project$View_SeedAndAutoRun$render(data.autoRunEnabled)),
+								A2(_user$project$View_SeedAndAutoRun$render, data.autoRunEnabled, data.randomSeed)),
 							_1: {ctor: '[]'}
 						}
 					}
 				}
 			});
 	});
-var _user$project$View_Core$Messages = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d, testListItemMouseEnter: e, testListItemMouseLeave: f, testClickHandler: g, copySeedClickHandler: h};
+var _user$project$View_Core$Messages = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d, testListItemMouseEnter: e, testListItemMouseLeave: f, testClickHandler: g, copySeedClickHandler: h, setSeedClickHandler: i};
 	});
 var _user$project$View_Core$DisplayData = function (a) {
 	return function (b) {
@@ -10821,7 +10851,9 @@ var _user$project$View_Core$DisplayData = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testHierarchy: f, nodeMouseIsOver: g, selectedNode: h, selectedNodeFailure: i, autoRunEnabled: j};
+										return function (k) {
+											return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testHierarchy: f, nodeMouseIsOver: g, selectedNode: h, selectedNodeFailure: i, autoRunEnabled: j, randomSeed: k};
+										};
 									};
 								};
 							};
@@ -10948,6 +10980,12 @@ var _user$project$Main$update = F2(
 					_user$project$Main$andPerform,
 					_user$project$Main$copySeed(_p0._0),
 					model);
+			case 'SetRandomSeed':
+				return _user$project$Main$andNoCommand(
+					A2(
+						_user$project$Model_Core$setRandomSeed,
+						_elm_lang$core$Maybe$Just(_p0._0),
+						model));
 			default:
 				return _user$project$Main$andNoCommand(model);
 		}
@@ -11016,6 +11054,9 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
 var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
+var _user$project$Main$SetRandomSeed = function (a) {
+	return {ctor: 'SetRandomSeed', _0: a};
+};
 var _user$project$Main$CopySeed = function (a) {
 	return {ctor: 'CopySeed', _0: a};
 };
@@ -11089,8 +11130,8 @@ var _user$project$Main$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View_Core$render,
-		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, selectedNodeFailure: model.selectedTestFailure, autoRunEnabled: model.autoRunEnabled},
-		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed});
+		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, selectedNodeFailure: model.selectedTestFailure, autoRunEnabled: model.autoRunEnabled, randomSeed: model.randomSeed},
+		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();

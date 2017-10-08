@@ -9,6 +9,7 @@ import Round exposing (round)
 
 type alias Messages message =
     { copySeedClickHandler : String -> message
+    , setSeedClickHandler : Int -> message
     }
 
 
@@ -45,7 +46,9 @@ runSeedDisplay runSeed messages =
                 ]
                 [ text "Copy" ]
             , div
-                [ class "btn btn-xs icon icon-arrow-down" ]
+                [ class "btn btn-xs icon icon-arrow-down"
+                , onClick <| messages.setSeedClickHandler seed
+                ]
                 [ text "Set" ]
             ]
 
