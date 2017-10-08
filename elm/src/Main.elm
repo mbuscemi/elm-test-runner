@@ -83,6 +83,7 @@ update message model =
             setRunStatusToProcessing model
                 |> resetPassedTests
                 |> setSelectedTest Nothing
+                |> setSelectedTestFailure Nothing
                 |> clearRunDuration
                 |> clearRunSeed
                 |> resetTestRuns
