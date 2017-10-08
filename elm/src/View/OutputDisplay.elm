@@ -21,7 +21,7 @@ failureText maybeFailure =
             , br [] []
             , text <| "╷"
             , br [] []
-            , text <| "| " ++ getComparison failure
+            , text <| "│ " ++ getComparison failure
             , br [] []
             , text <| "╵"
             , br [] []

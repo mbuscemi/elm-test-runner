@@ -9681,7 +9681,7 @@ var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
 											_0: _elm_lang$html$Html$text(
 												A2(
 													_elm_lang$core$Basics_ops['++'],
-													'| ',
+													'│ ',
 													_user$project$State_Failure$getComparison(_p1))),
 											_1: {
 												ctor: '::',
