@@ -24,6 +24,7 @@ type alias Messages message =
     , testListItemMouseEnter : Int -> message
     , testListItemMouseLeave : message
     , testClickHandler : Int -> Maybe Failure -> message
+    , copySeedClickHandler : String -> message
     }
 
 
@@ -48,7 +49,10 @@ render data messages =
             [ View.Toolbar.render messages.toggleClickHandler messages.runAllButtonClickHandler
             , View.RedGreenDisplay.render data.runStatus
             , View.PassingTestsDisplay.render data.totalTests data.passedTests
-            , View.DurationAndSeedDisplay.render data.runDuration data.runSeed
+            , View.DurationAndSeedDisplay.render
+                data.runDuration
+                data.runSeed
+                { copySeedClickHandler = messages.copySeedClickHandler }
             ]
         , div [ class "test-hierarchy" ]
             [ View.TestHierarchy.Core.render

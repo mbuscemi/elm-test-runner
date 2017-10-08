@@ -3,14 +3,20 @@ module View.DurationAndSeedDisplay exposing (render)
 import Duration.Core as Duration exposing (Duration)
 import Html exposing (Attribute, Html, div, span, text)
 import Html.Attributes exposing (class)
+import Html.Events exposing (onClick)
 import Round exposing (round)
 
 
-render : Maybe Duration -> Maybe Int -> Html message
-render runDuration runSeed =
+type alias Messages message =
+    { copySeedClickHandler : String -> message
+    }
+
+
+render : Maybe Duration -> Maybe Int -> Messages message -> Html message
+render runDuration runSeed messages =
     div [ class "run-data-row" ]
-        [ div [ runDataClass ] [ runTimeDisplay runDuration ]
-        , div [ runDataClass ] (runSeedDisplay runSeed)
+        [ div [ runDataClass "time" ] [ runTimeDisplay runDuration ]
+        , div [ runDataClass "seed" ] (runSeedDisplay runSeed messages)
         ]
 
 
@@ -24,13 +30,23 @@ runTimeDisplay runDuration =
             text ""
 
 
-runSeedDisplay : Maybe Int -> List (Html message)
-runSeedDisplay runSeed =
+runSeedDisplay : Maybe Int -> Messages message -> List (Html message)
+runSeedDisplay runSeed messages =
     case runSeed of
         Just seed ->
-            [ text <| "Seed: " ++ toString seed
-            , div [ class "btn btn-xs icon icon-file-symlink-file" ] [ text "Copy" ]
-            , div [ class "btn btn-xs icon icon-arrow-down" ] [ text "Set" ]
+            let
+                seedString =
+                    toString seed
+            in
+            [ text <| "Seed: " ++ seedString
+            , div
+                [ class "btn btn-xs icon icon-file-symlink-file"
+                , onClick <| messages.copySeedClickHandler seedString
+                ]
+                [ text "Copy" ]
+            , div
+                [ class "btn btn-xs icon icon-arrow-down" ]
+                [ text "Set" ]
             ]
 
         Nothing ->
@@ -44,6 +60,6 @@ formattedSeconds duration =
         |> flip (++) " s"
 
 
-runDataClass : Attribute message
-runDataClass =
-    class "run-data-field"
+runDataClass : String -> Attribute message
+runDataClass additionalField =
+    class <| "run-data-field " ++ additionalField

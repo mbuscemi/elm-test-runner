@@ -44,6 +44,7 @@ type Message
     | TestListItemMouseLeave
     | TestListItemSelect Int (Maybe Failure)
     | ToggleAutoRun
+    | CopySeed String
     | DoNothing
 
 
@@ -150,6 +151,10 @@ update message model =
             invertAutoRun model
                 |> andNoCommand
 
+        CopySeed seed ->
+            model
+                |> andPerform (copySeed seed)
+
         DoNothing ->
             model |> andNoCommand
 
@@ -175,6 +180,7 @@ view model =
         , testListItemMouseEnter = TestListItemMouseEnter
         , testListItemMouseLeave = TestListItemMouseLeave
         , testClickHandler = TestListItemSelect
+        , copySeedClickHandler = CopySeed
         }
 
 
@@ -203,6 +209,9 @@ port toggle : () -> Cmd message
 
 
 port runTest : () -> Cmd message
+
+
+port copySeed : String -> Cmd message
 
 
 port commandKeyTestStart : (() -> message) -> Sub message

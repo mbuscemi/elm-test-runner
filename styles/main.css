@@ -78,8 +78,15 @@
 }
 
 .etr-main-view div.run-data-field {
-    width: 50%;
     display: inline-block;
+}
+
+.etr-main-view div.run-data-field.time {
+    float: left;
+}
+
+.etr-main-view div.run-data-field.seed {
+    float: right;
 }
 
 .etr-main-view ul.test-list {

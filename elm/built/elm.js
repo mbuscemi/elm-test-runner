@@ -9925,7 +9925,10 @@ var _user$project$View_AutoRunOnSave$render = function (enabled) {
 		});
 };
 
-var _user$project$View_DurationAndSeedDisplay$runDataClass = _elm_lang$html$Html_Attributes$class('run-data-field');
+var _user$project$View_DurationAndSeedDisplay$runDataClass = function (additionalField) {
+	return _elm_lang$html$Html_Attributes$class(
+		A2(_elm_lang$core$Basics_ops['++'], 'run-data-field ', additionalField));
+};
 var _user$project$View_DurationAndSeedDisplay$formattedSeconds = function (duration) {
 	return A3(
 		_elm_lang$core$Basics$flip,
@@ -9939,56 +9942,60 @@ var _user$project$View_DurationAndSeedDisplay$formattedSeconds = function (durat
 			2,
 			_user$project$Duration_Core$asSeconds(duration)));
 };
-var _user$project$View_DurationAndSeedDisplay$runSeedDisplay = function (runSeed) {
-	var _p0 = runSeed;
-	if (_p0.ctor === 'Just') {
-		return {
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'Seed: ',
-					_elm_lang$core$Basics$toString(_p0._0))),
-			_1: {
+var _user$project$View_DurationAndSeedDisplay$runSeedDisplay = F2(
+	function (runSeed, messages) {
+		var _p0 = runSeed;
+		if (_p0.ctor === 'Just') {
+			var seedString = _elm_lang$core$Basics$toString(_p0._0);
+			return {
 				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('btn btn-xs icon icon-file-symlink-file'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Copy'),
-						_1: {ctor: '[]'}
-					}),
+				_0: _elm_lang$html$Html$text(
+					A2(_elm_lang$core$Basics_ops['++'], 'Seed: ', seedString)),
 				_1: {
 					ctor: '::',
 					_0: A2(
 						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('btn btn-xs icon icon-arrow-down'),
-							_1: {ctor: '[]'}
+							_0: _elm_lang$html$Html_Attributes$class('btn btn-xs icon icon-file-symlink-file'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									messages.copySeedClickHandler(seedString)),
+								_1: {ctor: '[]'}
+							}
 						},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('Set'),
+							_0: _elm_lang$html$Html$text('Copy'),
 							_1: {ctor: '[]'}
 						}),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('btn btn-xs icon icon-arrow-down'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Set'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
 				}
-			}
-		};
-	} else {
-		return {
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(''),
-			_1: {ctor: '[]'}
-		};
-	}
-};
+			};
+		} else {
+			return {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(''),
+				_1: {ctor: '[]'}
+			};
+		}
+	});
 var _user$project$View_DurationAndSeedDisplay$runTimeDisplay = function (runDuration) {
 	var _p1 = runDuration;
 	if (_p1.ctor === 'Just') {
@@ -10001,8 +10008,8 @@ var _user$project$View_DurationAndSeedDisplay$runTimeDisplay = function (runDura
 		return _elm_lang$html$Html$text('');
 	}
 };
-var _user$project$View_DurationAndSeedDisplay$render = F2(
-	function (runDuration, runSeed) {
+var _user$project$View_DurationAndSeedDisplay$render = F3(
+	function (runDuration, runSeed, messages) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -10016,7 +10023,7 @@ var _user$project$View_DurationAndSeedDisplay$render = F2(
 					_elm_lang$html$Html$div,
 					{
 						ctor: '::',
-						_0: _user$project$View_DurationAndSeedDisplay$runDataClass,
+						_0: _user$project$View_DurationAndSeedDisplay$runDataClass('time'),
 						_1: {ctor: '[]'}
 					},
 					{
@@ -10030,14 +10037,17 @@ var _user$project$View_DurationAndSeedDisplay$render = F2(
 						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _user$project$View_DurationAndSeedDisplay$runDataClass,
+							_0: _user$project$View_DurationAndSeedDisplay$runDataClass('seed'),
 							_1: {ctor: '[]'}
 						},
-						_user$project$View_DurationAndSeedDisplay$runSeedDisplay(runSeed)),
+						A2(_user$project$View_DurationAndSeedDisplay$runSeedDisplay, runSeed, messages)),
 					_1: {ctor: '[]'}
 				}
 			});
 	});
+var _user$project$View_DurationAndSeedDisplay$Messages = function (a) {
+	return {copySeedClickHandler: a};
+};
 
 var _user$project$View_OutputDisplay$toHtml = function (change) {
 	var _p0 = change;
@@ -10682,7 +10692,11 @@ var _user$project$View_Core$render = F2(
 								_0: A2(_user$project$View_PassingTestsDisplay$render, data.totalTests, data.passedTests),
 								_1: {
 									ctor: '::',
-									_0: A2(_user$project$View_DurationAndSeedDisplay$render, data.runDuration, data.runSeed),
+									_0: A3(
+										_user$project$View_DurationAndSeedDisplay$render,
+										data.runDuration,
+										data.runSeed,
+										{copySeedClickHandler: messages.copySeedClickHandler}),
 									_1: {ctor: '[]'}
 								}
 							}
@@ -10741,9 +10755,9 @@ var _user$project$View_Core$render = F2(
 				}
 			});
 	});
-var _user$project$View_Core$Messages = F7(
-	function (a, b, c, d, e, f, g) {
-		return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d, testListItemMouseEnter: e, testListItemMouseLeave: f, testClickHandler: g};
+var _user$project$View_Core$Messages = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d, testListItemMouseEnter: e, testListItemMouseLeave: f, testClickHandler: g, copySeedClickHandler: h};
 	});
 var _user$project$View_Core$DisplayData = function (a) {
 	return function (b) {
@@ -10787,6 +10801,11 @@ var _user$project$Main$runTest = _elm_lang$core$Native_Platform.outgoingPort(
 	'runTest',
 	function (v) {
 		return null;
+	});
+var _user$project$Main$copySeed = _elm_lang$core$Native_Platform.outgoingPort(
+	'copySeed',
+	function (v) {
+		return v;
 	});
 var _user$project$Main$update = F2(
 	function (message, model) {
@@ -10872,6 +10891,11 @@ var _user$project$Main$update = F2(
 			case 'ToggleAutoRun':
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$invertAutoRun(model));
+			case 'CopySeed':
+				return A2(
+					_user$project$Main$andPerform,
+					_user$project$Main$copySeed(_p0._0),
+					model);
 			default:
 				return _user$project$Main$andNoCommand(model);
 		}
@@ -10940,6 +10964,9 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
 var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
+var _user$project$Main$CopySeed = function (a) {
+	return {ctor: 'CopySeed', _0: a};
+};
 var _user$project$Main$ToggleAutoRun = {ctor: 'ToggleAutoRun'};
 var _user$project$Main$TestListItemSelect = F2(
 	function (a, b) {
@@ -11011,7 +11038,7 @@ var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View_Core$render,
 		{runStatus: model.runStatus, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, selectedNodeFailure: model.selectedTestFailure, autoRunEnabled: model.autoRunEnabled},
-		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect});
+		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
