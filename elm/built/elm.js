@@ -8804,6 +8804,25 @@ var _user$project$Duration_Core$Seconds = function (a) {
 	return {ctor: 'Seconds', _0: a};
 };
 
+var _user$project$State_Failure$getActual = function (failure) {
+	var _p0 = failure.reason.data.actual;
+	if (_p0.ctor === 'Just') {
+		return _p0._0;
+	} else {
+		return '';
+	}
+};
+var _user$project$State_Failure$getComparison = function (failure) {
+	return failure.reason.data.comparison;
+};
+var _user$project$State_Failure$getExpected = function (failure) {
+	var _p1 = failure.reason.data.expected;
+	if (_p1.ctor === 'Just') {
+		return _p1._0;
+	} else {
+		return '';
+	}
+};
 var _user$project$State_Failure$getMessage = function (failure) {
 	return failure.message;
 };
@@ -9611,18 +9630,91 @@ var _user$project$View_DurationAndSeedDisplay$render = F2(
 var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
 	var _p0 = maybeFailure;
 	if (_p0.ctor === 'Just') {
+		var _p1 = _p0._0;
 		return {
 			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$strong,
-				{ctor: '[]'},
-				{
+			_0: _elm_lang$html$Html$text('Failed on: '),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$strong,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							_user$project$State_Failure$getMessage(_p1)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Html$text(
-						_user$project$State_Failure$getMessage(_p0._0)),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
+					_0: A2(
+						_elm_lang$html$Html$br,
+						{ctor: '[]'},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$br,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_user$project$State_Failure$getActual(_p1)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('╷'),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$br,
+											{ctor: '[]'},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													'| ',
+													_user$project$State_Failure$getComparison(_p1))),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$br,
+													{ctor: '[]'},
+													{ctor: '[]'}),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('╵'),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$br,
+															{ctor: '[]'},
+															{ctor: '[]'}),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html$text(
+																_user$project$State_Failure$getExpected(_p1)),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		};
 	} else {
 		return {

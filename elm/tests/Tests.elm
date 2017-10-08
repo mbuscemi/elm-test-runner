@@ -118,7 +118,7 @@ suite =
         , describe "Helper Tests" <|
             [ test "basic addition" <|
                 \_ ->
-                    Expect.equal (1 + 2) 3
+                    Expect.equal (1 + 2) 4
             ]
         ]
 

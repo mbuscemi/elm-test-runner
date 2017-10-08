@@ -19,9 +19,11 @@
 
 .etr-main-view .output-display {
     height: 34vh;
+    padding: 4px 0;
     border-width: 1px 0;
     border-style: solid;
     border-color: black;
+    font-family: Consolas;
 }
 
 .etr-main-view .footer {

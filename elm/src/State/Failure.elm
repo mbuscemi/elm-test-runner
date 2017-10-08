@@ -1,4 +1,4 @@
-module State.Failure exposing (Failure, failure, getMessage)
+module State.Failure exposing (Failure, failure, getActual, getComparison, getExpected, getMessage)
 
 import Json.Decode exposing (Decoder, field, map, map2, map5, maybe, string)
 
@@ -49,3 +49,28 @@ failure =
 getMessage : Failure -> String
 getMessage failure =
     failure.message
+
+
+getExpected : Failure -> String
+getExpected failure =
+    case failure.reason.data.expected of
+        Just expectation ->
+            expectation
+
+        Nothing ->
+            ""
+
+
+getComparison : Failure -> String
+getComparison failure =
+    failure.reason.data.comparison
+
+
+getActual : Failure -> String
+getActual failure =
+    case failure.reason.data.actual of
+        Just actual ->
+            actual
+
+        Nothing ->
+            ""
