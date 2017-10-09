@@ -120,10 +120,10 @@ suite =
                 [ describe "basic case" <|
                     [ test "passing" <|
                         \_ ->
-                            Expect.equal (1 + 2) 3
+                            Expect.equal 3 (1 + 2)
                     , test "failing" <|
                         \_ ->
-                            Expect.equal (1 + 2) 4
+                            Expect.equal 4 (1 + 2)
                     ]
                 , describe "string with additions" <|
                     [ test "passing" <|
@@ -131,7 +131,7 @@ suite =
                             Expect.equal "abcdefghi" "abcdefghi"
                     , test "failing" <|
                         \_ ->
-                            Expect.equal "abbbcdeeefghhhi" "abcdefghi"
+                            Expect.equal "abcdefghi" "abbbcdeeefghhhi"
                     ]
                 , describe "string with removals" <|
                     [ test "passing" <|
@@ -139,7 +139,25 @@ suite =
                             Expect.equal "abcdefghi" "abcdefghi"
                     , test "failing" <|
                         \_ ->
-                            Expect.equal "acdfgi" "abcdefghi"
+                            Expect.equal "abcdefghi" "acdfgi"
+                    ]
+                ]
+            , describe "Expect.notEqual" <|
+                [ describe "basic case" <|
+                    [ test "passing" <|
+                        \_ ->
+                            Expect.notEqual (1 + 2) 4
+                    , test "failing" <|
+                        \_ ->
+                            Expect.notEqual (1 + 2) 3
+                    ]
+                , describe "string" <|
+                    [ test "passing" <|
+                        \_ ->
+                            Expect.notEqual "abcdefghi" "abcdefgh"
+                    , test "failing" <|
+                        \_ ->
+                            Expect.notEqual "abcdefghi" "abcdefghi"
                     ]
                 ]
             ]
