@@ -115,10 +115,33 @@ suite =
                     in
                     Expect.equal (fromPath [ "e", "f", "h" ] {} nonTransformer startTree) expectedTree
             ]
-        , describe "Helper Tests" <|
-            [ test "basic addition" <|
-                \_ ->
-                    Expect.equal (1 + 2) 3
+        , describe "Failure Output Validation" <|
+            [ describe "Expect.equal" <|
+                [ describe "basic case" <|
+                    [ test "passing" <|
+                        \_ ->
+                            Expect.equal (1 + 2) 3
+                    , test "failing" <|
+                        \_ ->
+                            Expect.equal (1 + 2) 4
+                    ]
+                , describe "string with additions" <|
+                    [ test "passing" <|
+                        \_ ->
+                            Expect.equal "abcdefghi" "abcdefghi"
+                    , test "failing" <|
+                        \_ ->
+                            Expect.equal "abbbcdeeefghhhi" "abcdefghi"
+                    ]
+                , describe "string with removals" <|
+                    [ test "passing" <|
+                        \_ ->
+                            Expect.equal "abcdefghi" "abcdefghi"
+                    , test "failing" <|
+                        \_ ->
+                            Expect.equal "acdfgi" "abcdefghi"
+                    ]
+                ]
             ]
         ]
 
