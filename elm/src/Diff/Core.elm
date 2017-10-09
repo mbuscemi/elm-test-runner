@@ -1,4 +1,4 @@
-module Diff.Core exposing (Change(..), diff, diffLines)
+module Diff.Core exposing (Change(Added, NoChange, Removed), diff, diffLines)
 
 {-| This describes how each line has changed and also contains its value.
 -}
@@ -103,16 +103,16 @@ diff a b =
         -- This is used for formatting result. If `ond` is working correctly, illegal accesses never happen.
         getAOrCrash x =
             case getA x of
-                Just a ->
-                    a
+                Just aa ->
+                    aa
 
                 Nothing ->
                     Debug.crash ("Cannot get A[" ++ toString x ++ "]")
 
         getBOrCrash y =
             case getB y of
-                Just b ->
-                    b
+                Just bb ->
+                    bb
 
                 Nothing ->
                     Debug.crash ("Cannot get B[" ++ toString y ++ "]")
@@ -156,42 +156,6 @@ makeChangesHelp changes getA getB ( x, y ) path =
             makeChangesHelp (change :: changes) getA getB ( prevX, prevY ) tail
 
 
-
--- Myers's O(ND) algorithm (http://www.xmailserver.org/diff2.pdf)
-
-
-ond : (Int -> Maybe a) -> (Int -> Maybe a) -> Int -> Int -> List ( Int, Int )
-ond getA getB m n =
-    let
-        v =
-            Array.initialize (m + n + 1) (always [])
-    in
-    ondLoopDK (snake getA getB) m 0 0 v
-
-
-ondLoopDK :
-    (Int -> Int -> List ( Int, Int ) -> ( List ( Int, Int ), Bool ))
-    -> Int
-    -> Int
-    -> Int
-    -> Array (List ( Int, Int ))
-    -> List ( Int, Int )
-ondLoopDK snake offset d k v =
-    if k > d then
-        ondLoopDK snake offset (d + 1) (-d - 1) v
-    else
-        case step snake offset k v of
-            Found path ->
-                path
-
-            Continue v ->
-                ondLoopDK snake offset d (k + 2) v
-
-
-
--- Wu's O(NP) algorithm (http://myerslab.mpi-cbg.de/wp-content/uploads/2014/06/np_diff.pdf)
-
-
 onp : (Int -> Maybe a) -> (Int -> Maybe a) -> Int -> Int -> List ( Int, Int )
 onp getA getB m n =
     let
@@ -223,8 +187,8 @@ onpLoopP snake delta offset p v =
         Found path ->
             path
 
-        Continue v ->
-            onpLoopP snake delta offset (p + 1) v
+        Continue vv ->
+            onpLoopP snake delta offset (p + 1) vv
 
 
 onpLoopK :
@@ -238,13 +202,13 @@ onpLoopK snake offset ks v =
         [] ->
             Continue v
 
-        k :: ks ->
+        k :: kks ->
             case step snake offset k v of
                 Found path ->
                     Found path
 
-                Continue v ->
-                    onpLoopK snake offset ks v
+                Continue vv ->
+                    onpLoopK snake offset kks vv
 
 
 step :

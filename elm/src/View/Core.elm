@@ -1,11 +1,11 @@
 module View.Core exposing (render)
 
 import Duration.Core exposing (Duration)
-import Html exposing (Html, div, h2, section, span, text)
+import Html exposing (Html, div)
 import Html.Attributes exposing (class)
 import State.Failure exposing (Failure)
-import State.RunStatus as RunStatus exposing (RunStatus)
-import TestInstance.Core as TestInstance exposing (TestInstance)
+import State.RunStatus exposing (RunStatus)
+import TestInstance.Core exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree)
 import View.DurationAndSeedDisplay
 import View.OutputDisplay

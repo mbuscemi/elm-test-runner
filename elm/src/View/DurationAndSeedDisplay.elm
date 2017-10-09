@@ -1,10 +1,10 @@
 module View.DurationAndSeedDisplay exposing (render)
 
 import Duration.Core as Duration exposing (Duration)
-import Html exposing (Attribute, Html, div, span, text)
+import Html exposing (Attribute, Html, div, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
-import Round exposing (round)
+import Round
 
 
 type alias Messages message =

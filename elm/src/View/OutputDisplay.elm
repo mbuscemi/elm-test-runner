@@ -1,9 +1,9 @@
 module View.OutputDisplay exposing (render)
 
 import Diff.Core exposing (Change(Added, NoChange, Removed), diff)
-import Html exposing (Html, br, div, span, strong, text)
+import Html exposing (Html, div, span, strong, text)
 import Html.Attributes exposing (class)
-import State.Failure as Failure exposing (Failure, getActual, getComparison, getExpected, getMessage)
+import State.Failure exposing (Failure, getActual, getComparison, getExpected, getMessage)
 
 
 render : Maybe Failure -> Html message

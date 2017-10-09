@@ -42,7 +42,7 @@ mergeChildren path originalData newData children =
 
         x :: xs ->
             case children of
-                ((Node node data nodeChildren) as current) :: rest ->
+                ((Node node _ nodeChildren) as current) :: rest ->
                     if node == x then
                         Node node newData (mergeChildren xs originalData newData nodeChildren) :: rest
                     else

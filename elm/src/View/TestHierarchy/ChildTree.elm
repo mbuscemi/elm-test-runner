@@ -22,7 +22,7 @@ type alias NodeData =
 
 
 render : Messages message -> NodeData -> CollapsibleTree String TestInstance -> Html message -> Html message
-render highlightMessages nodeData ((Node ( _, _, nodeId ) testInstance children) as tree) renderedChildren =
+render highlightMessages nodeData (Node ( _, _, nodeId ) testInstance children) renderedChildren =
     li
         (List.append
             (mouseEvents highlightMessages nodeId testInstance children)

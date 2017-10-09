@@ -71,13 +71,13 @@ statusIndicatorIcon nodeData =
 conditionallyEmbolden : Bool -> String -> TestInstance -> Html message
 conditionallyEmbolden hasChildren string nodeData =
     if hasChildren then
-        strong [] [ htmlText string nodeData ]
+        strong [] [ htmlText string ]
     else
-        htmlText (string ++ timeReport nodeData) nodeData
+        htmlText (string ++ timeReport nodeData)
 
 
-htmlText : String -> TestInstance -> Html message
-htmlText string nodeData =
+htmlText : String -> Html message
+htmlText string =
     text <| string
 
 

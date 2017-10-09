@@ -214,7 +214,7 @@ expandFailingNodes model =
 
 
 toggleFailingNodes : CollapsibleTree String TestInstance -> CollapsibleTree String TestInstance
-toggleFailingNodes (Node ( name, isExpanded, nodeId ) testInstance children) =
+toggleFailingNodes (Node ( name, _, nodeId ) testInstance children) =
     let
         expanded =
             TestInstance.isFailing testInstance

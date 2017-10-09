@@ -8968,77 +8968,26 @@ var _user$project$Diff_Core$step = F4(
 		return goal ? _user$project$Diff_Core$Found(newPath) : _user$project$Diff_Core$Continue(
 			A3(_elm_lang$core$Array$set, k + offset, newPath, v));
 	});
-var _user$project$Diff_Core$ondLoopDK = F5(
-	function (snake, offset, d, k, v) {
-		ondLoopDK:
-		while (true) {
-			if (_elm_lang$core$Native_Utils.cmp(k, d) > 0) {
-				var _v15 = snake,
-					_v16 = offset,
-					_v17 = d + 1,
-					_v18 = (0 - d) - 1,
-					_v19 = v;
-				snake = _v15;
-				offset = _v16;
-				d = _v17;
-				k = _v18;
-				v = _v19;
-				continue ondLoopDK;
-			} else {
-				var _p14 = A4(_user$project$Diff_Core$step, snake, offset, k, v);
-				if (_p14.ctor === 'Found') {
-					return _p14._0;
-				} else {
-					var _v21 = snake,
-						_v22 = offset,
-						_v23 = d,
-						_v24 = k + 2,
-						_v25 = _p14._0;
-					snake = _v21;
-					offset = _v22;
-					d = _v23;
-					k = _v24;
-					v = _v25;
-					continue ondLoopDK;
-				}
-			}
-		}
-	});
-var _user$project$Diff_Core$ond = F4(
-	function (getA, getB, m, n) {
-		var v = A2(
-			_elm_lang$core$Array$initialize,
-			(m + n) + 1,
-			_elm_lang$core$Basics$always(
-				{ctor: '[]'}));
-		return A5(
-			_user$project$Diff_Core$ondLoopDK,
-			A2(_user$project$Diff_Core$snake, getA, getB),
-			m,
-			0,
-			0,
-			v);
-	});
 var _user$project$Diff_Core$onpLoopK = F4(
 	function (snake, offset, ks, v) {
 		onpLoopK:
 		while (true) {
-			var _p15 = ks;
-			if (_p15.ctor === '[]') {
+			var _p14 = ks;
+			if (_p14.ctor === '[]') {
 				return _user$project$Diff_Core$Continue(v);
 			} else {
-				var _p16 = A4(_user$project$Diff_Core$step, snake, offset, _p15._0, v);
-				if (_p16.ctor === 'Found') {
-					return _user$project$Diff_Core$Found(_p16._0);
+				var _p15 = A4(_user$project$Diff_Core$step, snake, offset, _p14._0, v);
+				if (_p15.ctor === 'Found') {
+					return _user$project$Diff_Core$Found(_p15._0);
 				} else {
-					var _v28 = snake,
-						_v29 = offset,
-						_v30 = _p15._1,
-						_v31 = _p16._0;
-					snake = _v28;
-					offset = _v29;
-					ks = _v30;
-					v = _v31;
+					var _v17 = snake,
+						_v18 = offset,
+						_v19 = _p14._1,
+						_v20 = _p15._0;
+					snake = _v17;
+					offset = _v18;
+					ks = _v19;
+					v = _v20;
 					continue onpLoopK;
 				}
 			}
@@ -9057,20 +9006,20 @@ var _user$project$Diff_Core$onpLoopP = F5(
 				_elm_lang$core$List$reverse(
 					A2(_elm_lang$core$List$range, delta + 1, p)),
 				A2(_elm_lang$core$List$range, (0 - p) + delta, delta));
-			var _p17 = A4(_user$project$Diff_Core$onpLoopK, snake, offset, ks, v);
-			if (_p17.ctor === 'Found') {
-				return _p17._0;
+			var _p16 = A4(_user$project$Diff_Core$onpLoopK, snake, offset, ks, v);
+			if (_p16.ctor === 'Found') {
+				return _p16._0;
 			} else {
-				var _v33 = snake,
-					_v34 = delta,
-					_v35 = offset,
-					_v36 = p + 1,
-					_v37 = _p17._0;
-				snake = _v33;
-				delta = _v34;
-				offset = _v35;
-				p = _v36;
-				v = _v37;
+				var _v22 = snake,
+					_v23 = delta,
+					_v24 = offset,
+					_v25 = p + 1,
+					_v26 = _p16._0;
+				snake = _v22;
+				delta = _v23;
+				offset = _v24;
+				p = _v25;
+				v = _v26;
 				continue onpLoopP;
 			}
 		}
@@ -9099,9 +9048,9 @@ var _user$project$Diff_Core$diff = F2(
 			return A2(_elm_lang$core$Array$get, y - 1, arrB);
 		};
 		var getBOrCrash = function (y) {
-			var _p18 = getB(y);
-			if (_p18.ctor === 'Just') {
-				return _p18._0;
+			var _p17 = getB(y);
+			if (_p17.ctor === 'Just') {
+				return _p17._0;
 			} else {
 				return _elm_lang$core$Native_Utils.crashCase(
 					'Diff.Core',
@@ -9109,7 +9058,7 @@ var _user$project$Diff_Core$diff = F2(
 						start: {line: 113, column: 13},
 						end: {line: 118, column: 71}
 					},
-					_p18)(
+					_p17)(
 					A2(
 						_elm_lang$core$Basics_ops['++'],
 						'Cannot get B[',
@@ -9125,9 +9074,9 @@ var _user$project$Diff_Core$diff = F2(
 			return A2(_elm_lang$core$Array$get, x - 1, arrA);
 		};
 		var getAOrCrash = function (x) {
-			var _p20 = getA(x);
-			if (_p20.ctor === 'Just') {
-				return _p20._0;
+			var _p19 = getA(x);
+			if (_p19.ctor === 'Just') {
+				return _p19._0;
 			} else {
 				return _elm_lang$core$Native_Utils.crashCase(
 					'Diff.Core',
@@ -9135,7 +9084,7 @@ var _user$project$Diff_Core$diff = F2(
 						start: {line: 105, column: 13},
 						end: {line: 110, column: 71}
 					},
-					_p20)(
+					_p19)(
 					A2(
 						_elm_lang$core$Basics_ops['++'],
 						'Cannot get A[',
@@ -10560,10 +10509,9 @@ var _user$project$View_TestHierarchy_Root$timeReport = function (nodeData) {
 			_user$project$TestInstance_Core$durationAsString(nodeData),
 			' ms)'));
 };
-var _user$project$View_TestHierarchy_Root$htmlText = F2(
-	function (string, nodeData) {
-		return _elm_lang$html$Html$text(string);
-	});
+var _user$project$View_TestHierarchy_Root$htmlText = function (string) {
+	return _elm_lang$html$Html$text(string);
+};
 var _user$project$View_TestHierarchy_Root$conditionallyEmbolden = F3(
 	function (hasChildren, string, nodeData) {
 		return hasChildren ? A2(
@@ -10571,15 +10519,13 @@ var _user$project$View_TestHierarchy_Root$conditionallyEmbolden = F3(
 			{ctor: '[]'},
 			{
 				ctor: '::',
-				_0: A2(_user$project$View_TestHierarchy_Root$htmlText, string, nodeData),
+				_0: _user$project$View_TestHierarchy_Root$htmlText(string),
 				_1: {ctor: '[]'}
-			}) : A2(
-			_user$project$View_TestHierarchy_Root$htmlText,
+			}) : _user$project$View_TestHierarchy_Root$htmlText(
 			A2(
 				_elm_lang$core$Basics_ops['++'],
 				string,
-				_user$project$View_TestHierarchy_Root$timeReport(nodeData)),
-			nodeData);
+				_user$project$View_TestHierarchy_Root$timeReport(nodeData)));
 	});
 var _user$project$View_TestHierarchy_Root$statusIndicatorIcon = function (nodeData) {
 	return _elm_lang$html$Html$text(
@@ -10715,7 +10661,7 @@ var _user$project$View_TestHierarchy_Core$ToggleMessages = F2(
 	function (a, b) {
 		return {collapse: a, expand: b};
 	});
-var _user$project$View_TestHierarchy_Core$HighlightAndSelectionMessages = F3(
+var _user$project$View_TestHierarchy_Core$SelectionMessages = F3(
 	function (a, b, c) {
 		return {mouseIn: a, mouseOut: b, testClick: c};
 	});
