@@ -232,6 +232,50 @@ suite =
                             Expect.false "this should fail / false for true" True
                     ]
                 ]
+            , describe "Expect.all" <|
+                [ describe "three grouped checks" <|
+                    [ test "all pass" <|
+                        \_ ->
+                            Expect.all
+                                [ Expect.greaterThan -3
+                                , Expect.lessThan 3
+                                , Expect.equal 0
+                                ]
+                                0
+                    , test "first fails" <|
+                        \_ ->
+                            Expect.all
+                                [ Expect.greaterThan 0
+                                , Expect.lessThan 3
+                                , Expect.equal 0
+                                ]
+                                0
+                    , test "second fails" <|
+                        \_ ->
+                            Expect.all
+                                [ Expect.greaterThan -3
+                                , Expect.lessThan 0
+                                , Expect.equal 0
+                                ]
+                                0
+                    , test "third fails" <|
+                        \_ ->
+                            Expect.all
+                                [ Expect.greaterThan -3
+                                , Expect.lessThan 3
+                                , Expect.equal 1
+                                ]
+                                0
+                    , test "all fail" <|
+                        \_ ->
+                            Expect.all
+                                [ Expect.greaterThan 3
+                                , Expect.lessThan -3
+                                , Expect.equal 1
+                                ]
+                                0
+                    ]
+                ]
             ]
         ]
 
