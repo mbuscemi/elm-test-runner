@@ -286,6 +286,16 @@ suite =
                             3.14 |> Expect.within (Absolute 0.001) pi
                     ]
                 ]
+            , describe "Expect.notWithin" <|
+                [ describe "pi" <|
+                    [ test "passing" <|
+                        \_ ->
+                            3.14 |> Expect.notWithin (Absolute 0.001) pi
+                    , test "failing" <|
+                        \_ ->
+                            3.14 |> Expect.notWithin (Absolute 0.01) pi
+                    ]
+                ]
             ]
         ]
 
