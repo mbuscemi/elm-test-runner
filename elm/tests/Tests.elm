@@ -296,6 +296,16 @@ suite =
                             3.14 |> Expect.notWithin (Absolute 0.01) pi
                     ]
                 ]
+            , describe "Expect.err" <|
+                [ describe "documentation example" <|
+                    [ test "passing" <|
+                        \_ ->
+                            String.toInt "not an int" |> Expect.err
+                    , test "failing" <|
+                        \_ ->
+                            String.toInt "20" |> Expect.err
+                    ]
+                ]
             ]
         ]
 
