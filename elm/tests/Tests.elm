@@ -181,9 +181,35 @@ suite =
                     , test "passing on equal" <|
                         \_ ->
                             Expect.atMost 2 2
-                    , test "failing" <|
+                    , test "failing on greater" <|
                         \_ ->
                             Expect.atMost 2 3
+                    ]
+                ]
+            , describe "Expect.greaterThan" <|
+                [ describe "basic case" <|
+                    [ test "passing" <|
+                        \_ ->
+                            Expect.greaterThan 2 3
+                    , test "failing on equal" <|
+                        \_ ->
+                            Expect.greaterThan 2 2
+                    , test "failing on less" <|
+                        \_ ->
+                            Expect.greaterThan 2 1
+                    ]
+                ]
+            , describe "Expect.atLeast" <|
+                [ describe "basic case" <|
+                    [ test "passing" <|
+                        \_ ->
+                            Expect.atLeast 2 3
+                    , test "passing on equal" <|
+                        \_ ->
+                            Expect.atLeast 2 2
+                    , test "failing on less" <|
+                        \_ ->
+                            Expect.atLeast 2 1
                     ]
                 ]
             ]
