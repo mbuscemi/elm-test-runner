@@ -16,29 +16,29 @@ failureText maybeFailure =
     case maybeFailure of
         Just failure ->
             let
-                ( expectedHtml, actualHtml ) =
-                    diffedHtml (getExpected failure) (getActual failure)
+                ( expected, actual ) =
+                    diffed (getExpected failure) (getActual failure)
             in
             [ div [ class "failure-header" ]
                 [ text <| "Failed on: "
                 , strong [] [ text <| getMessage failure ]
                 ]
-            , actualHtml
+            , div [ class "actual" ] actual
             , div [] [ text <| "╷" ]
             , div [] [ text <| "│ " ++ getComparison failure ]
             , div [] [ text <| "╵" ]
-            , expectedHtml
+            , div [ class "expected" ] expected
             ]
 
         Nothing ->
             [ text "" ]
 
 
-diffedHtml : String -> String -> ( Html message, Html message )
-diffedHtml expected actual =
+diffed : String -> String -> ( List (Html message), List (Html message) )
+diffed expected actual =
     diff (String.toList expected) (String.toList actual)
         |> foldChanges
-        |> (\diffedActual -> ( div [ class "expected" ] [ text expected ], div [ class "actual" ] diffedActual ))
+        |> (\diffedActual -> ( [ text expected ], diffedActual ))
 
 
 foldChanges : List (Change Char) -> List (Html message)

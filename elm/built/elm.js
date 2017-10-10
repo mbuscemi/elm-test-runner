@@ -10072,31 +10072,17 @@ var _user$project$View_OutputDisplay$foldChanges = function (list) {
 		{ctor: '[]'},
 		list);
 };
-var _user$project$View_OutputDisplay$diffedHtml = F2(
+var _user$project$View_OutputDisplay$diffed = F2(
 	function (expected, actual) {
 		return function (diffedActual) {
 			return {
 				ctor: '_Tuple2',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('expected'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(expected),
-						_1: {ctor: '[]'}
-					}),
-				_1: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('actual'),
-						_1: {ctor: '[]'}
-					},
-					diffedActual)
+				_0: {
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(expected),
+					_1: {ctor: '[]'}
+				},
+				_1: diffedActual
 			};
 		}(
 			_user$project$View_OutputDisplay$foldChanges(
@@ -10110,11 +10096,11 @@ var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
 	if (_p1.ctor === 'Just') {
 		var _p3 = _p1._0;
 		var _p2 = A2(
-			_user$project$View_OutputDisplay$diffedHtml,
+			_user$project$View_OutputDisplay$diffed,
 			_user$project$State_Failure$getExpected(_p3),
 			_user$project$State_Failure$getActual(_p3));
-		var expectedHtml = _p2._0;
-		var actualHtml = _p2._1;
+		var expected = _p2._0;
+		var actual = _p2._1;
 		return {
 			ctor: '::',
 			_0: A2(
@@ -10143,7 +10129,14 @@ var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
 				}),
 			_1: {
 				ctor: '::',
-				_0: actualHtml,
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('actual'),
+						_1: {ctor: '[]'}
+					},
+					actual),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -10180,7 +10173,14 @@ var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
 								}),
 							_1: {
 								ctor: '::',
-								_0: expectedHtml,
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('expected'),
+										_1: {ctor: '[]'}
+									},
+									expected),
 								_1: {ctor: '[]'}
 							}
 						}
