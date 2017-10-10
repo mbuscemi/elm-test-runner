@@ -9131,31 +9131,19 @@ var _user$project$Duration_Core$Seconds = function (a) {
 	return {ctor: 'Seconds', _0: a};
 };
 
-var _user$project$State_Failure$shouldDiff = function (failure) {
-	var first = failure.reason.data.first;
-	var expected = failure.reason.data.expected;
-	var _p0 = {ctor: '_Tuple2', _0: expected, _1: first};
-	if (_p0._0.ctor === 'Just') {
-		if (_p0._1.ctor === 'Just') {
-			return true;
-		} else {
-			return true;
-		}
+var _user$project$State_Failure$getData = function (failure) {
+	var _p0 = failure.reason.data;
+	if (_p0.ctor === 'Complex') {
+		return _p0._0;
 	} else {
-		if (_p0._1.ctor === 'Just') {
-			return false;
-		} else {
-			return false;
-		}
+		return {comparison: _p0._0, actual: _elm_lang$core$Maybe$Nothing, expected: _elm_lang$core$Maybe$Nothing, first: _elm_lang$core$Maybe$Nothing, second: _elm_lang$core$Maybe$Nothing};
 	}
 };
-var _user$project$State_Failure$getComparison = function (failure) {
-	return failure.reason.data.comparison;
-};
-var _user$project$State_Failure$getActual = function (failure) {
-	var second = failure.reason.data.second;
-	var actual = failure.reason.data.actual;
-	var _p1 = {ctor: '_Tuple2', _0: actual, _1: second};
+var _user$project$State_Failure$getExpected = function (failure) {
+	var data = _user$project$State_Failure$getData(failure);
+	var expected = data.expected;
+	var first = data.first;
+	var _p1 = {ctor: '_Tuple2', _0: expected, _1: first};
 	if (_p1._0.ctor === 'Just') {
 		if (_p1._1.ctor === 'Just') {
 			return _p1._0._0;
@@ -9170,10 +9158,11 @@ var _user$project$State_Failure$getActual = function (failure) {
 		}
 	}
 };
-var _user$project$State_Failure$getExpected = function (failure) {
-	var first = failure.reason.data.first;
-	var expected = failure.reason.data.expected;
-	var _p2 = {ctor: '_Tuple2', _0: expected, _1: first};
+var _user$project$State_Failure$getActual = function (failure) {
+	var data = _user$project$State_Failure$getData(failure);
+	var actual = data.actual;
+	var second = data.second;
+	var _p2 = {ctor: '_Tuple2', _0: actual, _1: second};
 	if (_p2._0.ctor === 'Just') {
 		if (_p2._1.ctor === 'Just') {
 			return _p2._0._0;
@@ -9188,36 +9177,79 @@ var _user$project$State_Failure$getExpected = function (failure) {
 		}
 	}
 };
+var _user$project$State_Failure$getComparison = function (failure) {
+	return function (_) {
+		return _.comparison;
+	}(
+		_user$project$State_Failure$getData(failure));
+};
+var _user$project$State_Failure$shouldDiff = function (failure) {
+	var data = _user$project$State_Failure$getData(failure);
+	var expected = data.expected;
+	var first = data.first;
+	var _p3 = {ctor: '_Tuple2', _0: expected, _1: first};
+	if (_p3._0.ctor === 'Just') {
+		if (_p3._1.ctor === 'Just') {
+			return true;
+		} else {
+			return true;
+		}
+	} else {
+		if (_p3._1.ctor === 'Just') {
+			return false;
+		} else {
+			return false;
+		}
+	}
+};
 var _user$project$State_Failure$getMessage = function (failure) {
 	return failure.message;
 };
-var _user$project$State_Failure$Comparison = F5(
+var _user$project$State_Failure$ComparisonData = F5(
 	function (a, b, c, d, e) {
 		return {comparison: a, actual: b, expected: c, first: d, second: e};
 	});
-var _user$project$State_Failure$comparison = A6(
-	_elm_lang$core$Json_Decode$map5,
-	_user$project$State_Failure$Comparison,
-	A2(_elm_lang$core$Json_Decode$field, 'comparison', _elm_lang$core$Json_Decode$string),
-	_elm_lang$core$Json_Decode$maybe(
-		A2(_elm_lang$core$Json_Decode$field, 'actual', _elm_lang$core$Json_Decode$string)),
-	_elm_lang$core$Json_Decode$maybe(
-		A2(_elm_lang$core$Json_Decode$field, 'expected', _elm_lang$core$Json_Decode$string)),
-	_elm_lang$core$Json_Decode$maybe(
-		A2(_elm_lang$core$Json_Decode$field, 'first', _elm_lang$core$Json_Decode$string)),
-	_elm_lang$core$Json_Decode$maybe(
-		A2(_elm_lang$core$Json_Decode$field, 'second', _elm_lang$core$Json_Decode$string)));
 var _user$project$State_Failure$Reason = function (a) {
 	return {data: a};
 };
-var _user$project$State_Failure$reason = A2(
-	_elm_lang$core$Json_Decode$map,
-	_user$project$State_Failure$Reason,
-	A2(_elm_lang$core$Json_Decode$field, 'data', _user$project$State_Failure$comparison));
 var _user$project$State_Failure$Failure = F2(
 	function (a, b) {
 		return {message: a, reason: b};
 	});
+var _user$project$State_Failure$Plain = function (a) {
+	return {ctor: 'Plain', _0: a};
+};
+var _user$project$State_Failure$Complex = function (a) {
+	return {ctor: 'Complex', _0: a};
+};
+var _user$project$State_Failure$comparison = _elm_lang$core$Json_Decode$oneOf(
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$core$Json_Decode$map,
+			_user$project$State_Failure$Complex,
+			A6(
+				_elm_lang$core$Json_Decode$map5,
+				_user$project$State_Failure$ComparisonData,
+				A2(_elm_lang$core$Json_Decode$field, 'comparison', _elm_lang$core$Json_Decode$string),
+				_elm_lang$core$Json_Decode$maybe(
+					A2(_elm_lang$core$Json_Decode$field, 'actual', _elm_lang$core$Json_Decode$string)),
+				_elm_lang$core$Json_Decode$maybe(
+					A2(_elm_lang$core$Json_Decode$field, 'expected', _elm_lang$core$Json_Decode$string)),
+				_elm_lang$core$Json_Decode$maybe(
+					A2(_elm_lang$core$Json_Decode$field, 'first', _elm_lang$core$Json_Decode$string)),
+				_elm_lang$core$Json_Decode$maybe(
+					A2(_elm_lang$core$Json_Decode$field, 'second', _elm_lang$core$Json_Decode$string)))),
+		_1: {
+			ctor: '::',
+			_0: A2(_elm_lang$core$Json_Decode$map, _user$project$State_Failure$Plain, _elm_lang$core$Json_Decode$string),
+			_1: {ctor: '[]'}
+		}
+	});
+var _user$project$State_Failure$reason = A2(
+	_elm_lang$core$Json_Decode$map,
+	_user$project$State_Failure$Reason,
+	A2(_elm_lang$core$Json_Decode$field, 'data', _user$project$State_Failure$comparison));
 var _user$project$State_Failure$failure = A3(
 	_elm_lang$core$Json_Decode$map2,
 	_user$project$State_Failure$Failure,

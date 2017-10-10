@@ -212,6 +212,16 @@ suite =
                             Expect.atLeast 2 1
                     ]
                 ]
+            , describe "Expect.true" <|
+                [ describe "basic case" <|
+                    [ test "passing" <|
+                        \_ ->
+                            Expect.true "this should pass" True
+                    , test "failing" <|
+                        \_ ->
+                            Expect.true "this should fail" False
+                    ]
+                ]
             ]
         ]
 

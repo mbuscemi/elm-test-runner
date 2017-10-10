@@ -1,9 +1,9 @@
 module State.Failure exposing (Failure, failure, getActual, getComparison, getExpected, getMessage, shouldDiff)
 
-import Json.Decode exposing (Decoder, field, map, map2, map5, maybe, string)
+import Json.Decode exposing (Decoder, field, map, map2, map5, maybe, oneOf, string)
 
 
-type alias Comparison =
+type alias ComparisonData =
     { comparison : String
     , actual : Maybe String
     , expected : Maybe String
@@ -12,14 +12,23 @@ type alias Comparison =
     }
 
 
+type Comparison
+    = Complex ComparisonData
+    | Plain String
+
+
 comparison : Decoder Comparison
 comparison =
-    map5 Comparison
-        (field "comparison" string)
-        (maybe (field "actual" string))
-        (maybe (field "expected" string))
-        (maybe (field "first" string))
-        (maybe (field "second" string))
+    oneOf
+        [ map Complex <|
+            map5 ComparisonData
+                (field "comparison" string)
+                (maybe (field "actual" string))
+                (maybe (field "expected" string))
+                (maybe (field "first" string))
+                (maybe (field "second" string))
+        , map Plain string
+        ]
 
 
 type alias Reason =
@@ -51,14 +60,32 @@ getMessage failure =
     failure.message
 
 
+getData : Failure -> ComparisonData
+getData failure =
+    case failure.reason.data of
+        Complex data ->
+            data
+
+        Plain string ->
+            { comparison = string
+            , actual = Nothing
+            , expected = Nothing
+            , first = Nothing
+            , second = Nothing
+            }
+
+
 getExpected : Failure -> String
 getExpected failure =
     let
+        data =
+            getData failure
+
         expected =
-            failure.reason.data.expected
+            data.expected
 
         first =
-            failure.reason.data.first
+            data.first
     in
     case ( expected, first ) of
         ( Just expected, Just first ) ->
@@ -77,11 +104,14 @@ getExpected failure =
 getActual : Failure -> String
 getActual failure =
     let
+        data =
+            getData failure
+
         actual =
-            failure.reason.data.actual
+            data.actual
 
         second =
-            failure.reason.data.second
+            data.second
     in
     case ( actual, second ) of
         ( Just actual, Just second ) ->
@@ -99,17 +129,20 @@ getActual failure =
 
 getComparison : Failure -> String
 getComparison failure =
-    failure.reason.data.comparison
+    getData failure |> .comparison
 
 
 shouldDiff : Failure -> Bool
 shouldDiff failure =
     let
+        data =
+            getData failure
+
         expected =
-            failure.reason.data.expected
+            data.expected
 
         first =
-            failure.reason.data.first
+            data.first
     in
     case ( expected, first ) of
         ( Just expected, Just first ) ->
