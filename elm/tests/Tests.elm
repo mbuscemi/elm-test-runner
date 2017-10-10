@@ -219,7 +219,17 @@ suite =
                             Expect.true "this should pass" True
                     , test "failing" <|
                         \_ ->
-                            Expect.true "this should fail" False
+                            Expect.true "this should fail / true for false" False
+                    ]
+                ]
+            , describe "Expect.false" <|
+                [ describe "basic case" <|
+                    [ test "passing" <|
+                        \_ ->
+                            Expect.false "this should pass" False
+                    , test "failing" <|
+                        \_ ->
+                            Expect.false "this should fail / false for true" True
                     ]
                 ]
             ]
