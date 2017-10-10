@@ -1,4 +1,4 @@
-module State.Failure exposing (Failure, failure, getActual, getComparison, getExpected, getMessage)
+module State.Failure exposing (Failure, failure, getActual, getComparison, getExpected, getMessage, shouldDiff)
 
 import Json.Decode exposing (Decoder, field, map, map2, map5, maybe, string)
 
@@ -53,11 +53,47 @@ getMessage failure =
 
 getExpected : Failure -> String
 getExpected failure =
-    case failure.reason.data.expected of
-        Just expectation ->
-            expectation
+    let
+        expected =
+            failure.reason.data.expected
 
-        Nothing ->
+        first =
+            failure.reason.data.first
+    in
+    case ( expected, first ) of
+        ( Just expected, Just first ) ->
+            expected
+
+        ( Nothing, Just first ) ->
+            first
+
+        ( Just expected, Nothing ) ->
+            expected
+
+        ( Nothing, Nothing ) ->
+            ""
+
+
+getActual : Failure -> String
+getActual failure =
+    let
+        actual =
+            failure.reason.data.actual
+
+        second =
+            failure.reason.data.second
+    in
+    case ( actual, second ) of
+        ( Just actual, Just second ) ->
+            actual
+
+        ( Nothing, Just second ) ->
+            second
+
+        ( Just actual, Nothing ) ->
+            actual
+
+        ( Nothing, Nothing ) ->
             ""
 
 
@@ -66,11 +102,24 @@ getComparison failure =
     failure.reason.data.comparison
 
 
-getActual : Failure -> String
-getActual failure =
-    case failure.reason.data.actual of
-        Just actual ->
-            actual
+shouldDiff : Failure -> Bool
+shouldDiff failure =
+    let
+        expected =
+            failure.reason.data.expected
 
-        Nothing ->
-            ""
+        first =
+            failure.reason.data.first
+    in
+    case ( expected, first ) of
+        ( Just expected, Just first ) ->
+            True
+
+        ( Nothing, Just first ) ->
+            False
+
+        ( Just expected, Nothing ) ->
+            True
+
+        ( Nothing, Nothing ) ->
+            False

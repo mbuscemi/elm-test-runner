@@ -9131,23 +9131,61 @@ var _user$project$Duration_Core$Seconds = function (a) {
 	return {ctor: 'Seconds', _0: a};
 };
 
-var _user$project$State_Failure$getActual = function (failure) {
-	var _p0 = failure.reason.data.actual;
-	if (_p0.ctor === 'Just') {
-		return _p0._0;
+var _user$project$State_Failure$shouldDiff = function (failure) {
+	var first = failure.reason.data.first;
+	var expected = failure.reason.data.expected;
+	var _p0 = {ctor: '_Tuple2', _0: expected, _1: first};
+	if (_p0._0.ctor === 'Just') {
+		if (_p0._1.ctor === 'Just') {
+			return true;
+		} else {
+			return true;
+		}
 	} else {
-		return '';
+		if (_p0._1.ctor === 'Just') {
+			return false;
+		} else {
+			return false;
+		}
 	}
 };
 var _user$project$State_Failure$getComparison = function (failure) {
 	return failure.reason.data.comparison;
 };
-var _user$project$State_Failure$getExpected = function (failure) {
-	var _p1 = failure.reason.data.expected;
-	if (_p1.ctor === 'Just') {
-		return _p1._0;
+var _user$project$State_Failure$getActual = function (failure) {
+	var second = failure.reason.data.second;
+	var actual = failure.reason.data.actual;
+	var _p1 = {ctor: '_Tuple2', _0: actual, _1: second};
+	if (_p1._0.ctor === 'Just') {
+		if (_p1._1.ctor === 'Just') {
+			return _p1._0._0;
+		} else {
+			return _p1._0._0;
+		}
 	} else {
-		return '';
+		if (_p1._1.ctor === 'Just') {
+			return _p1._1._0;
+		} else {
+			return '';
+		}
+	}
+};
+var _user$project$State_Failure$getExpected = function (failure) {
+	var first = failure.reason.data.first;
+	var expected = failure.reason.data.expected;
+	var _p2 = {ctor: '_Tuple2', _0: expected, _1: first};
+	if (_p2._0.ctor === 'Just') {
+		if (_p2._1.ctor === 'Just') {
+			return _p2._0._0;
+		} else {
+			return _p2._0._0;
+		}
+	} else {
+		if (_p2._1.ctor === 'Just') {
+			return _p2._1._0;
+		} else {
+			return '';
+		}
 	}
 };
 var _user$project$State_Failure$getMessage = function (failure) {
@@ -10091,14 +10129,28 @@ var _user$project$View_OutputDisplay$diffed = F2(
 					_elm_lang$core$String$toList(expected),
 					_elm_lang$core$String$toList(actual))));
 	});
+var _user$project$View_OutputDisplay$process = function (failure) {
+	var actual = _user$project$State_Failure$getActual(failure);
+	var expected = _user$project$State_Failure$getExpected(failure);
+	return _user$project$State_Failure$shouldDiff(failure) ? A2(_user$project$View_OutputDisplay$diffed, expected, actual) : {
+		ctor: '_Tuple2',
+		_0: {
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(expected),
+			_1: {ctor: '[]'}
+		},
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(actual),
+			_1: {ctor: '[]'}
+		}
+	};
+};
 var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
 	var _p1 = maybeFailure;
 	if (_p1.ctor === 'Just') {
 		var _p3 = _p1._0;
-		var _p2 = A2(
-			_user$project$View_OutputDisplay$diffed,
-			_user$project$State_Failure$getExpected(_p3),
-			_user$project$State_Failure$getActual(_p3));
+		var _p2 = _user$project$View_OutputDisplay$process(_p3);
 		var expected = _p2._0;
 		var actual = _p2._1;
 		return {

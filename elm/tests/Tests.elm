@@ -160,6 +160,16 @@ suite =
                             Expect.notEqual "abcdefghi" "abcdefghi"
                     ]
                 ]
+            , describe "Expect.lessThan" <|
+                [ describe "basic case" <|
+                    [ test "passing" <|
+                        \_ ->
+                            Expect.lessThan 2 1
+                    , test "failing" <|
+                        \_ ->
+                            Expect.lessThan 2 3
+                    ]
+                ]
             ]
         ]
 

@@ -3,7 +3,7 @@ module View.OutputDisplay exposing (render)
 import Diff.Core exposing (Change(Added, NoChange, Removed), diff)
 import Html exposing (Html, div, span, strong, text)
 import Html.Attributes exposing (class)
-import State.Failure exposing (Failure, getActual, getComparison, getExpected, getMessage)
+import State.Failure exposing (Failure, getActual, getComparison, getExpected, getMessage, shouldDiff)
 
 
 render : Maybe Failure -> Html message
@@ -17,7 +17,7 @@ failureText maybeFailure =
         Just failure ->
             let
                 ( expected, actual ) =
-                    diffed (getExpected failure) (getActual failure)
+                    process failure
             in
             [ div [ class "failure-header" ]
                 [ text <| "Failed on: "
@@ -32,6 +32,21 @@ failureText maybeFailure =
 
         Nothing ->
             [ text "" ]
+
+
+process : Failure -> ( List (Html message), List (Html message) )
+process failure =
+    let
+        expected =
+            getExpected failure
+
+        actual =
+            getActual failure
+    in
+    if shouldDiff failure then
+        diffed expected actual
+    else
+        ( [ text expected ], [ text actual ] )
 
 
 diffed : String -> String -> ( List (Html message), List (Html message) )
