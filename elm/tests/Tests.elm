@@ -1,6 +1,6 @@
 module Tests exposing (suite)
 
-import Expect
+import Expect exposing (FloatingPointTolerance(Absolute))
 import Test exposing (Test, describe, test)
 import Tree.Core exposing (Tree(Node))
 import Tree.Merge exposing (fromPath)
@@ -274,6 +274,16 @@ suite =
                                 , Expect.equal 1
                                 ]
                                 0
+                    ]
+                ]
+            , describe "Expect.within" <|
+                [ describe "pi" <|
+                    [ test "passing" <|
+                        \_ ->
+                            3.14 |> Expect.within (Absolute 0.01) pi
+                    , test "failing" <|
+                        \_ ->
+                            3.14 |> Expect.within (Absolute 0.001) pi
                     ]
                 ]
             ]
