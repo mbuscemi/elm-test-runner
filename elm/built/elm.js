@@ -9202,6 +9202,14 @@ var _user$project$State_Failure$shouldDiff = function (failure) {
 		}
 	}
 };
+var _user$project$State_Failure$hasComplexComparison = function (failure) {
+	var _p4 = failure.reason.data;
+	if (_p4.ctor === 'Complex') {
+		return true;
+	} else {
+		return false;
+	}
+};
 var _user$project$State_Failure$getMessage = function (failure) {
 	return failure.message;
 };
@@ -10091,6 +10099,23 @@ var _user$project$View_DurationAndSeedDisplay$Messages = F2(
 		return {copySeedClickHandler: a, setSeedClickHandler: b};
 	});
 
+var _user$project$View_OutputDisplay$barPiece = F3(
+	function (piece, extra, failure) {
+		return _user$project$State_Failure$hasComplexComparison(failure) ? A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					A2(_elm_lang$core$Basics_ops['++'], piece, extra)),
+				_1: {ctor: '[]'}
+			}) : _elm_lang$html$Html$text(extra);
+	});
+var _user$project$View_OutputDisplay$barBottom = A2(_user$project$View_OutputDisplay$barPiece, '╵', '');
+var _user$project$View_OutputDisplay$barMiddle = function (comparison) {
+	return A2(_user$project$View_OutputDisplay$barPiece, '│ ', comparison);
+};
+var _user$project$View_OutputDisplay$barTop = A2(_user$project$View_OutputDisplay$barPiece, '╷', '');
 var _user$project$View_OutputDisplay$toHtml = function (change) {
 	var _p0 = change;
 	switch (_p0.ctor) {
@@ -10223,38 +10248,16 @@ var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
 					actual),
 				_1: {
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('╷'),
-							_1: {ctor: '[]'}
-						}),
+					_0: _user$project$View_OutputDisplay$barTop(_p3),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$div,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										'│ ',
-										_user$project$State_Failure$getComparison(_p3))),
-								_1: {ctor: '[]'}
-							}),
+							_user$project$View_OutputDisplay$barMiddle,
+							_user$project$State_Failure$getComparison(_p3),
+							_p3),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$div,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('╵'),
-									_1: {ctor: '[]'}
-								}),
+							_0: _user$project$View_OutputDisplay$barBottom(_p3),
 							_1: {
 								ctor: '::',
 								_0: A2(

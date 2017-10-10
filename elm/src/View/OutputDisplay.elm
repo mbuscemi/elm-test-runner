@@ -3,7 +3,16 @@ module View.OutputDisplay exposing (render)
 import Diff.Core exposing (Change(Added, NoChange, Removed), diff)
 import Html exposing (Html, div, span, strong, text)
 import Html.Attributes exposing (class)
-import State.Failure exposing (Failure, getActual, getComparison, getExpected, getMessage, shouldDiff)
+import State.Failure
+    exposing
+        ( Failure
+        , getActual
+        , getComparison
+        , getExpected
+        , getMessage
+        , hasComplexComparison
+        , shouldDiff
+        )
 
 
 render : Maybe Failure -> Html message
@@ -24,9 +33,9 @@ failureText maybeFailure =
                 , strong [] [ text <| getMessage failure ]
                 ]
             , div [ class "actual" ] actual
-            , div [] [ text <| "╷" ]
-            , div [] [ text <| "│ " ++ getComparison failure ]
-            , div [] [ text <| "╵" ]
+            , barTop failure
+            , barMiddle (getComparison failure) failure
+            , barBottom failure
             , div [ class "expected" ] expected
             ]
 
@@ -77,3 +86,26 @@ toHtml change =
 
         NoChange char ->
             text <| String.fromChar char
+
+
+barTop : Failure -> Html message
+barTop =
+    barPiece "╷" ""
+
+
+barMiddle : String -> Failure -> Html message
+barMiddle comparison =
+    barPiece "│ " comparison
+
+
+barBottom : Failure -> Html message
+barBottom =
+    barPiece "╵" ""
+
+
+barPiece : String -> String -> Failure -> Html message
+barPiece piece extra failure =
+    if hasComplexComparison failure then
+        div [] [ text <| piece ++ extra ]
+    else
+        text extra
