@@ -365,6 +365,15 @@ suite =
                                     Expect.fail err
                     ]
                 ]
+            , describe "Expect.onFail" <|
+                [ describe "documentation example" <|
+                    [ test "custom failure message" <|
+                        \_ ->
+                            "something"
+                                |> Expect.equal "something else"
+                                |> Expect.onFail "thought those two strings would be the same"
+                    ]
+                ]
             ]
         ]
 
