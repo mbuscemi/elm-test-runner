@@ -9131,9 +9131,17 @@ var _user$project$Duration_Core$Seconds = function (a) {
 	return {ctor: 'Seconds', _0: a};
 };
 
+var _user$project$State_Failure$isTodo = function (failure) {
+	var _p0 = failure;
+	if (_p0.ctor === 'SimpleFailure') {
+		return true;
+	} else {
+		return false;
+	}
+};
 var _user$project$State_Failure$expectationText = function (expectation) {
-	var _p0 = expectation;
-	if (_p0.ctor === 'ListFields') {
+	var _p1 = expectation;
+	if (_p1.ctor === 'ListFields') {
 		return A2(
 			_elm_lang$core$Basics_ops['++'],
 			'[\"',
@@ -9146,34 +9154,34 @@ var _user$project$State_Failure$expectationText = function (expectation) {
 							return A2(_elm_lang$core$Basics_ops['++'], string, number);
 						}),
 					'',
-					A2(_elm_lang$core$List$intersperse, '\",\"', _p0._0)),
+					A2(_elm_lang$core$List$intersperse, '\",\"', _p1._0)),
 				'\"]'));
 	} else {
-		return _p0._0;
+		return _p1._0;
 	}
 };
 var _user$project$State_Failure$getData = function (failure) {
-	var _p1 = failure;
-	if (_p1.ctor === 'SimpleFailure') {
+	var _p2 = failure;
+	if (_p2.ctor === 'SimpleFailure') {
 		return {
-			comparison: _elm_lang$core$Maybe$Just(_p1._0),
+			comparison: _elm_lang$core$Maybe$Just(_p2._0),
 			actual: _elm_lang$core$Maybe$Nothing,
 			expected: _elm_lang$core$Maybe$Nothing,
 			first: _elm_lang$core$Maybe$Nothing,
 			second: _elm_lang$core$Maybe$Nothing
 		};
 	} else {
-		var _p2 = _p1._0.reason.data;
-		if (_p2.ctor === 'SimpleComparison') {
+		var _p3 = _p2._0.reason.data;
+		if (_p3.ctor === 'SimpleComparison') {
 			return {
-				comparison: _elm_lang$core$Maybe$Just(_p2._0),
+				comparison: _elm_lang$core$Maybe$Just(_p3._0),
 				actual: _elm_lang$core$Maybe$Nothing,
 				expected: _elm_lang$core$Maybe$Nothing,
 				first: _elm_lang$core$Maybe$Nothing,
 				second: _elm_lang$core$Maybe$Nothing
 			};
 		} else {
-			return _p2._0;
+			return _p3._0;
 		}
 	}
 };
@@ -9181,26 +9189,7 @@ var _user$project$State_Failure$getExpected = function (failure) {
 	var data = _user$project$State_Failure$getData(failure);
 	var expected = data.expected;
 	var first = data.first;
-	var _p3 = {ctor: '_Tuple2', _0: expected, _1: first};
-	if (_p3._0.ctor === 'Just') {
-		if (_p3._1.ctor === 'Just') {
-			return _user$project$State_Failure$expectationText(_p3._0._0);
-		} else {
-			return _user$project$State_Failure$expectationText(_p3._0._0);
-		}
-	} else {
-		if (_p3._1.ctor === 'Just') {
-			return _p3._1._0;
-		} else {
-			return '';
-		}
-	}
-};
-var _user$project$State_Failure$getActual = function (failure) {
-	var data = _user$project$State_Failure$getData(failure);
-	var actual = data.actual;
-	var second = data.second;
-	var _p4 = {ctor: '_Tuple2', _0: actual, _1: second};
+	var _p4 = {ctor: '_Tuple2', _0: expected, _1: first};
 	if (_p4._0.ctor === 'Just') {
 		if (_p4._1.ctor === 'Just') {
 			return _user$project$State_Failure$expectationText(_p4._0._0);
@@ -9215,13 +9204,32 @@ var _user$project$State_Failure$getActual = function (failure) {
 		}
 	}
 };
+var _user$project$State_Failure$getActual = function (failure) {
+	var data = _user$project$State_Failure$getData(failure);
+	var actual = data.actual;
+	var second = data.second;
+	var _p5 = {ctor: '_Tuple2', _0: actual, _1: second};
+	if (_p5._0.ctor === 'Just') {
+		if (_p5._1.ctor === 'Just') {
+			return _user$project$State_Failure$expectationText(_p5._0._0);
+		} else {
+			return _user$project$State_Failure$expectationText(_p5._0._0);
+		}
+	} else {
+		if (_p5._1.ctor === 'Just') {
+			return _p5._1._0;
+		} else {
+			return '';
+		}
+	}
+};
 var _user$project$State_Failure$getComparison = function (failure) {
-	var _p5 = function (_) {
+	var _p6 = function (_) {
 		return _.comparison;
 	}(
 		_user$project$State_Failure$getData(failure));
-	if (_p5.ctor === 'Just') {
-		return _p5._0;
+	if (_p6.ctor === 'Just') {
+		return _p6._0;
 	} else {
 		return '';
 	}
@@ -9230,15 +9238,15 @@ var _user$project$State_Failure$shouldDiff = function (failure) {
 	var data = _user$project$State_Failure$getData(failure);
 	var expected = data.expected;
 	var first = data.first;
-	var _p6 = {ctor: '_Tuple2', _0: expected, _1: first};
-	if (_p6._0.ctor === 'Just') {
-		if (_p6._1.ctor === 'Just') {
+	var _p7 = {ctor: '_Tuple2', _0: expected, _1: first};
+	if (_p7._0.ctor === 'Just') {
+		if (_p7._1.ctor === 'Just') {
 			return true;
 		} else {
 			return true;
 		}
 	} else {
-		if (_p6._1.ctor === 'Just') {
+		if (_p7._1.ctor === 'Just') {
 			return false;
 		} else {
 			return false;
@@ -9246,12 +9254,12 @@ var _user$project$State_Failure$shouldDiff = function (failure) {
 	}
 };
 var _user$project$State_Failure$hasComplexComparison = function (failure) {
-	var _p7 = failure;
-	if (_p7.ctor === 'SimpleFailure') {
+	var _p8 = failure;
+	if (_p8.ctor === 'SimpleFailure') {
 		return false;
 	} else {
-		var _p8 = _p7._0.reason.data;
-		if (_p8.ctor === 'ComplexComparison') {
+		var _p9 = _p8._0.reason.data;
+		if (_p9.ctor === 'ComplexComparison') {
 			return true;
 		} else {
 			return false;
@@ -9259,19 +9267,19 @@ var _user$project$State_Failure$hasComplexComparison = function (failure) {
 	}
 };
 var _user$project$State_Failure$getGiven = function (failure) {
-	var _p9 = failure;
-	if (_p9.ctor === 'SimpleFailure') {
+	var _p10 = failure;
+	if (_p10.ctor === 'SimpleFailure') {
 		return _elm_lang$core$Maybe$Nothing;
 	} else {
-		return _p9._0.given;
+		return _p10._0.given;
 	}
 };
 var _user$project$State_Failure$getMessage = function (failure) {
-	var _p10 = failure;
-	if (_p10.ctor === 'SimpleFailure') {
-		return _p10._0;
+	var _p11 = failure;
+	if (_p11.ctor === 'SimpleFailure') {
+		return _p11._0;
 	} else {
-		return _p10._0.message;
+		return _p11._0.message;
 	}
 };
 var _user$project$State_Failure$ComparisonData = F5(
@@ -10285,6 +10293,9 @@ var _user$project$View_OutputDisplay$givenDisplay = function (failure) {
 		return _elm_lang$html$Html$text('');
 	}
 };
+var _user$project$View_OutputDisplay$headerText = function (failure) {
+	return _user$project$State_Failure$isTodo(failure) ? 'TODO: ' : 'Failed on: ';
+};
 var _user$project$View_OutputDisplay$toHtml = function (change) {
 	var _p1 = change;
 	switch (_p1.ctor) {
@@ -10390,7 +10401,8 @@ var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
 				},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text('Failed on: '),
+					_0: _elm_lang$html$Html$text(
+						_user$project$View_OutputDisplay$headerText(_p4)),
 					_1: {
 						ctor: '::',
 						_0: A2(

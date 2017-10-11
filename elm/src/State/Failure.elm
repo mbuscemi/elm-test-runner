@@ -8,6 +8,7 @@ module State.Failure
         , getGiven
         , getMessage
         , hasComplexComparison
+        , isTodo
         , shouldDiff
         )
 
@@ -250,4 +251,14 @@ shouldDiff failure =
             True
 
         ( Nothing, Nothing ) ->
+            False
+
+
+isTodo : Failure -> Bool
+isTodo failure =
+    case failure of
+        SimpleFailure _ ->
+            True
+
+        ComplexFailure _ ->
             False

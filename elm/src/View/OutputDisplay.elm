@@ -12,6 +12,7 @@ import State.Failure
         , getGiven
         , getMessage
         , hasComplexComparison
+        , isTodo
         , shouldDiff
         )
 
@@ -30,7 +31,7 @@ failureText maybeFailure =
                     process failure
             in
             [ div [ class "failure-header" ]
-                [ text <| "Failed on: "
+                [ text <| headerText failure
                 , strong [] [ text <| getMessage failure ]
                 ]
             , givenDisplay failure
@@ -88,6 +89,14 @@ toHtml change =
 
         NoChange char ->
             text <| String.fromChar char
+
+
+headerText : Failure -> String
+headerText failure =
+    if isTodo failure then
+        "TODO: "
+    else
+        "Failed on: "
 
 
 givenDisplay : Failure -> Html message
