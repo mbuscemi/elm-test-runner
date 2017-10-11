@@ -1,5 +1,6 @@
 module Tests exposing (suite)
 
+import Dict
 import Expect exposing (FloatingPointTolerance(Absolute))
 import Test exposing (Test, describe, test)
 import Tree.Core exposing (Tree(Node))
@@ -316,6 +317,18 @@ suite =
                         \_ ->
                             [ 1, 2, 4, 6 ]
                                 |> Expect.equalLists [ 1, 2, 5 ]
+                    ]
+                ]
+            , describe "Expect.equalDicts" <|
+                [ describe "documentation example" <|
+                    [ test "passing" <|
+                        \_ ->
+                            Dict.fromList [ ( 1, "one" ), ( 2, "two" ) ]
+                                |> Expect.equalDicts (Dict.fromList [ ( 1, "one" ), ( 2, "two" ) ])
+                    , test "failing" <|
+                        \_ ->
+                            Dict.fromList [ ( 1, "one" ), ( 2, "too" ) ]
+                                |> Expect.equalDicts (Dict.fromList [ ( 1, "one" ), ( 2, "two" ), ( 3, "three" ) ])
                     ]
                 ]
             ]
