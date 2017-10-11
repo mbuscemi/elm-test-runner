@@ -2,9 +2,10 @@ module Tests exposing (suite)
 
 import Dict
 import Expect exposing (FloatingPointTolerance(Absolute))
+import Fuzz exposing (int)
 import Json.Decode exposing (decodeString, int)
 import Set
-import Test exposing (Test, describe, test)
+import Test exposing (Test, describe, fuzz, test)
 import Tree.Core exposing (Tree(Node))
 import Tree.Merge exposing (fromPath)
 
@@ -349,7 +350,7 @@ suite =
                 [ describe "documentation example" <|
                     [ test "passing" <|
                         \_ ->
-                            case decodeString int "42" of
+                            case decodeString Json.Decode.int "42" of
                                 Ok _ ->
                                     Expect.pass
 
@@ -357,7 +358,7 @@ suite =
                                     Expect.fail err
                     , test "failing" <|
                         \_ ->
-                            case decodeString int "forty-two" of
+                            case decodeString Json.Decode.int "forty-two" of
                                 Ok _ ->
                                     Expect.pass
 
@@ -372,6 +373,16 @@ suite =
                             "something"
                                 |> Expect.equal "something else"
                                 |> Expect.onFail "thought those two strings would be the same"
+                    ]
+                ]
+            , describe "fuzz tests" <|
+                [ describe "simple example / adding one" <|
+                    [ fuzz Fuzz.int "passing" <|
+                        \num ->
+                            (\x -> x + 1) num |> Expect.equal (num + 1)
+                    , fuzz Fuzz.float "failing" <|
+                        \num ->
+                            (\x -> x + 1.0000000001) num |> Expect.equal (num + 1)
                     ]
                 ]
             , describe "final passing test" <|

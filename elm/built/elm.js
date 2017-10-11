@@ -9258,12 +9258,20 @@ var _user$project$State_Failure$hasComplexComparison = function (failure) {
 		}
 	}
 };
-var _user$project$State_Failure$getMessage = function (failure) {
+var _user$project$State_Failure$getGiven = function (failure) {
 	var _p9 = failure;
 	if (_p9.ctor === 'SimpleFailure') {
-		return _p9._0;
+		return _elm_lang$core$Maybe$Nothing;
 	} else {
-		return _p9._0.message;
+		return _p9._0.given;
+	}
+};
+var _user$project$State_Failure$getMessage = function (failure) {
+	var _p10 = failure;
+	if (_p10.ctor === 'SimpleFailure') {
+		return _p10._0;
+	} else {
+		return _p10._0.message;
 	}
 };
 var _user$project$State_Failure$ComparisonData = F5(
@@ -9273,9 +9281,9 @@ var _user$project$State_Failure$ComparisonData = F5(
 var _user$project$State_Failure$Reason = function (a) {
 	return {data: a};
 };
-var _user$project$State_Failure$FailureData = F2(
-	function (a, b) {
-		return {message: a, reason: b};
+var _user$project$State_Failure$FailureData = F3(
+	function (a, b, c) {
+		return {message: a, reason: b, given: c};
 	});
 var _user$project$State_Failure$Simple = function (a) {
 	return {ctor: 'Simple', _0: a};
@@ -9346,11 +9354,13 @@ var _user$project$State_Failure$failure = _elm_lang$core$Json_Decode$oneOf(
 			_0: A2(
 				_elm_lang$core$Json_Decode$map,
 				_user$project$State_Failure$ComplexFailure,
-				A3(
-					_elm_lang$core$Json_Decode$map2,
+				A4(
+					_elm_lang$core$Json_Decode$map3,
 					_user$project$State_Failure$FailureData,
 					A2(_elm_lang$core$Json_Decode$field, 'message', _elm_lang$core$Json_Decode$string),
-					A2(_elm_lang$core$Json_Decode$field, 'reason', _user$project$State_Failure$reason))),
+					A2(_elm_lang$core$Json_Decode$field, 'reason', _user$project$State_Failure$reason),
+					_elm_lang$core$Json_Decode$maybe(
+						A2(_elm_lang$core$Json_Decode$field, 'given', _elm_lang$core$Json_Decode$string)))),
 			_1: {ctor: '[]'}
 		}
 	});
@@ -10255,9 +10265,29 @@ var _user$project$View_OutputDisplay$barMiddle = function (comparison) {
 	return A2(_user$project$View_OutputDisplay$barPiece, '│ ', comparison);
 };
 var _user$project$View_OutputDisplay$barTop = A2(_user$project$View_OutputDisplay$barPiece, '╷', '');
+var _user$project$View_OutputDisplay$givenDisplay = function (failure) {
+	var _p0 = _user$project$State_Failure$getGiven(failure);
+	if (_p0.ctor === 'Just') {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('given-display'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					A2(_elm_lang$core$Basics_ops['++'], 'Given: ', _p0._0)),
+				_1: {ctor: '[]'}
+			});
+	} else {
+		return _elm_lang$html$Html$text('');
+	}
+};
 var _user$project$View_OutputDisplay$toHtml = function (change) {
-	var _p0 = change;
-	switch (_p0.ctor) {
+	var _p1 = change;
+	switch (_p1.ctor) {
 		case 'Added':
 			return A2(
 				_elm_lang$html$Html$span,
@@ -10269,7 +10299,7 @@ var _user$project$View_OutputDisplay$toHtml = function (change) {
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html$text(
-						_elm_lang$core$String$fromChar(_p0._0)),
+						_elm_lang$core$String$fromChar(_p1._0)),
 					_1: {ctor: '[]'}
 				});
 		case 'Removed':
@@ -10283,12 +10313,12 @@ var _user$project$View_OutputDisplay$toHtml = function (change) {
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html$text(
-						_elm_lang$core$String$fromChar(_p0._0)),
+						_elm_lang$core$String$fromChar(_p1._0)),
 					_1: {ctor: '[]'}
 				});
 		default:
 			return _elm_lang$html$Html$text(
-				_elm_lang$core$String$fromChar(_p0._0));
+				_elm_lang$core$String$fromChar(_p1._0));
 	}
 };
 var _user$project$View_OutputDisplay$foldChangeIntoHtml = F2(
@@ -10343,12 +10373,12 @@ var _user$project$View_OutputDisplay$process = function (failure) {
 	};
 };
 var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
-	var _p1 = maybeFailure;
-	if (_p1.ctor === 'Just') {
-		var _p3 = _p1._0;
-		var _p2 = _user$project$View_OutputDisplay$process(_p3);
-		var expected = _p2._0;
-		var actual = _p2._1;
+	var _p2 = maybeFailure;
+	if (_p2.ctor === 'Just') {
+		var _p4 = _p2._0;
+		var _p3 = _user$project$View_OutputDisplay$process(_p4);
+		var expected = _p3._0;
+		var actual = _p3._1;
 		return {
 			ctor: '::',
 			_0: A2(
@@ -10369,7 +10399,7 @@ var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html$text(
-									_user$project$State_Failure$getMessage(_p3)),
+									_user$project$State_Failure$getMessage(_p4)),
 								_1: {ctor: '[]'}
 							}),
 						_1: {ctor: '[]'}
@@ -10377,37 +10407,41 @@ var _user$project$View_OutputDisplay$failureText = function (maybeFailure) {
 				}),
 			_1: {
 				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('actual'),
-						_1: {ctor: '[]'}
-					},
-					actual),
+				_0: _user$project$View_OutputDisplay$givenDisplay(_p4),
 				_1: {
 					ctor: '::',
-					_0: _user$project$View_OutputDisplay$barTop(_p3),
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('actual'),
+							_1: {ctor: '[]'}
+						},
+						actual),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_user$project$View_OutputDisplay$barMiddle,
-							_user$project$State_Failure$getMessage(_p3),
-							_p3),
+						_0: _user$project$View_OutputDisplay$barTop(_p4),
 						_1: {
 							ctor: '::',
-							_0: _user$project$View_OutputDisplay$barBottom(_p3),
+							_0: A2(
+								_user$project$View_OutputDisplay$barMiddle,
+								_user$project$State_Failure$getMessage(_p4),
+								_p4),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$div,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('expected'),
-										_1: {ctor: '[]'}
-									},
-									expected),
-								_1: {ctor: '[]'}
+								_0: _user$project$View_OutputDisplay$barBottom(_p4),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('expected'),
+											_1: {ctor: '[]'}
+										},
+										expected),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
 					}

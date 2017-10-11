@@ -5,12 +5,13 @@ module State.Failure
         , getActual
         , getComparison
         , getExpected
+        , getGiven
         , getMessage
         , hasComplexComparison
         , shouldDiff
         )
 
-import Json.Decode exposing (Decoder, field, list, map, map2, map5, maybe, oneOf, string)
+import Json.Decode exposing (Decoder, field, list, map, map3, map5, maybe, oneOf, string)
 
 
 type Expectation
@@ -68,6 +69,7 @@ reason =
 type alias FailureData =
     { message : String
     , reason : Reason
+    , given : Maybe String
     }
 
 
@@ -81,9 +83,10 @@ failure =
     oneOf
         [ map SimpleFailure string
         , map ComplexFailure <|
-            map2 FailureData
+            map3 FailureData
                 (field "message" string)
                 (field "reason" reason)
+                (maybe <| field "given" string)
         ]
 
 
@@ -95,6 +98,16 @@ getMessage failure =
 
         ComplexFailure complexFailure ->
             complexFailure.message
+
+
+getGiven : Failure -> Maybe String
+getGiven failure =
+    case failure of
+        SimpleFailure string ->
+            Nothing
+
+        ComplexFailure complexFailure ->
+            complexFailure.given
 
 
 hasComplexComparison : Failure -> Bool

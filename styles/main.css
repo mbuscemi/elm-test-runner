@@ -133,7 +133,8 @@
     transition: background-color 0.3s ease-in-out;
 }
 
-.etr-main-view .output-display .failure-header {
+.etr-main-view .output-display .failure-header,
+.etr-main-view .output-display .given-display  {
     margin: 0 0 1.5em 0;
 }
 

@@ -9,6 +9,7 @@ import State.Failure
         , getActual
         , getComparison
         , getExpected
+        , getGiven
         , getMessage
         , hasComplexComparison
         , shouldDiff
@@ -32,6 +33,7 @@ failureText maybeFailure =
                 [ text <| "Failed on: "
                 , strong [] [ text <| getMessage failure ]
                 ]
+            , givenDisplay failure
             , div [ class "actual" ] actual
             , barTop failure
             , barMiddle (getMessage failure) failure
@@ -86,6 +88,16 @@ toHtml change =
 
         NoChange char ->
             text <| String.fromChar char
+
+
+givenDisplay : Failure -> Html message
+givenDisplay failure =
+    case getGiven failure of
+        Just givenText ->
+            div [ class "given-display" ] [ text <| "Given: " ++ givenText ]
+
+        Nothing ->
+            text ""
 
 
 barTop : Failure -> Html message
