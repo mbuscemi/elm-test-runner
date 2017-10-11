@@ -9587,7 +9587,7 @@ var _user$project$TestEvent_TestCompleted$parse = function (rawData) {
 
 var _user$project$TestInstance_Reconcile$updateStatusPreferringFail = F2(
 	function ($new, old) {
-		return (_user$project$TestInstance_Core$isFailing($new) || _user$project$TestInstance_Core$isFailing(old)) ? A2(_user$project$TestInstance_Core$setStatus, 'fail', old) : A2(_user$project$TestInstance_Core$setStatus, 'pass', old);
+		return (_user$project$TestInstance_Core$isFailing($new) || _user$project$TestInstance_Core$isFailing(old)) ? A2(_user$project$TestInstance_Core$setStatus, 'fail', $new) : A2(_user$project$TestInstance_Core$setStatus, 'pass', $new);
 	});
 var _user$project$TestInstance_Reconcile$transform = F2(
 	function ($new, old) {
@@ -9651,7 +9651,7 @@ var _user$project$Tree_Merge$listToTree = F3(
 		}
 	});
 var _user$project$Tree_Merge$mergeChildren = F4(
-	function (path, originalData, newData, children) {
+	function (path, newData, transformer, children) {
 		var _p1 = path;
 		if (_p1.ctor === '[]') {
 			return children;
@@ -9662,23 +9662,24 @@ var _user$project$Tree_Merge$mergeChildren = F4(
 			if (_p2.ctor === '::') {
 				var _p4 = _p2._1;
 				var _p3 = _p2._0._0;
+				var transformedData = A2(transformer, newData, _p2._0._1);
 				return _elm_lang$core$Native_Utils.eq(_p3, _p5) ? {
 					ctor: '::',
 					_0: A3(
 						_user$project$Tree_Core$Node,
 						_p3,
-						newData,
-						A4(_user$project$Tree_Merge$mergeChildren, _p6, originalData, newData, _p2._0._2)),
+						transformedData,
+						A4(_user$project$Tree_Merge$mergeChildren, _p6, newData, transformer, _p2._0._2)),
 					_1: _p4
 				} : {
 					ctor: '::',
 					_0: _p2._0,
-					_1: A4(_user$project$Tree_Merge$mergeChildren, path, originalData, newData, _p4)
+					_1: A4(_user$project$Tree_Merge$mergeChildren, path, newData, transformer, _p4)
 				};
 			} else {
 				return {
 					ctor: '::',
-					_0: A3(_user$project$Tree_Merge$listToTree, _p5, originalData, _p6),
+					_0: A3(_user$project$Tree_Merge$listToTree, _p5, newData, _p6),
 					_1: {ctor: '[]'}
 				};
 			}
@@ -9700,7 +9701,7 @@ var _user$project$Tree_Merge$fromPath = F4(
 				_user$project$Tree_Core$Node,
 				_p13,
 				transformedData,
-				A4(_user$project$Tree_Merge$mergeChildren, _p11, newData, transformedData, _p12)) : A3(
+				A4(_user$project$Tree_Merge$mergeChildren, _p11, newData, transformer, _p12)) : A3(
 				_user$project$Tree_Core$Node,
 				_p13,
 				transformedData,

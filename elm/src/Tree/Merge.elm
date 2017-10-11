@@ -19,7 +19,7 @@ fromPath path newData transformer ((Node node data children) as tree) =
                     transformer newData data
             in
             if node == x then
-                Node node transformedData (mergeChildren xs newData transformedData children)
+                Node node transformedData (mergeChildren xs newData transformer children)
             else
                 Node node transformedData (listToTree x newData xs :: children)
 
@@ -34,19 +34,23 @@ listToTree first data path =
             Node first data [ listToTree x data xs ]
 
 
-mergeChildren : List a -> b -> b -> List (Tree a b) -> List (Tree a b)
-mergeChildren path originalData newData children =
+mergeChildren : List a -> b -> DataTransformer b -> List (Tree a b) -> List (Tree a b)
+mergeChildren path newData transformer children =
     case path of
         [] ->
             children
 
         x :: xs ->
             case children of
-                ((Node node _ nodeChildren) as current) :: rest ->
+                ((Node node data nodeChildren) as current) :: rest ->
+                    let
+                        transformedData =
+                            transformer newData data
+                    in
                     if node == x then
-                        Node node newData (mergeChildren xs originalData newData nodeChildren) :: rest
+                        Node node transformedData (mergeChildren xs newData transformer nodeChildren) :: rest
                     else
-                        current :: mergeChildren path originalData newData rest
+                        current :: mergeChildren path newData transformer rest
 
                 [] ->
-                    [ listToTree x originalData xs ]
+                    [ listToTree x newData xs ]

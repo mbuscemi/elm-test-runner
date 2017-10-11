@@ -11,6 +11,6 @@ transform new old =
 updateStatusPreferringFail : TestInstance -> TestInstance -> TestInstance
 updateStatusPreferringFail new old =
     if Core.isFailing new || Core.isFailing old then
-        Core.setStatus "fail" old
+        Core.setStatus "fail" new
     else
-        Core.setStatus "pass" old
+        Core.setStatus "pass" new
