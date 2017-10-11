@@ -374,6 +374,11 @@ suite =
                                 |> Expect.onFail "thought those two strings would be the same"
                     ]
                 ]
+            , describe "final passing test" <|
+                [ test "should not cause parent node to pass" <|
+                    \_ ->
+                        Expect.pass
+                ]
             ]
         ]
 

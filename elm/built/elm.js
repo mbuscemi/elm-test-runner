@@ -9673,7 +9673,7 @@ var _user$project$Tree_Merge$mergeChildren = F4(
 				} : {
 					ctor: '::',
 					_0: _p2._0,
-					_1: A4(_user$project$Tree_Merge$mergeChildren, path, originalData, originalData, _p4)
+					_1: A4(_user$project$Tree_Merge$mergeChildren, path, originalData, newData, _p4)
 				};
 			} else {
 				return {

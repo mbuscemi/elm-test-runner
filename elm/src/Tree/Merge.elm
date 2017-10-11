@@ -46,7 +46,7 @@ mergeChildren path originalData newData children =
                     if node == x then
                         Node node newData (mergeChildren xs originalData newData nodeChildren) :: rest
                     else
-                        current :: mergeChildren path originalData originalData rest
+                        current :: mergeChildren path originalData newData rest
 
                 [] ->
                     [ listToTree x originalData xs ]
