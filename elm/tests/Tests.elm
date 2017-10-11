@@ -379,10 +379,9 @@ suite =
                     \_ ->
                         Expect.pass
                 ]
-
-            -- , describe "a todo" <|
-            --     [ Test.todo "stuff & things"
-            --     ]
+            ]
+        , describe "Todo Functionality" <|
+            [ Test.todo "stuff & things"
             ]
         ]
 

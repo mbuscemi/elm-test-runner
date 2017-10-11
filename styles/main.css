@@ -64,6 +64,10 @@
     background-color: #55360a;
 }
 
+.etr-main-view .status-bar.incomplete {
+    background-color: #073d6f;
+}
+
 .etr-main-view .passing-tests .number-field {
     margin: 0 15% 0 0;
     text-align: left;
@@ -111,6 +115,11 @@
 
 .etr-main-view ul.test-list span.failed {
     color: red;
+    font-weight: bold;
+}
+
+.etr-main-view ul.test-list span.todo {
+    color: #2381eb;
     font-weight: bold;
 }
 

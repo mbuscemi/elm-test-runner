@@ -9153,10 +9153,8 @@ var _user$project$State_Failure$expectationText = function (expectation) {
 	}
 };
 var _user$project$State_Failure$getData = function (failure) {
-	var _p1 = failure.reason.data;
-	if (_p1.ctor === 'Complex') {
-		return _p1._0;
-	} else {
+	var _p1 = failure;
+	if (_p1.ctor === 'SimpleFailure') {
 		return {
 			comparison: _elm_lang$core$Maybe$Just(_p1._0),
 			actual: _elm_lang$core$Maybe$Nothing,
@@ -9164,32 +9162,26 @@ var _user$project$State_Failure$getData = function (failure) {
 			first: _elm_lang$core$Maybe$Nothing,
 			second: _elm_lang$core$Maybe$Nothing
 		};
+	} else {
+		var _p2 = _p1._0.reason.data;
+		if (_p2.ctor === 'SimpleComparison') {
+			return {
+				comparison: _elm_lang$core$Maybe$Just(_p2._0),
+				actual: _elm_lang$core$Maybe$Nothing,
+				expected: _elm_lang$core$Maybe$Nothing,
+				first: _elm_lang$core$Maybe$Nothing,
+				second: _elm_lang$core$Maybe$Nothing
+			};
+		} else {
+			return _p2._0;
+		}
 	}
 };
 var _user$project$State_Failure$getExpected = function (failure) {
 	var data = _user$project$State_Failure$getData(failure);
 	var expected = data.expected;
 	var first = data.first;
-	var _p2 = {ctor: '_Tuple2', _0: expected, _1: first};
-	if (_p2._0.ctor === 'Just') {
-		if (_p2._1.ctor === 'Just') {
-			return _user$project$State_Failure$expectationText(_p2._0._0);
-		} else {
-			return _user$project$State_Failure$expectationText(_p2._0._0);
-		}
-	} else {
-		if (_p2._1.ctor === 'Just') {
-			return _p2._1._0;
-		} else {
-			return '';
-		}
-	}
-};
-var _user$project$State_Failure$getActual = function (failure) {
-	var data = _user$project$State_Failure$getData(failure);
-	var actual = data.actual;
-	var second = data.second;
-	var _p3 = {ctor: '_Tuple2', _0: actual, _1: second};
+	var _p3 = {ctor: '_Tuple2', _0: expected, _1: first};
 	if (_p3._0.ctor === 'Just') {
 		if (_p3._1.ctor === 'Just') {
 			return _user$project$State_Failure$expectationText(_p3._0._0);
@@ -9204,13 +9196,32 @@ var _user$project$State_Failure$getActual = function (failure) {
 		}
 	}
 };
+var _user$project$State_Failure$getActual = function (failure) {
+	var data = _user$project$State_Failure$getData(failure);
+	var actual = data.actual;
+	var second = data.second;
+	var _p4 = {ctor: '_Tuple2', _0: actual, _1: second};
+	if (_p4._0.ctor === 'Just') {
+		if (_p4._1.ctor === 'Just') {
+			return _user$project$State_Failure$expectationText(_p4._0._0);
+		} else {
+			return _user$project$State_Failure$expectationText(_p4._0._0);
+		}
+	} else {
+		if (_p4._1.ctor === 'Just') {
+			return _p4._1._0;
+		} else {
+			return '';
+		}
+	}
+};
 var _user$project$State_Failure$getComparison = function (failure) {
-	var _p4 = function (_) {
+	var _p5 = function (_) {
 		return _.comparison;
 	}(
 		_user$project$State_Failure$getData(failure));
-	if (_p4.ctor === 'Just') {
-		return _p4._0;
+	if (_p5.ctor === 'Just') {
+		return _p5._0;
 	} else {
 		return '';
 	}
@@ -9219,15 +9230,15 @@ var _user$project$State_Failure$shouldDiff = function (failure) {
 	var data = _user$project$State_Failure$getData(failure);
 	var expected = data.expected;
 	var first = data.first;
-	var _p5 = {ctor: '_Tuple2', _0: expected, _1: first};
-	if (_p5._0.ctor === 'Just') {
-		if (_p5._1.ctor === 'Just') {
+	var _p6 = {ctor: '_Tuple2', _0: expected, _1: first};
+	if (_p6._0.ctor === 'Just') {
+		if (_p6._1.ctor === 'Just') {
 			return true;
 		} else {
 			return true;
 		}
 	} else {
-		if (_p5._1.ctor === 'Just') {
+		if (_p6._1.ctor === 'Just') {
 			return false;
 		} else {
 			return false;
@@ -9235,15 +9246,25 @@ var _user$project$State_Failure$shouldDiff = function (failure) {
 	}
 };
 var _user$project$State_Failure$hasComplexComparison = function (failure) {
-	var _p6 = failure.reason.data;
-	if (_p6.ctor === 'Complex') {
-		return true;
-	} else {
+	var _p7 = failure;
+	if (_p7.ctor === 'SimpleFailure') {
 		return false;
+	} else {
+		var _p8 = _p7._0.reason.data;
+		if (_p8.ctor === 'ComplexComparison') {
+			return true;
+		} else {
+			return false;
+		}
 	}
 };
 var _user$project$State_Failure$getMessage = function (failure) {
-	return failure.message;
+	var _p9 = failure;
+	if (_p9.ctor === 'SimpleFailure') {
+		return _p9._0;
+	} else {
+		return _p9._0.message;
+	}
 };
 var _user$project$State_Failure$ComparisonData = F5(
 	function (a, b, c, d, e) {
@@ -9252,7 +9273,7 @@ var _user$project$State_Failure$ComparisonData = F5(
 var _user$project$State_Failure$Reason = function (a) {
 	return {data: a};
 };
-var _user$project$State_Failure$Failure = F2(
+var _user$project$State_Failure$FailureData = F2(
 	function (a, b) {
 		return {message: a, reason: b};
 	});
@@ -9275,21 +9296,21 @@ var _user$project$State_Failure$expectation = _elm_lang$core$Json_Decode$oneOf(
 			_1: {ctor: '[]'}
 		}
 	});
-var _user$project$State_Failure$Plain = function (a) {
-	return {ctor: 'Plain', _0: a};
+var _user$project$State_Failure$ComplexComparison = function (a) {
+	return {ctor: 'ComplexComparison', _0: a};
 };
-var _user$project$State_Failure$Complex = function (a) {
-	return {ctor: 'Complex', _0: a};
+var _user$project$State_Failure$SimpleComparison = function (a) {
+	return {ctor: 'SimpleComparison', _0: a};
 };
 var _user$project$State_Failure$comparison = _elm_lang$core$Json_Decode$oneOf(
 	{
 		ctor: '::',
-		_0: A2(_elm_lang$core$Json_Decode$map, _user$project$State_Failure$Plain, _elm_lang$core$Json_Decode$string),
+		_0: A2(_elm_lang$core$Json_Decode$map, _user$project$State_Failure$SimpleComparison, _elm_lang$core$Json_Decode$string),
 		_1: {
 			ctor: '::',
 			_0: A2(
 				_elm_lang$core$Json_Decode$map,
-				_user$project$State_Failure$Complex,
+				_user$project$State_Failure$ComplexComparison,
 				A6(
 					_elm_lang$core$Json_Decode$map5,
 					_user$project$State_Failure$ComparisonData,
@@ -9310,11 +9331,29 @@ var _user$project$State_Failure$reason = A2(
 	_elm_lang$core$Json_Decode$map,
 	_user$project$State_Failure$Reason,
 	A2(_elm_lang$core$Json_Decode$field, 'data', _user$project$State_Failure$comparison));
-var _user$project$State_Failure$failure = A3(
-	_elm_lang$core$Json_Decode$map2,
-	_user$project$State_Failure$Failure,
-	A2(_elm_lang$core$Json_Decode$field, 'message', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'reason', _user$project$State_Failure$reason));
+var _user$project$State_Failure$ComplexFailure = function (a) {
+	return {ctor: 'ComplexFailure', _0: a};
+};
+var _user$project$State_Failure$SimpleFailure = function (a) {
+	return {ctor: 'SimpleFailure', _0: a};
+};
+var _user$project$State_Failure$failure = _elm_lang$core$Json_Decode$oneOf(
+	{
+		ctor: '::',
+		_0: A2(_elm_lang$core$Json_Decode$map, _user$project$State_Failure$SimpleFailure, _elm_lang$core$Json_Decode$string),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$core$Json_Decode$map,
+				_user$project$State_Failure$ComplexFailure,
+				A3(
+					_elm_lang$core$Json_Decode$map2,
+					_user$project$State_Failure$FailureData,
+					A2(_elm_lang$core$Json_Decode$field, 'message', _elm_lang$core$Json_Decode$string),
+					A2(_elm_lang$core$Json_Decode$field, 'reason', _user$project$State_Failure$reason))),
+			_1: {ctor: '[]'}
+		}
+	});
 
 var _user$project$State_RunStatus$toClass = function (runStatus) {
 	var _p0 = runStatus;
@@ -9327,8 +9366,10 @@ var _user$project$State_RunStatus$toClass = function (runStatus) {
 			return 'last-passed';
 		case 'LastFailed':
 			return 'last-failed';
-		default:
+		case 'CompileError':
 			return 'compile-error';
+		default:
+			return 'incomplete';
 	}
 };
 var _user$project$State_RunStatus$toText = function (runStatus) {
@@ -9342,14 +9383,20 @@ var _user$project$State_RunStatus$toText = function (runStatus) {
 			return 'Passed';
 		case 'LastFailed':
 			return 'Failed';
-		default:
+		case 'CompileError':
 			return 'Compile Error';
+		default:
+			return 'Incomplete';
 	}
 };
+var _user$project$State_RunStatus$Incomplete = {ctor: 'Incomplete'};
+var _user$project$State_RunStatus$incomplete = _user$project$State_RunStatus$Incomplete;
 var _user$project$State_RunStatus$CompileError = {ctor: 'CompileError'};
 var _user$project$State_RunStatus$compileError = _user$project$State_RunStatus$CompileError;
 var _user$project$State_RunStatus$LastFailed = {ctor: 'LastFailed'};
+var _user$project$State_RunStatus$lastFailed = _user$project$State_RunStatus$LastFailed;
 var _user$project$State_RunStatus$LastPassed = {ctor: 'LastPassed'};
+var _user$project$State_RunStatus$lastPassed = _user$project$State_RunStatus$LastPassed;
 var _user$project$State_RunStatus$passFail = function (didPass) {
 	return didPass ? _user$project$State_RunStatus$LastPassed : _user$project$State_RunStatus$LastFailed;
 };
@@ -9450,8 +9497,10 @@ var _user$project$TestInstance_Core$toClass = function (instance) {
 			return 'passed';
 		case 'Fail':
 			return 'failed';
-		default:
+		case 'Pending':
 			return 'pending';
+		default:
+			return 'todo';
 	}
 };
 var _user$project$TestInstance_Core$toStatusIcon = function (instance) {
@@ -9461,14 +9510,20 @@ var _user$project$TestInstance_Core$toStatusIcon = function (instance) {
 			return '✓';
 		case 'Fail':
 			return '✗';
-		default:
+		case 'Pending':
 			return '○';
+		default:
+			return '»';
 	}
 };
 var _user$project$TestInstance_Core$TestInstance = F3(
 	function (a, b, c) {
 		return {testStatus: a, duration: b, failure: c};
 	});
+var _user$project$TestInstance_Core$Todo = {ctor: 'Todo'};
+var _user$project$TestInstance_Core$isTodo = function (instance) {
+	return _elm_lang$core$Native_Utils.eq(instance.testStatus, _user$project$TestInstance_Core$Todo);
+};
 var _user$project$TestInstance_Core$Pending = {ctor: 'Pending'};
 var _user$project$TestInstance_Core$default = {
 	testStatus: _user$project$TestInstance_Core$Pending,
@@ -9499,6 +9554,10 @@ var _user$project$TestInstance_Core$setStatus = F2(
 				return _elm_lang$core$Native_Utils.update(
 					instance,
 					{testStatus: _user$project$TestInstance_Core$Pending});
+			case 'todo':
+				return _elm_lang$core$Native_Utils.update(
+					instance,
+					{testStatus: _user$project$TestInstance_Core$Todo});
 			default:
 				return _elm_lang$core$Native_Utils.update(
 					instance,
@@ -9509,32 +9568,6 @@ var _user$project$TestInstance_Core$setStatus = F2(
 var _user$project$TestEvent_TestCompleted$labels = function (_p0) {
 	var _p1 = _p0;
 	return _p1._0.labels;
-};
-var _user$project$TestEvent_TestCompleted$passed = function (_p2) {
-	var _p3 = _p2;
-	var _p4 = _p3._0.status;
-	if (_p4.ctor === 'Pass') {
-		return true;
-	} else {
-		return false;
-	}
-};
-var _user$project$TestEvent_TestCompleted$toTestInstance = function (_p5) {
-	var _p6 = _p5;
-	var _p7 = _p6._0;
-	return A2(
-		_user$project$TestInstance_Core$setFailure,
-		_elm_lang$core$List$head(_p7.failures),
-		A2(
-			_user$project$TestInstance_Core$setDuration,
-			_p7.duration,
-			A2(
-				_user$project$TestInstance_Core$setStatus,
-				_user$project$TestEvent_TestCompleted$passed(_p6) ? 'pass' : 'fail',
-				_user$project$TestInstance_Core$default)));
-};
-var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
-	return _user$project$TestEvent_TestCompleted$passed(event) ? 1 : 0;
 };
 var _user$project$TestEvent_TestCompleted$defaultRawData = {
 	status: '',
@@ -9572,22 +9605,49 @@ var _user$project$TestEvent_TestCompleted$Parsed = F4(
 var _user$project$TestEvent_TestCompleted$TestCompleted = function (a) {
 	return {ctor: 'TestCompleted', _0: a};
 };
+var _user$project$TestEvent_TestCompleted$Todo = {ctor: 'Todo'};
+var _user$project$TestEvent_TestCompleted$isTodo = function (_p2) {
+	var _p3 = _p2;
+	return _elm_lang$core$Native_Utils.eq(_p3._0.status, _user$project$TestEvent_TestCompleted$Todo);
+};
 var _user$project$TestEvent_TestCompleted$Fail = {ctor: 'Fail'};
 var _user$project$TestEvent_TestCompleted$Pass = {ctor: 'Pass'};
 var _user$project$TestEvent_TestCompleted$parse = function (rawData) {
 	var parsed = _user$project$TestEvent_TestCompleted$parseJson(rawData);
 	return _user$project$TestEvent_TestCompleted$TestCompleted(
 		{
-			status: _elm_lang$core$Native_Utils.eq(parsed.status, 'pass') ? _user$project$TestEvent_TestCompleted$Pass : _user$project$TestEvent_TestCompleted$Fail,
+			status: _elm_lang$core$Native_Utils.eq(parsed.status, 'pass') ? _user$project$TestEvent_TestCompleted$Pass : (_elm_lang$core$Native_Utils.eq(parsed.status, 'todo') ? _user$project$TestEvent_TestCompleted$Todo : _user$project$TestEvent_TestCompleted$Fail),
 			labels: parsed.labels,
 			failures: parsed.failures,
 			duration: _user$project$TestEvent_Util$parseInt(parsed.duration)
 		});
 };
+var _user$project$TestEvent_TestCompleted$passed = function (_p4) {
+	var _p5 = _p4;
+	return _elm_lang$core$Native_Utils.eq(_p5._0.status, _user$project$TestEvent_TestCompleted$Pass);
+};
+var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
+	return _user$project$TestEvent_TestCompleted$passed(event) ? 1 : 0;
+};
+var _user$project$TestEvent_TestCompleted$toTestInstance = function (_p6) {
+	var _p7 = _p6;
+	var _p9 = _p7._0;
+	var _p8 = _p7;
+	return A2(
+		_user$project$TestInstance_Core$setFailure,
+		_elm_lang$core$List$head(_p9.failures),
+		A2(
+			_user$project$TestInstance_Core$setDuration,
+			_p9.duration,
+			A2(
+				_user$project$TestInstance_Core$setStatus,
+				_user$project$TestEvent_TestCompleted$passed(_p8) ? 'pass' : (_user$project$TestEvent_TestCompleted$isTodo(_p8) ? 'todo' : 'fail'),
+				_user$project$TestInstance_Core$default)));
+};
 
 var _user$project$TestInstance_Reconcile$updateStatusPreferringFail = F2(
 	function ($new, old) {
-		return (_user$project$TestInstance_Core$isFailing($new) || _user$project$TestInstance_Core$isFailing(old)) ? A2(_user$project$TestInstance_Core$setStatus, 'fail', $new) : A2(_user$project$TestInstance_Core$setStatus, 'pass', $new);
+		return (_user$project$TestInstance_Core$isFailing($new) || _user$project$TestInstance_Core$isFailing(old)) ? A2(_user$project$TestInstance_Core$setStatus, 'fail', $new) : ((_user$project$TestInstance_Core$isTodo($new) || _user$project$TestInstance_Core$isTodo(old)) ? A2(_user$project$TestInstance_Core$setStatus, 'todo', $new) : A2(_user$project$TestInstance_Core$setStatus, 'pass', $new));
 	});
 var _user$project$TestInstance_Reconcile$transform = F2(
 	function ($new, old) {
@@ -9736,40 +9796,55 @@ var _user$project$Tree_Node$toggle = F3(
 				_p3));
 	});
 
+var _user$project$Tree_Traverse$hasMatchingNode = F2(
+	function (evaluator, _p0) {
+		var _p1 = _p0;
+		return evaluator(_p1._1) ? true : A3(
+			_elm_lang$core$List$foldl,
+			F2(
+				function (x, y) {
+					return x || y;
+				}),
+			false,
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Tree_Traverse$hasMatchingNode(evaluator),
+				_p1._2));
+	});
 var _user$project$Tree_Traverse$purgeNodes = F2(
 	function (evaluator, nodeList) {
 		return A2(
 			_elm_lang$core$List$filter,
-			function (_p0) {
-				var _p1 = _p0;
-				return evaluator(_p1._1);
+			function (_p2) {
+				var _p3 = _p2;
+				return evaluator(_p3._1);
 			},
 			nodeList);
 	});
 var _user$project$Tree_Traverse$purge = F2(
-	function (evaluator, _p2) {
-		var _p3 = _p2;
-		return A3(
-			_user$project$Tree_Core$Node,
-			_p3._0,
-			_p3._1,
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$Tree_Traverse$purge(evaluator),
-				A2(_user$project$Tree_Traverse$purgeNodes, evaluator, _p3._2)));
-	});
-var _user$project$Tree_Traverse$update = F2(
-	function (updater, _p4) {
+	function (evaluator, _p4) {
 		var _p5 = _p4;
-		var updatedData = updater(_p5._1);
 		return A3(
 			_user$project$Tree_Core$Node,
 			_p5._0,
+			_p5._1,
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Tree_Traverse$purge(evaluator),
+				A2(_user$project$Tree_Traverse$purgeNodes, evaluator, _p5._2)));
+	});
+var _user$project$Tree_Traverse$update = F2(
+	function (updater, _p6) {
+		var _p7 = _p6;
+		var updatedData = updater(_p7._1);
+		return A3(
+			_user$project$Tree_Core$Node,
+			_p7._0,
 			updatedData,
 			A2(
 				_elm_lang$core$List$map,
 				_user$project$Tree_Traverse$update(updater),
-				_p5._2));
+				_p7._2));
 	});
 
 var _user$project$Model_Core$randomSeedForJS = function (model) {
@@ -9800,21 +9875,21 @@ var _user$project$Model_Core$toggleNode = F3(
 				testHierarchy: A3(_user$project$Tree_Node$toggle, nodeId, newState, model.testHierarchy)
 			});
 	});
-var _user$project$Model_Core$toggleFailingNodes = function (_p1) {
+var _user$project$Model_Core$toggleFailingAndTodoNodes = function (_p1) {
 	var _p2 = _p1;
 	var _p3 = _p2._1;
-	var expanded = _user$project$TestInstance_Core$isFailing(_p3);
+	var expanded = _user$project$TestInstance_Core$isFailing(_p3) || _user$project$TestInstance_Core$isTodo(_p3);
 	return A3(
 		_user$project$Tree_Core$Node,
 		{ctor: '_Tuple3', _0: _p2._0._0, _1: expanded, _2: _p2._0._2},
 		_p3,
-		A2(_elm_lang$core$List$map, _user$project$Model_Core$toggleFailingNodes, _p2._2));
+		A2(_elm_lang$core$List$map, _user$project$Model_Core$toggleFailingAndTodoNodes, _p2._2));
 };
-var _user$project$Model_Core$expandFailingNodes = function (model) {
+var _user$project$Model_Core$expandFailingAndTodoNodes = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{
-			testHierarchy: _user$project$Model_Core$toggleFailingNodes(model.testHierarchy)
+			testHierarchy: _user$project$Model_Core$toggleFailingAndTodoNodes(model.testHierarchy)
 		});
 };
 var _user$project$Model_Core$purgeObsoleteNodes = function (model) {
@@ -9911,15 +9986,26 @@ var _user$project$Model_Core$setRunStatusToCompileError = function (model) {
 		model,
 		{runStatus: _user$project$State_RunStatus$compileError});
 };
-var _user$project$Model_Core$setRunStatusToPassFail = F2(
+var _user$project$Model_Core$setRunStatusForTodo = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			runStatus: A2(_user$project$Tree_Traverse$hasMatchingNode, _user$project$TestInstance_Core$isTodo, model.testRuns) ? _user$project$State_RunStatus$incomplete : model.runStatus
+		});
+};
+var _user$project$Model_Core$setRunStatusForFailure = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{
-				runStatus: _user$project$State_RunStatus$passFail(
-					_user$project$TestEvent_RunComplete$passed(event))
+				runStatus: (!_user$project$TestEvent_RunComplete$passed(event)) ? _user$project$State_RunStatus$lastFailed : model.runStatus
 			});
 	});
+var _user$project$Model_Core$setRunStatusToPassing = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{runStatus: _user$project$State_RunStatus$lastPassed});
+};
 var _user$project$Model_Core$setRunStatusToProcessing = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -11101,13 +11187,17 @@ var _user$project$Main$update = F2(
 			case 'RunComplete':
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
-					_user$project$Model_Core$expandFailingNodes(
+					_user$project$Model_Core$expandFailingAndTodoNodes(
 						_user$project$Model_Core$updateHierarchy(
 							_user$project$Model_Core$purgeObsoleteNodes(
 								A2(
 									_user$project$Model_Core$setRunDuration,
 									event,
-									A2(_user$project$Model_Core$setRunStatusToPassFail, event, model))))));
+									A2(
+										_user$project$Model_Core$setRunStatusForFailure,
+										event,
+										_user$project$Model_Core$setRunStatusForTodo(
+											_user$project$Model_Core$setRunStatusToPassing(model))))))));
 			case 'TestListItemExpand':
 				return _user$project$Main$andNoCommand(
 					A3(_user$project$Model_Core$toggleNode, _p0._0, true, model));

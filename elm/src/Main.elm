@@ -7,7 +7,7 @@ import Model.Core as Model
         , buildTestRunDataTree
         , clearRunDuration
         , clearRunSeed
-        , expandFailingNodes
+        , expandFailingAndTodoNodes
         , invertAutoRun
         , purgeObsoleteNodes
         , randomSeedForJS
@@ -17,8 +17,10 @@ import Model.Core as Model
         , setRandomSeedForcing
         , setRunDuration
         , setRunSeed
+        , setRunStatusForFailure
+        , setRunStatusForTodo
         , setRunStatusToCompileError
-        , setRunStatusToPassFail
+        , setRunStatusToPassing
         , setRunStatusToProcessing
         , setSelectedTest
         , setSelectedTestFailure
@@ -126,11 +128,13 @@ update message model =
                 event =
                     RunComplete.parse data
             in
-            setRunStatusToPassFail event model
+            setRunStatusToPassing model
+                |> setRunStatusForTodo
+                |> setRunStatusForFailure event
                 |> setRunDuration event
                 |> purgeObsoleteNodes
                 |> updateHierarchy
-                |> expandFailingNodes
+                |> expandFailingAndTodoNodes
                 |> andNoCommand
 
         TestListItemExpand nodeId ->

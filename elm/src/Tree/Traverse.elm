@@ -1,4 +1,4 @@
-module Tree.Traverse exposing (purge, update)
+module Tree.Traverse exposing (hasMatchingNode, purge, update)
 
 import Tree.Core exposing (Tree(Node))
 
@@ -32,3 +32,14 @@ purgeNodes evaluator nodeList =
     List.filter
         (\(Node _ data _) -> evaluator data)
         nodeList
+
+
+hasMatchingNode : DataEvaluator b -> Tree a b -> Bool
+hasMatchingNode evaluator (Node node data children) =
+    if evaluator data then
+        True
+    else
+        List.foldl
+            (||)
+            False
+            (List.map (hasMatchingNode evaluator) children)

@@ -1,4 +1,16 @@
-module State.RunStatus exposing (RunStatus, compileError, noData, passFail, processing, toClass, toText)
+module State.RunStatus
+    exposing
+        ( RunStatus
+        , compileError
+        , incomplete
+        , lastFailed
+        , lastPassed
+        , noData
+        , passFail
+        , processing
+        , toClass
+        , toText
+        )
 
 
 type RunStatus
@@ -7,6 +19,17 @@ type RunStatus
     | LastPassed
     | LastFailed
     | CompileError
+    | Incomplete
+
+
+lastPassed : RunStatus
+lastPassed =
+    LastPassed
+
+
+lastFailed : RunStatus
+lastFailed =
+    LastFailed
 
 
 noData : RunStatus
@@ -22,6 +45,11 @@ processing =
 compileError : RunStatus
 compileError =
     CompileError
+
+
+incomplete : RunStatus
+incomplete =
+    Incomplete
 
 
 passFail : Bool -> RunStatus
@@ -50,6 +78,9 @@ toText runStatus =
         CompileError ->
             "Compile Error"
 
+        Incomplete ->
+            "Incomplete"
+
 
 toClass : RunStatus -> String
 toClass runStatus =
@@ -68,3 +99,6 @@ toClass runStatus =
 
         CompileError ->
             "compile-error"
+
+        Incomplete ->
+            "incomplete"

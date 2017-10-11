@@ -6,6 +6,7 @@ module TestInstance.Core
         , getFailure
         , isFailing
         , isPending
+        , isTodo
         , setDuration
         , setFailure
         , setStatus
@@ -21,6 +22,7 @@ type TestStatus
     = Pass
     | Fail
     | Pending
+    | Todo
 
 
 type alias TestInstance =
@@ -50,6 +52,9 @@ toStatusIcon instance =
         Pending ->
             "○"
 
+        Todo ->
+            "»"
+
 
 toClass : TestInstance -> String
 toClass instance =
@@ -63,6 +68,9 @@ toClass instance =
         Pending ->
             "pending"
 
+        Todo ->
+            "todo"
+
 
 isFailing : TestInstance -> Bool
 isFailing instance =
@@ -72,6 +80,11 @@ isFailing instance =
 isPending : TestInstance -> Bool
 isPending instance =
     instance.testStatus == Pending
+
+
+isTodo : TestInstance -> Bool
+isTodo instance =
+    instance.testStatus == Todo
 
 
 getFailure : TestInstance -> Maybe Failure
@@ -90,6 +103,9 @@ setStatus newStatus instance =
 
         "pending" ->
             { instance | testStatus = Pending }
+
+        "todo" ->
+            { instance | testStatus = Todo }
 
         _ ->
             { instance | testStatus = Pending }

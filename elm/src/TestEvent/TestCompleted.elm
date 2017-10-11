@@ -44,6 +44,7 @@ defaultRawData =
 type TestStatus
     = Pass
     | Fail
+    | Todo
 
 
 type alias Parsed =
@@ -64,6 +65,8 @@ parse rawData =
         { status =
             if parsed.status == "pass" then
                 Pass
+            else if parsed.status == "todo" then
+                Todo
             else
                 Fail
         , labels = parsed.labels
@@ -88,12 +91,12 @@ passedTestCountToIncrement event =
 
 passed : TestCompleted -> Bool
 passed (TestCompleted parsed) =
-    case parsed.status of
-        Pass ->
-            True
+    parsed.status == Pass
 
-        Fail ->
-            False
+
+isTodo : TestCompleted -> Bool
+isTodo (TestCompleted parsed) =
+    parsed.status == Todo
 
 
 labels : TestCompleted -> List String
@@ -107,6 +110,8 @@ toTestInstance ((TestCompleted parsed) as event) =
         |> TestInstance.setStatus
             (if passed event then
                 "pass"
+             else if isTodo event then
+                "todo"
              else
                 "fail"
             )

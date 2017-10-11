@@ -12,5 +12,7 @@ updateStatusPreferringFail : TestInstance -> TestInstance -> TestInstance
 updateStatusPreferringFail new old =
     if Core.isFailing new || Core.isFailing old then
         Core.setStatus "fail" new
+    else if Core.isTodo new || Core.isTodo old then
+        Core.setStatus "todo" new
     else
         Core.setStatus "pass" new

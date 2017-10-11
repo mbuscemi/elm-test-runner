@@ -5,7 +5,7 @@ module Model.Core
         , clearRunDuration
         , clearRunSeed
         , default
-        , expandFailingNodes
+        , expandFailingAndTodoNodes
         , invertAutoRun
         , purgeObsoleteNodes
         , randomSeedForJS
@@ -15,8 +15,10 @@ module Model.Core
         , setRandomSeedForcing
         , setRunDuration
         , setRunSeed
+        , setRunStatusForFailure
+        , setRunStatusForTodo
         , setRunStatusToCompileError
-        , setRunStatusToPassFail
+        , setRunStatusToPassing
         , setRunStatusToProcessing
         , setSelectedTest
         , setSelectedTestFailure
@@ -96,9 +98,31 @@ setRunStatusToProcessing model =
     { model | runStatus = RunStatus.processing }
 
 
-setRunStatusToPassFail : RunComplete -> Model -> Model
-setRunStatusToPassFail event model =
-    { model | runStatus = RunStatus.passFail <| RunComplete.passed event }
+setRunStatusToPassing : Model -> Model
+setRunStatusToPassing model =
+    { model | runStatus = RunStatus.lastPassed }
+
+
+setRunStatusForFailure : RunComplete -> Model -> Model
+setRunStatusForFailure event model =
+    { model
+        | runStatus =
+            if not <| RunComplete.passed event then
+                RunStatus.lastFailed
+            else
+                model.runStatus
+    }
+
+
+setRunStatusForTodo : Model -> Model
+setRunStatusForTodo model =
+    { model
+        | runStatus =
+            if Tree.Traverse.hasMatchingNode TestInstance.isTodo model.testRuns then
+                RunStatus.incomplete
+            else
+                model.runStatus
+    }
 
 
 setRunStatusToCompileError : Model -> Model
@@ -208,19 +232,19 @@ removeTopNode node =
             Node humanReadableTopLevelMessage data []
 
 
-expandFailingNodes : Model -> Model
-expandFailingNodes model =
-    { model | testHierarchy = toggleFailingNodes model.testHierarchy }
+expandFailingAndTodoNodes : Model -> Model
+expandFailingAndTodoNodes model =
+    { model | testHierarchy = toggleFailingAndTodoNodes model.testHierarchy }
 
 
-toggleFailingNodes : CollapsibleTree String TestInstance -> CollapsibleTree String TestInstance
-toggleFailingNodes (Node ( name, _, nodeId ) testInstance children) =
+toggleFailingAndTodoNodes : CollapsibleTree String TestInstance -> CollapsibleTree String TestInstance
+toggleFailingAndTodoNodes (Node ( name, _, nodeId ) testInstance children) =
     let
         expanded =
-            TestInstance.isFailing testInstance
+            TestInstance.isFailing testInstance || TestInstance.isTodo testInstance
     in
     Node ( name, expanded, nodeId ) testInstance <|
-        List.map toggleFailingNodes children
+        List.map toggleFailingAndTodoNodes children
 
 
 toggleNode : Int -> Bool -> Model -> Model

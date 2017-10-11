@@ -36,15 +36,15 @@ type alias ComparisonData =
 
 
 type Comparison
-    = Complex ComparisonData
-    | Plain String
+    = SimpleComparison String
+    | ComplexComparison ComparisonData
 
 
 comparison : Decoder Comparison
 comparison =
     oneOf
-        [ map Plain string
-        , map Complex <|
+        [ map SimpleComparison string
+        , map ComplexComparison <|
             map5 ComparisonData
                 (maybe <| field "comparison" string)
                 (maybe <| field "actual" expectation)
@@ -65,47 +65,76 @@ reason =
         (field "data" comparison)
 
 
-type alias Failure =
+type alias FailureData =
     { message : String
     , reason : Reason
     }
 
 
+type Failure
+    = SimpleFailure String
+    | ComplexFailure FailureData
+
+
 failure : Decoder Failure
 failure =
-    map2 Failure
-        (field "message" string)
-        (field "reason" reason)
+    oneOf
+        [ map SimpleFailure string
+        , map ComplexFailure <|
+            map2 FailureData
+                (field "message" string)
+                (field "reason" reason)
+        ]
 
 
 getMessage : Failure -> String
 getMessage failure =
-    failure.message
+    case failure of
+        SimpleFailure string ->
+            string
+
+        ComplexFailure complexFailure ->
+            complexFailure.message
 
 
 hasComplexComparison : Failure -> Bool
 hasComplexComparison failure =
-    case failure.reason.data of
-        Complex _ ->
-            True
-
-        Plain _ ->
+    case failure of
+        SimpleFailure _ ->
             False
+
+        ComplexFailure complexFailure ->
+            case complexFailure.reason.data of
+                ComplexComparison _ ->
+                    True
+
+                SimpleComparison _ ->
+                    False
 
 
 getData : Failure -> ComparisonData
 getData failure =
-    case failure.reason.data of
-        Complex data ->
-            data
-
-        Plain string ->
+    case failure of
+        SimpleFailure string ->
             { comparison = Just string
             , actual = Nothing
             , expected = Nothing
             , first = Nothing
             , second = Nothing
             }
+
+        ComplexFailure complexFailure ->
+            case complexFailure.reason.data of
+                SimpleComparison string ->
+                    { comparison = Just string
+                    , actual = Nothing
+                    , expected = Nothing
+                    , first = Nothing
+                    , second = Nothing
+                    }
+
+                ComplexComparison data ->
+                    data
 
 
 expectationText : Expectation -> String
