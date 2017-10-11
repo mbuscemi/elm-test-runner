@@ -34,7 +34,7 @@ failureText maybeFailure =
                 ]
             , div [ class "actual" ] actual
             , barTop failure
-            , barMiddle (getComparison failure) failure
+            , barMiddle (getMessage failure) failure
             , barBottom failure
             , div [ class "expected" ] expected
             ]

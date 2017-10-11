@@ -10,13 +10,26 @@ module State.Failure
         , shouldDiff
         )
 
-import Json.Decode exposing (Decoder, field, map, map2, map5, maybe, oneOf, string)
+import Json.Decode exposing (Decoder, field, list, map, map2, map5, maybe, oneOf, string)
+
+
+type Expectation
+    = ListFields (List String)
+    | Simple String
+
+
+expectation : Decoder Expectation
+expectation =
+    oneOf
+        [ map ListFields (list string)
+        , map Simple string
+        ]
 
 
 type alias ComparisonData =
-    { comparison : String
-    , actual : Maybe String
-    , expected : Maybe String
+    { comparison : Maybe String
+    , actual : Maybe Expectation
+    , expected : Maybe Expectation
     , first : Maybe String
     , second : Maybe String
     }
@@ -30,14 +43,14 @@ type Comparison
 comparison : Decoder Comparison
 comparison =
     oneOf
-        [ map Complex <|
+        [ map Plain string
+        , map Complex <|
             map5 ComparisonData
-                (field "comparison" string)
-                (maybe (field "actual" string))
-                (maybe (field "expected" string))
-                (maybe (field "first" string))
-                (maybe (field "second" string))
-        , map Plain string
+                (maybe <| field "comparison" string)
+                (maybe <| field "actual" expectation)
+                (maybe <| field "expected" expectation)
+                (maybe <| field "first" string)
+                (maybe <| field "second" string)
         ]
 
 
@@ -87,12 +100,27 @@ getData failure =
             data
 
         Plain string ->
-            { comparison = string
+            { comparison = Just string
             , actual = Nothing
             , expected = Nothing
             , first = Nothing
             , second = Nothing
             }
+
+
+expectationText : Expectation -> String
+expectationText expectation =
+    case expectation of
+        ListFields list ->
+            "[\""
+                ++ List.foldl
+                    (\number string -> string ++ number)
+                    ""
+                    (List.intersperse "\",\"" list)
+                ++ "\"]"
+
+        Simple string ->
+            string
 
 
 getExpected : Failure -> String
@@ -109,13 +137,13 @@ getExpected failure =
     in
     case ( expected, first ) of
         ( Just expected, Just first ) ->
-            expected
+            expectationText expected
 
         ( Nothing, Just first ) ->
             first
 
         ( Just expected, Nothing ) ->
-            expected
+            expectationText expected
 
         ( Nothing, Nothing ) ->
             ""
@@ -135,13 +163,13 @@ getActual failure =
     in
     case ( actual, second ) of
         ( Just actual, Just second ) ->
-            actual
+            expectationText actual
 
         ( Nothing, Just second ) ->
             second
 
         ( Just actual, Nothing ) ->
-            actual
+            expectationText actual
 
         ( Nothing, Nothing ) ->
             ""
@@ -149,7 +177,12 @@ getActual failure =
 
 getComparison : Failure -> String
 getComparison failure =
-    getData failure |> .comparison
+    case getData failure |> .comparison of
+        Just string ->
+            string
+
+        Nothing ->
+            ""
 
 
 shouldDiff : Failure -> Bool

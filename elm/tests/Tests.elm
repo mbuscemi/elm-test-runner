@@ -306,6 +306,18 @@ suite =
                             String.toInt "20" |> Expect.err
                     ]
                 ]
+            , describe "Expect.equalLists" <|
+                [ describe "documentation example" <|
+                    [ test "passing" <|
+                        \_ ->
+                            [ 1, 2, 3 ]
+                                |> Expect.equalLists [ 1, 2, 3 ]
+                    , test "failing" <|
+                        \_ ->
+                            [ 1, 2, 4, 6 ]
+                                |> Expect.equalLists [ 1, 2, 5 ]
+                    ]
+                ]
             ]
         ]
 
