@@ -2,6 +2,7 @@ module Tests exposing (suite)
 
 import Dict
 import Expect exposing (FloatingPointTolerance(Absolute))
+import Set
 import Test exposing (Test, describe, test)
 import Tree.Core exposing (Tree(Node))
 import Tree.Merge exposing (fromPath)
@@ -329,6 +330,18 @@ suite =
                         \_ ->
                             Dict.fromList [ ( 1, "one" ), ( 2, "too" ) ]
                                 |> Expect.equalDicts (Dict.fromList [ ( 1, "one" ), ( 2, "two" ), ( 3, "three" ) ])
+                    ]
+                ]
+            , describe "Expect.equalSets" <|
+                [ describe "documentation example" <|
+                    [ test "passing" <|
+                        \_ ->
+                            Set.fromList [ 1, 2 ]
+                                |> Expect.equalSets (Set.fromList [ 1, 2 ])
+                    , test "failing" <|
+                        \_ ->
+                            Set.fromList [ 1, 2, 4, 6 ]
+                                |> Expect.equalSets (Set.fromList [ 1, 2, 5 ])
                     ]
                 ]
             ]
