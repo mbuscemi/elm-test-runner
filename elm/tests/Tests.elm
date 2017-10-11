@@ -2,6 +2,7 @@ module Tests exposing (suite)
 
 import Dict
 import Expect exposing (FloatingPointTolerance(Absolute))
+import Json.Decode exposing (decodeString, int)
 import Set
 import Test exposing (Test, describe, test)
 import Tree.Core exposing (Tree(Node))
@@ -342,6 +343,26 @@ suite =
                         \_ ->
                             Set.fromList [ 1, 2, 4, 6 ]
                                 |> Expect.equalSets (Set.fromList [ 1, 2, 5 ])
+                    ]
+                ]
+            , describe "Expect.pass and Expect.fail" <|
+                [ describe "documentation example" <|
+                    [ test "passing" <|
+                        \_ ->
+                            case decodeString int "42" of
+                                Ok _ ->
+                                    Expect.pass
+
+                                Err err ->
+                                    Expect.fail err
+                    , test "failing" <|
+                        \_ ->
+                            case decodeString int "forty-two" of
+                                Ok _ ->
+                                    Expect.pass
+
+                                Err err ->
+                                    Expect.fail err
                     ]
                 ]
             ]
