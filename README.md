@@ -2,6 +2,8 @@
 
 Run elm-test and view results without leaving Atom
 
+![Elm Test Runner](https://github.com/mbuscemi/elm-test-runner/images/elm-test-runner.png)
+
 ## Setup
 
 1. Install [`node-test-runner`](https://github.com/rtfeldman/node-test-runner). This makes the `elm-test` command available on the command line, which is a requirement to use Elm Test Runner. Elm Test Runner currently requires elm-test version 0.18.9.
