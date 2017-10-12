@@ -20,3 +20,14 @@ Run elm-test and view results without leaving Atom
 3. Click the "Run All" button, or use Cmd-T to run tests.
 4. Wait for the test run to complete.
 5. Click on individual failing tests to view the failure results for those tests.
+
+### Seed Utilities
+
+1. Toggle the "Seed" checkbox on and off in the lower left corner of the pane. If the checkbox is active, the number in the adjacent field will used when running `elm-test`. If the box is unchecked, or if the number field is empty (it will read "Generate Random"), then a random seed will be used.
+2. To lock-in the seed for the last test run, click the "Set" button. This will set the seed the number field and activate the "Seed" checkbox if it is not already active.
+3. To copy the seed for the last test run to the clipboard, click the "Copy" button. This will allow you to paste the seed into another location.
+
+### Auto-Run Tests on Save
+
+1. Go to Packages → Elm Test Runner → Toggle Auto-Run on Save, or use Ctrl-R to toggle 'Auto-Run on Save' on and off. When it is active, an indicator will light up in the lower right hand corner of the pane.
+2. When 'Auto-Run on Save' is enabled, executing a "save" action on any project file will initiate a test run in Elm Test Runner.
