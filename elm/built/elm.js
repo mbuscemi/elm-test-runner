@@ -9910,6 +9910,13 @@ var _user$project$Model_Core$expandFailingAndTodoNodes = function (model) {
 			testHierarchy: _user$project$Model_Core$toggleFailingAndTodoNodes(model.testHierarchy)
 		});
 };
+var _user$project$Model_Core$updateHierarchy = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testHierarchy: _user$project$Tree_Core$make(model.testRuns)
+		});
+};
 var _user$project$Model_Core$purgeObsoleteNodes = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -10035,27 +10042,7 @@ var _user$project$Model_Core$invertAutoRun = function (model) {
 		{autoRunEnabled: !model.autoRunEnabled});
 };
 var _user$project$Model_Core$humanReadableTopLevelMessage = 'No Tests';
-var _user$project$Model_Core$removeTopNode = function (node) {
-	var _p5 = node;
-	if (_p5._2.ctor === '::') {
-		return _p5._2._0;
-	} else {
-		return A3(
-			_user$project$Tree_Core$Node,
-			_user$project$Model_Core$humanReadableTopLevelMessage,
-			_p5._1,
-			{ctor: '[]'});
-	}
-};
-var _user$project$Model_Core$updateHierarchy = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			testHierarchy: _user$project$Tree_Core$make(
-				_user$project$Model_Core$removeTopNode(model.testRuns))
-		});
-};
-var _user$project$Model_Core$systemTopLevelMessage = '::Root::';
+var _user$project$Model_Core$systemTopLevelMessage = '✶ Elm Test Runner ✶';
 var _user$project$Model_Core$buildTestRunDataTree = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(

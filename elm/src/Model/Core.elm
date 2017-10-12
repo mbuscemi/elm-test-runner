@@ -80,7 +80,7 @@ default =
 
 systemTopLevelMessage : String
 systemTopLevelMessage =
-    "::Root::"
+    "✶ Elm Test Runner ✶"
 
 
 humanReadableTopLevelMessage : String
@@ -217,19 +217,8 @@ updateHierarchy model =
     { model
         | testHierarchy =
             model.testRuns
-                |> removeTopNode
                 |> Tree.make
     }
-
-
-removeTopNode : Tree String b -> Tree String b
-removeTopNode node =
-    case node of
-        Node _ _ (first :: _) ->
-            first
-
-        Node _ data [] ->
-            Node humanReadableTopLevelMessage data []
 
 
 expandFailingAndTodoNodes : Model -> Model
