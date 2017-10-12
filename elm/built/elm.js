@@ -10042,7 +10042,7 @@ var _user$project$Model_Core$invertAutoRun = function (model) {
 		{autoRunEnabled: !model.autoRunEnabled});
 };
 var _user$project$Model_Core$humanReadableTopLevelMessage = 'No Tests';
-var _user$project$Model_Core$systemTopLevelMessage = '✶ Elm Test Runner ✶';
+var _user$project$Model_Core$systemTopLevelMessage = 'Elm Test Runner';
 var _user$project$Model_Core$buildTestRunDataTree = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(

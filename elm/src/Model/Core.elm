@@ -80,7 +80,7 @@ default =
 
 systemTopLevelMessage : String
 systemTopLevelMessage =
-    "✶ Elm Test Runner ✶"
+    "Elm Test Runner"
 
 
 humanReadableTopLevelMessage : String
