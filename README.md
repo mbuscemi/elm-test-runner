@@ -2,7 +2,7 @@
 
 Run elm-test and view results without leaving Atom
 
-![Elm Test Runner](https://github.com/mbuscemi/elm-test-runner/images/elm-test-runner.png)
+![Elm Test Runner](https://github.com/mbuscemi/elm-test-runner/blob/master/images/elm-test-runner.png)
 
 ## Setup
 
