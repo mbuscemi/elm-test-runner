@@ -27,6 +27,8 @@ Run elm-test and view results without leaving Atom
 
 ### Seed Utilities
 
+![Setting the Seed](https://github.com/mbuscemi/elm-test-runner/blob/master/images/set-seed-example.gif)
+
 1. Toggle the "Seed" checkbox on and off in the lower left corner of the pane. If the checkbox is active, the number in the adjacent field will used when running `elm-test`. If the box is unchecked, or if the number field is empty (it will read "Generate Random"), then a random seed will be used.
 2. To lock-in the seed for the last test run, click the "Set" button. This will set the seed the number field and activate the "Seed" checkbox if it is not already active.
 3. To copy the seed for the last test run to the clipboard, click the "Copy" button. This will allow you to paste the seed into another location.
