@@ -2,9 +2,7 @@
 
 Run elm-test and view results without leaving Atom
 
-<p style="text-align: center;">
-    <img src="https://github.com/mbuscemi/elm-test-runner/blob/master/images/elm-test-runner.png" alt="Elm Test Runner" style="width: 380px;" />
-</p>
+![Elm Test Runner](https://github.com/mbuscemi/elm-test-runner/blob/master/images/elm-test-runner.png)
 
 ## Setup
 
