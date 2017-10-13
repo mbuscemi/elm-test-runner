@@ -35,5 +35,7 @@ Run elm-test and view results without leaving Atom
 
 ### Auto-Run Tests on Save
 
+![Auto-Run on Save](https://github.com/mbuscemi/elm-test-runner/blob/master/images/auto-run-on-save-example.gif)
+
 1. Go to Packages → Elm Test Runner → Toggle Auto-Run on Save, or use Ctrl-R to toggle 'Auto-Run on Save' on and off. When it is active, an indicator will light up in the lower right hand corner of the pane.
 2. When 'Auto-Run on Save' is enabled, executing a "save" action on any project file will initiate a test run in Elm Test Runner.
