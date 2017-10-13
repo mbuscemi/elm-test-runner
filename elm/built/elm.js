@@ -9961,6 +9961,23 @@ var _user$project$Model_Core$setTestMouseIsOver = F2(
 			model,
 			{testMouseIsOver: nodeId});
 	});
+var _user$project$Model_Core$buildTestRunDataTree = F2(
+	function (event, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				testRuns: A4(
+					_user$project$Tree_Merge$fromPath,
+					{
+						ctor: '::',
+						_0: model.projectName,
+						_1: _user$project$TestEvent_TestCompleted$labels(event)
+					},
+					_user$project$TestEvent_TestCompleted$toTestInstance(event),
+					_user$project$TestInstance_Reconcile$transform,
+					model.testRuns)
+			});
+	});
 var _user$project$Model_Core$updatePassedTestCount = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -10041,26 +10058,34 @@ var _user$project$Model_Core$invertAutoRun = function (model) {
 		model,
 		{autoRunEnabled: !model.autoRunEnabled});
 };
+var _user$project$Model_Core$setProjectNameToTopNode = function (model) {
+	var _p5 = model.testRuns;
+	var testInstance = _p5._1;
+	var children = _p5._2;
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testRuns: A3(_user$project$Tree_Core$Node, model.projectName, testInstance, children)
+		});
+};
 var _user$project$Model_Core$humanReadableTopLevelMessage = 'No Tests';
-var _user$project$Model_Core$systemTopLevelMessage = 'Elm Test Runner';
-var _user$project$Model_Core$buildTestRunDataTree = F2(
-	function (event, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				testRuns: A4(
-					_user$project$Tree_Merge$fromPath,
-					{
-						ctor: '::',
-						_0: _user$project$Model_Core$systemTopLevelMessage,
-						_1: _user$project$TestEvent_TestCompleted$labels(event)
-					},
-					_user$project$TestEvent_TestCompleted$toTestInstance(event),
-					_user$project$TestInstance_Reconcile$transform,
-					model.testRuns)
-			});
+var _user$project$Model_Core$defaultProjectName = 'Unknown Project';
+var _user$project$Model_Core$setProjectNameFromPath = F2(
+	function (projectPath, model) {
+		return _user$project$Model_Core$setProjectNameToTopNode(
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{
+					projectName: A2(
+						_elm_lang$core$Maybe$withDefault,
+						_user$project$Model_Core$defaultProjectName,
+						_elm_lang$core$List$head(
+							_elm_lang$core$List$reverse(
+								A2(_elm_lang$core$String$split, '/', projectPath))))
+				}));
 	});
 var _user$project$Model_Core$default = {
+	projectName: '',
 	runStatus: _user$project$State_RunStatus$noData,
 	totalTests: 0,
 	passedTests: 0,
@@ -10068,7 +10093,7 @@ var _user$project$Model_Core$default = {
 	runSeed: _elm_lang$core$Maybe$Nothing,
 	testRuns: A3(
 		_user$project$Tree_Core$Node,
-		_user$project$Model_Core$systemTopLevelMessage,
+		_user$project$Model_Core$defaultProjectName,
 		_user$project$TestInstance_Core$default,
 		{ctor: '[]'}),
 	testHierarchy: _user$project$Tree_Core$make(
@@ -10097,7 +10122,9 @@ var _user$project$Model_Core$Model = function (a) {
 										return function (k) {
 											return function (l) {
 												return function (m) {
-													return {runStatus: a, totalTests: b, passedTests: c, runDuration: d, runSeed: e, testRuns: f, testHierarchy: g, testMouseIsOver: h, selectedTest: i, selectedTestFailure: j, autoRunEnabled: k, randomSeed: l, forceRandomSeedEnabled: m};
+													return function (n) {
+														return {projectName: a, runStatus: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testRuns: g, testHierarchy: h, testMouseIsOver: i, selectedTest: j, selectedTestFailure: k, autoRunEnabled: l, randomSeed: m, forceRandomSeedEnabled: n};
+													};
 												};
 											};
 										};
@@ -11200,7 +11227,7 @@ var _user$project$Main$update = F2(
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$setRunStatusToCompileError(model));
 			case 'RunStart':
-				var event = _user$project$TestEvent_RunStart$parse(_p0._0);
+				var event = _user$project$TestEvent_RunStart$parse(_p0._0._1);
 				return _user$project$Main$andNoCommand(
 					A2(
 						_user$project$Model_Core$setRunSeed,
@@ -11208,7 +11235,10 @@ var _user$project$Main$update = F2(
 						A2(
 							_user$project$Model_Core$setTotalTestCount,
 							event,
-							_user$project$Model_Core$setRunStatusToProcessing(model))));
+							A2(
+								_user$project$Model_Core$setProjectNameFromPath,
+								_p0._0._0,
+								_user$project$Model_Core$setRunStatusToProcessing(model)))));
 			case 'TestCompleted':
 				var event = _user$project$TestEvent_TestCompleted$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
@@ -11299,29 +11329,43 @@ var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(
 	'runStart',
 	A2(
 		_elm_lang$core$Json_Decode$andThen,
-		function (testCount) {
+		function (x0) {
 			return A2(
 				_elm_lang$core$Json_Decode$andThen,
-				function (fuzzRuns) {
-					return A2(
+				function (x1) {
+					return _elm_lang$core$Json_Decode$succeed(
+						{ctor: '_Tuple2', _0: x0, _1: x1});
+				},
+				A2(
+					_elm_lang$core$Json_Decode$index,
+					1,
+					A2(
 						_elm_lang$core$Json_Decode$andThen,
-						function (paths) {
+						function (testCount) {
 							return A2(
 								_elm_lang$core$Json_Decode$andThen,
-								function (initialSeed) {
-									return _elm_lang$core$Json_Decode$succeed(
-										{testCount: testCount, fuzzRuns: fuzzRuns, paths: paths, initialSeed: initialSeed});
+								function (fuzzRuns) {
+									return A2(
+										_elm_lang$core$Json_Decode$andThen,
+										function (paths) {
+											return A2(
+												_elm_lang$core$Json_Decode$andThen,
+												function (initialSeed) {
+													return _elm_lang$core$Json_Decode$succeed(
+														{testCount: testCount, fuzzRuns: fuzzRuns, paths: paths, initialSeed: initialSeed});
+												},
+												A2(_elm_lang$core$Json_Decode$field, 'initialSeed', _elm_lang$core$Json_Decode$string));
+										},
+										A2(
+											_elm_lang$core$Json_Decode$field,
+											'paths',
+											_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)));
 								},
-								A2(_elm_lang$core$Json_Decode$field, 'initialSeed', _elm_lang$core$Json_Decode$string));
+								A2(_elm_lang$core$Json_Decode$field, 'fuzzRuns', _elm_lang$core$Json_Decode$string));
 						},
-						A2(
-							_elm_lang$core$Json_Decode$field,
-							'paths',
-							_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)));
-				},
-				A2(_elm_lang$core$Json_Decode$field, 'fuzzRuns', _elm_lang$core$Json_Decode$string));
+						A2(_elm_lang$core$Json_Decode$field, 'testCount', _elm_lang$core$Json_Decode$string))));
 		},
-		A2(_elm_lang$core$Json_Decode$field, 'testCount', _elm_lang$core$Json_Decode$string)));
+		A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$string)));
 var _user$project$Main$testCompleted = _elm_lang$core$Native_Platform.incomingPort('testCompleted', _elm_lang$core$Json_Decode$string);
 var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort(
 	'runComplete',

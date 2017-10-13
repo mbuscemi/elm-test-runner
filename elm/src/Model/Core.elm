@@ -11,6 +11,7 @@ module Model.Core
         , randomSeedForJS
         , resetPassedTests
         , resetTestRuns
+        , setProjectNameFromPath
         , setRandomSeed
         , setRandomSeedForcing
         , setRunDuration
@@ -44,7 +45,8 @@ import Tree.Traverse
 
 
 type alias Model =
-    { runStatus : RunStatus
+    { projectName : String
+    , runStatus : RunStatus
     , totalTests : Int
     , passedTests : Int
     , runDuration : Maybe Duration
@@ -62,12 +64,13 @@ type alias Model =
 
 default : Model
 default =
-    { runStatus = RunStatus.noData
+    { projectName = ""
+    , runStatus = RunStatus.noData
     , totalTests = 0
     , passedTests = 0
     , runDuration = Nothing
     , runSeed = Nothing
-    , testRuns = Node systemTopLevelMessage TestInstance.default []
+    , testRuns = Node defaultProjectName TestInstance.default []
     , testHierarchy = Tree.make (Node humanReadableTopLevelMessage TestInstance.default [])
     , testMouseIsOver = Nothing
     , selectedTest = Nothing
@@ -78,14 +81,37 @@ default =
     }
 
 
-systemTopLevelMessage : String
-systemTopLevelMessage =
-    "Elm Test Runner"
+defaultProjectName : String
+defaultProjectName =
+    "Unknown Project"
 
 
 humanReadableTopLevelMessage : String
 humanReadableTopLevelMessage =
     "No Tests"
+
+
+setProjectNameFromPath : String -> Model -> Model
+setProjectNameFromPath projectPath model =
+    { model
+        | projectName =
+            String.split "/" projectPath
+                |> List.reverse
+                |> List.head
+                |> Maybe.withDefault defaultProjectName
+    }
+        |> setProjectNameToTopNode
+
+
+setProjectNameToTopNode : Model -> Model
+setProjectNameToTopNode model =
+    let
+        (Node _ testInstance children) =
+            model.testRuns
+    in
+    { model
+        | testRuns = Node model.projectName testInstance children
+    }
 
 
 invertAutoRun : Model -> Model
@@ -170,7 +196,7 @@ buildTestRunDataTree event model =
     { model
         | testRuns =
             Tree.Merge.fromPath
-                (systemTopLevelMessage :: TestCompleted.labels event)
+                (model.projectName :: TestCompleted.labels event)
                 (TestCompleted.toTestInstance event)
                 TestInstance.Reconcile.transform
                 model.testRuns

@@ -13,6 +13,7 @@ import Model.Core as Model
         , randomSeedForJS
         , resetPassedTests
         , resetTestRuns
+        , setProjectNameFromPath
         , setRandomSeed
         , setRandomSeedForcing
         , setRunDuration
@@ -41,7 +42,7 @@ type Message
     = ToggleButtonClicked
     | InitiateRunAll
     | CompilerErrored
-    | RunStart RunStart.RawData
+    | RunStart ( String, RunStart.RawData )
     | TestCompleted String
     | RunComplete RunComplete.RawData
     | TestListItemExpand Int
@@ -103,12 +104,13 @@ update message model =
             setRunStatusToCompileError model
                 |> andNoCommand
 
-        RunStart data ->
+        RunStart ( projectPath, data ) ->
             let
                 event =
                     RunStart.parse data
             in
             setRunStatusToProcessing model
+                |> setProjectNameFromPath projectPath
                 |> setTotalTestCount event
                 |> setRunSeed event
                 |> andNoCommand
@@ -250,7 +252,7 @@ port toggleAutoRun : (() -> message) -> Sub message
 port notifySaveEvent : (() -> message) -> Sub message
 
 
-port runStart : (RunStart.RawData -> message) -> Sub message
+port runStart : (( String, RunStart.RawData ) -> message) -> Sub message
 
 
 port testCompleted : (String -> message) -> Sub message
