@@ -13,6 +13,7 @@ import Model.Core as Model
         , randomSeedForJS
         , resetPassedTests
         , resetTestRuns
+        , setCompilerErrorMessage
         , setProjectNameFromPath
         , setRandomSeed
         , setRandomSeedForcing
@@ -41,7 +42,7 @@ import View.Core
 type Message
     = ToggleButtonClicked
     | InitiateRunAll
-    | CompilerErrored
+    | CompilerErrored String
     | RunStart ( String, RunStart.RawData )
     | TestCompleted String
     | RunComplete RunComplete.RawData
@@ -94,14 +95,16 @@ update message model =
                 |> resetPassedTests
                 |> setSelectedTest Nothing
                 |> setSelectedTestFailure Nothing
+                |> setCompilerErrorMessage Nothing
                 |> clearRunDuration
                 |> clearRunSeed
                 |> resetTestRuns
                 |> updateHierarchy
                 |> andPerform (runTest <| randomSeedForJS model)
 
-        CompilerErrored ->
+        CompilerErrored errorMessage ->
             setRunStatusToCompileError model
+                |> setCompilerErrorMessage (Just errorMessage)
                 |> andNoCommand
 
         RunStart ( projectPath, data ) ->
@@ -185,6 +188,7 @@ view : Model -> Html Message
 view model =
     View.Core.render
         { runStatus = model.runStatus
+        , compilerError = model.compilerError
         , totalTests = model.totalTests
         , passedTests = model.passedTests
         , runDuration = model.runDuration
@@ -214,7 +218,7 @@ subscriptions : Model -> Sub Message
 subscriptions model =
     Sub.batch
         [ commandKeyTestStart (always InitiateRunAll)
-        , notifyCompilerErrored (always CompilerErrored)
+        , notifyCompilerErrored CompilerErrored
         , toggleAutoRun (always ToggleAutoRun)
         , notifySaveEvent <| saveEventMessage model
         , runStart RunStart
@@ -243,7 +247,7 @@ port copySeed : String -> Cmd message
 port commandKeyTestStart : (() -> message) -> Sub message
 
 
-port notifyCompilerErrored : (() -> message) -> Sub message
+port notifyCompilerErrored : (String -> message) -> Sub message
 
 
 port toggleAutoRun : (() -> message) -> Sub message

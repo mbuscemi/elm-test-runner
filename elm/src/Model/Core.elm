@@ -11,6 +11,7 @@ module Model.Core
         , randomSeedForJS
         , resetPassedTests
         , resetTestRuns
+        , setCompilerErrorMessage
         , setProjectNameFromPath
         , setRandomSeed
         , setRandomSeedForcing
@@ -46,6 +47,7 @@ import Tree.Traverse
 
 type alias Model =
     { projectName : String
+    , compilerError : Maybe String
     , runStatus : RunStatus
     , totalTests : Int
     , passedTests : Int
@@ -65,6 +67,7 @@ type alias Model =
 default : Model
 default =
     { projectName = ""
+    , compilerError = Nothing
     , runStatus = RunStatus.noData
     , totalTests = 0
     , passedTests = 0
@@ -184,6 +187,11 @@ setRunSeed event model =
 clearRunSeed : Model -> Model
 clearRunSeed model =
     { model | runSeed = Nothing }
+
+
+setCompilerErrorMessage : Maybe String -> Model -> Model
+setCompilerErrorMessage maybeError model =
+    { model | compilerError = maybeError }
 
 
 updatePassedTestCount : TestCompleted -> Model -> Model

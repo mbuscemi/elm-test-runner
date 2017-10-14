@@ -32,6 +32,7 @@ type alias Messages message =
 
 type alias DisplayData =
     { runStatus : RunStatus
+    , compilerError : Maybe String
     , totalTests : Int
     , passedTests : Int
     , runDuration : Maybe Duration
@@ -75,7 +76,7 @@ render data messages =
                 data.testHierarchy
             ]
         , div [ class "output-display" ]
-            [ View.OutputDisplay.render data.selectedNodeFailure ]
+            [ View.OutputDisplay.render data.compilerError data.selectedNodeFailure ]
         , div [ class "footer" ]
             (View.SeedAndAutoRun.render
                 messages.setForceSeedHandler

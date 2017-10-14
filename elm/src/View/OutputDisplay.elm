@@ -1,7 +1,7 @@
 module View.OutputDisplay exposing (render)
 
 import Diff.Core exposing (Change(Added, NoChange, Removed), diff)
-import Html exposing (Html, div, span, strong, text)
+import Html exposing (Html, br, div, span, strong, text)
 import Html.Attributes exposing (class)
 import State.Failure
     exposing
@@ -17,33 +17,50 @@ import State.Failure
         )
 
 
-render : Maybe Failure -> Html message
-render failure =
-    div [ class "failure" ] (failureText failure)
+render : Maybe String -> Maybe Failure -> Html message
+render compilerError failure =
+    case ( compilerError, failure ) of
+        ( Just error, _ ) ->
+            div [ class "failure" ] (errorText error)
+
+        ( Nothing, Just failure ) ->
+            div [ class "failure" ] (failureText failure)
+
+        ( Nothing, Nothing ) ->
+            div [] []
 
 
-failureText : Maybe Failure -> List (Html message)
-failureText maybeFailure =
-    case maybeFailure of
-        Just failure ->
-            let
-                ( expected, actual ) =
-                    process failure
-            in
-            [ div [ class "failure-header" ]
-                [ text <| headerText failure
-                , strong [] [ text <| getMessage failure ]
-                ]
-            , givenDisplay failure
-            , div [ class "actual" ] actual
-            , barTop failure
-            , barMiddle (getMessage failure) failure
-            , barBottom failure
-            , div [ class "expected" ] expected
-            ]
+errorText : String -> List (Html message)
+errorText errorMessage =
+    [ div [] [ strong [] [ text "Compiler Error:" ] ]
+    , div [] (errorHtml errorMessage)
+    ]
 
-        Nothing ->
-            [ text "" ]
+
+errorHtml : String -> List (Html message)
+errorHtml message =
+    String.split "\n" message
+        |> List.map text
+        |> List.intersperse (br [] [])
+
+
+failureText : Failure -> List (Html message)
+failureText failure =
+    let
+        ( expected, actual ) =
+            process failure
+    in
+    [ div [ class "failure-header" ]
+        [ text <| headerText failure
+        , strong [] [ text <| getMessage failure ]
+        ]
+    , givenDisplay failure
+    , div [ class "actual" ] actual
+    , barTop failure
+    , barMiddle (getMessage failure) failure
+    , barBottom failure
+    , div [ class "expected" ] expected
+    ]
 
 
 process : Failure -> ( List (Html message), List (Html message) )
