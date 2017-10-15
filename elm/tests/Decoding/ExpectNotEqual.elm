@@ -1,4 +1,4 @@
-module Decoding.ExpectEqual exposing (parsesCorrectly)
+module Decoding.ExpectNotEqual exposing (parsesCorrectly)
 
 import Expect
 import Maybe.Extra as Maybe
@@ -36,7 +36,7 @@ parsesCorrectly =
                 Expect.true "expected a failure in the failures list" (Maybe.isJust maybeFailure)
         , test "has correct message" <|
             \_ ->
-                Expect.equal (Failure.getMessage failure) "Expect.equal"
+                Expect.equal (Failure.getMessage failure) "Expect.notEqual"
         , test "has no given" <|
             \_ ->
                 Expect.true "expected not to find a given" (Maybe.isNothing <| Failure.getGiven failure)
@@ -45,7 +45,7 @@ parsesCorrectly =
                 Expect.true "expected to find a complex comparison object" (Failure.hasComplexComparison failure)
         , test "has expected expected text" <|
             \_ ->
-                Expect.equal (Failure.getExpected failure) "4"
+                Expect.equal (Failure.getExpected failure) "3"
         , test "has expected actual text" <|
             \_ ->
                 Expect.equal (Failure.getActual failure) "3"
@@ -60,4 +60,4 @@ parsesCorrectly =
 
 failingJsonString : String
 failingJsonString =
-    """{"event":"testCompleted","status":"fail","labels":["FailureOutputValidation","Expect.equal","basic case","failing"],"failures":[{"given":null,"message":"Expect.equal","reason":{"type":"custom","data":{"expected":"4","actual":"3","comparison":"Expect.equal"}}}],"duration":"3"}"""
+    """{"event":"testCompleted","status":"fail","labels":["FailureOutputValidation","Expect.notEqual","basic case","failing"],"failures":[{"given":null,"message":"Expect.notEqual","reason":{"type":"custom","data":{"expected":"3","actual":"3","comparison":"Expect.notEqual"}}}],"duration":"1"}"""

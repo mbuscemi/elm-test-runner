@@ -31,9 +31,9 @@ import Test exposing (Test, describe, fuzz, skip, test)
 
 expectEqual : Test
 expectEqual =
-    describe "Expect.equal" <|
-        [ skip <|
-            describe "basic case" <|
+    skip <|
+        describe "Expect.equal" <|
+            [ describe "basic case" <|
                 [ test "passing" <|
                     \_ ->
                         Expect.equal 3 (1 + 2)
@@ -41,8 +41,7 @@ expectEqual =
                     \_ ->
                         Expect.equal 4 (1 + 2)
                 ]
-        , skip <|
-            describe "string with additions" <|
+            , describe "string with additions" <|
                 [ test "passing" <|
                     \_ ->
                         Expect.equal "abcdefghi" "abcdefghi"
@@ -50,8 +49,7 @@ expectEqual =
                     \_ ->
                         Expect.equal "abcdefghi" "abbbcdeeefghhhi"
                 ]
-        , skip <|
-            describe "string with removals" <|
+            , describe "string with removals" <|
                 [ test "passing" <|
                     \_ ->
                         Expect.equal "abcdefghi" "abcdefghi"
@@ -59,7 +57,7 @@ expectEqual =
                     \_ ->
                         Expect.equal "abcdefghi" "acdfgi"
                 ]
-        ]
+            ]
 
 
 expectNotEqual : Test
