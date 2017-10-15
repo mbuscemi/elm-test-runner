@@ -3,12 +3,12 @@ module State.Failure
         ( Failure
         , failure
         , getActual
-        , getComparison
         , getExpected
         , getGiven
         , getMessage
         , hasComplexComparison
         , isTodo
+        , nullInstance
         , shouldDiff
         )
 
@@ -91,6 +91,11 @@ failure =
         ]
 
 
+nullInstance : Failure
+nullInstance =
+    SimpleFailure "NULL"
+
+
 getMessage : Failure -> String
 getMessage failure =
     case failure of
@@ -124,46 +129,6 @@ hasComplexComparison failure =
 
                 SimpleComparison _ ->
                     False
-
-
-getData : Failure -> ComparisonData
-getData failure =
-    case failure of
-        SimpleFailure string ->
-            { comparison = Just string
-            , actual = Nothing
-            , expected = Nothing
-            , first = Nothing
-            , second = Nothing
-            }
-
-        ComplexFailure complexFailure ->
-            case complexFailure.reason.data of
-                SimpleComparison string ->
-                    { comparison = Just string
-                    , actual = Nothing
-                    , expected = Nothing
-                    , first = Nothing
-                    , second = Nothing
-                    }
-
-                ComplexComparison data ->
-                    data
-
-
-expectationText : Expectation -> String
-expectationText expectation =
-    case expectation of
-        ListFields list ->
-            "[\""
-                ++ List.foldl
-                    (\number string -> string ++ number)
-                    ""
-                    (List.intersperse "\",\"" list)
-                ++ "\"]"
-
-        Simple string ->
-            string
 
 
 getExpected : Failure -> String
@@ -218,16 +183,6 @@ getActual failure =
             ""
 
 
-getComparison : Failure -> String
-getComparison failure =
-    case getData failure |> .comparison of
-        Just string ->
-            string
-
-        Nothing ->
-            ""
-
-
 shouldDiff : Failure -> Bool
 shouldDiff failure =
     let
@@ -262,3 +217,43 @@ isTodo failure =
 
         ComplexFailure _ ->
             False
+
+
+getData : Failure -> ComparisonData
+getData failure =
+    case failure of
+        SimpleFailure string ->
+            { comparison = Just string
+            , actual = Nothing
+            , expected = Nothing
+            , first = Nothing
+            , second = Nothing
+            }
+
+        ComplexFailure complexFailure ->
+            case complexFailure.reason.data of
+                SimpleComparison string ->
+                    { comparison = Just string
+                    , actual = Nothing
+                    , expected = Nothing
+                    , first = Nothing
+                    , second = Nothing
+                    }
+
+                ComplexComparison data ->
+                    data
+
+
+expectationText : Expectation -> String
+expectationText expectation =
+    case expectation of
+        ListFields list ->
+            "[\""
+                ++ List.foldl
+                    (\number string -> string ++ number)
+                    ""
+                    (List.intersperse "\",\"" list)
+                ++ "\"]"
+
+        Simple string ->
+            string

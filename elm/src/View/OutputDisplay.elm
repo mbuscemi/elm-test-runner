@@ -7,7 +7,6 @@ import State.Failure
     exposing
         ( Failure
         , getActual
-        , getComparison
         , getExpected
         , getGiven
         , getMessage
