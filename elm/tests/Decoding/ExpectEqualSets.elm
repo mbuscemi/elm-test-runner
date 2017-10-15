@@ -43,10 +43,10 @@ parsesCorrectly =
         , test "has a complex comparison" <|
             \_ ->
                 Expect.true "expected to find a complex comparison object" (Failure.hasComplexComparison failure)
-        , test "has no expected text" <|
+        , test "has expected expected text" <|
             \_ ->
                 Expect.equal (Failure.getExpected failure) "Set.fromList [1,2,5]"
-        , test "has no actual text" <|
+        , test "has expected actual text" <|
             \_ ->
                 Expect.equal (Failure.getActual failure) "Set.fromList [1,2,4,6]"
         , test "should display with diff" <|

@@ -332,18 +332,18 @@ expectEqualSets =
 
 expectPassAndExpectFail : Test
 expectPassAndExpectFail =
-    describe "Expect.pass and Expect.fail" <|
-        [ describe "documentation example" <|
-            [ test "passing" <|
-                \_ ->
-                    case decodeString Json.Decode.int "42" of
-                        Ok _ ->
-                            Expect.pass
+    skip <|
+        describe "Expect.pass and Expect.fail" <|
+            [ describe "documentation example" <|
+                [ test "passing" <|
+                    \_ ->
+                        case decodeString Json.Decode.int "42" of
+                            Ok _ ->
+                                Expect.pass
 
-                        Err err ->
-                            Expect.fail err
-            , skip <|
-                test "failing" <|
+                            Err err ->
+                                Expect.fail err
+                , test "failing" <|
                     \_ ->
                         case decodeString Json.Decode.int "forty-two" of
                             Ok _ ->
@@ -351,8 +351,8 @@ expectPassAndExpectFail =
 
                             Err err ->
                                 Expect.fail err
+                ]
             ]
-        ]
 
 
 expectOnFail : Test

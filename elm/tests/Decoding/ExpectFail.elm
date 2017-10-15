@@ -1,4 +1,4 @@
-module Decoding.ExpectEqualDicts exposing (parsesCorrectly)
+module Decoding.ExpectFail exposing (parsesCorrectly)
 
 import Expect
 import Maybe.Extra as Maybe
@@ -36,22 +36,22 @@ parsesCorrectly =
                 Expect.true "expected a failure in the failures list" (Maybe.isJust maybeFailure)
         , test "has correct message" <|
             \_ ->
-                Expect.equal (Failure.getMessage failure) "Expect.equalDicts"
+                Expect.equal (Failure.getMessage failure) "Given an invalid JSON: Unexpected token o in JSON at position 1"
         , test "has no given" <|
             \_ ->
                 Expect.true "expected not to find a given" (Maybe.isNothing <| Failure.getGiven failure)
         , test "has a complex comparison" <|
             \_ ->
-                Expect.true "expected to find a complex comparison object" (Failure.hasComplexComparison failure)
-        , test "has expected expected text" <|
+                Expect.false "expected to find a simple comparison object" (Failure.hasComplexComparison failure)
+        , test "has no expected text" <|
             \_ ->
-                Expect.equal (Failure.getExpected failure) """Dict.fromList [(1,"one"),(2,"two"),(3,"three")]"""
-        , test "has expected actual text" <|
+                Expect.equal (Failure.getExpected failure) ""
+        , test "has no actual text" <|
             \_ ->
-                Expect.equal (Failure.getActual failure) """Dict.fromList [(1,"one"),(2,"too")]"""
+                Expect.equal (Failure.getActual failure) ""
         , test "should display with diff" <|
             \_ ->
-                Expect.true "expected that diff should occur" (Failure.shouldDiff failure)
+                Expect.false "expected that diff should not occur" (Failure.shouldDiff failure)
         , test "not a todo" <|
             \_ ->
                 Expect.false "expected that this is not a todo test" (Failure.isTodo failure)
@@ -60,4 +60,4 @@ parsesCorrectly =
 
 failingJsonString : String
 failingJsonString =
-    """{"event":"testCompleted","status":"fail","labels":["FailureOutputValidation","Expect.equalDicts","documentation example","failing"],"failures":[{"given":null,"message":"Expect.equalDicts","reason":{"type":"custom","data":{"expected":"Dict.fromList [(1,\\"one\\"),(2,\\"two\\"),(3,\\"three\\")]","actual":"Dict.fromList [(1,\\"one\\"),(2,\\"too\\")]","extra":["(2,\\"too\\")"],"missing":["(2,\\"two\\")","(3,\\"three\\")"]}}}],"duration":"2"}"""
+    """{"event":"testCompleted","status":"fail","labels":["FailureOutputValidation","Expect.pass and Expect.fail","documentation example","failing"],"failures":[{"given":null,"message":"Given an invalid JSON: Unexpected token o in JSON at position 1","reason":{"type":"custom","data":"Given an invalid JSON: Unexpected token o in JSON at position 1"}}],"duration":"1"}"""
