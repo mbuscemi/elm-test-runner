@@ -1,6 +1,5 @@
 
 .etr-main-view {
-    width: 22vw;
     height: 100%;
     margin: 1em 1em;
     display: flex;
@@ -23,7 +22,7 @@
 }
 
 .etr-main-view .footer {
-    height: 50px;
+    min-height: 50px;
 }
 
 .etr-main-view .btn-toolbar {
