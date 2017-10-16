@@ -34,10 +34,11 @@
     margin: 0;
     float: right;
     position: relative;
-    top: -28px;
+    top: -54px;
 }
 
 .etr-main-view .toolbar .status-bar {
+    height: 53px;
     margin-right: 90px;
     text-align: center;
 }
@@ -66,16 +67,26 @@
     background-color: #073d6f;
 }
 
+.etr-main-view .toolbar .status-bar .title {
+    font-size: 1.25em;
+}
+
 .etr-main-view .passing-tests {
-    text-align: left;
+    text-align: center;
+    position: relative;
+    top: -10px;
 }
 
 .etr-main-view .passing-tests .number-field {
-    margin: 0 5%;
+    padding: 0;
 }
 
-.etr-main-view .passing-tests .number-field.first {
-    margin-left: 0;
+.etr-main-view .passing-tests .number-field.passing {
+    padding-right: 5%;
+}
+
+.etr-main-view .passing-tests .number-field.total {
+    padding-left: 5%;
 }
 
 .etr-main-view div.run-data-row {
@@ -96,6 +107,9 @@
 
 .etr-main-view div.run-data-field.seed {
     float: right;
+    position: relative;
+    top: -1px;
+    right: 9px;
 }
 
 .etr-main-view ul.test-list {

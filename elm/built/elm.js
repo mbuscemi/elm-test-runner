@@ -10576,61 +10576,6 @@ var _user$project$View_OutputDisplay$render = F2(
 		}
 	});
 
-var _user$project$View_PassingTestsDisplay$render = F2(
-	function (totalTests, passingTests) {
-		return A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('passing-tests'),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$span,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('number-field first'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							_elm_lang$core$Basics$toString(passingTests)),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$span,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(' / '),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$span,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('number-field'),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(
-									_elm_lang$core$Basics$toString(totalTests)),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}
-				}
-			});
-	});
-
 var _user$project$View_SeedAndAutoRun$enabledString = function (enabled) {
 	return enabled ? 'enabled' : 'disabled';
 };
@@ -11001,8 +10946,8 @@ var _user$project$View_TestHierarchy_Core$NodeData = F2(
 		return {nodeMouseIsOver: a, selectedNode: b};
 	});
 
-var _user$project$View_Toolbar$render = F2(
-	function (runStatus, runAllButtonClickHandler) {
+var _user$project$View_Toolbar$render = F4(
+	function (totalTests, passingTests, runStatus, runAllButtonClickHandler) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -11027,14 +10972,72 @@ var _user$project$View_Toolbar$render = F2(
 						ctor: '::',
 						_0: A2(
 							_elm_lang$html$Html$strong,
-							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('title'),
+								_1: {ctor: '[]'}
+							},
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html$text(
 									_user$project$State_RunStatus$toText(runStatus)),
 								_1: {ctor: '[]'}
 							}),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('passing-tests'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$span,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('number-field passing'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(
+												_elm_lang$core$Basics$toString(passingTests)),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$span,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(' / '),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$span,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('number-field total'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(
+														_elm_lang$core$Basics$toString(totalTests)),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
 					}),
 				_1: {
 					ctor: '::',
@@ -11090,19 +11093,15 @@ var _user$project$View_Core$render = F2(
 					},
 					{
 						ctor: '::',
-						_0: A2(_user$project$View_Toolbar$render, data.runStatus, messages.runAllButtonClickHandler),
+						_0: A4(_user$project$View_Toolbar$render, data.totalTests, data.passedTests, data.runStatus, messages.runAllButtonClickHandler),
 						_1: {
 							ctor: '::',
-							_0: A2(_user$project$View_PassingTestsDisplay$render, data.totalTests, data.passedTests),
-							_1: {
-								ctor: '::',
-								_0: A3(
-									_user$project$View_DurationAndSeedDisplay$render,
-									data.runDuration,
-									data.runSeed,
-									{copySeedClickHandler: messages.copySeedClickHandler, setSeedClickHandler: messages.setSeedClickHandler}),
-								_1: {ctor: '[]'}
-							}
+							_0: A3(
+								_user$project$View_DurationAndSeedDisplay$render,
+								data.runDuration,
+								data.runSeed,
+								{copySeedClickHandler: messages.copySeedClickHandler, setSeedClickHandler: messages.setSeedClickHandler}),
+							_1: {ctor: '[]'}
 						}
 					}),
 				_1: {
