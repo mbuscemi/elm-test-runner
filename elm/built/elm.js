@@ -10642,33 +10642,6 @@ var _user$project$View_PassingTestsDisplay$render = F2(
 			});
 	});
 
-var _user$project$View_RedGreenDisplay$render = function (runStatus) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class(
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'status-bar ',
-					_user$project$State_RunStatus$toClass(runStatus))),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$strong,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(
-						_user$project$State_RunStatus$toText(runStatus)),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		});
-};
-
 var _user$project$View_SeedAndAutoRun$enabledString = function (enabled) {
 	return enabled ? 'enabled' : 'disabled';
 };
@@ -11039,30 +11012,48 @@ var _user$project$View_TestHierarchy_Core$NodeData = F2(
 		return {nodeMouseIsOver: a, selectedNode: b};
 	});
 
-var _user$project$View_Toolbar$render = function (runAllButtonClickHandler) {
-	return A2(
-		_elm_lang$html$Html$section,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('input-block'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('btn-toolbar'),
-					_1: {ctor: '[]'}
-				},
-				{
+var _user$project$View_Toolbar$render = F2(
+	function (runStatus, runAllButtonClickHandler) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('toolbar'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'status-bar ',
+								_user$project$State_RunStatus$toClass(runStatus))),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$strong,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									_user$project$State_RunStatus$toText(runStatus)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
 					ctor: '::',
 					_0: A2(
 						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('btn-group right'),
+							_0: _elm_lang$html$Html_Attributes$class('run-all-button'),
 							_1: {ctor: '[]'}
 						},
 						{
@@ -11086,10 +11077,9 @@ var _user$project$View_Toolbar$render = function (runAllButtonClickHandler) {
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		});
-};
+				}
+			});
+	});
 
 var _user$project$View_Core$render = F2(
 	function (data, messages) {
@@ -11111,22 +11101,18 @@ var _user$project$View_Core$render = F2(
 					},
 					{
 						ctor: '::',
-						_0: _user$project$View_Toolbar$render(messages.runAllButtonClickHandler),
+						_0: A2(_user$project$View_Toolbar$render, data.runStatus, messages.runAllButtonClickHandler),
 						_1: {
 							ctor: '::',
-							_0: _user$project$View_RedGreenDisplay$render(data.runStatus),
+							_0: A2(_user$project$View_PassingTestsDisplay$render, data.totalTests, data.passedTests),
 							_1: {
 								ctor: '::',
-								_0: A2(_user$project$View_PassingTestsDisplay$render, data.totalTests, data.passedTests),
-								_1: {
-									ctor: '::',
-									_0: A3(
-										_user$project$View_DurationAndSeedDisplay$render,
-										data.runDuration,
-										data.runSeed,
-										{copySeedClickHandler: messages.copySeedClickHandler, setSeedClickHandler: messages.setSeedClickHandler}),
-									_1: {ctor: '[]'}
-								}
+								_0: A3(
+									_user$project$View_DurationAndSeedDisplay$render,
+									data.runDuration,
+									data.runSeed,
+									{copySeedClickHandler: messages.copySeedClickHandler, setSeedClickHandler: messages.setSeedClickHandler}),
+								_1: {ctor: '[]'}
 							}
 						}
 					}),

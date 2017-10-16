@@ -25,22 +25,25 @@
     min-height: 50px;
 }
 
-.etr-main-view .btn-toolbar {
+.etr-main-view .toolbar {
     margin: 0 0 0.5em 0;
 }
 
-.etr-main-view .btn-toolbar .btn-group {
-    margin: 0;
+.etr-main-view .toolbar div {
+
 }
 
-.etr-main-view .btn-toolbar .right {
-    float: right;
-}
-
-.etr-main-view .status-bar {
-    width: 100%;
+.etr-main-view .toolbar .status-bar {
+    margin-right: 90px;
     text-align: center;
-    margin: 1em 0;
+}
+
+.etr-main-view .toolbar .run-all-button {
+    width: 80px;
+    margin: 0;
+    float: right;
+    position: relative;
+    top: -28px;
 }
 
 .etr-main-view .status-bar.no-data {

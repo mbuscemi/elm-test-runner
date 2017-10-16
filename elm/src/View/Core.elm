@@ -10,7 +10,6 @@ import Tree.Core exposing (CollapsibleTree)
 import View.DurationAndSeedDisplay
 import View.OutputDisplay
 import View.PassingTestsDisplay
-import View.RedGreenDisplay
 import View.SeedAndAutoRun
 import View.TestHierarchy.Core
 import View.Toolbar
@@ -50,8 +49,7 @@ render : DisplayData -> Messages message -> Html message
 render data messages =
     div [ class "etr-main-view" ]
         [ div [ class "core" ]
-            [ View.Toolbar.render messages.runAllButtonClickHandler
-            , View.RedGreenDisplay.render data.runStatus
+            [ View.Toolbar.render data.runStatus messages.runAllButtonClickHandler
             , View.PassingTestsDisplay.render data.totalTests data.passedTests
             , View.DurationAndSeedDisplay.render
                 data.runDuration
