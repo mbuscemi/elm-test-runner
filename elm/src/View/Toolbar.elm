@@ -11,7 +11,7 @@ render totalTests passingTests runStatus runAllButtonClickHandler =
     div [ class "toolbar" ]
         [ div [ class <| "status-bar " ++ RunStatus.toClass runStatus ]
             [ strong [ class "title" ] [ text <| RunStatus.toText runStatus ]
-            , div [ class "passing-tests" ]
+            , span [ class "passing-tests" ]
                 [ span [ class "number-field passing" ] [ text <| toString passingTests ]
                 , span [] [ text " / " ]
                 , span [ class "number-field total" ] [ text <| toString totalTests ]

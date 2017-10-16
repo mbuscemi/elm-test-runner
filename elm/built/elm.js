@@ -10986,7 +10986,7 @@ var _user$project$View_Toolbar$render = F4(
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$div,
+								_elm_lang$html$Html$span,
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$class('passing-tests'),
