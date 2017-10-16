@@ -35,7 +35,7 @@ purgeNodes evaluator nodeList =
 
 
 hasMatchingNode : DataEvaluator b -> Tree a b -> Bool
-hasMatchingNode evaluator (Node node data children) =
+hasMatchingNode evaluator (Node _ data children) =
     if evaluator data then
         True
     else

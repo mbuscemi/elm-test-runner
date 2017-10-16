@@ -12,7 +12,7 @@ module State.Failure
         , shouldDiff
         )
 
-import Json.Decode exposing (Decoder, field, list, map, map2, map3, map4, map5, maybe, oneOf, string)
+import Json.Decode exposing (Decoder, field, list, map, map2, map3, map4, oneOf, string)
 
 
 type alias EqualityComparisonData =
@@ -95,8 +95,7 @@ comparison =
 
 
 type alias Reason =
-    { data : Comparison
-    }
+    { data : Comparison }
 
 
 reason : Decoder Reason
@@ -135,8 +134,8 @@ conditionalFailureData =
 
 type Failure
     = SimpleFailure String
-    | ComplexFailure ComplexFailureData
     | ConditionalFailure ConditionalFailureData
+    | ComplexFailure ComplexFailureData
 
 
 failure : Decoder Failure
@@ -156,14 +155,14 @@ nullInstance =
 getMessage : Failure -> String
 getMessage failure =
     case failure of
-        SimpleFailure string ->
-            string
+        SimpleFailure messsage ->
+            messsage
 
-        ComplexFailure failure ->
-            failure.message
+        ComplexFailure fail ->
+            fail.message
 
-        ConditionalFailure failure ->
-            failure.message
+        ConditionalFailure fail ->
+            fail.message
 
 
 getGiven : Failure -> Maybe String
@@ -175,26 +174,26 @@ getGiven failure =
         ComplexFailure _ ->
             Nothing
 
-        ConditionalFailure failure ->
-            Just failure.given
+        ConditionalFailure fail ->
+            Just fail.given
 
 
 hasComplexComparison : Failure -> Bool
-hasComplexComparison failure =
-    case failure of
+hasComplexComparison fail =
+    case fail of
         SimpleFailure _ ->
             False
 
-        ComplexFailure failure ->
-            case failure.reason.data of
+        ComplexFailure obj ->
+            case obj.reason.data of
                 SimpleComparison _ ->
                     False
 
                 _ ->
                     True
 
-        ConditionalFailure failure ->
-            case failure.reason.data of
+        ConditionalFailure obj ->
+            case obj.reason.data of
                 SimpleComparison _ ->
                     False
 
@@ -203,9 +202,9 @@ hasComplexComparison failure =
 
 
 getExpected : Failure -> String
-getExpected failure =
-    case getComparison failure of
-        SimpleComparison string ->
+getExpected fail =
+    case getComparison fail of
+        SimpleComparison _ ->
             ""
 
         EqualityComparison data ->
@@ -224,7 +223,7 @@ getExpected failure =
 getActual : Failure -> String
 getActual failure =
     case getComparison failure of
-        SimpleComparison string ->
+        SimpleComparison _ ->
             ""
 
         EqualityComparison data ->
@@ -275,21 +274,21 @@ isTodo failure =
 getComparison : Failure -> Comparison
 getComparison failure =
     case failure of
-        SimpleFailure string ->
-            SimpleComparison string
+        SimpleFailure message ->
+            SimpleComparison message
 
-        ComplexFailure failure ->
-            failure.reason.data
+        ComplexFailure fail ->
+            fail.reason.data
 
-        ConditionalFailure failure ->
-            failure.reason.data
+        ConditionalFailure fail ->
+            fail.reason.data
 
 
 expectationText : List String -> String
-expectationText list =
+expectationText values =
     "[\""
         ++ List.foldl
-            (\number string -> string ++ number)
+            (\number value -> value ++ number)
             ""
-            (List.intersperse "\",\"" list)
+            (List.intersperse "\",\"" values)
         ++ "\"]"

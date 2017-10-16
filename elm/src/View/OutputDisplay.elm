@@ -22,8 +22,8 @@ render compilerError failure =
         ( Just error, _ ) ->
             div [ class "failure" ] (errorText error)
 
-        ( Nothing, Just failure ) ->
-            div [ class "failure" ] (failureText failure)
+        ( Nothing, Just fail ) ->
+            div [ class "failure" ] (failureText fail)
 
         ( Nothing, Nothing ) ->
             div [] []
