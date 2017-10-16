@@ -12,47 +12,85 @@ module State.Failure
         , shouldDiff
         )
 
-import Json.Decode exposing (Decoder, field, list, map, map3, map5, maybe, oneOf, string)
+import Json.Decode exposing (Decoder, field, list, map, map2, map3, map4, map5, maybe, oneOf, string)
 
 
-type Expectation
-    = ListFields (List String)
-    | Simple String
-
-
-expectation : Decoder Expectation
-expectation =
-    oneOf
-        [ map ListFields (list string)
-        , map Simple string
-        ]
-
-
-type alias ComparisonData =
-    { comparison : Maybe String
-    , actual : Maybe Expectation
-    , expected : Maybe Expectation
-    , first : Maybe String
-    , second : Maybe String
+type alias EqualityComparisonData =
+    { comparison : String
+    , actual : String
+    , expected : String
     }
+
+
+equalityComparison : Decoder EqualityComparisonData
+equalityComparison =
+    map3 EqualityComparisonData
+        (field "comparison" string)
+        (field "actual" string)
+        (field "expected" string)
+
+
+type alias QuantityComparisonData =
+    { comparison : String
+    , first : String
+    , second : String
+    }
+
+
+quantityComparison : Decoder QuantityComparisonData
+quantityComparison =
+    map3 QuantityComparisonData
+        (field "comparison" string)
+        (field "first" string)
+        (field "second" string)
+
+
+type alias ListComparisonData =
+    { actual : List String
+    , expected : List String
+    }
+
+
+listComparison : Decoder ListComparisonData
+listComparison =
+    map2 ListComparisonData
+        (field "actual" <| list string)
+        (field "expected" <| list string)
+
+
+type alias DictSetComparisonData =
+    { actual : String
+    , expected : String
+    , extra : List String
+    , missing : List String
+    }
+
+
+dictSetComparison : Decoder DictSetComparisonData
+dictSetComparison =
+    map4 DictSetComparisonData
+        (field "actual" string)
+        (field "expected" string)
+        (field "extra" <| list string)
+        (field "missing" <| list string)
 
 
 type Comparison
     = SimpleComparison String
-    | ComplexComparison ComparisonData
+    | EqualityComparison EqualityComparisonData
+    | QuantityComparison QuantityComparisonData
+    | ListComparison ListComparisonData
+    | DictSetComparison DictSetComparisonData
 
 
 comparison : Decoder Comparison
 comparison =
     oneOf
         [ map SimpleComparison string
-        , map ComplexComparison <|
-            map5 ComparisonData
-                (maybe <| field "comparison" string)
-                (maybe <| field "actual" expectation)
-                (maybe <| field "expected" expectation)
-                (maybe <| field "first" string)
-                (maybe <| field "second" string)
+        , map EqualityComparison equalityComparison
+        , map QuantityComparison quantityComparison
+        , map ListComparison listComparison
+        , map DictSetComparison dictSetComparison
         ]
 
 
@@ -124,89 +162,68 @@ hasComplexComparison failure =
 
         ComplexFailure complexFailure ->
             case complexFailure.reason.data of
-                ComplexComparison _ ->
-                    True
-
                 SimpleComparison _ ->
                     False
+
+                _ ->
+                    True
 
 
 getExpected : Failure -> String
 getExpected failure =
-    let
-        data =
-            getData failure
+    case getComparison failure of
+        SimpleComparison string ->
+            ""
 
-        expected =
+        EqualityComparison data ->
             data.expected
 
-        first =
+        QuantityComparison data ->
             data.first
-    in
-    case ( expected, first ) of
-        ( Just expected, Just first ) ->
-            expectationText expected
 
-        ( Nothing, Just first ) ->
-            first
+        ListComparison data ->
+            expectationText data.expected
 
-        ( Just expected, Nothing ) ->
-            expectationText expected
-
-        ( Nothing, Nothing ) ->
-            ""
+        DictSetComparison data ->
+            data.expected
 
 
 getActual : Failure -> String
 getActual failure =
-    let
-        data =
-            getData failure
+    case getComparison failure of
+        SimpleComparison string ->
+            ""
 
-        actual =
+        EqualityComparison data ->
             data.actual
 
-        second =
+        QuantityComparison data ->
             data.second
-    in
-    case ( actual, second ) of
-        ( Just actual, Just second ) ->
-            expectationText actual
 
-        ( Nothing, Just second ) ->
-            second
+        ListComparison data ->
+            expectationText data.actual
 
-        ( Just actual, Nothing ) ->
-            expectationText actual
-
-        ( Nothing, Nothing ) ->
-            ""
+        DictSetComparison data ->
+            data.actual
 
 
 shouldDiff : Failure -> Bool
 shouldDiff failure =
-    let
-        data =
-            getData failure
-
-        expected =
-            data.expected
-
-        first =
-            data.first
-    in
-    case ( expected, first ) of
-        ( Just expected, Just first ) ->
-            True
-
-        ( Nothing, Just first ) ->
+    case getComparison failure of
+        SimpleComparison _ ->
             False
 
-        ( Just expected, Nothing ) ->
+        EqualityComparison _ ->
             True
 
-        ( Nothing, Nothing ) ->
+        QuantityComparison _ ->
             False
+
+        ListComparison _ ->
+            True
+
+        DictSetComparison _ ->
+            True
 
 
 isTodo : Failure -> Bool
@@ -219,41 +236,21 @@ isTodo failure =
             False
 
 
-getData : Failure -> ComparisonData
-getData failure =
+getComparison : Failure -> Comparison
+getComparison failure =
     case failure of
         SimpleFailure string ->
-            { comparison = Just string
-            , actual = Nothing
-            , expected = Nothing
-            , first = Nothing
-            , second = Nothing
-            }
+            SimpleComparison string
 
         ComplexFailure complexFailure ->
-            case complexFailure.reason.data of
-                SimpleComparison string ->
-                    { comparison = Just string
-                    , actual = Nothing
-                    , expected = Nothing
-                    , first = Nothing
-                    , second = Nothing
-                    }
-
-                ComplexComparison data ->
-                    data
+            complexFailure.reason.data
 
 
-expectationText : Expectation -> String
-expectationText expectation =
-    case expectation of
-        ListFields list ->
-            "[\""
-                ++ List.foldl
-                    (\number string -> string ++ number)
-                    ""
-                    (List.intersperse "\",\"" list)
-                ++ "\"]"
-
-        Simple string ->
-            string
+expectationText : List String -> String
+expectationText list =
+    "[\""
+        ++ List.foldl
+            (\number string -> string ++ number)
+            ""
+            (List.intersperse "\",\"" list)
+        ++ "\"]"
