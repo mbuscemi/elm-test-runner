@@ -179,8 +179,8 @@ getGiven failure =
 
 
 hasComplexComparison : Failure -> Bool
-hasComplexComparison fail =
-    case fail of
+hasComplexComparison failure =
+    case failure of
         SimpleFailure _ ->
             False
 
@@ -202,8 +202,8 @@ hasComplexComparison fail =
 
 
 getExpected : Failure -> String
-getExpected fail =
-    case getComparison fail of
+getExpected failure =
+    case getComparison failure of
         SimpleComparison _ ->
             ""
 
