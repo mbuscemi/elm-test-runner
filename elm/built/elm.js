@@ -10591,7 +10591,7 @@ var _user$project$View_PassingTestsDisplay$render = F2(
 					_elm_lang$html$Html$span,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('number-field'),
+						_0: _elm_lang$html$Html_Attributes$class('number-field first'),
 						_1: {ctor: '[]'}
 					},
 					{
@@ -10625,18 +10625,7 @@ var _user$project$View_PassingTestsDisplay$render = F2(
 									_elm_lang$core$Basics$toString(totalTests)),
 								_1: {ctor: '[]'}
 							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$span,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(' tests passed'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
+						_1: {ctor: '[]'}
 					}
 				}
 			});

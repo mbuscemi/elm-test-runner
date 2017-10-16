@@ -29,21 +29,17 @@
     margin: 0 0 0.5em 0;
 }
 
-.etr-main-view .toolbar div {
-
-}
-
-.etr-main-view .toolbar .status-bar {
-    margin-right: 90px;
-    text-align: center;
-}
-
 .etr-main-view .toolbar .run-all-button {
     width: 80px;
     margin: 0;
     float: right;
     position: relative;
     top: -28px;
+}
+
+.etr-main-view .toolbar .status-bar {
+    margin-right: 90px;
+    text-align: center;
 }
 
 .etr-main-view .status-bar.no-data {
@@ -70,9 +66,16 @@
     background-color: #073d6f;
 }
 
-.etr-main-view .passing-tests .number-field {
-    margin: 0 15% 0 0;
+.etr-main-view .passing-tests {
     text-align: left;
+}
+
+.etr-main-view .passing-tests .number-field {
+    margin: 0 5%;
+}
+
+.etr-main-view .passing-tests .number-field.first {
+    margin-left: 0;
 }
 
 .etr-main-view div.run-data-row {
