@@ -9131,7 +9131,7 @@ var _user$project$Duration_Core$Seconds = function (a) {
 	return {ctor: 'Seconds', _0: a};
 };
 
-var _user$project$State_Failure$expectationText = function (list) {
+var _user$project$State_Failure$expectationText = function (values) {
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
 		'[\"',
@@ -9140,11 +9140,11 @@ var _user$project$State_Failure$expectationText = function (list) {
 			A3(
 				_elm_lang$core$List$foldl,
 				F2(
-					function (number, string) {
-						return A2(_elm_lang$core$Basics_ops['++'], string, number);
+					function (number, value) {
+						return A2(_elm_lang$core$Basics_ops['++'], value, number);
 					}),
 				'',
-				A2(_elm_lang$core$List$intersperse, '\",\"', list)),
+				A2(_elm_lang$core$List$intersperse, '\",\"', values)),
 			'\"]'));
 };
 var _user$project$State_Failure$isTodo = function (failure) {
@@ -9158,8 +9158,8 @@ var _user$project$State_Failure$isTodo = function (failure) {
 			return false;
 	}
 };
-var _user$project$State_Failure$hasComplexComparison = function (failure) {
-	var _p1 = failure;
+var _user$project$State_Failure$hasComplexComparison = function (fail) {
+	var _p1 = fail;
 	switch (_p1.ctor) {
 		case 'SimpleFailure':
 			return false;
@@ -9327,8 +9327,8 @@ var _user$project$State_Failure$getComparison = function (failure) {
 			return _p6._0.reason.data;
 	}
 };
-var _user$project$State_Failure$getExpected = function (failure) {
-	var _p7 = _user$project$State_Failure$getComparison(failure);
+var _user$project$State_Failure$getExpected = function (fail) {
+	var _p7 = _user$project$State_Failure$getComparison(fail);
 	switch (_p7.ctor) {
 		case 'SimpleComparison':
 			return '';
@@ -9372,11 +9372,11 @@ var _user$project$State_Failure$shouldDiff = function (failure) {
 			return true;
 	}
 };
-var _user$project$State_Failure$ConditionalFailure = function (a) {
-	return {ctor: 'ConditionalFailure', _0: a};
-};
 var _user$project$State_Failure$ComplexFailure = function (a) {
 	return {ctor: 'ComplexFailure', _0: a};
+};
+var _user$project$State_Failure$ConditionalFailure = function (a) {
+	return {ctor: 'ConditionalFailure', _0: a};
 };
 var _user$project$State_Failure$SimpleFailure = function (a) {
 	return {ctor: 'SimpleFailure', _0: a};
