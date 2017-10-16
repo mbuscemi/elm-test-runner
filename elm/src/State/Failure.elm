@@ -105,27 +105,46 @@ reason =
         (field "data" comparison)
 
 
-type alias FailureData =
+type alias ComplexFailureData =
     { message : String
     , reason : Reason
-    , given : Maybe String
     }
+
+
+complexFailureData : Decoder ComplexFailureData
+complexFailureData =
+    map2 ComplexFailureData
+        (field "message" string)
+        (field "reason" reason)
+
+
+type alias ConditionalFailureData =
+    { message : String
+    , reason : Reason
+    , given : String
+    }
+
+
+conditionalFailureData : Decoder ConditionalFailureData
+conditionalFailureData =
+    map3 ConditionalFailureData
+        (field "message" string)
+        (field "reason" reason)
+        (field "given" string)
 
 
 type Failure
     = SimpleFailure String
-    | ComplexFailure FailureData
+    | ComplexFailure ComplexFailureData
+    | ConditionalFailure ConditionalFailureData
 
 
 failure : Decoder Failure
 failure =
     oneOf
         [ map SimpleFailure string
-        , map ComplexFailure <|
-            map3 FailureData
-                (field "message" string)
-                (field "reason" reason)
-                (maybe <| field "given" string)
+        , map ConditionalFailure conditionalFailureData
+        , map ComplexFailure complexFailureData
         ]
 
 
@@ -140,18 +159,24 @@ getMessage failure =
         SimpleFailure string ->
             string
 
-        ComplexFailure complexFailure ->
-            complexFailure.message
+        ComplexFailure failure ->
+            failure.message
+
+        ConditionalFailure failure ->
+            failure.message
 
 
 getGiven : Failure -> Maybe String
 getGiven failure =
     case failure of
-        SimpleFailure string ->
+        SimpleFailure _ ->
             Nothing
 
-        ComplexFailure complexFailure ->
-            complexFailure.given
+        ComplexFailure _ ->
+            Nothing
+
+        ConditionalFailure failure ->
+            Just failure.given
 
 
 hasComplexComparison : Failure -> Bool
@@ -160,8 +185,16 @@ hasComplexComparison failure =
         SimpleFailure _ ->
             False
 
-        ComplexFailure complexFailure ->
-            case complexFailure.reason.data of
+        ComplexFailure failure ->
+            case failure.reason.data of
+                SimpleComparison _ ->
+                    False
+
+                _ ->
+                    True
+
+        ConditionalFailure failure ->
+            case failure.reason.data of
                 SimpleComparison _ ->
                     False
 
@@ -235,6 +268,9 @@ isTodo failure =
         ComplexFailure _ ->
             False
 
+        ConditionalFailure _ ->
+            False
+
 
 getComparison : Failure -> Comparison
 getComparison failure =
@@ -242,8 +278,11 @@ getComparison failure =
         SimpleFailure string ->
             SimpleComparison string
 
-        ComplexFailure complexFailure ->
-            complexFailure.reason.data
+        ComplexFailure failure ->
+            failure.reason.data
+
+        ConditionalFailure failure ->
+            failure.reason.data
 
 
 expectationText : List String -> String
