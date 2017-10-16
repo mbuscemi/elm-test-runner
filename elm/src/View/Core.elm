@@ -17,8 +17,7 @@ import View.Toolbar
 
 
 type alias Messages message =
-    { toggleClickHandler : message
-    , runAllButtonClickHandler : message
+    { runAllButtonClickHandler : message
     , testListItemExpand : Int -> message
     , testListItemCollapse : Int -> message
     , testListItemMouseEnter : Int -> message
@@ -51,7 +50,7 @@ render : DisplayData -> Messages message -> Html message
 render data messages =
     div [ class "etr-main-view" ]
         [ div [ class "core" ]
-            [ View.Toolbar.render messages.toggleClickHandler messages.runAllButtonClickHandler
+            [ View.Toolbar.render messages.runAllButtonClickHandler
             , View.RedGreenDisplay.render data.runStatus
             , View.PassingTestsDisplay.render data.totalTests data.passedTests
             , View.DurationAndSeedDisplay.render

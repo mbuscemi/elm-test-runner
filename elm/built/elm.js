@@ -9158,8 +9158,8 @@ var _user$project$State_Failure$isTodo = function (failure) {
 			return false;
 	}
 };
-var _user$project$State_Failure$hasComplexComparison = function (fail) {
-	var _p1 = fail;
+var _user$project$State_Failure$hasComplexComparison = function (failure) {
+	var _p1 = failure;
 	switch (_p1.ctor) {
 		case 'SimpleFailure':
 			return false;
@@ -9327,8 +9327,8 @@ var _user$project$State_Failure$getComparison = function (failure) {
 			return _p6._0.reason.data;
 	}
 };
-var _user$project$State_Failure$getExpected = function (fail) {
-	var _p7 = _user$project$State_Failure$getComparison(fail);
+var _user$project$State_Failure$getExpected = function (failure) {
+	var _p7 = _user$project$State_Failure$getComparison(failure);
 	switch (_p7.ctor) {
 		case 'SimpleComparison':
 			return '';
@@ -11039,84 +11039,57 @@ var _user$project$View_TestHierarchy_Core$NodeData = F2(
 		return {nodeMouseIsOver: a, selectedNode: b};
 	});
 
-var _user$project$View_Toolbar$render = F2(
-	function (toggleClickHandler, runAllButtonClickHandler) {
-		return A2(
-			_elm_lang$html$Html$section,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('input-block'),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('btn-toolbar'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('btn-group'),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$div,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('btn icon icon-chevron-right'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onClick(toggleClickHandler),
-											_1: {ctor: '[]'}
-										}
-									},
-									{ctor: '[]'}),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
+var _user$project$View_Toolbar$render = function (runAllButtonClickHandler) {
+	return A2(
+		_elm_lang$html$Html$section,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('input-block'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('btn-toolbar'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('btn-group right'),
+							_1: {ctor: '[]'}
+						},
+						{
 							ctor: '::',
 							_0: A2(
 								_elm_lang$html$Html$div,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('btn-group right'),
-									_1: {ctor: '[]'}
+									_0: _elm_lang$html$Html_Attributes$class('btn icon icon-sync'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(runAllButtonClickHandler),
+										_1: {ctor: '[]'}
+									}
 								},
 								{
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$div,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('btn icon icon-sync'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Events$onClick(runAllButtonClickHandler),
-												_1: {ctor: '[]'}
-											}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Run All'),
-											_1: {ctor: '[]'}
-										}),
+									_0: _elm_lang$html$Html$text('Run All'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			});
-	});
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
 
 var _user$project$View_Core$render = F2(
 	function (data, messages) {
@@ -11138,7 +11111,7 @@ var _user$project$View_Core$render = F2(
 					},
 					{
 						ctor: '::',
-						_0: A2(_user$project$View_Toolbar$render, messages.toggleClickHandler, messages.runAllButtonClickHandler),
+						_0: _user$project$View_Toolbar$render(messages.runAllButtonClickHandler),
 						_1: {
 							ctor: '::',
 							_0: _user$project$View_RedGreenDisplay$render(data.runStatus),
@@ -11206,27 +11179,10 @@ var _user$project$View_Core$render = F2(
 				}
 			});
 	});
-var _user$project$View_Core$Messages = function (a) {
-	return function (b) {
-		return function (c) {
-			return function (d) {
-				return function (e) {
-					return function (f) {
-						return function (g) {
-							return function (h) {
-								return function (i) {
-									return function (j) {
-										return {toggleClickHandler: a, runAllButtonClickHandler: b, testListItemExpand: c, testListItemCollapse: d, testListItemMouseEnter: e, testListItemMouseLeave: f, testClickHandler: g, copySeedClickHandler: h, setSeedClickHandler: i, setForceSeedHandler: j};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-};
+var _user$project$View_Core$Messages = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {runAllButtonClickHandler: a, testListItemExpand: b, testListItemCollapse: c, testListItemMouseEnter: d, testListItemMouseLeave: e, testClickHandler: f, copySeedClickHandler: g, setSeedClickHandler: h, setForceSeedHandler: i};
+	});
 var _user$project$View_Core$DisplayData = function (a) {
 	return function (b) {
 		return function (c) {
@@ -11266,11 +11222,6 @@ var _user$project$Main$init = A2(
 	_elm_lang$core$Platform_Cmd_ops['!'],
 	_user$project$Model_Core$default,
 	{ctor: '[]'});
-var _user$project$Main$toggle = _elm_lang$core$Native_Platform.outgoingPort(
-	'toggle',
-	function (v) {
-		return null;
-	});
 var _user$project$Main$runTest = _elm_lang$core$Native_Platform.outgoingPort(
 	'runTest',
 	function (v) {
@@ -11285,12 +11236,6 @@ var _user$project$Main$update = F2(
 	function (message, model) {
 		var _p0 = message;
 		switch (_p0.ctor) {
-			case 'ToggleButtonClicked':
-				return A2(
-					_user$project$Main$andPerform,
-					_user$project$Main$toggle(
-						{ctor: '_Tuple0'}),
-					model);
 			case 'InitiateRunAll':
 				return A2(
 					_user$project$Main$andPerform,
@@ -11512,6 +11457,12 @@ var _user$project$Main$CompilerErrored = function (a) {
 	return {ctor: 'CompilerErrored', _0: a};
 };
 var _user$project$Main$InitiateRunAll = {ctor: 'InitiateRunAll'};
+var _user$project$Main$view = function (model) {
+	return A2(
+		_user$project$View_Core$render,
+		{runStatus: model.runStatus, compilerError: model.compilerError, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, selectedNodeFailure: model.selectedTestFailure, autoRunEnabled: model.autoRunEnabled, randomSeed: model.randomSeed, forceRandomSeedEnabled: model.forceRandomSeedEnabled},
+		{runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed});
+};
 var _user$project$Main$saveEventMessage = F2(
 	function (model, _p1) {
 		return model.autoRunEnabled ? _user$project$Main$InitiateRunAll : _user$project$Main$DoNothing;
@@ -11550,13 +11501,6 @@ var _user$project$Main$subscriptions = function (model) {
 				}
 			}
 		});
-};
-var _user$project$Main$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
-var _user$project$Main$view = function (model) {
-	return A2(
-		_user$project$View_Core$render,
-		{runStatus: model.runStatus, compilerError: model.compilerError, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, selectedNodeFailure: model.selectedTestFailure, autoRunEnabled: model.autoRunEnabled, randomSeed: model.randomSeed, forceRandomSeedEnabled: model.forceRandomSeedEnabled},
-		{toggleClickHandler: _user$project$Main$ToggleButtonClicked, runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed});
 };
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();

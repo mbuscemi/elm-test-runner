@@ -40,8 +40,7 @@ import View.Core
 
 
 type Message
-    = ToggleButtonClicked
-    | InitiateRunAll
+    = InitiateRunAll
     | CompilerErrored String
     | RunStart ( String, RunStart.RawData )
     | TestCompleted String
@@ -86,10 +85,6 @@ andPerform command model =
 update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
-        ToggleButtonClicked ->
-            model
-                |> andPerform (toggle ())
-
         InitiateRunAll ->
             setRunStatusToProcessing model
                 |> resetPassedTests
@@ -201,8 +196,7 @@ view model =
         , randomSeed = model.randomSeed
         , forceRandomSeedEnabled = model.forceRandomSeedEnabled
         }
-        { toggleClickHandler = ToggleButtonClicked
-        , runAllButtonClickHandler = InitiateRunAll
+        { runAllButtonClickHandler = InitiateRunAll
         , testListItemExpand = TestListItemExpand
         , testListItemCollapse = TestListItemCollapse
         , testListItemMouseEnter = TestListItemMouseEnter
@@ -233,9 +227,6 @@ saveEventMessage model _ =
         InitiateRunAll
     else
         DoNothing
-
-
-port toggle : () -> Cmd message
 
 
 port runTest : String -> Cmd message
