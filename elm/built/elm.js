@@ -15501,6 +15501,30 @@ var _user$project$State_Failure$failure = _elm_lang$core$Json_Decode$oneOf(
 	});
 var _user$project$State_Failure$nullInstance = _user$project$State_Failure$SimpleFailure('NULL');
 
+var _user$project$State_PaneLocation$toStyle = function (paneLocation) {
+	var _p0 = paneLocation;
+	if (_p0.ctor === 'Bottom') {
+		return 'horizontal';
+	} else {
+		return 'vertical';
+	}
+};
+var _user$project$State_PaneLocation$Left = {ctor: 'Left'};
+var _user$project$State_PaneLocation$Bottom = {ctor: 'Bottom'};
+var _user$project$State_PaneLocation$Right = {ctor: 'Right'};
+var _user$project$State_PaneLocation$default = _user$project$State_PaneLocation$Right;
+var _user$project$State_PaneLocation$fromString = function (location) {
+	var _p1 = location;
+	switch (_p1) {
+		case 'bottom':
+			return _user$project$State_PaneLocation$Bottom;
+		case 'left':
+			return _user$project$State_PaneLocation$Left;
+		default:
+			return _user$project$State_PaneLocation$Right;
+	}
+};
+
 var _user$project$State_RunStatus$toClass = function (runStatus) {
 	var _p0 = runStatus;
 	switch (_p0.ctor) {
@@ -15993,6 +16017,14 @@ var _user$project$Tree_Traverse$update = F2(
 				_p7._2));
 	});
 
+var _user$project$Model_Core$setPaneLocation = F2(
+	function (newLocation, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				paneLocation: _user$project$State_PaneLocation$fromString(newLocation)
+			});
+	});
 var _user$project$Model_Core$initiateStatusBarTextFlicker = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -16258,7 +16290,8 @@ var _user$project$Model_Core$default = {
 	autoRunEnabled: false,
 	randomSeed: _elm_lang$core$Maybe$Nothing,
 	forceRandomSeedEnabled: false,
-	statusBarStyle: _user$project$Animation_Flicker$initial
+	statusBarStyle: _user$project$Animation_Flicker$initial,
+	paneLocation: _user$project$State_PaneLocation$default
 };
 var _user$project$Model_Core$Model = function (a) {
 	return function (b) {
@@ -16276,7 +16309,9 @@ var _user$project$Model_Core$Model = function (a) {
 													return function (n) {
 														return function (o) {
 															return function (p) {
-																return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTest: k, selectedTestFailure: l, autoRunEnabled: m, randomSeed: n, forceRandomSeedEnabled: o, statusBarStyle: p};
+																return function (q) {
+																	return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTest: k, selectedTestFailure: l, autoRunEnabled: m, randomSeed: n, forceRandomSeedEnabled: o, statusBarStyle: p, paneLocation: q};
+																};
 															};
 														};
 													};
@@ -17449,6 +17484,9 @@ var _user$project$Main$update = F2(
 			case 'AnimateFlicker':
 				return _user$project$Main$andNoCommand(
 					A2(_user$project$Model_Core$updateFlicker, _p0._0, model));
+			case 'PaneMoved':
+				return _user$project$Main$andNoCommand(
+					A2(_user$project$Model_Core$setPaneLocation, _p0._0, model));
 			default:
 				return _user$project$Main$andNoCommand(model);
 		}
@@ -17466,6 +17504,7 @@ var _user$project$Main$notifySaveEvent = _elm_lang$core$Native_Platform.incoming
 	'notifySaveEvent',
 	_elm_lang$core$Json_Decode$null(
 		{ctor: '_Tuple0'}));
+var _user$project$Main$notifyPaneMoved = _elm_lang$core$Native_Platform.incomingPort('notifyPaneMoved', _elm_lang$core$Json_Decode$string);
 var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(
 	'runStart',
 	A2(
@@ -17528,6 +17567,9 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
 var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
+var _user$project$Main$PaneMoved = function (a) {
+	return {ctor: 'PaneMoved', _0: a};
+};
 var _user$project$Main$AnimateFlicker = function (a) {
 	return {ctor: 'AnimateFlicker', _0: a};
 };
@@ -17597,24 +17639,28 @@ var _user$project$Main$subscriptions = function (model) {
 							_user$project$Main$saveEventMessage(model)),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Main$runStart(_user$project$Main$RunStart),
+							_0: _user$project$Main$notifyPaneMoved(_user$project$Main$PaneMoved),
 							_1: {
 								ctor: '::',
-								_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+								_0: _user$project$Main$runStart(_user$project$Main$RunStart),
 								_1: {
 									ctor: '::',
-									_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
+									_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
 									_1: {
 										ctor: '::',
-										_0: A2(
-											_mdgriffith$elm_style_animation$Animation$subscription,
-											_user$project$Main$AnimateFlicker,
-											{
-												ctor: '::',
-												_0: model.statusBarStyle,
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
+										_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_mdgriffith$elm_style_animation$Animation$subscription,
+												_user$project$Main$AnimateFlicker,
+												{
+													ctor: '::',
+													_0: model.statusBarStyle,
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
 									}
 								}
 							}

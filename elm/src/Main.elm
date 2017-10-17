@@ -16,6 +16,7 @@ import Model.Core as Model
         , resetPassedTests
         , resetTestRuns
         , setCompilerErrorMessage
+        , setPaneLocation
         , setProjectNameFromPath
         , setRandomSeed
         , setRandomSeedForcing
@@ -58,6 +59,7 @@ type Message
     | SetRandomSeed Int
     | SetForceSeed Bool
     | AnimateFlicker Animation.Msg
+    | PaneMoved String
     | DoNothing
 
 
@@ -184,6 +186,10 @@ update message model =
             updateFlicker animateMessage model
                 |> andNoCommand
 
+        PaneMoved newLocation ->
+            setPaneLocation newLocation model
+                |> andNoCommand
+
         DoNothing ->
             model |> andNoCommand
 
@@ -225,6 +231,7 @@ subscriptions model =
         , notifyCompilerErrored CompilerErrored
         , toggleAutoRun (always ToggleAutoRun)
         , notifySaveEvent <| saveEventMessage model
+        , notifyPaneMoved PaneMoved
         , runStart RunStart
         , testCompleted TestCompleted
         , runComplete RunComplete
@@ -256,6 +263,9 @@ port toggleAutoRun : (() -> message) -> Sub message
 
 
 port notifySaveEvent : (() -> message) -> Sub message
+
+
+port notifyPaneMoved : (String -> message) -> Sub message
 
 
 port runStart : (( String, RunStart.RawData ) -> message) -> Sub message

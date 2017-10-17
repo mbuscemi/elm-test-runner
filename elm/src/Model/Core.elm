@@ -13,6 +13,7 @@ module Model.Core
         , resetPassedTests
         , resetTestRuns
         , setCompilerErrorMessage
+        , setPaneLocation
         , setProjectNameFromPath
         , setRandomSeed
         , setRandomSeedForcing
@@ -37,6 +38,7 @@ import Animation exposing (State)
 import Animation.Flicker
 import Duration.Core exposing (Duration)
 import State.Failure exposing (Failure)
+import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
 import TestEvent.RunStart as RunStart exposing (RunStart)
@@ -66,6 +68,7 @@ type alias Model =
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
     , statusBarStyle : State
+    , paneLocation : PaneLocation
     }
 
 
@@ -87,6 +90,7 @@ default =
     , randomSeed = Nothing
     , forceRandomSeedEnabled = False
     , statusBarStyle = Animation.Flicker.initial
+    , paneLocation = PaneLocation.default
     }
 
 
@@ -309,3 +313,8 @@ updateFlicker animationMessage model =
 initiateStatusBarTextFlicker : Model -> Model
 initiateStatusBarTextFlicker model =
     { model | statusBarStyle = Animation.Flicker.animation model.statusBarStyle }
+
+
+setPaneLocation : String -> Model -> Model
+setPaneLocation newLocation model =
+    { model | paneLocation = PaneLocation.fromString newLocation }
