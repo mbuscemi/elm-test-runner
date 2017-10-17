@@ -46,7 +46,9 @@
 .etr-main-view .toolbar .status-bar {
     height: 31px;
     margin-right: 90px;
+    border-radius: 4px;
     text-align: center;
+    transition: background-color 0.33s ease-in-out;
 }
 
 .etr-main-view .status-bar.no-data {
