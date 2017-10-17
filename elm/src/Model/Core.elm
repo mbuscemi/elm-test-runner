@@ -6,6 +6,7 @@ module Model.Core
         , clearRunSeed
         , default
         , expandFailingAndTodoNodes
+        , initiateStatusBarTextFlicker
         , invertAutoRun
         , purgeObsoleteNodes
         , randomSeedForJS
@@ -27,10 +28,13 @@ module Model.Core
         , setTestMouseIsOver
         , setTotalTestCount
         , toggleNode
+        , updateFlicker
         , updateHierarchy
         , updatePassedTestCount
         )
 
+import Animation exposing (State)
+import Animation.Flicker
 import Duration.Core exposing (Duration)
 import State.Failure exposing (Failure)
 import State.RunStatus as RunStatus exposing (RunStatus)
@@ -61,6 +65,7 @@ type alias Model =
     , autoRunEnabled : Bool
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
+    , statusBarStyle : State
     }
 
 
@@ -81,6 +86,7 @@ default =
     , autoRunEnabled = False
     , randomSeed = Nothing
     , forceRandomSeedEnabled = False
+    , statusBarStyle = Animation.Flicker.initial
     }
 
 
@@ -293,3 +299,13 @@ randomSeedForJS model =
 
         _ ->
             ""
+
+
+updateFlicker : Animation.Msg -> Model -> Model
+updateFlicker animationMessage model =
+    { model | statusBarStyle = Animation.update animationMessage model.statusBarStyle }
+
+
+initiateStatusBarTextFlicker : Model -> Model
+initiateStatusBarTextFlicker model =
+    { model | statusBarStyle = Animation.Flicker.animation model.statusBarStyle }

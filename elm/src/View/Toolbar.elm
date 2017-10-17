@@ -1,17 +1,21 @@
 module View.Toolbar exposing (render)
 
+import Animation exposing (State)
 import Html exposing (Html, div, section, span, strong, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import State.RunStatus as RunStatus exposing (RunStatus)
 
 
-render : Int -> Int -> RunStatus -> message -> Html message
-render totalTests passingTests runStatus runAllButtonClickHandler =
+render : Int -> Int -> RunStatus -> State -> message -> Html message
+render totalTests passingTests runStatus statusBarTextStyle runAllButtonClickHandler =
     div [ class "toolbar" ]
         [ div [ class <| "status-bar " ++ RunStatus.toClass runStatus ]
-            [ strong [ class "title" ] [ text <| RunStatus.toText runStatus ]
-            , span [ class "passing-tests" ]
+            [ strong
+                (List.append [ class "title" ] (Animation.render statusBarTextStyle))
+                [ text <| RunStatus.toText runStatus ]
+            , span
+                (List.append [ class "passing-tests" ] (Animation.render statusBarTextStyle))
                 [ span [ class "number-field passing" ] [ text <| toString passingTests ]
                 , span [] [ text " / " ]
                 , span [ class "number-field total" ] [ text <| toString totalTests ]

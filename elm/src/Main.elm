@@ -1,5 +1,6 @@
 port module Main exposing (main)
 
+import Animation
 import Html exposing (Html)
 import Model.Core as Model
     exposing
@@ -8,6 +9,7 @@ import Model.Core as Model
         , clearRunDuration
         , clearRunSeed
         , expandFailingAndTodoNodes
+        , initiateStatusBarTextFlicker
         , invertAutoRun
         , purgeObsoleteNodes
         , randomSeedForJS
@@ -29,6 +31,7 @@ import Model.Core as Model
         , setTestMouseIsOver
         , setTotalTestCount
         , toggleNode
+        , updateFlicker
         , updateHierarchy
         , updatePassedTestCount
         )
@@ -54,6 +57,7 @@ type Message
     | CopySeed String
     | SetRandomSeed Int
     | SetForceSeed Bool
+    | AnimateFlicker Animation.Msg
     | DoNothing
 
 
@@ -135,6 +139,7 @@ update message model =
                 |> purgeObsoleteNodes
                 |> updateHierarchy
                 |> expandFailingAndTodoNodes
+                |> initiateStatusBarTextFlicker
                 |> andNoCommand
 
         TestListItemExpand nodeId ->
@@ -175,6 +180,10 @@ update message model =
             setRandomSeedForcing setting model
                 |> andNoCommand
 
+        AnimateFlicker animateMessage ->
+            updateFlicker animateMessage model
+                |> andNoCommand
+
         DoNothing ->
             model |> andNoCommand
 
@@ -195,6 +204,7 @@ view model =
         , autoRunEnabled = model.autoRunEnabled
         , randomSeed = model.randomSeed
         , forceRandomSeedEnabled = model.forceRandomSeedEnabled
+        , statusBarTextStyle = model.statusBarStyle
         }
         { runAllButtonClickHandler = InitiateRunAll
         , testListItemExpand = TestListItemExpand
@@ -218,6 +228,7 @@ subscriptions model =
         , runStart RunStart
         , testCompleted TestCompleted
         , runComplete RunComplete
+        , Animation.subscription AnimateFlicker [ model.statusBarStyle ]
         ]
 
 

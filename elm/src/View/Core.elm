@@ -1,5 +1,6 @@
 module View.Core exposing (render)
 
+import Animation exposing (State)
 import Duration.Core exposing (Duration)
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
@@ -41,6 +42,7 @@ type alias DisplayData =
     , autoRunEnabled : Bool
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
+    , statusBarTextStyle : State
     }
 
 
@@ -48,7 +50,7 @@ render : DisplayData -> Messages message -> Html message
 render data messages =
     div [ class "etr-main-view" ]
         [ div [ class "core" ]
-            [ View.Toolbar.render data.totalTests data.passedTests data.runStatus messages.runAllButtonClickHandler
+            [ View.Toolbar.render data.totalTests data.passedTests data.runStatus data.statusBarTextStyle messages.runAllButtonClickHandler
             , View.DurationAndSeedDisplay.render
                 data.runDuration
                 data.runSeed
