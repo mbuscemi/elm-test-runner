@@ -5,6 +5,7 @@ import Duration.Core exposing (Duration)
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
 import State.Failure exposing (Failure)
+import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus exposing (RunStatus)
 import TestInstance.Core exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree)
@@ -43,42 +44,47 @@ type alias DisplayData =
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
     , statusBarTextStyle : State
+    , paneLocation : PaneLocation
     }
 
 
 render : DisplayData -> Messages message -> Html message
 render data messages =
-    div [ class "etr-main-view" ]
-        [ div [ class "core" ]
-            [ View.Toolbar.render data.totalTests data.passedTests data.runStatus data.statusBarTextStyle messages.runAllButtonClickHandler
-            , View.DurationAndSeedDisplay.render
-                data.runDuration
-                data.runSeed
-                { copySeedClickHandler = messages.copySeedClickHandler
-                , setSeedClickHandler = messages.setSeedClickHandler
-                }
+    div [ class <| "etr-main-view " ++ PaneLocation.toStyle data.paneLocation ]
+        [ div [ class "section-one" ]
+            [ div [ class "core" ]
+                [ View.Toolbar.render data.totalTests data.passedTests data.runStatus data.statusBarTextStyle messages.runAllButtonClickHandler
+                , View.DurationAndSeedDisplay.render
+                    data.runDuration
+                    data.runSeed
+                    { copySeedClickHandler = messages.copySeedClickHandler
+                    , setSeedClickHandler = messages.setSeedClickHandler
+                    }
+                ]
+            , div [ class "test-hierarchy" ]
+                [ View.TestHierarchy.Core.render
+                    { expand = messages.testListItemExpand
+                    , collapse = messages.testListItemCollapse
+                    }
+                    { mouseIn = messages.testListItemMouseEnter
+                    , mouseOut = messages.testListItemMouseLeave
+                    , testClick = messages.testClickHandler
+                    }
+                    { nodeMouseIsOver = data.nodeMouseIsOver
+                    , selectedNode = data.selectedNode
+                    }
+                    data.testHierarchy
+                ]
             ]
-        , div [ class "test-hierarchy" ]
-            [ View.TestHierarchy.Core.render
-                { expand = messages.testListItemExpand
-                , collapse = messages.testListItemCollapse
-                }
-                { mouseIn = messages.testListItemMouseEnter
-                , mouseOut = messages.testListItemMouseLeave
-                , testClick = messages.testClickHandler
-                }
-                { nodeMouseIsOver = data.nodeMouseIsOver
-                , selectedNode = data.selectedNode
-                }
-                data.testHierarchy
+        , div [ class "section-two" ]
+            [ div [ class "output-display" ]
+                [ View.OutputDisplay.render data.compilerError data.selectedNodeFailure ]
+            , div [ class "footer" ]
+                (View.SeedAndAutoRun.render
+                    messages.setForceSeedHandler
+                    data.autoRunEnabled
+                    data.forceRandomSeedEnabled
+                    data.randomSeed
+                )
             ]
-        , div [ class "output-display" ]
-            [ View.OutputDisplay.render data.compilerError data.selectedNodeFailure ]
-        , div [ class "footer" ]
-            (View.SeedAndAutoRun.render
-                messages.setForceSeedHandler
-                data.autoRunEnabled
-                data.forceRandomSeedEnabled
-                data.randomSeed
-            )
         ]

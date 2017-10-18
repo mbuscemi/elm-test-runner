@@ -211,6 +211,7 @@ view model =
         , randomSeed = model.randomSeed
         , forceRandomSeedEnabled = model.forceRandomSeedEnabled
         , statusBarTextStyle = model.statusBarStyle
+        , paneLocation = model.paneLocation
         }
         { runAllButtonClickHandler = InitiateRunAll
         , testListItemExpand = TestListItemExpand

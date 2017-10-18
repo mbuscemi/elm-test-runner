@@ -17242,7 +17242,11 @@ var _user$project$View_Core$render = F2(
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('etr-main-view'),
+				_0: _elm_lang$html$Html_Attributes$class(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'etr-main-view ',
+						_user$project$State_PaneLocation$toStyle(data.paneLocation))),
 				_1: {ctor: '[]'}
 			},
 			{
@@ -17251,19 +17255,50 @@ var _user$project$View_Core$render = F2(
 					_elm_lang$html$Html$div,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('core'),
+						_0: _elm_lang$html$Html_Attributes$class('section-one'),
 						_1: {ctor: '[]'}
 					},
 					{
 						ctor: '::',
-						_0: A5(_user$project$View_Toolbar$render, data.totalTests, data.passedTests, data.runStatus, data.statusBarTextStyle, messages.runAllButtonClickHandler),
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('core'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A5(_user$project$View_Toolbar$render, data.totalTests, data.passedTests, data.runStatus, data.statusBarTextStyle, messages.runAllButtonClickHandler),
+								_1: {
+									ctor: '::',
+									_0: A3(
+										_user$project$View_DurationAndSeedDisplay$render,
+										data.runDuration,
+										data.runSeed,
+										{copySeedClickHandler: messages.copySeedClickHandler, setSeedClickHandler: messages.setSeedClickHandler}),
+									_1: {ctor: '[]'}
+								}
+							}),
 						_1: {
 							ctor: '::',
-							_0: A3(
-								_user$project$View_DurationAndSeedDisplay$render,
-								data.runDuration,
-								data.runSeed,
-								{copySeedClickHandler: messages.copySeedClickHandler, setSeedClickHandler: messages.setSeedClickHandler}),
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('test-hierarchy'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A4(
+										_user$project$View_TestHierarchy_Core$render,
+										{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse},
+										{mouseIn: messages.testListItemMouseEnter, mouseOut: messages.testListItemMouseLeave, testClick: messages.testClickHandler},
+										{nodeMouseIsOver: data.nodeMouseIsOver, selectedNode: data.selectedNode},
+										data.testHierarchy),
+									_1: {ctor: '[]'}
+								}),
 							_1: {ctor: '[]'}
 						}
 					}),
@@ -17273,46 +17308,37 @@ var _user$project$View_Core$render = F2(
 						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('test-hierarchy'),
+							_0: _elm_lang$html$Html_Attributes$class('section-two'),
 							_1: {ctor: '[]'}
 						},
 						{
-							ctor: '::',
-							_0: A4(
-								_user$project$View_TestHierarchy_Core$render,
-								{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse},
-								{mouseIn: messages.testListItemMouseEnter, mouseOut: messages.testListItemMouseLeave, testClick: messages.testClickHandler},
-								{nodeMouseIsOver: data.nodeMouseIsOver, selectedNode: data.selectedNode},
-								data.testHierarchy),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('output-display'),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(_user$project$View_OutputDisplay$render, data.compilerError, data.selectedNodeFailure),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
 							ctor: '::',
 							_0: A2(
 								_elm_lang$html$Html$div,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('footer'),
+									_0: _elm_lang$html$Html_Attributes$class('output-display'),
 									_1: {ctor: '[]'}
 								},
-								A4(_user$project$View_SeedAndAutoRun$render, messages.setForceSeedHandler, data.autoRunEnabled, data.forceRandomSeedEnabled, data.randomSeed)),
-							_1: {ctor: '[]'}
-						}
-					}
+								{
+									ctor: '::',
+									_0: A2(_user$project$View_OutputDisplay$render, data.compilerError, data.selectedNodeFailure),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('footer'),
+										_1: {ctor: '[]'}
+									},
+									A4(_user$project$View_SeedAndAutoRun$render, messages.setForceSeedHandler, data.autoRunEnabled, data.forceRandomSeedEnabled, data.randomSeed)),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
 				}
 			});
 	});
@@ -17334,7 +17360,9 @@ var _user$project$View_Core$DisplayData = function (a) {
 											return function (l) {
 												return function (m) {
 													return function (n) {
-														return {runStatus: a, compilerError: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testHierarchy: g, nodeMouseIsOver: h, selectedNode: i, selectedNodeFailure: j, autoRunEnabled: k, randomSeed: l, forceRandomSeedEnabled: m, statusBarTextStyle: n};
+														return function (o) {
+															return {runStatus: a, compilerError: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testHierarchy: g, nodeMouseIsOver: h, selectedNode: i, selectedNodeFailure: j, autoRunEnabled: k, randomSeed: l, forceRandomSeedEnabled: m, statusBarTextStyle: n, paneLocation: o};
+														};
 													};
 												};
 											};
@@ -17613,7 +17641,7 @@ var _user$project$Main$InitiateRunAll = {ctor: 'InitiateRunAll'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View_Core$render,
-		{runStatus: model.runStatus, compilerError: model.compilerError, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, selectedNodeFailure: model.selectedTestFailure, autoRunEnabled: model.autoRunEnabled, randomSeed: model.randomSeed, forceRandomSeedEnabled: model.forceRandomSeedEnabled, statusBarTextStyle: model.statusBarStyle},
+		{runStatus: model.runStatus, compilerError: model.compilerError, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNode: model.selectedTest, selectedNodeFailure: model.selectedTestFailure, autoRunEnabled: model.autoRunEnabled, randomSeed: model.randomSeed, forceRandomSeedEnabled: model.forceRandomSeedEnabled, statusBarTextStyle: model.statusBarStyle, paneLocation: model.paneLocation},
 		{runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed});
 };
 var _user$project$Main$saveEventMessage = F2(
