@@ -7,6 +7,7 @@ module TestInstance.Core
         , isFailing
         , isPending
         , isTodo
+        , pathAndDescription
         , setDuration
         , setFailure
         , setLabels
@@ -133,3 +134,8 @@ setFailure failure instance =
 setLabels : Labels -> TestInstance -> TestInstance
 setLabels labels instance =
     { instance | labels = labels }
+
+
+pathAndDescription : TestInstance -> ( String, String )
+pathAndDescription instance =
+    Labels.getPathAndTestDescription instance.labels

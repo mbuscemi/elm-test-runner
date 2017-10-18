@@ -15645,8 +15645,15 @@ var _user$project$State_Labels$buildPathAndDescription = F2(
 		while (true) {
 			var _p0 = labels;
 			if (_p0.ctor === '::') {
-				if (_p0._1.ctor === '[]') {
-					return {ctor: '_Tuple2', _0: intermediatePath, _1: _p0._0};
+				if ((_p0._1.ctor === '::') && (_p0._1._1.ctor === '[]')) {
+					return {
+						ctor: '_Tuple2',
+						_0: A2(
+							_elm_lang$core$Basics_ops['++'],
+							intermediatePath,
+							A2(_elm_lang$core$Basics_ops['++'], _p0._0, '.elm')),
+						_1: _p0._1._0
+					};
 				} else {
 					var _v1 = A2(
 						_elm_lang$core$Basics_ops['++'],
@@ -15666,10 +15673,6 @@ var _user$project$State_Labels$getPathAndTestDescription = function (labels) {
 	var _p1 = labels;
 	return A2(_user$project$State_Labels$buildPathAndDescription, '', _p1._0);
 };
-var _user$project$State_Labels$toList = function (labels) {
-	var _p2 = labels;
-	return _p2._0;
-};
 var _user$project$State_Labels$Basic = function (a) {
 	return {ctor: 'Basic', _0: a};
 };
@@ -15679,6 +15682,9 @@ var _user$project$State_Labels$fromList = function (rawLabels) {
 	return _user$project$State_Labels$Basic(rawLabels);
 };
 
+var _user$project$TestInstance_Core$pathAndDescription = function (instance) {
+	return _user$project$State_Labels$getPathAndTestDescription(instance.labels);
+};
 var _user$project$TestInstance_Core$setLabels = F2(
 	function (labels, instance) {
 		return _elm_lang$core$Native_Utils.update(
@@ -17457,6 +17463,11 @@ var _user$project$Main$copySeed = _elm_lang$core$Native_Platform.outgoingPort(
 	function (v) {
 		return v;
 	});
+var _user$project$Main$navigateToFile = _elm_lang$core$Native_Platform.outgoingPort(
+	'navigateToFile',
+	function (v) {
+		return [v._0, v._1];
+	});
 var _user$project$Main$update = F2(
 	function (message, model) {
 		var _p0 = message;
@@ -17539,10 +17550,20 @@ var _user$project$Main$update = F2(
 				return _user$project$Main$andNoCommand(
 					A2(_user$project$Model_Core$setTestMouseIsOver, _elm_lang$core$Maybe$Nothing, model));
 			case 'TestListItemSelect':
-				return _user$project$Main$andNoCommand(
+				var _p2 = _p0._1;
+				return function () {
+					var _p1 = _p2;
+					if (_p1.ctor === 'Just') {
+						return _user$project$Main$andPerform(
+							_user$project$Main$navigateToFile(
+								_user$project$TestInstance_Core$pathAndDescription(_p1._0)));
+					} else {
+						return _user$project$Main$andNoCommand;
+					}
+				}()(
 					A2(
 						_user$project$Model_Core$setSelectedTestInstance,
-						_p0._1,
+						_p2,
 						A2(
 							_user$project$Model_Core$setSelectedTestNodeId,
 							_elm_lang$core$Maybe$Just(_p0._0),
@@ -17703,7 +17724,7 @@ var _user$project$Main$view = function (model) {
 		{runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed});
 };
 var _user$project$Main$saveEventMessage = F2(
-	function (model, _p1) {
+	function (model, _p3) {
 		return model.autoRunEnabled ? _user$project$Main$InitiateRunAll : _user$project$Main$DoNothing;
 	});
 var _user$project$Main$subscriptions = function (model) {

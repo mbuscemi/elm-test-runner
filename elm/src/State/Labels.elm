@@ -1,4 +1,4 @@
-module State.Labels exposing (Labels, empty, fromList)
+module State.Labels exposing (Labels, empty, fromList, getPathAndTestDescription)
 
 
 type Labels
@@ -19,13 +19,6 @@ fromList rawLabels =
     Basic rawLabels
 
 
-toList : Labels -> List String
-toList labels =
-    case labels of
-        Basic list ->
-            list
-
-
 getPathAndTestDescription : Labels -> PathAndTestDescription
 getPathAndTestDescription labels =
     case labels of
@@ -36,8 +29,8 @@ getPathAndTestDescription labels =
 buildPathAndDescription : String -> List String -> PathAndTestDescription
 buildPathAndDescription intermediatePath labels =
     case labels of
-        [ lastLabel ] ->
-            ( intermediatePath, lastLabel )
+        nextToLastLabel :: [ lastLabel ] ->
+            ( intermediatePath ++ nextToLastLabel ++ ".elm", lastLabel )
 
         nextLabel :: rest ->
             buildPathAndDescription (intermediatePath ++ nextLabel ++ "/") rest

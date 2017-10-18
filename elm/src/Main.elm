@@ -39,7 +39,7 @@ import Model.Core as Model
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
-import TestInstance.Core exposing (TestInstance)
+import TestInstance.Core as TestInstance exposing (TestInstance)
 import View.Core
 
 
@@ -163,7 +163,13 @@ update message model =
         TestListItemSelect nodeId testInstance ->
             setSelectedTestNodeId (Just nodeId) model
                 |> setSelectedTestInstance testInstance
-                |> andNoCommand
+                |> (case testInstance of
+                        Just instance ->
+                            andPerform <| navigateToFile (TestInstance.pathAndDescription instance)
+
+                        Nothing ->
+                            andNoCommand
+                   )
 
         ToggleAutoRun ->
             invertAutoRun model
@@ -252,6 +258,9 @@ port runTest : String -> Cmd message
 
 
 port copySeed : String -> Cmd message
+
+
+port navigateToFile : ( String, String ) -> Cmd message
 
 
 port commandKeyTestStart : (() -> message) -> Sub message
