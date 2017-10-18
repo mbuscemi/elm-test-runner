@@ -22,7 +22,7 @@ type alias Messages message =
     , testListItemCollapse : Int -> message
     , testListItemMouseEnter : Int -> message
     , testListItemMouseLeave : message
-    , testClickHandler : Int -> Maybe Failure -> message
+    , testClickHandler : Int -> Maybe TestInstance -> message
     , copySeedClickHandler : String -> message
     , setSeedClickHandler : Int -> message
     , setForceSeedHandler : Bool -> message
@@ -38,8 +38,8 @@ type alias DisplayData =
     , runSeed : Maybe Int
     , testHierarchy : CollapsibleTree String TestInstance
     , nodeMouseIsOver : Maybe Int
-    , selectedNode : Maybe Int
-    , selectedNodeFailure : Maybe Failure
+    , selectedNodeId : Maybe Int
+    , selectedTestInstance : Maybe TestInstance
     , autoRunEnabled : Bool
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
@@ -71,14 +71,14 @@ render data messages =
                     , testClick = messages.testClickHandler
                     }
                     { nodeMouseIsOver = data.nodeMouseIsOver
-                    , selectedNode = data.selectedNode
+                    , selectedNode = data.selectedNodeId
                     }
                     data.testHierarchy
                 ]
             ]
         , div [ class "section-two" ]
             [ div [ class "output-display" ]
-                [ View.OutputDisplay.render data.compilerError data.selectedNodeFailure ]
+                [ View.OutputDisplay.render data.compilerError data.selectedTestInstance ]
             , div [ class "footer" ]
                 (View.SeedAndAutoRun.render
                     messages.setForceSeedHandler

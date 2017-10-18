@@ -14,16 +14,22 @@ import State.Failure
         , isTodo
         , shouldDiff
         )
+import TestInstance.Core as TestInstance exposing (TestInstance)
 
 
-render : Maybe String -> Maybe Failure -> Html message
-render compilerError failure =
-    case ( compilerError, failure ) of
+render : Maybe String -> Maybe TestInstance -> Html message
+render compilerError testInstance =
+    case ( compilerError, testInstance ) of
         ( Just error, _ ) ->
             div [ class "failure" ] (errorText error)
 
-        ( Nothing, Just fail ) ->
-            div [ class "failure" ] (failureText fail)
+        ( Nothing, Just testInstance ) ->
+            case TestInstance.getFailure testInstance of
+                Just failure ->
+                    div [ class "failure" ] (failureText failure)
+
+                Nothing ->
+                    div [] []
 
         ( Nothing, Nothing ) ->
             div [] []

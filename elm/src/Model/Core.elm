@@ -24,8 +24,8 @@ module Model.Core
         , setRunStatusToCompileError
         , setRunStatusToPassing
         , setRunStatusToProcessing
-        , setSelectedTest
-        , setSelectedTestFailure
+        , setSelectedTestInstance
+        , setSelectedTestNodeId
         , setTestMouseIsOver
         , setTotalTestCount
         , toggleNode
@@ -37,7 +37,6 @@ module Model.Core
 import Animation exposing (State)
 import Animation.Flicker
 import Duration.Core exposing (Duration)
-import State.Failure exposing (Failure)
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
@@ -62,8 +61,8 @@ type alias Model =
     , testRuns : Tree String TestInstance
     , testHierarchy : CollapsibleTree String TestInstance
     , testMouseIsOver : Maybe Int
-    , selectedTest : Maybe Int
-    , selectedTestFailure : Maybe Failure
+    , selectedTestNodeId : Maybe Int
+    , selectedTestInstance : Maybe TestInstance
     , autoRunEnabled : Bool
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
@@ -84,8 +83,8 @@ default =
     , testRuns = Node defaultProjectName TestInstance.default []
     , testHierarchy = Tree.make (Node humanReadableTopLevelMessage TestInstance.default [])
     , testMouseIsOver = Nothing
-    , selectedTest = Nothing
-    , selectedTestFailure = Nothing
+    , selectedTestNodeId = Nothing
+    , selectedTestInstance = Nothing
     , autoRunEnabled = False
     , randomSeed = Nothing
     , forceRandomSeedEnabled = False
@@ -226,14 +225,14 @@ setTestMouseIsOver nodeId model =
     { model | testMouseIsOver = nodeId }
 
 
-setSelectedTest : Maybe Int -> Model -> Model
-setSelectedTest nodeId model =
-    { model | selectedTest = nodeId }
+setSelectedTestNodeId : Maybe Int -> Model -> Model
+setSelectedTestNodeId nodeId model =
+    { model | selectedTestNodeId = nodeId }
 
 
-setSelectedTestFailure : Maybe Failure -> Model -> Model
-setSelectedTestFailure failure model =
-    { model | selectedTestFailure = failure }
+setSelectedTestInstance : Maybe TestInstance -> Model -> Model
+setSelectedTestInstance testInstance model =
+    { model | selectedTestInstance = testInstance }
 
 
 setRunDuration : RunComplete -> Model -> Model

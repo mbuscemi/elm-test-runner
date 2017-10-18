@@ -27,8 +27,8 @@ import Model.Core as Model
         , setRunStatusToCompileError
         , setRunStatusToPassing
         , setRunStatusToProcessing
-        , setSelectedTest
-        , setSelectedTestFailure
+        , setSelectedTestInstance
+        , setSelectedTestNodeId
         , setTestMouseIsOver
         , setTotalTestCount
         , toggleNode
@@ -36,10 +36,10 @@ import Model.Core as Model
         , updateHierarchy
         , updatePassedTestCount
         )
-import State.Failure exposing (Failure)
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
+import TestInstance.Core exposing (TestInstance)
 import View.Core
 
 
@@ -53,7 +53,7 @@ type Message
     | TestListItemCollapse Int
     | TestListItemMouseEnter Int
     | TestListItemMouseLeave
-    | TestListItemSelect Int (Maybe Failure)
+    | TestListItemSelect Int (Maybe TestInstance)
     | ToggleAutoRun
     | CopySeed String
     | SetRandomSeed Int
@@ -94,8 +94,8 @@ update message model =
         InitiateRunAll ->
             setRunStatusToProcessing model
                 |> resetPassedTests
-                |> setSelectedTest Nothing
-                |> setSelectedTestFailure Nothing
+                |> setSelectedTestNodeId Nothing
+                |> setSelectedTestInstance Nothing
                 |> setCompilerErrorMessage Nothing
                 |> clearRunDuration
                 |> clearRunSeed
@@ -160,9 +160,9 @@ update message model =
             setTestMouseIsOver Nothing model
                 |> andNoCommand
 
-        TestListItemSelect nodeId failure ->
-            setSelectedTest (Just nodeId) model
-                |> setSelectedTestFailure failure
+        TestListItemSelect nodeId testInstance ->
+            setSelectedTestNodeId (Just nodeId) model
+                |> setSelectedTestInstance testInstance
                 |> andNoCommand
 
         ToggleAutoRun ->
@@ -205,8 +205,8 @@ view model =
         , runSeed = model.runSeed
         , testHierarchy = model.testHierarchy
         , nodeMouseIsOver = model.testMouseIsOver
-        , selectedNode = model.selectedTest
-        , selectedNodeFailure = model.selectedTestFailure
+        , selectedNodeId = model.selectedTestNodeId
+        , selectedTestInstance = model.selectedTestInstance
         , autoRunEnabled = model.autoRunEnabled
         , randomSeed = model.randomSeed
         , forceRandomSeedEnabled = model.forceRandomSeedEnabled

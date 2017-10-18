@@ -2,7 +2,6 @@ module View.TestHierarchy.Core exposing (render)
 
 import Html exposing (Html, ul)
 import Html.Attributes exposing (class)
-import State.Failure exposing (Failure)
 import TestInstance.Core exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree, Tree(Node))
 import View.TestHierarchy.ChildTree
@@ -18,7 +17,7 @@ type alias ToggleMessages message =
 type alias SelectionMessages message =
     { mouseIn : Int -> message
     , mouseOut : message
-    , testClick : Int -> Maybe Failure -> message
+    , testClick : Int -> Maybe TestInstance -> message
     }
 
 

@@ -3,7 +3,6 @@ module View.TestHierarchy.ChildTree exposing (render)
 import Html exposing (Attribute, Html, li)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick, onMouseEnter, onMouseLeave)
-import State.Failure exposing (Failure)
 import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree, Tree(Node))
 
@@ -11,7 +10,7 @@ import Tree.Core exposing (CollapsibleTree, Tree(Node))
 type alias Messages message =
     { mouseIn : Int -> message
     , mouseOut : message
-    , testClick : Int -> Maybe Failure -> message
+    , testClick : Int -> Maybe TestInstance -> message
     }
 
 
@@ -36,7 +35,7 @@ mouseEvents messages nodeId testInstance children =
     if List.isEmpty children then
         [ onMouseEnter <| messages.mouseIn nodeId
         , onMouseLeave <| messages.mouseOut
-        , onClick <| messages.testClick nodeId (TestInstance.getFailure testInstance)
+        , onClick <| messages.testClick nodeId (Just testInstance)
         ]
     else
         []
