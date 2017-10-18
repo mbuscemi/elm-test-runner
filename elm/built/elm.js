@@ -15504,15 +15504,15 @@ var _user$project$State_Failure$nullInstance = _user$project$State_Failure$Simpl
 var _user$project$State_PaneLocation$toStyle = function (paneLocation) {
 	var _p0 = paneLocation;
 	if (_p0.ctor === 'Bottom') {
-		return 'horizontal';
+		return 'landscape';
 	} else {
-		return 'vertical';
+		return 'portrait';
 	}
 };
 var _user$project$State_PaneLocation$Left = {ctor: 'Left'};
 var _user$project$State_PaneLocation$Bottom = {ctor: 'Bottom'};
+var _user$project$State_PaneLocation$default = _user$project$State_PaneLocation$Bottom;
 var _user$project$State_PaneLocation$Right = {ctor: 'Right'};
-var _user$project$State_PaneLocation$default = _user$project$State_PaneLocation$Right;
 var _user$project$State_PaneLocation$fromString = function (location) {
 	var _p1 = location;
 	switch (_p1) {

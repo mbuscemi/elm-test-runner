@@ -9,7 +9,7 @@ type PaneLocation
 
 default : PaneLocation
 default =
-    Right
+    Bottom
 
 
 fromString : String -> PaneLocation
@@ -29,7 +29,7 @@ toStyle : PaneLocation -> String
 toStyle paneLocation =
     case paneLocation of
         Bottom ->
-            "horizontal"
+            "landscape"
 
         _ ->
-            "vertical"
+            "portrait"

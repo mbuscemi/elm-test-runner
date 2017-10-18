@@ -1,0 +1,13 @@
+
+.etr-main-view.landscape {
+    flex-direction: row;
+}
+
+.etr-main-view.landscape .section-two {
+    flex: 4;
+    margin-left: 16px;
+}
+
+.etr-main-view.landscape .output-display {
+    border-top-width: 0px;
+}
