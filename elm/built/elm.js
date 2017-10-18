@@ -15639,6 +15639,52 @@ var _user$project$State_Failure$failure = _elm_lang$core$Json_Decode$oneOf(
 	});
 var _user$project$State_Failure$nullInstance = _user$project$State_Failure$SimpleFailure('NULL');
 
+var _user$project$State_Labels$buildPathAndDescription = F2(
+	function (intermediatePath, labels) {
+		buildPathAndDescription:
+		while (true) {
+			var _p0 = labels;
+			if (_p0.ctor === '::') {
+				if (_p0._1.ctor === '[]') {
+					return {ctor: '_Tuple2', _0: intermediatePath, _1: _p0._0};
+				} else {
+					var _v1 = A2(
+						_elm_lang$core$Basics_ops['++'],
+						intermediatePath,
+						A2(_elm_lang$core$Basics_ops['++'], _p0._0, '/')),
+						_v2 = _p0._1;
+					intermediatePath = _v1;
+					labels = _v2;
+					continue buildPathAndDescription;
+				}
+			} else {
+				return {ctor: '_Tuple2', _0: intermediatePath, _1: ''};
+			}
+		}
+	});
+var _user$project$State_Labels$getPathAndTestDescription = function (labels) {
+	var _p1 = labels;
+	return A2(_user$project$State_Labels$buildPathAndDescription, '', _p1._0);
+};
+var _user$project$State_Labels$toList = function (labels) {
+	var _p2 = labels;
+	return _p2._0;
+};
+var _user$project$State_Labels$Basic = function (a) {
+	return {ctor: 'Basic', _0: a};
+};
+var _user$project$State_Labels$empty = _user$project$State_Labels$Basic(
+	{ctor: '[]'});
+var _user$project$State_Labels$fromList = function (rawLabels) {
+	return _user$project$State_Labels$Basic(rawLabels);
+};
+
+var _user$project$TestInstance_Core$setLabels = F2(
+	function (labels, instance) {
+		return _elm_lang$core$Native_Utils.update(
+			instance,
+			{labels: labels});
+	});
 var _user$project$TestInstance_Core$setFailure = F2(
 	function (failure, instance) {
 		return _elm_lang$core$Native_Utils.update(
@@ -15686,9 +15732,9 @@ var _user$project$TestInstance_Core$toStatusIcon = function (instance) {
 			return '»';
 	}
 };
-var _user$project$TestInstance_Core$TestInstance = F3(
-	function (a, b, c) {
-		return {testStatus: a, duration: b, failure: c};
+var _user$project$TestInstance_Core$TestInstance = F4(
+	function (a, b, c, d) {
+		return {testStatus: a, labels: b, duration: c, failure: d};
 	});
 var _user$project$TestInstance_Core$Todo = {ctor: 'Todo'};
 var _user$project$TestInstance_Core$isTodo = function (instance) {
@@ -15697,6 +15743,7 @@ var _user$project$TestInstance_Core$isTodo = function (instance) {
 var _user$project$TestInstance_Core$Pending = {ctor: 'Pending'};
 var _user$project$TestInstance_Core$default = {
 	testStatus: _user$project$TestInstance_Core$Pending,
+	labels: _user$project$State_Labels$empty,
 	duration: _user$project$Duration_Core$inMilliseconds(0),
 	failure: _elm_lang$core$Maybe$Nothing
 };
@@ -15810,9 +15857,12 @@ var _user$project$TestEvent_TestCompleted$toTestInstance = function (_p6) {
 			_user$project$TestInstance_Core$setDuration,
 			_p9.duration,
 			A2(
-				_user$project$TestInstance_Core$setStatus,
-				_user$project$TestEvent_TestCompleted$passed(_p8) ? 'pass' : (_user$project$TestEvent_TestCompleted$isTodo(_p8) ? 'todo' : 'fail'),
-				_user$project$TestInstance_Core$default)));
+				_user$project$TestInstance_Core$setLabels,
+				_user$project$State_Labels$fromList(_p9.labels),
+				A2(
+					_user$project$TestInstance_Core$setStatus,
+					_user$project$TestEvent_TestCompleted$passed(_p8) ? 'pass' : (_user$project$TestEvent_TestCompleted$isTodo(_p8) ? 'todo' : 'fail'),
+					_user$project$TestInstance_Core$default))));
 };
 
 var _user$project$TestInstance_Reconcile$updateStatusPreferringFail = F2(

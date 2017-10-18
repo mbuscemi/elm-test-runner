@@ -11,6 +11,7 @@ module TestEvent.TestCompleted
 
 import Json.Decode exposing (Decoder, decodeString, field, list, map4, string)
 import State.Failure exposing (Failure, failure)
+import State.Labels as Labels
 import TestEvent.Util
 import TestInstance.Core as TestInstance exposing (TestInstance)
 
@@ -115,5 +116,6 @@ toTestInstance ((TestCompleted parsed) as event) =
              else
                 "fail"
             )
+        |> TestInstance.setLabels (Labels.fromList parsed.labels)
         |> TestInstance.setDuration parsed.duration
         |> TestInstance.setFailure (List.head parsed.failures)

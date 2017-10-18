@@ -9,6 +9,7 @@ module TestInstance.Core
         , isTodo
         , setDuration
         , setFailure
+        , setLabels
         , setStatus
         , toClass
         , toStatusIcon
@@ -16,6 +17,7 @@ module TestInstance.Core
 
 import Duration.Core as Duration exposing (Duration, inMilliseconds)
 import State.Failure exposing (Failure)
+import State.Labels as Labels exposing (Labels)
 
 
 type TestStatus
@@ -27,6 +29,7 @@ type TestStatus
 
 type alias TestInstance =
     { testStatus : TestStatus
+    , labels : Labels
     , duration : Duration
     , failure : Maybe Failure
     }
@@ -35,6 +38,7 @@ type alias TestInstance =
 default : TestInstance
 default =
     { testStatus = Pending
+    , labels = Labels.empty
     , duration = inMilliseconds 0
     , failure = Nothing
     }
@@ -124,3 +128,8 @@ durationAsString instance =
 setFailure : Maybe Failure -> TestInstance -> TestInstance
 setFailure failure instance =
     { instance | failure = failure }
+
+
+setLabels : Labels -> TestInstance -> TestInstance
+setLabels labels instance =
+    { instance | labels = labels }
