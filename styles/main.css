@@ -42,6 +42,7 @@
     border-style: solid;
     border-color: black;
     font-family: Consolas;
+    overflow: scroll;
 }
 
 .etr-main-view .footer {
@@ -194,8 +195,7 @@
     background-color: #5c2121;
 }
 
-.etr-main-view .seed-settings,
-.etr-main-view .auto-run-display {
+.etr-main-view .footer > div {
     margin-top: 5px;
 }
 
@@ -217,16 +217,26 @@
     background-color: rgb(84, 84, 84);
 }
 
-.etr-main-view .auto-run-display {
+.etr-main-view .auto-run-display,
+.etr-main-view .auto-navigate-display {
     text-align: right;
     font-weight: bold;
     float: right;
 }
 
-.etr-main-view .auto-run-display.disabled {
+.etr-main-view .footer .divider {
+    margin-left: 1em;
+    margin-right: 1em;
+    color: #545961;
+    float: right;
+}
+
+.etr-main-view .auto-run-display.disabled,
+.etr-main-view .auto-navigate-display.disabled {
     color: #545961;
 }
 
-.etr-main-view .auto-run-display.enabled {
+.etr-main-view .auto-run-display.enabled,
+.etr-main-view .auto-navigate-display.enabled {
     text-shadow: #af9738 1px 0 10px;
 }

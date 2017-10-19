@@ -7,6 +7,7 @@ module Model.Core
         , default
         , expandFailingAndTodoNodes
         , initiateStatusBarTextFlicker
+        , invertAutoNavigate
         , invertAutoRun
         , purgeObsoleteNodes
         , randomSeedForJS
@@ -64,6 +65,7 @@ type alias Model =
     , selectedTestNodeId : Maybe Int
     , selectedTestInstance : Maybe TestInstance
     , autoRunEnabled : Bool
+    , autoNavigateEnabled : Bool
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
     , statusBarStyle : State
@@ -86,6 +88,7 @@ default =
     , selectedTestNodeId = Nothing
     , selectedTestInstance = Nothing
     , autoRunEnabled = False
+    , autoNavigateEnabled = True
     , randomSeed = Nothing
     , forceRandomSeedEnabled = False
     , statusBarStyle = Animation.Flicker.initial
@@ -129,6 +132,11 @@ setProjectNameToTopNode model =
 invertAutoRun : Model -> Model
 invertAutoRun model =
     { model | autoRunEnabled = not model.autoRunEnabled }
+
+
+invertAutoNavigate : Model -> Model
+invertAutoNavigate model =
+    { model | autoNavigateEnabled = not model.autoNavigateEnabled }
 
 
 setRunStatusToProcessing : Model -> Model

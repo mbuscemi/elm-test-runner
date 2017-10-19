@@ -2,6 +2,7 @@
   "atom-workspace": {
     "cmd-alt-t": "elm-test-runner:toggle",
     "ctrl-r": "elm-test-runner:toggle-auto-run",
+    "ctrl-alt-n": "elm-test-runner:toggle-auto-navigate",
     "cmd-t": "elm-test-runner:run-test"
   }
 }

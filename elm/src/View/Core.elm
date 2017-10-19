@@ -10,7 +10,7 @@ import TestInstance.Core exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree)
 import View.DurationAndSeedDisplay
 import View.OutputDisplay
-import View.SeedAndAutoRun
+import View.SeedAndSettings
 import View.TestHierarchy.Core
 import View.Toolbar
 
@@ -40,6 +40,7 @@ type alias DisplayData =
     , selectedNodeId : Maybe Int
     , selectedTestInstance : Maybe TestInstance
     , autoRunEnabled : Bool
+    , autoNavigateEnabled : Bool
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
     , statusBarTextStyle : State
@@ -79,9 +80,10 @@ render data messages =
             [ div [ class "output-display" ]
                 [ View.OutputDisplay.render data.compilerError data.selectedTestInstance ]
             , div [ class "footer" ]
-                (View.SeedAndAutoRun.render
+                (View.SeedAndSettings.render
                     messages.setForceSeedHandler
                     data.autoRunEnabled
+                    data.autoNavigateEnabled
                     data.forceRandomSeedEnabled
                     data.randomSeed
                 )

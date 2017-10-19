@@ -20,6 +20,10 @@
                         {
                             "label": "Toggle Auto-Run on Save",
                             "command": "elm-test-runner:toggle-auto-run"
+                        },
+                        {
+                            "label": "Toggle Auto-Navigate to Test",
+                            "command": "elm-test-runner:toggle-auto-navigate"
                         }
                     ]
                 }

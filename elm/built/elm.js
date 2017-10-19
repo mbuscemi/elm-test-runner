@@ -17317,6 +17317,11 @@ var _user$project$Model_Core$setRunStatusToProcessing = function (model) {
 		model,
 		{runStatus: _user$project$State_RunStatus$processing});
 };
+var _user$project$Model_Core$invertAutoNavigate = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{autoNavigateEnabled: !model.autoNavigateEnabled});
+};
 var _user$project$Model_Core$invertAutoRun = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -17371,6 +17376,7 @@ var _user$project$Model_Core$default = {
 	selectedTestNodeId: _elm_lang$core$Maybe$Nothing,
 	selectedTestInstance: _elm_lang$core$Maybe$Nothing,
 	autoRunEnabled: false,
+	autoNavigateEnabled: true,
 	randomSeed: _elm_lang$core$Maybe$Nothing,
 	forceRandomSeedEnabled: false,
 	statusBarStyle: _user$project$Animation_Flicker$initial,
@@ -17393,7 +17399,9 @@ var _user$project$Model_Core$Model = function (a) {
 														return function (o) {
 															return function (p) {
 																return function (q) {
-																	return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, randomSeed: n, forceRandomSeedEnabled: o, statusBarStyle: p, paneLocation: q};
+																	return function (r) {
+																		return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, randomSeed: o, forceRandomSeedEnabled: p, statusBarStyle: q, paneLocation: r};
+																	};
 																};
 															};
 														};
@@ -17824,10 +17832,10 @@ var _user$project$View_OutputDisplay$render = F2(
 		}
 	});
 
-var _user$project$View_SeedAndAutoRun$enabledString = function (enabled) {
+var _user$project$View_SeedAndSettings$enabledString = function (enabled) {
 	return enabled ? 'enabled' : 'disabled';
 };
-var _user$project$View_SeedAndAutoRun$seedInputValue = function (randomSeed) {
+var _user$project$View_SeedAndSettings$seedInputValue = function (randomSeed) {
 	var _p0 = randomSeed;
 	if (_p0.ctor === 'Just') {
 		return _elm_lang$html$Html_Attributes$value(
@@ -17836,22 +17844,22 @@ var _user$project$View_SeedAndAutoRun$seedInputValue = function (randomSeed) {
 		return _elm_lang$html$Html_Attributes$value('');
 	}
 };
-var _user$project$View_SeedAndAutoRun$seedTextInputStyles = function (forceRandomSeedEnabled) {
+var _user$project$View_SeedAndSettings$seedTextInputStyles = function (forceRandomSeedEnabled) {
 	return {
 		ctor: '::',
 		_0: _elm_lang$html$Html_Attributes$disabled(!forceRandomSeedEnabled),
 		_1: {ctor: '[]'}
 	};
 };
-var _user$project$View_SeedAndAutoRun$seedCheckboxStyles = function (forceRandomSeedEnabled) {
+var _user$project$View_SeedAndSettings$seedCheckboxStyles = function (forceRandomSeedEnabled) {
 	return {
 		ctor: '::',
 		_0: _elm_lang$html$Html_Attributes$checked(forceRandomSeedEnabled),
 		_1: {ctor: '[]'}
 	};
 };
-var _user$project$View_SeedAndAutoRun$render = F4(
-	function (setForceSeedHandler, autoRunEnabled, forceRandomSeedEnabled, randomSeed) {
+var _user$project$View_SeedAndSettings$render = F5(
+	function (setForceSeedHandler, autoRunEnabled, autoNavigateEnabled, forceRandomSeedEnabled, randomSeed) {
 		return {
 			ctor: '::',
 			_0: A2(
@@ -17876,7 +17884,7 @@ var _user$project$View_SeedAndAutoRun$render = F4(
 									_1: {ctor: '[]'}
 								}
 							},
-							_user$project$View_SeedAndAutoRun$seedCheckboxStyles(forceRandomSeedEnabled)),
+							_user$project$View_SeedAndSettings$seedCheckboxStyles(forceRandomSeedEnabled)),
 						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
@@ -17902,12 +17910,12 @@ var _user$project$View_SeedAndAutoRun$render = F4(
 											_0: _elm_lang$html$Html_Attributes$placeholder('Generate Random'),
 											_1: {
 												ctor: '::',
-												_0: _user$project$View_SeedAndAutoRun$seedInputValue(randomSeed),
+												_0: _user$project$View_SeedAndSettings$seedInputValue(randomSeed),
 												_1: {ctor: '[]'}
 											}
 										}
 									},
-									_user$project$View_SeedAndAutoRun$seedTextInputStyles(forceRandomSeedEnabled)),
+									_user$project$View_SeedAndSettings$seedTextInputStyles(forceRandomSeedEnabled)),
 								{ctor: '[]'}),
 							_1: {ctor: '[]'}
 						}
@@ -17923,20 +17931,49 @@ var _user$project$View_SeedAndAutoRun$render = F4(
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								'auto-run-display ',
-								_user$project$View_SeedAndAutoRun$enabledString(autoRunEnabled))),
+								_user$project$View_SeedAndSettings$enabledString(autoRunEnabled))),
 						_1: {ctor: '[]'}
 					},
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								'AUTO RUN ',
-								_elm_lang$core$String$toUpper(
-									_user$project$View_SeedAndAutoRun$enabledString(autoRunEnabled)))),
+						_0: _elm_lang$html$Html$text('AUTO-RUN'),
 						_1: {ctor: '[]'}
 					}),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('divider'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(' | '),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class(
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'auto-navigate-display ',
+										_user$project$View_SeedAndSettings$enabledString(autoNavigateEnabled))),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('AUTO-NAVIGATE'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
 			}
 		};
 	});
@@ -18425,7 +18462,7 @@ var _user$project$View_Core$render = F2(
 										_0: _elm_lang$html$Html_Attributes$class('footer'),
 										_1: {ctor: '[]'}
 									},
-									A4(_user$project$View_SeedAndAutoRun$render, messages.setForceSeedHandler, data.autoRunEnabled, data.forceRandomSeedEnabled, data.randomSeed)),
+									A5(_user$project$View_SeedAndSettings$render, messages.setForceSeedHandler, data.autoRunEnabled, data.autoNavigateEnabled, data.forceRandomSeedEnabled, data.randomSeed)),
 								_1: {ctor: '[]'}
 							}
 						}),
@@ -18452,7 +18489,9 @@ var _user$project$View_Core$DisplayData = function (a) {
 												return function (m) {
 													return function (n) {
 														return function (o) {
-															return {runStatus: a, compilerError: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testHierarchy: g, nodeMouseIsOver: h, selectedNodeId: i, selectedTestInstance: j, autoRunEnabled: k, randomSeed: l, forceRandomSeedEnabled: m, statusBarTextStyle: n, paneLocation: o};
+															return function (p) {
+																return {runStatus: a, compilerError: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testHierarchy: g, nodeMouseIsOver: h, selectedNodeId: i, selectedTestInstance: j, autoRunEnabled: k, autoNavigateEnabled: l, randomSeed: m, forceRandomSeedEnabled: n, statusBarTextStyle: o, paneLocation: p};
+															};
 														};
 													};
 												};
@@ -18585,11 +18624,11 @@ var _user$project$Main$update = F2(
 			case 'TestListItemSelect':
 				var _p2 = _p0._1;
 				return function () {
-					var _p1 = _p2;
-					if (_p1.ctor === 'Just') {
+					var _p1 = {ctor: '_Tuple2', _0: _p2, _1: model.autoNavigateEnabled};
+					if (((_p1.ctor === '_Tuple2') && (_p1._0.ctor === 'Just')) && (_p1._1 === true)) {
 						return _user$project$Main$andPerform(
 							_user$project$Main$navigateToFile(
-								_user$project$TestInstance_Core$pathAndDescription(_p1._0)));
+								_user$project$TestInstance_Core$pathAndDescription(_p1._0._0)));
 					} else {
 						return _user$project$Main$andNoCommand;
 					}
@@ -18604,6 +18643,9 @@ var _user$project$Main$update = F2(
 			case 'ToggleAutoRun':
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$invertAutoRun(model));
+			case 'ToggleAutoNavigate':
+				return _user$project$Main$andNoCommand(
+					_user$project$Model_Core$invertAutoNavigate(model));
 			case 'CopySeed':
 				return A2(
 					_user$project$Main$andPerform,
@@ -18638,6 +18680,10 @@ var _user$project$Main$commandKeyTestStart = _elm_lang$core$Native_Platform.inco
 var _user$project$Main$notifyCompilerErrored = _elm_lang$core$Native_Platform.incomingPort('notifyCompilerErrored', _elm_lang$core$Json_Decode$string);
 var _user$project$Main$toggleAutoRun = _elm_lang$core$Native_Platform.incomingPort(
 	'toggleAutoRun',
+	_elm_lang$core$Json_Decode$null(
+		{ctor: '_Tuple0'}));
+var _user$project$Main$toggleAutoNavigate = _elm_lang$core$Native_Platform.incomingPort(
+	'toggleAutoNavigate',
 	_elm_lang$core$Json_Decode$null(
 		{ctor: '_Tuple0'}));
 var _user$project$Main$notifySaveEvent = _elm_lang$core$Native_Platform.incomingPort(
@@ -18722,6 +18768,7 @@ var _user$project$Main$SetRandomSeed = function (a) {
 var _user$project$Main$CopySeed = function (a) {
 	return {ctor: 'CopySeed', _0: a};
 };
+var _user$project$Main$ToggleAutoNavigate = {ctor: 'ToggleAutoNavigate'};
 var _user$project$Main$ToggleAutoRun = {ctor: 'ToggleAutoRun'};
 var _user$project$Main$TestListItemSelect = F2(
 	function (a, b) {
@@ -18753,7 +18800,7 @@ var _user$project$Main$InitiateRunAll = {ctor: 'InitiateRunAll'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View_Core$render,
-		{runStatus: model.runStatus, compilerError: model.compilerError, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNodeId: model.selectedTestNodeId, selectedTestInstance: model.selectedTestInstance, autoRunEnabled: model.autoRunEnabled, randomSeed: model.randomSeed, forceRandomSeedEnabled: model.forceRandomSeedEnabled, statusBarTextStyle: model.statusBarStyle, paneLocation: model.paneLocation},
+		{runStatus: model.runStatus, compilerError: model.compilerError, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNodeId: model.selectedTestNodeId, selectedTestInstance: model.selectedTestInstance, autoRunEnabled: model.autoRunEnabled, autoNavigateEnabled: model.autoNavigateEnabled, randomSeed: model.randomSeed, forceRandomSeedEnabled: model.forceRandomSeedEnabled, statusBarTextStyle: model.statusBarStyle, paneLocation: model.paneLocation},
 		{runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed});
 };
 var _user$project$Main$saveEventMessage = F2(
@@ -18775,31 +18822,36 @@ var _user$project$Main$subscriptions = function (model) {
 						_elm_lang$core$Basics$always(_user$project$Main$ToggleAutoRun)),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Main$notifySaveEvent(
-							_user$project$Main$saveEventMessage(model)),
+						_0: _user$project$Main$toggleAutoNavigate(
+							_elm_lang$core$Basics$always(_user$project$Main$ToggleAutoNavigate)),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Main$notifyPaneMoved(_user$project$Main$PaneMoved),
+							_0: _user$project$Main$notifySaveEvent(
+								_user$project$Main$saveEventMessage(model)),
 							_1: {
 								ctor: '::',
-								_0: _user$project$Main$runStart(_user$project$Main$RunStart),
+								_0: _user$project$Main$notifyPaneMoved(_user$project$Main$PaneMoved),
 								_1: {
 									ctor: '::',
-									_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+									_0: _user$project$Main$runStart(_user$project$Main$RunStart),
 									_1: {
 										ctor: '::',
-										_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
+										_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
 										_1: {
 											ctor: '::',
-											_0: A2(
-												_mdgriffith$elm_style_animation$Animation$subscription,
-												_user$project$Main$AnimateFlicker,
-												{
-													ctor: '::',
-													_0: model.statusBarStyle,
-													_1: {ctor: '[]'}
-												}),
-											_1: {ctor: '[]'}
+											_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_mdgriffith$elm_style_animation$Animation$subscription,
+													_user$project$Main$AnimateFlicker,
+													{
+														ctor: '::',
+														_0: model.statusBarStyle,
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
 										}
 									}
 								}

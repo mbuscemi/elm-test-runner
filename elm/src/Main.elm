@@ -10,6 +10,7 @@ import Model.Core as Model
         , clearRunSeed
         , expandFailingAndTodoNodes
         , initiateStatusBarTextFlicker
+        , invertAutoNavigate
         , invertAutoRun
         , purgeObsoleteNodes
         , randomSeedForJS
@@ -55,6 +56,7 @@ type Message
     | TestListItemMouseLeave
     | TestListItemSelect Int (Maybe TestInstance)
     | ToggleAutoRun
+    | ToggleAutoNavigate
     | CopySeed String
     | SetRandomSeed Int
     | SetForceSeed Bool
@@ -163,16 +165,20 @@ update message model =
         TestListItemSelect nodeId testInstance ->
             setSelectedTestNodeId (Just nodeId) model
                 |> setSelectedTestInstance testInstance
-                |> (case testInstance of
-                        Just instance ->
+                |> (case ( testInstance, model.autoNavigateEnabled ) of
+                        ( Just instance, True ) ->
                             andPerform <| navigateToFile (TestInstance.pathAndDescription instance)
 
-                        Nothing ->
+                        _ ->
                             andNoCommand
                    )
 
         ToggleAutoRun ->
             invertAutoRun model
+                |> andNoCommand
+
+        ToggleAutoNavigate ->
+            invertAutoNavigate model
                 |> andNoCommand
 
         CopySeed seed ->
@@ -214,6 +220,7 @@ view model =
         , selectedNodeId = model.selectedTestNodeId
         , selectedTestInstance = model.selectedTestInstance
         , autoRunEnabled = model.autoRunEnabled
+        , autoNavigateEnabled = model.autoNavigateEnabled
         , randomSeed = model.randomSeed
         , forceRandomSeedEnabled = model.forceRandomSeedEnabled
         , statusBarTextStyle = model.statusBarStyle
@@ -237,6 +244,7 @@ subscriptions model =
         [ commandKeyTestStart (always InitiateRunAll)
         , notifyCompilerErrored CompilerErrored
         , toggleAutoRun (always ToggleAutoRun)
+        , toggleAutoNavigate (always ToggleAutoNavigate)
         , notifySaveEvent <| saveEventMessage model
         , notifyPaneMoved PaneMoved
         , runStart RunStart
@@ -270,6 +278,9 @@ port notifyCompilerErrored : (String -> message) -> Sub message
 
 
 port toggleAutoRun : (() -> message) -> Sub message
+
+
+port toggleAutoNavigate : (() -> message) -> Sub message
 
 
 port notifySaveEvent : (() -> message) -> Sub message
