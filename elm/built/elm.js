@@ -17317,11 +17317,23 @@ var _user$project$Model_Core$setRunStatusToProcessing = function (model) {
 		model,
 		{runStatus: _user$project$State_RunStatus$processing});
 };
+var _user$project$Model_Core$setAutoNavigate = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{autoNavigateEnabled: setting});
+	});
 var _user$project$Model_Core$invertAutoNavigate = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{autoNavigateEnabled: !model.autoNavigateEnabled});
 };
+var _user$project$Model_Core$setAutoRun = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{autoRunEnabled: setting});
+	});
 var _user$project$Model_Core$invertAutoRun = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -18515,10 +18527,13 @@ var _user$project$Main$andPerform = F2(
 var _user$project$Main$andNoCommand = function (model) {
 	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 };
-var _user$project$Main$init = A2(
-	_elm_lang$core$Platform_Cmd_ops['!'],
-	_user$project$Model_Core$default,
-	{ctor: '[]'});
+var _user$project$Main$init = function (flags) {
+	return _user$project$Main$andNoCommand(
+		A2(
+			_user$project$Model_Core$setAutoNavigate,
+			flags.autoNavigate,
+			A2(_user$project$Model_Core$setAutoRun, flags.autoRun, _user$project$Model_Core$default)));
+};
 var _user$project$Main$runTest = _elm_lang$core$Native_Platform.outgoingPort(
 	'runTest',
 	function (v) {
@@ -18752,6 +18767,10 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 				A2(_elm_lang$core$Json_Decode$field, 'failed', _elm_lang$core$Json_Decode$string));
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
+var _user$project$Main$Flags = F2(
+	function (a, b) {
+		return {autoRun: a, autoNavigate: b};
+	});
 var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
 var _user$project$Main$PaneMoved = function (a) {
 	return {ctor: 'PaneMoved', _0: a};
@@ -18862,8 +18881,20 @@ var _user$project$Main$subscriptions = function (model) {
 			}
 		});
 };
-var _user$project$Main$main = _elm_lang$html$Html$program(
-	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
+var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
+	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})(
+	A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (autoNavigate) {
+			return A2(
+				_elm_lang$core$Json_Decode$andThen,
+				function (autoRun) {
+					return _elm_lang$core$Json_Decode$succeed(
+						{autoNavigate: autoNavigate, autoRun: autoRun});
+				},
+				A2(_elm_lang$core$Json_Decode$field, 'autoRun', _elm_lang$core$Json_Decode$bool));
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'autoNavigate', _elm_lang$core$Json_Decode$bool)));
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};

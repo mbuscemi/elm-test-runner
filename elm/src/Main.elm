@@ -16,6 +16,8 @@ import Model.Core as Model
         , randomSeedForJS
         , resetPassedTests
         , resetTestRuns
+        , setAutoNavigate
+        , setAutoRun
         , setCompilerErrorMessage
         , setPaneLocation
         , setProjectNameFromPath
@@ -65,9 +67,15 @@ type Message
     | DoNothing
 
 
-main : Program Never Model Message
+type alias Flags =
+    { autoRun : Bool
+    , autoNavigate : Bool
+    }
+
+
+main : Program Flags Model Message
 main =
-    Html.program
+    Html.programWithFlags
         { init = init
         , view = view
         , update = update
@@ -75,9 +83,12 @@ main =
         }
 
 
-init : ( Model, Cmd Message )
-init =
-    Model.default ! []
+init : Flags -> ( Model, Cmd Message )
+init flags =
+    Model.default
+        |> setAutoRun flags.autoRun
+        |> setAutoNavigate flags.autoNavigate
+        |> andNoCommand
 
 
 andNoCommand : Model -> ( Model, Cmd Message )

@@ -13,6 +13,8 @@ module Model.Core
         , randomSeedForJS
         , resetPassedTests
         , resetTestRuns
+        , setAutoNavigate
+        , setAutoRun
         , setCompilerErrorMessage
         , setPaneLocation
         , setProjectNameFromPath
@@ -134,9 +136,19 @@ invertAutoRun model =
     { model | autoRunEnabled = not model.autoRunEnabled }
 
 
+setAutoRun : Bool -> Model -> Model
+setAutoRun setting model =
+    { model | autoRunEnabled = setting }
+
+
 invertAutoNavigate : Model -> Model
 invertAutoNavigate model =
     { model | autoNavigateEnabled = not model.autoNavigateEnabled }
+
+
+setAutoNavigate : Bool -> Model -> Model
+setAutoNavigate setting model =
+    { model | autoNavigateEnabled = setting }
 
 
 setRunStatusToProcessing : Model -> Model

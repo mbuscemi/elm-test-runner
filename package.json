@@ -3,8 +3,7 @@
   "main": "./lib/elm-test-runner",
   "version": "0.0.0",
   "description": "Run elm-test and view results without leaving Atom",
-  "keywords": [
-  ],
+  "keywords": [],
   "activationCommands": {
     "atom-workspace": [
         "elm-test-runner:toggle",
@@ -16,6 +15,8 @@
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
-  "dependencies": {
+  "dependencies": {},
+  "deserializers": {
+      "ElmTestRunnerView": "deserialize"
   }
 }
