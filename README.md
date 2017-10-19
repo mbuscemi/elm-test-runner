@@ -25,6 +25,11 @@ Run elm-test and view results without leaving Atom
 4. Wait for the test run to complete.
 5. Click on individual failing tests to view the failure results for those tests.
 
+### Dock Left, Right, or Center
+
+1. Drag the header bar for Elm Test Runner from its default position on the right side of the screen into the lower dock, or the left dock.
+2. Elm Test Runner will move to that dock. Landscape orientation for the center bottom dock is supported.
+
 ### Seed Utilities
 
 ![Setting the Seed](https://github.com/mbuscemi/elm-test-runner/blob/master/images/set-seed-example.gif)
@@ -39,3 +44,11 @@ Run elm-test and view results without leaving Atom
 
 1. Go to Packages → Elm Test Runner → Toggle Auto-Run on Save, or use Ctrl-R to toggle 'Auto-Run on Save' on and off. When it is active, an indicator will light up in the lower right hand corner of the pane.
 2. When 'Auto-Run on Save' is enabled, executing a "save" action on any project file will initiate a test run in Elm Test Runner.
+
+### Auto-Navigate to Test
+
+1. Click on a passing or failing test, and the file containing the selected test will open in your editor.*
+2. Auto-Navigate to Test is enabled by default. You can disable it, by going to Packages → Elm Test Runner → Toggle Auto-Navigate to Test, or by using Ctrl-Alt-N. An indicator light in the lower right hand corner of the pane indicates whether this functionality is enabled or disabled.
+
+/* *Important Caveat:* The elm-test utility outputs file path components inline with test name components. As a result, it is only possible for Elm Test Runner to build the correct path to your tests if the top level `describe` function labels begin with lower case letters. It will also
+cause difficulty if you open a test file from one project into another. Currently, it is recommended that you disable auto-navigate functionality if you need to work in such conditions.
