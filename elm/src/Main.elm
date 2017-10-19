@@ -260,7 +260,7 @@ port runTest : String -> Cmd message
 port copySeed : String -> Cmd message
 
 
-port navigateToFile : ( String, String ) -> Cmd message
+port navigateToFile : ( String, List String ) -> Cmd message
 
 
 port commandKeyTestStart : (() -> message) -> Sub message
