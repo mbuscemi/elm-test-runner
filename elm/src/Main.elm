@@ -4,7 +4,8 @@ import Animation
 import Html exposing (Html)
 import Model.Core as Model
     exposing
-        ( Model
+        ( Flags
+        , Model
         , buildTestRunDataTree
         , clearRunDuration
         , clearRunSeed
@@ -16,6 +17,7 @@ import Model.Core as Model
         , randomSeedForJS
         , resetPassedTests
         , resetTestRuns
+        , serialize
         , setAutoNavigate
         , setAutoRun
         , setCompilerErrorMessage
@@ -67,12 +69,6 @@ type Message
     | DoNothing
 
 
-type alias Flags =
-    { autoRun : Bool
-    , autoNavigate : Bool
-    }
-
-
 main : Program Flags Model Message
 main =
     Html.programWithFlags
@@ -99,6 +95,13 @@ andNoCommand model =
 andPerform : Cmd Message -> Model -> ( Model, Cmd Message )
 andPerform command model =
     ( model, command )
+
+
+andUpdatePersistentState : Model -> ( Model, Cmd Message )
+andUpdatePersistentState model =
+    serialize model
+        |> updatePersistentState
+        |> flip andPerform model
 
 
 update : Message -> Model -> ( Model, Cmd Message )
@@ -186,11 +189,11 @@ update message model =
 
         ToggleAutoRun ->
             invertAutoRun model
-                |> andNoCommand
+                |> andUpdatePersistentState
 
         ToggleAutoNavigate ->
             invertAutoNavigate model
-                |> andNoCommand
+                |> andUpdatePersistentState
 
         CopySeed seed ->
             model
@@ -280,6 +283,9 @@ port copySeed : String -> Cmd message
 
 
 port navigateToFile : ( String, List String ) -> Cmd message
+
+
+port updatePersistentState : Flags -> Cmd message
 
 
 port commandKeyTestStart : (() -> message) -> Sub message

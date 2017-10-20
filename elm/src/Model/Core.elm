@@ -1,6 +1,7 @@
 module Model.Core
     exposing
-        ( Model
+        ( Flags
+        , Model
         , buildTestRunDataTree
         , clearRunDuration
         , clearRunSeed
@@ -13,6 +14,7 @@ module Model.Core
         , randomSeedForJS
         , resetPassedTests
         , resetTestRuns
+        , serialize
         , setAutoNavigate
         , setAutoRun
         , setCompilerErrorMessage
@@ -75,6 +77,12 @@ type alias Model =
     }
 
 
+type alias Flags =
+    { autoRun : Bool
+    , autoNavigate : Bool
+    }
+
+
 default : Model
 default =
     { projectName = ""
@@ -106,6 +114,13 @@ defaultProjectName =
 humanReadableTopLevelMessage : String
 humanReadableTopLevelMessage =
     "No Tests"
+
+
+serialize : Model -> Flags
+serialize model =
+    { autoRun = model.autoRunEnabled
+    , autoNavigate = model.autoNavigateEnabled
+    }
 
 
 setProjectNameFromPath : String -> Model -> Model

@@ -17349,6 +17349,9 @@ var _user$project$Model_Core$setProjectNameToTopNode = function (model) {
 			testRuns: A3(_user$project$Tree_Core$Node, model.projectName, testInstance, children)
 		});
 };
+var _user$project$Model_Core$serialize = function (model) {
+	return {autoRun: model.autoRunEnabled, autoNavigate: model.autoNavigateEnabled};
+};
 var _user$project$Model_Core$humanReadableTopLevelMessage = 'No Tests';
 var _user$project$Model_Core$defaultProjectName = 'Unknown Project';
 var _user$project$Model_Core$setProjectNameFromPath = F2(
@@ -17431,6 +17434,10 @@ var _user$project$Model_Core$Model = function (a) {
 		};
 	};
 };
+var _user$project$Model_Core$Flags = F2(
+	function (a, b) {
+		return {autoRun: a, autoNavigate: b};
+	});
 
 var _user$project$View_DurationAndSeedDisplay$runDataClass = function (additionalField) {
 	return _elm_lang$html$Html_Attributes$class(
@@ -18555,6 +18562,19 @@ var _user$project$Main$navigateToFile = _elm_lang$core$Native_Platform.outgoingP
 			})
 		];
 	});
+var _user$project$Main$updatePersistentState = _elm_lang$core$Native_Platform.outgoingPort(
+	'updatePersistentState',
+	function (v) {
+		return {autoRun: v.autoRun, autoNavigate: v.autoNavigate};
+	});
+var _user$project$Main$andUpdatePersistentState = function (model) {
+	return A3(
+		_elm_lang$core$Basics$flip,
+		_user$project$Main$andPerform,
+		model,
+		_user$project$Main$updatePersistentState(
+			_user$project$Model_Core$serialize(model)));
+};
 var _user$project$Main$update = F2(
 	function (message, model) {
 		var _p0 = message;
@@ -18656,10 +18676,10 @@ var _user$project$Main$update = F2(
 							_elm_lang$core$Maybe$Just(_p0._0),
 							model)));
 			case 'ToggleAutoRun':
-				return _user$project$Main$andNoCommand(
+				return _user$project$Main$andUpdatePersistentState(
 					_user$project$Model_Core$invertAutoRun(model));
 			case 'ToggleAutoNavigate':
-				return _user$project$Main$andNoCommand(
+				return _user$project$Main$andUpdatePersistentState(
 					_user$project$Model_Core$invertAutoNavigate(model));
 			case 'CopySeed':
 				return A2(
@@ -18767,10 +18787,6 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 				A2(_elm_lang$core$Json_Decode$field, 'failed', _elm_lang$core$Json_Decode$string));
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
-var _user$project$Main$Flags = F2(
-	function (a, b) {
-		return {autoRun: a, autoNavigate: b};
-	});
 var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
 var _user$project$Main$PaneMoved = function (a) {
 	return {ctor: 'PaneMoved', _0: a};
