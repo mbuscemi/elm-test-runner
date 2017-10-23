@@ -3,14 +3,13 @@ module View.TestHierarchy.ChildTree exposing (render)
 import Html exposing (Attribute, Html, li)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick, onMouseEnter, onMouseLeave)
-import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree, Tree(Node))
 
 
-type alias Messages message =
+type alias Messages message testInstance =
     { mouseIn : Int -> message
     , mouseOut : message
-    , testClick : Int -> Maybe TestInstance -> message
+    , testClick : Int -> Maybe testInstance -> message
     }
 
 
@@ -20,7 +19,7 @@ type alias NodeData =
     }
 
 
-render : Messages message -> NodeData -> CollapsibleTree String TestInstance -> Html message -> Html message
+render : Messages message testInstance -> NodeData -> CollapsibleTree String testInstance -> Html message -> Html message
 render highlightMessages nodeData (Node ( _, _, nodeId ) testInstance children) renderedChildren =
     li
         (List.append
@@ -30,7 +29,7 @@ render highlightMessages nodeData (Node ( _, _, nodeId ) testInstance children) 
         [ renderedChildren ]
 
 
-mouseEvents : Messages message -> Int -> TestInstance -> List (CollapsibleTree String TestInstance) -> List (Attribute message)
+mouseEvents : Messages message testInstance -> Int -> testInstance -> List (CollapsibleTree String testInstance) -> List (Attribute message)
 mouseEvents messages nodeId testInstance children =
     if List.isEmpty children then
         [ onMouseEnter <| messages.mouseIn nodeId
