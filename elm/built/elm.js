@@ -17991,6 +17991,59 @@ var _user$project$View_SeedAndSettings$render = F5(
 		};
 	});
 
+var _user$project$TestInstance_View$timeReport = function (testInstance) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		' (',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_user$project$TestInstance_Core$durationAsString(testInstance),
+			' ms)'));
+};
+var _user$project$TestInstance_View$conditionallyEmbolden = F3(
+	function (hasChildren, string, testInstance) {
+		return hasChildren ? A2(
+			_elm_lang$html$Html$strong,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(string),
+				_1: {ctor: '[]'}
+			}) : _elm_lang$html$Html$text(
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				string,
+				_user$project$TestInstance_View$timeReport(testInstance)));
+	});
+var _user$project$TestInstance_View$statusIndicatorIcon = function (testInstance) {
+	return _elm_lang$html$Html$text(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			' ',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_user$project$TestInstance_Core$toStatusIcon(testInstance),
+				' ')));
+};
+var _user$project$TestInstance_View$statusIndicatorTextColor = function (testInstance) {
+	return _elm_lang$html$Html_Attributes$class(
+		_user$project$TestInstance_Core$toClass(testInstance));
+};
+var _user$project$TestInstance_View$statusIndicator = function (testInstance) {
+	return A2(
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _user$project$TestInstance_View$statusIndicatorTextColor(testInstance),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _user$project$TestInstance_View$statusIndicatorIcon(testInstance),
+			_1: {ctor: '[]'}
+		});
+};
+
 var _user$project$View_TestHierarchy_ChildTree$mouseOverHexColor = '2c333e';
 var _user$project$View_TestHierarchy_ChildTree$selectedHexColor = '343f51';
 var _user$project$View_TestHierarchy_ChildTree$testNodeBackgroundColorStyle = function (hexColor) {
@@ -18074,61 +18127,6 @@ var _user$project$View_TestHierarchy_ChildTree$NodeData = F2(
 		return {nodeMouseIsOver: a, selectedNode: b};
 	});
 
-var _user$project$View_TestHierarchy_Root$timeReport = function (nodeData) {
-	return A2(
-		_elm_lang$core$Basics_ops['++'],
-		' (',
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			_user$project$TestInstance_Core$durationAsString(nodeData),
-			' ms)'));
-};
-var _user$project$View_TestHierarchy_Root$htmlText = function (string) {
-	return _elm_lang$html$Html$text(string);
-};
-var _user$project$View_TestHierarchy_Root$conditionallyEmbolden = F3(
-	function (hasChildren, string, nodeData) {
-		return hasChildren ? A2(
-			_elm_lang$html$Html$strong,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: _user$project$View_TestHierarchy_Root$htmlText(string),
-				_1: {ctor: '[]'}
-			}) : _user$project$View_TestHierarchy_Root$htmlText(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				string,
-				_user$project$View_TestHierarchy_Root$timeReport(nodeData)));
-	});
-var _user$project$View_TestHierarchy_Root$statusIndicatorIcon = function (nodeData) {
-	return _elm_lang$html$Html$text(
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			' ',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_user$project$TestInstance_Core$toStatusIcon(nodeData),
-				' ')));
-};
-var _user$project$View_TestHierarchy_Root$statusIndicatorTextColor = function (nodeData) {
-	return _elm_lang$html$Html_Attributes$class(
-		_user$project$TestInstance_Core$toClass(nodeData));
-};
-var _user$project$View_TestHierarchy_Root$statusIndicator = function (nodeData) {
-	return A2(
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _user$project$View_TestHierarchy_Root$statusIndicatorTextColor(nodeData),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _user$project$View_TestHierarchy_Root$statusIndicatorIcon(nodeData),
-			_1: {ctor: '[]'}
-		});
-};
 var _user$project$View_TestHierarchy_Root$togglingArrowText = F2(
 	function (isVisible, isExpanded) {
 		return isVisible ? '' : (isExpanded ? '▾ ' : '▸ ');
@@ -18145,41 +18143,45 @@ var _user$project$View_TestHierarchy_Root$togglingArrow = F2(
 				_1: {ctor: '[]'}
 			});
 	});
-var _user$project$View_TestHierarchy_Root$rootText = F4(
-	function (nodeData, hasChildren, isExpanded, nodeName) {
+var _user$project$View_TestHierarchy_Root$rootText = F5(
+	function (hasChildren, isExpanded, nodeName, testInstanceView, testInstance) {
 		return {
 			ctor: '::',
 			_0: A2(_user$project$View_TestHierarchy_Root$togglingArrow, hasChildren, isExpanded),
 			_1: {
 				ctor: '::',
-				_0: _user$project$View_TestHierarchy_Root$statusIndicator(nodeData),
+				_0: testInstanceView.statusIndicator(testInstance),
 				_1: {
 					ctor: '::',
-					_0: A3(_user$project$View_TestHierarchy_Root$conditionallyEmbolden, !hasChildren, nodeName, nodeData),
+					_0: A3(testInstanceView.conditionallyEmbolden, !hasChildren, nodeName, testInstance),
 					_1: {ctor: '[]'}
 				}
 			}
 		};
 	});
 var _user$project$View_TestHierarchy_Root$expandOrCollapse = F3(
-	function (messages, isExpanded, nodeId) {
+	function (isExpanded, nodeId, messages) {
 		return _elm_lang$html$Html_Events$onClick(
 			isExpanded ? messages.collapse(nodeId) : messages.expand(nodeId));
 	});
-var _user$project$View_TestHierarchy_Root$render = F6(
-	function (messages, nodeData, hasChildren, isExpanded, nodeName, nodeId) {
+var _user$project$View_TestHierarchy_Root$render = F7(
+	function (hasChildren, isExpanded, nodeName, nodeId, testInstanceView, testInstance, messages) {
 		return A2(
 			_elm_lang$html$Html$span,
 			{
 				ctor: '::',
-				_0: A3(_user$project$View_TestHierarchy_Root$expandOrCollapse, messages, isExpanded, nodeId),
+				_0: A3(_user$project$View_TestHierarchy_Root$expandOrCollapse, isExpanded, nodeId, messages),
 				_1: {ctor: '[]'}
 			},
-			A4(_user$project$View_TestHierarchy_Root$rootText, nodeData, hasChildren, isExpanded, nodeName));
+			A5(_user$project$View_TestHierarchy_Root$rootText, hasChildren, isExpanded, nodeName, testInstanceView, testInstance));
 	});
 var _user$project$View_TestHierarchy_Root$Messages = F2(
 	function (a, b) {
 		return {collapse: a, expand: b};
+	});
+var _user$project$View_TestHierarchy_Root$TestInstanceView = F2(
+	function (a, b) {
+		return {statusIndicator: a, conditionallyEmbolden: b};
 	});
 
 var _user$project$View_TestHierarchy_Core$viewTree = F4(
@@ -18196,14 +18198,15 @@ var _user$project$View_TestHierarchy_Core$viewTree = F4(
 			},
 			{
 				ctor: '::',
-				_0: A6(
+				_0: A7(
 					_user$project$View_TestHierarchy_Root$render,
-					toggleMessages,
-					_p1._1,
 					_elm_lang$core$List$isEmpty(_p2),
 					_p3,
 					_p1._0._0,
-					_p1._0._2),
+					_p1._0._2,
+					{statusIndicator: _user$project$TestInstance_View$statusIndicator, conditionallyEmbolden: _user$project$TestInstance_View$conditionallyEmbolden},
+					_p1._1,
+					toggleMessages),
 				_1: A5(_user$project$View_TestHierarchy_Core$viewChildren, toggleMessages, highlightMessages, _p3, nodeData, _p2)
 			});
 	});
