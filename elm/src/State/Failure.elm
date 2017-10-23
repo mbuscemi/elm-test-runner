@@ -95,13 +95,12 @@ comparison =
 
 
 type alias Reason =
-    { data : Comparison }
+    Comparison
 
 
 reason : Decoder Reason
 reason =
-    map Reason
-        (field "data" comparison)
+    field "data" comparison
 
 
 type alias ComplexFailureData =
@@ -158,11 +157,11 @@ getMessage failure =
         SimpleFailure messsage ->
             messsage
 
-        ComplexFailure fail ->
-            fail.message
+        ComplexFailure complexFailure ->
+            complexFailure.message
 
-        ConditionalFailure fail ->
-            fail.message
+        ConditionalFailure conditionalFailure ->
+            conditionalFailure.message
 
 
 getGiven : Failure -> Maybe String
@@ -184,16 +183,16 @@ hasComplexComparison failure =
         SimpleFailure _ ->
             False
 
-        ComplexFailure obj ->
-            case obj.reason.data of
+        ComplexFailure complexFailure ->
+            case complexFailure.reason of
                 SimpleComparison _ ->
                     False
 
                 _ ->
                     True
 
-        ConditionalFailure obj ->
-            case obj.reason.data of
+        ConditionalFailure conditionalFailure ->
+            case conditionalFailure.reason of
                 SimpleComparison _ ->
                     False
 
@@ -277,11 +276,11 @@ getComparison failure =
         SimpleFailure message ->
             SimpleComparison message
 
-        ComplexFailure fail ->
-            fail.reason.data
+        ComplexFailure complexFailure ->
+            complexFailure.reason
 
-        ConditionalFailure fail ->
-            fail.reason.data
+        ConditionalFailure conditionalFailure ->
+            conditionalFailure.reason
 
 
 expectationText : List String -> String

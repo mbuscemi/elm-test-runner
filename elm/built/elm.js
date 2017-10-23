@@ -16399,14 +16399,14 @@ var _user$project$State_Failure$hasComplexComparison = function (failure) {
 		case 'SimpleFailure':
 			return false;
 		case 'ComplexFailure':
-			var _p2 = _p1._0.reason.data;
+			var _p2 = _p1._0.reason;
 			if (_p2.ctor === 'SimpleComparison') {
 				return false;
 			} else {
 				return true;
 			}
 		default:
-			var _p3 = _p1._0.reason.data;
+			var _p3 = _p1._0.reason;
 			if (_p3.ctor === 'SimpleComparison') {
 				return false;
 			} else {
@@ -16488,9 +16488,6 @@ var _user$project$State_Failure$dictSetComparison = A5(
 		_elm_lang$core$Json_Decode$field,
 		'missing',
 		_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)));
-var _user$project$State_Failure$Reason = function (a) {
-	return {data: a};
-};
 var _user$project$State_Failure$ComplexFailureData = F2(
 	function (a, b) {
 		return {message: a, reason: b};
@@ -16536,10 +16533,7 @@ var _user$project$State_Failure$comparison = _elm_lang$core$Json_Decode$oneOf(
 			}
 		}
 	});
-var _user$project$State_Failure$reason = A2(
-	_elm_lang$core$Json_Decode$map,
-	_user$project$State_Failure$Reason,
-	A2(_elm_lang$core$Json_Decode$field, 'data', _user$project$State_Failure$comparison));
+var _user$project$State_Failure$reason = A2(_elm_lang$core$Json_Decode$field, 'data', _user$project$State_Failure$comparison);
 var _user$project$State_Failure$complexFailureData = A3(
 	_elm_lang$core$Json_Decode$map2,
 	_user$project$State_Failure$ComplexFailureData,
@@ -16557,9 +16551,9 @@ var _user$project$State_Failure$getComparison = function (failure) {
 		case 'SimpleFailure':
 			return _user$project$State_Failure$SimpleComparison(_p6._0);
 		case 'ComplexFailure':
-			return _p6._0.reason.data;
+			return _p6._0.reason;
 		default:
-			return _p6._0.reason.data;
+			return _p6._0.reason;
 	}
 };
 var _user$project$State_Failure$getExpected = function (failure) {
