@@ -3,6 +3,7 @@ module View.TestHierarchy.Core exposing (render)
 import Html exposing (Html, ul)
 import Html.Attributes exposing (class)
 import TestInstance.Core exposing (TestInstance)
+import TestInstance.View
 import Tree.Core exposing (CollapsibleTree, Tree(Node))
 import View.TestHierarchy.ChildTree
 import View.TestHierarchy.Root
@@ -50,7 +51,7 @@ viewTree :
 viewTree toggleMessages highlightMessages nodeData (Node ( nodeName, isExpanded, nodeId ) nodeInternals children) =
     ul
         [ class "test-list" ]
-        (View.TestHierarchy.Root.render toggleMessages nodeInternals (List.isEmpty children) isExpanded nodeName nodeId
+        (View.TestHierarchy.Root.render (List.isEmpty children) isExpanded nodeName nodeId { statusIndicator = TestInstance.View.statusIndicator, conditionallyEmbolden = TestInstance.View.conditionallyEmbolden } nodeInternals toggleMessages
             :: viewChildren toggleMessages highlightMessages isExpanded nodeData children
         )
 

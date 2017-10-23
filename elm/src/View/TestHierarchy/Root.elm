@@ -1,9 +1,7 @@
 module View.TestHierarchy.Root exposing (render)
 
 import Html exposing (Attribute, Html, span, strong, text)
-import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
-import TestInstance.Core as TestInstance exposing (TestInstance)
 
 
 type alias Messages message =
@@ -12,15 +10,21 @@ type alias Messages message =
     }
 
 
-render : Messages message -> TestInstance -> Bool -> Bool -> String -> Int -> Html message
-render messages nodeData hasChildren isExpanded nodeName nodeId =
+type alias TestInstanceView testInstance message =
+    { statusIndicator : testInstance -> Html message
+    , conditionallyEmbolden : Bool -> String -> testInstance -> Html message
+    }
+
+
+render : Bool -> Bool -> String -> Int -> TestInstanceView testInstance message -> testInstance -> Messages message -> Html message
+render hasChildren isExpanded nodeName nodeId testInstanceView testInstance messages =
     span
-        [ expandOrCollapse messages isExpanded nodeId ]
-        (rootText nodeData hasChildren isExpanded nodeName)
+        [ expandOrCollapse isExpanded nodeId messages ]
+        (rootText hasChildren isExpanded nodeName testInstanceView testInstance)
 
 
-expandOrCollapse : Messages message -> Bool -> Int -> Attribute message
-expandOrCollapse messages isExpanded nodeId =
+expandOrCollapse : Bool -> Int -> Messages message -> Attribute message
+expandOrCollapse isExpanded nodeId messages =
     onClick <|
         if isExpanded then
             messages.collapse nodeId
@@ -28,11 +32,11 @@ expandOrCollapse messages isExpanded nodeId =
             messages.expand nodeId
 
 
-rootText : TestInstance -> Bool -> Bool -> String -> List (Html message)
-rootText nodeData hasChildren isExpanded nodeName =
+rootText : Bool -> Bool -> String -> TestInstanceView testInstance message -> testInstance -> List (Html message)
+rootText hasChildren isExpanded nodeName testInstanceView testInstance =
     [ togglingArrow hasChildren isExpanded
-    , statusIndicator nodeData
-    , conditionallyEmbolden (not hasChildren) nodeName nodeData
+    , testInstanceView.statusIndicator testInstance
+    , testInstanceView.conditionallyEmbolden (not hasChildren) nodeName testInstance
     ]
 
 
@@ -49,38 +53,3 @@ togglingArrowText isVisible isExpanded =
         "▾ "
     else
         "▸ "
-
-
-statusIndicator : TestInstance -> Html message
-statusIndicator nodeData =
-    span
-        [ statusIndicatorTextColor nodeData ]
-        [ statusIndicatorIcon nodeData ]
-
-
-statusIndicatorTextColor : TestInstance -> Attribute message
-statusIndicatorTextColor nodeData =
-    class <| TestInstance.toClass nodeData
-
-
-statusIndicatorIcon : TestInstance -> Html message
-statusIndicatorIcon nodeData =
-    text <| " " ++ TestInstance.toStatusIcon nodeData ++ " "
-
-
-conditionallyEmbolden : Bool -> String -> TestInstance -> Html message
-conditionallyEmbolden hasChildren string nodeData =
-    if hasChildren then
-        strong [] [ htmlText string ]
-    else
-        htmlText (string ++ timeReport nodeData)
-
-
-htmlText : String -> Html message
-htmlText string =
-    text <| string
-
-
-timeReport : TestInstance -> String
-timeReport nodeData =
-    " (" ++ TestInstance.durationAsString nodeData ++ " ms)"
