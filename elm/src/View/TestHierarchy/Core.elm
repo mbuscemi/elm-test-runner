@@ -27,13 +27,27 @@ type alias NodeData =
     }
 
 
+type alias TestTree =
+    CollapsibleTree String TestInstance
+
+
 render :
     ToggleMessages message
     -> SelectionMessages message
     -> NodeData
-    -> CollapsibleTree String TestInstance
+    -> TestTree
     -> Html message
-render toggleMessages highlightMessages nodeData (Node ( nodeName, isExpanded, nodeId ) nodeInternals children) =
+render toggleMessages highlightMessages nodeData testHierarchy =
+    viewTree toggleMessages highlightMessages nodeData testHierarchy
+
+
+viewTree :
+    ToggleMessages message
+    -> SelectionMessages message
+    -> NodeData
+    -> TestTree
+    -> Html message
+viewTree toggleMessages highlightMessages nodeData (Node ( nodeName, isExpanded, nodeId ) nodeInternals children) =
     ul
         [ class "test-list" ]
         (View.TestHierarchy.Root.render toggleMessages nodeInternals (List.isEmpty children) isExpanded nodeName nodeId
@@ -46,7 +60,7 @@ viewChildren :
     -> SelectionMessages message
     -> Bool
     -> NodeData
-    -> List (CollapsibleTree String TestInstance)
+    -> List TestTree
     -> List (Html message)
 viewChildren toggleMessages highlightMessages shouldShow nodeData children =
     if shouldShow then
@@ -59,7 +73,7 @@ viewForest :
     ToggleMessages message
     -> SelectionMessages message
     -> NodeData
-    -> List (CollapsibleTree String TestInstance)
+    -> List TestTree
     -> List (Html message)
 viewForest toggleMessages highlightMessages nodeData children =
     List.map (childTree toggleMessages highlightMessages nodeData) children
@@ -69,11 +83,11 @@ childTree :
     ToggleMessages message
     -> SelectionMessages message
     -> NodeData
-    -> CollapsibleTree String TestInstance
+    -> TestTree
     -> Html message
 childTree toggleMessages highlightMessages nodeData tree =
     View.TestHierarchy.ChildTree.render
         highlightMessages
         nodeData
         tree
-        (render toggleMessages highlightMessages nodeData tree)
+        (viewTree toggleMessages highlightMessages nodeData tree)

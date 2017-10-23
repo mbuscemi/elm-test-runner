@@ -18188,7 +18188,7 @@ var _user$project$View_TestHierarchy_Root$Messages = F2(
 		return {collapse: a, expand: b};
 	});
 
-var _user$project$View_TestHierarchy_Core$render = F4(
+var _user$project$View_TestHierarchy_Core$viewTree = F4(
 	function (toggleMessages, highlightMessages, nodeData, _p0) {
 		var _p1 = _p0;
 		var _p3 = _p1._0._1;
@@ -18231,7 +18231,11 @@ var _user$project$View_TestHierarchy_Core$childTree = F4(
 			highlightMessages,
 			nodeData,
 			tree,
-			A4(_user$project$View_TestHierarchy_Core$render, toggleMessages, highlightMessages, nodeData, tree));
+			A4(_user$project$View_TestHierarchy_Core$viewTree, toggleMessages, highlightMessages, nodeData, tree));
+	});
+var _user$project$View_TestHierarchy_Core$render = F4(
+	function (toggleMessages, highlightMessages, nodeData, testHierarchy) {
+		return A4(_user$project$View_TestHierarchy_Core$viewTree, toggleMessages, highlightMessages, nodeData, testHierarchy);
 	});
 var _user$project$View_TestHierarchy_Core$ToggleMessages = F2(
 	function (a, b) {
