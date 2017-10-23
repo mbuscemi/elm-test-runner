@@ -4,8 +4,8 @@ import Expect
 import Maybe.Extra as Maybe
 import State.Failure as Failure exposing (Failure)
 import Test exposing (Test, describe, test)
-import TestEvent.TestCompleted exposing (TestCompleted, parse, toTestInstance)
-import TestInstance.Core as TestInstance exposing (TestInstance)
+import TestEvent.TestCompleted exposing (TestCompleted, parse)
+import TestInstance.Core as TestInstance exposing (TestInstance, fromEvent)
 
 
 parsesCorrectly : Test
@@ -17,7 +17,7 @@ parsesCorrectly =
 
         testInstance : TestInstance
         testInstance =
-            toTestInstance event
+            fromEvent event
 
         maybeFailure : Maybe Failure
         maybeFailure =

@@ -16626,6 +16626,79 @@ var _user$project$State_Failure$failure = _elm_lang$core$Json_Decode$oneOf(
 	});
 var _user$project$State_Failure$nullInstance = _user$project$State_Failure$SimpleFailure('NULL');
 
+var _user$project$TestEvent_TestCompleted$firstFailure = function (_p0) {
+	var _p1 = _p0;
+	return _elm_lang$core$List$head(_p1._0.failures);
+};
+var _user$project$TestEvent_TestCompleted$duration = function (_p2) {
+	var _p3 = _p2;
+	return _user$project$Duration_Core$inMilliseconds(_p3._0.duration);
+};
+var _user$project$TestEvent_TestCompleted$labels = function (_p4) {
+	var _p5 = _p4;
+	return _p5._0.labels;
+};
+var _user$project$TestEvent_TestCompleted$defaultRawData = {
+	status: '',
+	labels: {ctor: '[]'},
+	failures: {ctor: '[]'},
+	duration: ''
+};
+var _user$project$TestEvent_TestCompleted$RawData = F4(
+	function (a, b, c, d) {
+		return {status: a, labels: b, failures: c, duration: d};
+	});
+var _user$project$TestEvent_TestCompleted$rawData = A5(
+	_elm_lang$core$Json_Decode$map4,
+	_user$project$TestEvent_TestCompleted$RawData,
+	A2(_elm_lang$core$Json_Decode$field, 'status', _elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$field,
+		'labels',
+		_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)),
+	A2(
+		_elm_lang$core$Json_Decode$field,
+		'failures',
+		_elm_lang$core$Json_Decode$list(_user$project$State_Failure$failure)),
+	A2(_elm_lang$core$Json_Decode$field, 'duration', _elm_lang$core$Json_Decode$string));
+var _user$project$TestEvent_TestCompleted$parseJson = function (jsonString) {
+	return A2(
+		_elm_lang$core$Result$withDefault,
+		_user$project$TestEvent_TestCompleted$defaultRawData,
+		A2(_elm_lang$core$Json_Decode$decodeString, _user$project$TestEvent_TestCompleted$rawData, jsonString));
+};
+var _user$project$TestEvent_TestCompleted$Parsed = F4(
+	function (a, b, c, d) {
+		return {status: a, labels: b, failures: c, duration: d};
+	});
+var _user$project$TestEvent_TestCompleted$TestCompleted = function (a) {
+	return {ctor: 'TestCompleted', _0: a};
+};
+var _user$project$TestEvent_TestCompleted$Todo = {ctor: 'Todo'};
+var _user$project$TestEvent_TestCompleted$isTodo = function (_p6) {
+	var _p7 = _p6;
+	return _elm_lang$core$Native_Utils.eq(_p7._0.status, _user$project$TestEvent_TestCompleted$Todo);
+};
+var _user$project$TestEvent_TestCompleted$Fail = {ctor: 'Fail'};
+var _user$project$TestEvent_TestCompleted$Pass = {ctor: 'Pass'};
+var _user$project$TestEvent_TestCompleted$parse = function (rawData) {
+	var parsed = _user$project$TestEvent_TestCompleted$parseJson(rawData);
+	return _user$project$TestEvent_TestCompleted$TestCompleted(
+		{
+			status: _elm_lang$core$Native_Utils.eq(parsed.status, 'pass') ? _user$project$TestEvent_TestCompleted$Pass : (_elm_lang$core$Native_Utils.eq(parsed.status, 'todo') ? _user$project$TestEvent_TestCompleted$Todo : _user$project$TestEvent_TestCompleted$Fail),
+			labels: parsed.labels,
+			failures: parsed.failures,
+			duration: _user$project$TestEvent_Util$parseInt(parsed.duration)
+		});
+};
+var _user$project$TestEvent_TestCompleted$passed = function (_p8) {
+	var _p9 = _p8;
+	return _elm_lang$core$Native_Utils.eq(_p9._0.status, _user$project$TestEvent_TestCompleted$Pass);
+};
+var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
+	return _user$project$TestEvent_TestCompleted$passed(event) ? 1 : 0;
+};
+
 var _user$project$State_Labels$firstCharIsUpper = function (string) {
 	var _p0 = _elm_lang$core$String$uncons(string);
 	if (_p0.ctor === 'Just') {
@@ -16782,6 +16855,15 @@ var _user$project$TestInstance_Core$isFailing = function (instance) {
 	return _elm_lang$core$Native_Utils.eq(instance.testStatus, _user$project$TestInstance_Core$Fail);
 };
 var _user$project$TestInstance_Core$Pass = {ctor: 'Pass'};
+var _user$project$TestInstance_Core$fromEvent = function (event) {
+	return A4(
+		_user$project$TestInstance_Core$TestInstance,
+		_user$project$TestEvent_TestCompleted$passed(event) ? _user$project$TestInstance_Core$Pass : (_user$project$TestEvent_TestCompleted$isTodo(event) ? _user$project$TestInstance_Core$Todo : _user$project$TestInstance_Core$Fail),
+		_user$project$State_Labels$fromList(
+			_user$project$TestEvent_TestCompleted$labels(event)),
+		_user$project$TestEvent_TestCompleted$duration(event),
+		_user$project$TestEvent_TestCompleted$firstFailure(event));
+};
 var _user$project$TestInstance_Core$setStatus = F2(
 	function (newStatus, instance) {
 		var _p2 = newStatus;
@@ -16808,89 +16890,6 @@ var _user$project$TestInstance_Core$setStatus = F2(
 					{testStatus: _user$project$TestInstance_Core$Pending});
 		}
 	});
-
-var _user$project$TestEvent_TestCompleted$labels = function (_p0) {
-	var _p1 = _p0;
-	return _p1._0.labels;
-};
-var _user$project$TestEvent_TestCompleted$defaultRawData = {
-	status: '',
-	labels: {ctor: '[]'},
-	failures: {ctor: '[]'},
-	duration: ''
-};
-var _user$project$TestEvent_TestCompleted$RawData = F4(
-	function (a, b, c, d) {
-		return {status: a, labels: b, failures: c, duration: d};
-	});
-var _user$project$TestEvent_TestCompleted$rawData = A5(
-	_elm_lang$core$Json_Decode$map4,
-	_user$project$TestEvent_TestCompleted$RawData,
-	A2(_elm_lang$core$Json_Decode$field, 'status', _elm_lang$core$Json_Decode$string),
-	A2(
-		_elm_lang$core$Json_Decode$field,
-		'labels',
-		_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)),
-	A2(
-		_elm_lang$core$Json_Decode$field,
-		'failures',
-		_elm_lang$core$Json_Decode$list(_user$project$State_Failure$failure)),
-	A2(_elm_lang$core$Json_Decode$field, 'duration', _elm_lang$core$Json_Decode$string));
-var _user$project$TestEvent_TestCompleted$parseJson = function (jsonString) {
-	return A2(
-		_elm_lang$core$Result$withDefault,
-		_user$project$TestEvent_TestCompleted$defaultRawData,
-		A2(_elm_lang$core$Json_Decode$decodeString, _user$project$TestEvent_TestCompleted$rawData, jsonString));
-};
-var _user$project$TestEvent_TestCompleted$Parsed = F4(
-	function (a, b, c, d) {
-		return {status: a, labels: b, failures: c, duration: d};
-	});
-var _user$project$TestEvent_TestCompleted$TestCompleted = function (a) {
-	return {ctor: 'TestCompleted', _0: a};
-};
-var _user$project$TestEvent_TestCompleted$Todo = {ctor: 'Todo'};
-var _user$project$TestEvent_TestCompleted$isTodo = function (_p2) {
-	var _p3 = _p2;
-	return _elm_lang$core$Native_Utils.eq(_p3._0.status, _user$project$TestEvent_TestCompleted$Todo);
-};
-var _user$project$TestEvent_TestCompleted$Fail = {ctor: 'Fail'};
-var _user$project$TestEvent_TestCompleted$Pass = {ctor: 'Pass'};
-var _user$project$TestEvent_TestCompleted$parse = function (rawData) {
-	var parsed = _user$project$TestEvent_TestCompleted$parseJson(rawData);
-	return _user$project$TestEvent_TestCompleted$TestCompleted(
-		{
-			status: _elm_lang$core$Native_Utils.eq(parsed.status, 'pass') ? _user$project$TestEvent_TestCompleted$Pass : (_elm_lang$core$Native_Utils.eq(parsed.status, 'todo') ? _user$project$TestEvent_TestCompleted$Todo : _user$project$TestEvent_TestCompleted$Fail),
-			labels: parsed.labels,
-			failures: parsed.failures,
-			duration: _user$project$TestEvent_Util$parseInt(parsed.duration)
-		});
-};
-var _user$project$TestEvent_TestCompleted$passed = function (_p4) {
-	var _p5 = _p4;
-	return _elm_lang$core$Native_Utils.eq(_p5._0.status, _user$project$TestEvent_TestCompleted$Pass);
-};
-var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
-	return _user$project$TestEvent_TestCompleted$passed(event) ? 1 : 0;
-};
-var _user$project$TestEvent_TestCompleted$toTestInstance = function (_p6) {
-	var _p7 = _p6;
-	var _p9 = _p7._0;
-	var _p8 = _p7;
-	return A2(
-		_user$project$TestInstance_Core$setFailure,
-		_elm_lang$core$List$head(_p9.failures),
-		A2(
-			_user$project$TestInstance_Core$setDuration,
-			_p9.duration,
-			A2(
-				_user$project$TestInstance_Core$setLabels,
-				_user$project$State_Labels$fromList(_p9.labels),
-				A2(
-					_user$project$TestInstance_Core$setStatus,
-					_user$project$TestEvent_TestCompleted$passed(_p8) ? 'pass' : (_user$project$TestEvent_TestCompleted$isTodo(_p8) ? 'todo' : 'fail'),
-					_user$project$TestInstance_Core$default))));
-};
 
 var _user$project$TestInstance_Reconcile$updateStatusPreferringFail = F2(
 	function ($new, old) {
@@ -17225,7 +17224,7 @@ var _user$project$Model_Core$buildTestRunDataTree = F2(
 						_0: model.projectName,
 						_1: _user$project$TestEvent_TestCompleted$labels(event)
 					},
-					_user$project$TestEvent_TestCompleted$toTestInstance(event),
+					_user$project$TestInstance_Core$fromEvent(event),
 					_user$project$TestInstance_Reconcile$transform,
 					model.testRuns)
 			});

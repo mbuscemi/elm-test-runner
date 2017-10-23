@@ -3,6 +3,7 @@ module TestInstance.Core
         ( TestInstance
         , default
         , durationAsString
+        , fromEvent
         , getFailure
         , isFailing
         , isPending
@@ -19,6 +20,7 @@ module TestInstance.Core
 import Duration.Core as Duration exposing (Duration, inMilliseconds)
 import State.Failure exposing (Failure)
 import State.Labels as Labels exposing (Labels)
+import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
 
 
 type TestStatus
@@ -43,6 +45,21 @@ default =
     , duration = inMilliseconds 0
     , failure = Nothing
     }
+
+
+fromEvent : TestCompleted -> TestInstance
+fromEvent event =
+    TestInstance
+        (if TestCompleted.passed event then
+            Pass
+         else if TestCompleted.isTodo event then
+            Todo
+         else
+            Fail
+        )
+        (Labels.fromList <| TestCompleted.labels event)
+        (TestCompleted.duration event)
+        (TestCompleted.firstFailure event)
 
 
 toStatusIcon : TestInstance -> String

@@ -249,7 +249,7 @@ buildTestRunDataTree event model =
         | testRuns =
             Tree.Merge.fromPath
                 (model.projectName :: TestCompleted.labels event)
-                (TestCompleted.toTestInstance event)
+                (TestInstance.fromEvent event)
                 TestInstance.Reconcile.transform
                 model.testRuns
     }

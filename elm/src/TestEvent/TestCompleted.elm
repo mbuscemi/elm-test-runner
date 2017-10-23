@@ -2,18 +2,19 @@ module TestEvent.TestCompleted
     exposing
         ( RawData
         , TestCompleted
+        , duration
+        , firstFailure
+        , isTodo
         , labels
         , parse
         , passed
         , passedTestCountToIncrement
-        , toTestInstance
         )
 
+import Duration.Core as Duration exposing (Duration)
 import Json.Decode exposing (Decoder, decodeString, field, list, map4, string)
 import State.Failure exposing (Failure, failure)
-import State.Labels as Labels
 import TestEvent.Util
-import TestInstance.Core as TestInstance exposing (TestInstance)
 
 
 type TestCompleted
@@ -105,17 +106,28 @@ labels (TestCompleted parsed) =
     parsed.labels
 
 
-toTestInstance : TestCompleted -> TestInstance
-toTestInstance ((TestCompleted parsed) as event) =
-    TestInstance.default
-        |> TestInstance.setStatus
-            (if passed event then
-                "pass"
-             else if isTodo event then
-                "todo"
-             else
-                "fail"
-            )
-        |> TestInstance.setLabels (Labels.fromList parsed.labels)
-        |> TestInstance.setDuration parsed.duration
-        |> TestInstance.setFailure (List.head parsed.failures)
+duration : TestCompleted -> Duration
+duration (TestCompleted parsed) =
+    Duration.inMilliseconds parsed.duration
+
+
+firstFailure : TestCompleted -> Maybe Failure
+firstFailure (TestCompleted parsed) =
+    List.head parsed.failures
+
+
+
+-- toTestInstance : TestCompleted -> TestInstance
+-- toTestInstance ((TestCompleted parsed) as event) =
+--     TestInstance.default
+--         |> TestInstance.setStatus
+--             (if passed event then
+--                 "pass"
+--              else if isTodo event then
+--                 "todo"
+--              else
+--                 "fail"
+--             )
+--         |> TestInstance.setLabels (Labels.fromList parsed.labels)
+--         |> TestInstance.setDuration parsed.duration
+--         |> TestInstance.setFailure (List.head parsed.failures)
