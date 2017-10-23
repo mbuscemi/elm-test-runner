@@ -17433,6 +17433,59 @@ var _user$project$Model_Core$Flags = F2(
 		return {autoRun: a, autoNavigate: b};
 	});
 
+var _user$project$TestInstance_View$timeReport = function (testInstance) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		' (',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_user$project$TestInstance_Core$durationAsString(testInstance),
+			' ms)'));
+};
+var _user$project$TestInstance_View$conditionallyEmbolden = F3(
+	function (hasChildren, string, testInstance) {
+		return hasChildren ? A2(
+			_elm_lang$html$Html$strong,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(string),
+				_1: {ctor: '[]'}
+			}) : _elm_lang$html$Html$text(
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				string,
+				_user$project$TestInstance_View$timeReport(testInstance)));
+	});
+var _user$project$TestInstance_View$statusIndicatorIcon = function (testInstance) {
+	return _elm_lang$html$Html$text(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			' ',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_user$project$TestInstance_Core$toStatusIcon(testInstance),
+				' ')));
+};
+var _user$project$TestInstance_View$statusIndicatorTextColor = function (testInstance) {
+	return _elm_lang$html$Html_Attributes$class(
+		_user$project$TestInstance_Core$toClass(testInstance));
+};
+var _user$project$TestInstance_View$statusIndicator = function (testInstance) {
+	return A2(
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _user$project$TestInstance_View$statusIndicatorTextColor(testInstance),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _user$project$TestInstance_View$statusIndicatorIcon(testInstance),
+			_1: {ctor: '[]'}
+		});
+};
+
 var _user$project$View_DurationAndSeedDisplay$runDataClass = function (additionalField) {
 	return _elm_lang$html$Html_Attributes$class(
 		A2(_elm_lang$core$Basics_ops['++'], 'run-data-field ', additionalField));
@@ -17991,59 +18044,6 @@ var _user$project$View_SeedAndSettings$render = F5(
 		};
 	});
 
-var _user$project$TestInstance_View$timeReport = function (testInstance) {
-	return A2(
-		_elm_lang$core$Basics_ops['++'],
-		' (',
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			_user$project$TestInstance_Core$durationAsString(testInstance),
-			' ms)'));
-};
-var _user$project$TestInstance_View$conditionallyEmbolden = F3(
-	function (hasChildren, string, testInstance) {
-		return hasChildren ? A2(
-			_elm_lang$html$Html$strong,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(string),
-				_1: {ctor: '[]'}
-			}) : _elm_lang$html$Html$text(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				string,
-				_user$project$TestInstance_View$timeReport(testInstance)));
-	});
-var _user$project$TestInstance_View$statusIndicatorIcon = function (testInstance) {
-	return _elm_lang$html$Html$text(
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			' ',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_user$project$TestInstance_Core$toStatusIcon(testInstance),
-				' ')));
-};
-var _user$project$TestInstance_View$statusIndicatorTextColor = function (testInstance) {
-	return _elm_lang$html$Html_Attributes$class(
-		_user$project$TestInstance_Core$toClass(testInstance));
-};
-var _user$project$TestInstance_View$statusIndicator = function (testInstance) {
-	return A2(
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _user$project$TestInstance_View$statusIndicatorTextColor(testInstance),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _user$project$TestInstance_View$statusIndicatorIcon(testInstance),
-			_1: {ctor: '[]'}
-		});
-};
-
 var _user$project$View_TestHierarchy_ChildTree$mouseOverHexColor = '2c333e';
 var _user$project$View_TestHierarchy_ChildTree$selectedHexColor = '343f51';
 var _user$project$View_TestHierarchy_ChildTree$testNodeBackgroundColorStyle = function (hexColor) {
@@ -18184,8 +18184,8 @@ var _user$project$View_TestHierarchy_Root$TestInstanceView = F2(
 		return {statusIndicator: a, conditionallyEmbolden: b};
 	});
 
-var _user$project$View_TestHierarchy_Core$viewTree = F4(
-	function (toggleMessages, highlightMessages, nodeData, _p0) {
+var _user$project$View_TestHierarchy_Core$viewTree = F5(
+	function (testInstanceView, toggleMessages, highlightMessages, nodeData, _p0) {
 		var _p1 = _p0;
 		var _p3 = _p1._0._1;
 		var _p2 = _p1._2;
@@ -18204,35 +18204,35 @@ var _user$project$View_TestHierarchy_Core$viewTree = F4(
 					_p3,
 					_p1._0._0,
 					_p1._0._2,
-					{statusIndicator: _user$project$TestInstance_View$statusIndicator, conditionallyEmbolden: _user$project$TestInstance_View$conditionallyEmbolden},
+					testInstanceView,
 					_p1._1,
 					toggleMessages),
-				_1: A5(_user$project$View_TestHierarchy_Core$viewChildren, toggleMessages, highlightMessages, _p3, nodeData, _p2)
+				_1: A6(_user$project$View_TestHierarchy_Core$viewChildren, testInstanceView, toggleMessages, highlightMessages, _p3, nodeData, _p2)
 			});
 	});
-var _user$project$View_TestHierarchy_Core$viewChildren = F5(
-	function (toggleMessages, highlightMessages, shouldShow, nodeData, children) {
-		return shouldShow ? A4(_user$project$View_TestHierarchy_Core$viewForest, toggleMessages, highlightMessages, nodeData, children) : {ctor: '[]'};
+var _user$project$View_TestHierarchy_Core$viewChildren = F6(
+	function (testInstanceView, toggleMessages, highlightMessages, shouldShow, nodeData, children) {
+		return shouldShow ? A5(_user$project$View_TestHierarchy_Core$viewForest, testInstanceView, toggleMessages, highlightMessages, nodeData, children) : {ctor: '[]'};
 	});
-var _user$project$View_TestHierarchy_Core$viewForest = F4(
-	function (toggleMessages, highlightMessages, nodeData, children) {
+var _user$project$View_TestHierarchy_Core$viewForest = F5(
+	function (testInstanceView, toggleMessages, highlightMessages, nodeData, children) {
 		return A2(
 			_elm_lang$core$List$map,
-			A3(_user$project$View_TestHierarchy_Core$childTree, toggleMessages, highlightMessages, nodeData),
+			A4(_user$project$View_TestHierarchy_Core$childTree, testInstanceView, toggleMessages, highlightMessages, nodeData),
 			children);
 	});
-var _user$project$View_TestHierarchy_Core$childTree = F4(
-	function (toggleMessages, highlightMessages, nodeData, tree) {
+var _user$project$View_TestHierarchy_Core$childTree = F5(
+	function (testInstanceView, toggleMessages, highlightMessages, nodeData, tree) {
 		return A4(
 			_user$project$View_TestHierarchy_ChildTree$render,
 			highlightMessages,
 			nodeData,
 			tree,
-			A4(_user$project$View_TestHierarchy_Core$viewTree, toggleMessages, highlightMessages, nodeData, tree));
+			A5(_user$project$View_TestHierarchy_Core$viewTree, testInstanceView, toggleMessages, highlightMessages, nodeData, tree));
 	});
-var _user$project$View_TestHierarchy_Core$render = F4(
-	function (toggleMessages, highlightMessages, nodeData, testHierarchy) {
-		return A4(_user$project$View_TestHierarchy_Core$viewTree, toggleMessages, highlightMessages, nodeData, testHierarchy);
+var _user$project$View_TestHierarchy_Core$render = F5(
+	function (testInstanceView, toggleMessages, highlightMessages, nodeData, testHierarchy) {
+		return A5(_user$project$View_TestHierarchy_Core$viewTree, testInstanceView, toggleMessages, highlightMessages, nodeData, testHierarchy);
 	});
 var _user$project$View_TestHierarchy_Core$ToggleMessages = F2(
 	function (a, b) {
@@ -18245,6 +18245,10 @@ var _user$project$View_TestHierarchy_Core$SelectionMessages = F3(
 var _user$project$View_TestHierarchy_Core$NodeData = F2(
 	function (a, b) {
 		return {nodeMouseIsOver: a, selectedNode: b};
+	});
+var _user$project$View_TestHierarchy_Core$TestInstanceView = F2(
+	function (a, b) {
+		return {statusIndicator: a, conditionallyEmbolden: b};
 	});
 
 var _user$project$View_Toolbar$render = F5(
@@ -18435,8 +18439,9 @@ var _user$project$View_Core$render = F2(
 								},
 								{
 									ctor: '::',
-									_0: A4(
+									_0: A5(
 										_user$project$View_TestHierarchy_Core$render,
+										{statusIndicator: _user$project$TestInstance_View$statusIndicator, conditionallyEmbolden: _user$project$TestInstance_View$conditionallyEmbolden},
 										{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse},
 										{mouseIn: messages.testListItemMouseEnter, mouseOut: messages.testListItemMouseLeave, testClick: messages.testClickHandler},
 										{nodeMouseIsOver: data.nodeMouseIsOver, selectedNode: data.selectedNodeId},

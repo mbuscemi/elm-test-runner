@@ -2,8 +2,6 @@ module View.TestHierarchy.Core exposing (render)
 
 import Html exposing (Html, ul)
 import Html.Attributes exposing (class)
-import TestInstance.Core exposing (TestInstance)
-import TestInstance.View
 import Tree.Core exposing (CollapsibleTree, Tree(Node))
 import View.TestHierarchy.ChildTree
 import View.TestHierarchy.Root
@@ -15,10 +13,10 @@ type alias ToggleMessages message =
     }
 
 
-type alias SelectionMessages message =
+type alias SelectionMessages testInstance message =
     { mouseIn : Int -> message
     , mouseOut : message
-    , testClick : Int -> Maybe TestInstance -> message
+    , testClick : Int -> Maybe testInstance -> message
     }
 
 
@@ -28,67 +26,78 @@ type alias NodeData =
     }
 
 
-type alias TestTree =
-    CollapsibleTree String TestInstance
+type alias TestTree testInstance =
+    CollapsibleTree String testInstance
+
+
+type alias TestInstanceView testInstance message =
+    { statusIndicator : testInstance -> Html message
+    , conditionallyEmbolden : Bool -> String -> testInstance -> Html message
+    }
 
 
 render :
-    ToggleMessages message
-    -> SelectionMessages message
+    TestInstanceView testInstance message
+    -> ToggleMessages message
+    -> SelectionMessages testInstance message
     -> NodeData
-    -> TestTree
+    -> TestTree testInstance
     -> Html message
-render toggleMessages highlightMessages nodeData testHierarchy =
-    viewTree toggleMessages highlightMessages nodeData testHierarchy
+render testInstanceView toggleMessages highlightMessages nodeData testHierarchy =
+    viewTree testInstanceView toggleMessages highlightMessages nodeData testHierarchy
 
 
 viewTree :
-    ToggleMessages message
-    -> SelectionMessages message
+    TestInstanceView testInstance message
+    -> ToggleMessages message
+    -> SelectionMessages testInstance message
     -> NodeData
-    -> TestTree
+    -> TestTree testInstance
     -> Html message
-viewTree toggleMessages highlightMessages nodeData (Node ( nodeName, isExpanded, nodeId ) nodeInternals children) =
+viewTree testInstanceView toggleMessages highlightMessages nodeData (Node ( nodeName, isExpanded, nodeId ) nodeInternals children) =
     ul
         [ class "test-list" ]
-        (View.TestHierarchy.Root.render (List.isEmpty children) isExpanded nodeName nodeId { statusIndicator = TestInstance.View.statusIndicator, conditionallyEmbolden = TestInstance.View.conditionallyEmbolden } nodeInternals toggleMessages
-            :: viewChildren toggleMessages highlightMessages isExpanded nodeData children
+        (View.TestHierarchy.Root.render (List.isEmpty children) isExpanded nodeName nodeId testInstanceView nodeInternals toggleMessages
+            :: viewChildren testInstanceView toggleMessages highlightMessages isExpanded nodeData children
         )
 
 
 viewChildren :
-    ToggleMessages message
-    -> SelectionMessages message
+    TestInstanceView testInstance message
+    -> ToggleMessages message
+    -> SelectionMessages testInstance message
     -> Bool
     -> NodeData
-    -> List TestTree
+    -> List (TestTree testInstance)
     -> List (Html message)
-viewChildren toggleMessages highlightMessages shouldShow nodeData children =
+viewChildren testInstanceView toggleMessages highlightMessages shouldShow nodeData children =
     if shouldShow then
-        viewForest toggleMessages highlightMessages nodeData children
+        viewForest testInstanceView toggleMessages highlightMessages nodeData children
     else
         []
 
 
 viewForest :
-    ToggleMessages message
-    -> SelectionMessages message
+    TestInstanceView testInstance message
+    -> ToggleMessages message
+    -> SelectionMessages testInstance message
     -> NodeData
-    -> List TestTree
+    -> List (TestTree testInstance)
     -> List (Html message)
-viewForest toggleMessages highlightMessages nodeData children =
-    List.map (childTree toggleMessages highlightMessages nodeData) children
+viewForest testInstanceView toggleMessages highlightMessages nodeData children =
+    List.map (childTree testInstanceView toggleMessages highlightMessages nodeData) children
 
 
 childTree :
-    ToggleMessages message
-    -> SelectionMessages message
+    TestInstanceView testInstance message
+    -> ToggleMessages message
+    -> SelectionMessages testInstance message
     -> NodeData
-    -> TestTree
+    -> TestTree testInstance
     -> Html message
-childTree toggleMessages highlightMessages nodeData tree =
+childTree testInstanceView toggleMessages highlightMessages nodeData tree =
     View.TestHierarchy.ChildTree.render
         highlightMessages
         nodeData
         tree
-        (viewTree toggleMessages highlightMessages nodeData tree)
+        (viewTree testInstanceView toggleMessages highlightMessages nodeData tree)

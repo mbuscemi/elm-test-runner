@@ -7,6 +7,7 @@ import Html.Attributes exposing (class)
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus exposing (RunStatus)
 import TestInstance.Core exposing (TestInstance)
+import TestInstance.View
 import Tree.Core exposing (CollapsibleTree)
 import View.DurationAndSeedDisplay
 import View.OutputDisplay
@@ -63,6 +64,9 @@ render data messages =
                 ]
             , div [ class "test-hierarchy" ]
                 [ View.TestHierarchy.Core.render
+                    { statusIndicator = TestInstance.View.statusIndicator
+                    , conditionallyEmbolden = TestInstance.View.conditionallyEmbolden
+                    }
                     { expand = messages.testListItemExpand
                     , collapse = messages.testListItemCollapse
                     }
