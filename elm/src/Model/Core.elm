@@ -9,7 +9,6 @@ module Model.Core
         , initiateStatusBarTextFlicker
         , purgeObsoleteNodes
         , randomSeedForJS
-        , resetPassedTests
         , resetTestRuns
         , serialize
         , setCompilerErrorMessage
@@ -21,11 +20,9 @@ module Model.Core
         , setSelectedTestInstance
         , setSelectedTestNodeId
         , setTestMouseIsOver
-        , setTotalTestCount
         , toggleNode
         , updateFlicker
         , updateHierarchy
-        , updatePassedTestCount
         )
 
 import Animation exposing (State)
@@ -103,11 +100,6 @@ serialize model =
     }
 
 
-resetPassedTests : Model -> Model
-resetPassedTests model =
-    { model | passedTests = 0 }
-
-
 resetTestRuns : Model -> Model
 resetTestRuns model =
     { model
@@ -116,11 +108,6 @@ resetTestRuns model =
                 (TestInstance.setStatus "pending")
                 model.testRuns
     }
-
-
-setTotalTestCount : RunStart -> Model -> Model
-setTotalTestCount event model =
-    { model | totalTests = RunStart.numTotalTests event }
 
 
 setRunSeed : RunStart -> Model -> Model
@@ -136,11 +123,6 @@ clearRunSeed model =
 setCompilerErrorMessage : Maybe String -> Model -> Model
 setCompilerErrorMessage maybeError model =
     { model | compilerError = maybeError }
-
-
-updatePassedTestCount : TestCompleted -> Model -> Model
-updatePassedTestCount event model =
-    { model | passedTests = model.passedTests + TestCompleted.passedTestCountToIncrement event }
 
 
 buildTestRunDataTree : TestCompleted -> Model -> Model

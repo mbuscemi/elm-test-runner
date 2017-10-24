@@ -13,7 +13,6 @@ import Model.Core as Model
         , initiateStatusBarTextFlicker
         , purgeObsoleteNodes
         , randomSeedForJS
-        , resetPassedTests
         , resetTestRuns
         , serialize
         , setCompilerErrorMessage
@@ -25,15 +24,14 @@ import Model.Core as Model
         , setSelectedTestInstance
         , setSelectedTestNodeId
         , setTestMouseIsOver
-        , setTotalTestCount
         , toggleNode
         , updateFlicker
         , updateHierarchy
-        , updatePassedTestCount
         )
 import Model.Flags as Flags exposing (Flags)
 import Model.ProjectName
 import Model.RunStatus
+import Model.TestCount
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
@@ -106,7 +104,7 @@ update message model =
     case message of
         InitiateRunAll ->
             Model.RunStatus.setToProcessing model
-                |> resetPassedTests
+                |> Model.TestCount.resetPassed
                 |> setSelectedTestNodeId Nothing
                 |> setSelectedTestInstance Nothing
                 |> setCompilerErrorMessage Nothing
@@ -128,7 +126,7 @@ update message model =
             in
             Model.RunStatus.setToProcessing model
                 |> Model.ProjectName.setFromPath projectPath
-                |> setTotalTestCount event
+                |> Model.TestCount.setTotal event
                 |> setRunSeed event
                 |> andNoCommand
 
@@ -137,7 +135,7 @@ update message model =
                 event =
                     TestCompleted.parse data
             in
-            updatePassedTestCount event model
+            Model.TestCount.updatePassed event model
                 |> buildTestRunDataTree event
                 |> updateHierarchy
                 |> andNoCommand

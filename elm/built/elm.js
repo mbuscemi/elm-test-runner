@@ -17295,14 +17295,6 @@ var _user$project$Model_Core$buildTestRunDataTree = F2(
 					model.testRuns)
 			});
 	});
-var _user$project$Model_Core$updatePassedTestCount = F2(
-	function (event, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				passedTests: model.passedTests + _user$project$TestEvent_TestCompleted$passedTestCountToIncrement(event)
-			});
-	});
 var _user$project$Model_Core$setCompilerErrorMessage = F2(
 	function (maybeError, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -17323,14 +17315,6 @@ var _user$project$Model_Core$setRunSeed = F2(
 					_user$project$TestEvent_RunStart$initialSeed(event))
 			});
 	});
-var _user$project$Model_Core$setTotalTestCount = F2(
-	function (event, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				totalTests: _user$project$TestEvent_RunStart$numTotalTests(event)
-			});
-	});
 var _user$project$Model_Core$resetTestRuns = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -17340,11 +17324,6 @@ var _user$project$Model_Core$resetTestRuns = function (model) {
 				_user$project$TestInstance_Core$setStatus('pending'),
 				model.testRuns)
 		});
-};
-var _user$project$Model_Core$resetPassedTests = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{passedTests: 0});
 };
 var _user$project$Model_Core$serialize = function (model) {
 	return {autoRun: model.autoRunEnabled, autoNavigate: model.autoNavigateEnabled};
@@ -17447,6 +17426,28 @@ var _user$project$Model_RunStatus$setToProcessing = function (model) {
 		model,
 		{runStatus: _user$project$State_RunStatus$processing});
 };
+
+var _user$project$Model_TestCount$setTotal = F2(
+	function (event, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				totalTests: _user$project$TestEvent_RunStart$numTotalTests(event)
+			});
+	});
+var _user$project$Model_TestCount$resetPassed = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{passedTests: 0});
+};
+var _user$project$Model_TestCount$updatePassed = F2(
+	function (event, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				passedTests: model.passedTests + _user$project$TestEvent_TestCompleted$passedTestCountToIncrement(event)
+			});
+	});
 
 var _user$project$TestInstance_View$timeReport = function (testInstance) {
 	return A2(
@@ -18615,7 +18616,7 @@ var _user$project$Main$update = F2(
 											A2(
 												_user$project$Model_Core$setSelectedTestNodeId,
 												_elm_lang$core$Maybe$Nothing,
-												_user$project$Model_Core$resetPassedTests(
+												_user$project$Model_TestCount$resetPassed(
 													_user$project$Model_RunStatus$setToProcessing(model))))))))));
 			case 'CompilerErrored':
 				return _user$project$Main$andNoCommand(
@@ -18630,7 +18631,7 @@ var _user$project$Main$update = F2(
 						_user$project$Model_Core$setRunSeed,
 						event,
 						A2(
-							_user$project$Model_Core$setTotalTestCount,
+							_user$project$Model_TestCount$setTotal,
 							event,
 							A2(
 								_user$project$Model_ProjectName$setFromPath,
@@ -18643,7 +18644,7 @@ var _user$project$Main$update = F2(
 						A2(
 							_user$project$Model_Core$buildTestRunDataTree,
 							event,
-							A2(_user$project$Model_Core$updatePassedTestCount, event, model))));
+							A2(_user$project$Model_TestCount$updatePassed, event, model))));
 			case 'RunComplete':
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
