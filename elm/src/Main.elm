@@ -7,12 +7,9 @@ import Model.Config
 import Model.Core as Model
     exposing
         ( Model
-        , expandFailingAndTodoNodes
         , initiateStatusBarTextFlicker
         , serialize
-        , toggleNode
         , updateFlicker
-        , updateHierarchy
         )
 import Model.Flags as Flags exposing (Flags)
 import Model.ProjectName
@@ -102,7 +99,7 @@ update message model =
                 |> Model.RunDuration.clear
                 |> Model.RunSeed.clear
                 |> Model.TestTree.reset
-                |> updateHierarchy
+                |> Model.TestTree.updateHierarchy
                 |> andPerform (runTest <| Model.RandomSeed.forJS model)
 
         CompilerErrored errorMessage ->
@@ -128,7 +125,7 @@ update message model =
             in
             Model.TestCount.updatePassed event model
                 |> Model.TestTree.build event
-                |> updateHierarchy
+                |> Model.TestTree.updateHierarchy
                 |> andNoCommand
 
         RunComplete data ->
@@ -141,17 +138,17 @@ update message model =
                 |> Model.RunStatus.setForFailure event
                 |> Model.RunDuration.set event
                 |> Model.TestTree.purgeObsoleteNodes
-                |> updateHierarchy
-                |> expandFailingAndTodoNodes
+                |> Model.TestTree.updateHierarchy
+                |> Model.TestTree.expandFailingAndTodoNodes
                 |> initiateStatusBarTextFlicker
                 |> andNoCommand
 
         TestListItemExpand nodeId ->
-            toggleNode nodeId True model
+            Model.TestTree.toggleNode nodeId True model
                 |> andNoCommand
 
         TestListItemCollapse nodeId ->
-            toggleNode nodeId False model
+            Model.TestTree.toggleNode nodeId False model
                 |> andNoCommand
 
         TestListItemMouseEnter nodeId ->

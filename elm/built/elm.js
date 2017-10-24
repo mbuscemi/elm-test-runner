@@ -16956,29 +16956,6 @@ var _user$project$TestInstance_Core$setStatus = F2(
 		}
 	});
 
-var _user$project$Tree_Node$toggle = F3(
-	function (nodeId, expand, _p0) {
-		var _p1 = _p0;
-		var _p5 = _p1._0;
-		var _p4 = _p1._1;
-		var _p3 = _p1._2;
-		var _p2 = _p5;
-		var x = _p2._0;
-		var nid = _p2._2;
-		return _elm_lang$core$Native_Utils.eq(nodeId, nid) ? A3(
-			_user$project$Tree_Core$Node,
-			{ctor: '_Tuple3', _0: x, _1: expand, _2: nid},
-			_p4,
-			_p3) : A3(
-			_user$project$Tree_Core$Node,
-			_p5,
-			_p4,
-			A2(
-				_elm_lang$core$List$map,
-				A2(_user$project$Tree_Node$toggle, nodeId, expand),
-				_p3));
-	});
-
 var _user$project$Model_Core$initiateStatusBarTextFlicker = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -16994,38 +16971,6 @@ var _user$project$Model_Core$updateFlicker = F2(
 				statusBarStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarStyle)
 			});
 	});
-var _user$project$Model_Core$toggleNode = F3(
-	function (nodeId, newState, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				testHierarchy: A3(_user$project$Tree_Node$toggle, nodeId, newState, model.testHierarchy)
-			});
-	});
-var _user$project$Model_Core$toggleFailingAndTodoNodes = function (_p0) {
-	var _p1 = _p0;
-	var _p2 = _p1._1;
-	var expanded = _user$project$TestInstance_Core$isFailing(_p2) || _user$project$TestInstance_Core$isTodo(_p2);
-	return A3(
-		_user$project$Tree_Core$Node,
-		{ctor: '_Tuple3', _0: _p1._0._0, _1: expanded, _2: _p1._0._2},
-		_p2,
-		A2(_elm_lang$core$List$map, _user$project$Model_Core$toggleFailingAndTodoNodes, _p1._2));
-};
-var _user$project$Model_Core$expandFailingAndTodoNodes = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			testHierarchy: _user$project$Model_Core$toggleFailingAndTodoNodes(model.testHierarchy)
-		});
-};
-var _user$project$Model_Core$updateHierarchy = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			testHierarchy: _user$project$Tree_Core$make(model.testRuns)
-		});
-};
 var _user$project$Model_Core$serialize = function (model) {
 	return {autoRun: model.autoRunEnabled, autoNavigate: model.autoNavigateEnabled};
 };
@@ -17415,14 +17360,69 @@ var _user$project$Tree_Merge$fromPath = F4(
 		}
 	});
 
+var _user$project$Tree_Node$toggle = F3(
+	function (nodeId, expand, _p0) {
+		var _p1 = _p0;
+		var _p5 = _p1._0;
+		var _p4 = _p1._1;
+		var _p3 = _p1._2;
+		var _p2 = _p5;
+		var x = _p2._0;
+		var nid = _p2._2;
+		return _elm_lang$core$Native_Utils.eq(nodeId, nid) ? A3(
+			_user$project$Tree_Core$Node,
+			{ctor: '_Tuple3', _0: x, _1: expand, _2: nid},
+			_p4,
+			_p3) : A3(
+			_user$project$Tree_Core$Node,
+			_p5,
+			_p4,
+			A2(
+				_elm_lang$core$List$map,
+				A2(_user$project$Tree_Node$toggle, nodeId, expand),
+				_p3));
+	});
+
+var _user$project$Model_TestTree$toggleFailingAndTodoNodes = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1._1;
+	var expanded = _user$project$TestInstance_Core$isFailing(_p2) || _user$project$TestInstance_Core$isTodo(_p2);
+	return A3(
+		_user$project$Tree_Core$Node,
+		{ctor: '_Tuple3', _0: _p1._0._0, _1: expanded, _2: _p1._0._2},
+		_p2,
+		A2(_elm_lang$core$List$map, _user$project$Model_TestTree$toggleFailingAndTodoNodes, _p1._2));
+};
+var _user$project$Model_TestTree$expandFailingAndTodoNodes = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testHierarchy: _user$project$Model_TestTree$toggleFailingAndTodoNodes(model.testHierarchy)
+		});
+};
+var _user$project$Model_TestTree$toggleNode = F3(
+	function (nodeId, newState, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				testHierarchy: A3(_user$project$Tree_Node$toggle, nodeId, newState, model.testHierarchy)
+			});
+	});
+var _user$project$Model_TestTree$updateHierarchy = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testHierarchy: _user$project$Tree_Core$make(model.testRuns)
+		});
+};
 var _user$project$Model_TestTree$purgeObsoleteNodes = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{
 			testRuns: A2(
 				_user$project$Tree_Traverse$purge,
-				function (_p0) {
-					return !_user$project$TestInstance_Core$isPending(_p0);
+				function (_p3) {
+					return !_user$project$TestInstance_Core$isPending(_p3);
 				},
 				model.testRuns)
 		});
@@ -18609,7 +18609,7 @@ var _user$project$Main$update = F2(
 					_user$project$Main$andPerform,
 					_user$project$Main$runTest(
 						_user$project$Model_RandomSeed$forJS(model)),
-					_user$project$Model_Core$updateHierarchy(
+					_user$project$Model_TestTree$updateHierarchy(
 						_user$project$Model_TestTree$reset(
 							_user$project$Model_RunSeed$clear(
 								_user$project$Model_RunDuration$clear(
@@ -18646,7 +18646,7 @@ var _user$project$Main$update = F2(
 			case 'TestCompleted':
 				var event = _user$project$TestEvent_TestCompleted$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
-					_user$project$Model_Core$updateHierarchy(
+					_user$project$Model_TestTree$updateHierarchy(
 						A2(
 							_user$project$Model_TestTree$build,
 							event,
@@ -18655,8 +18655,8 @@ var _user$project$Main$update = F2(
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
 					_user$project$Model_Core$initiateStatusBarTextFlicker(
-						_user$project$Model_Core$expandFailingAndTodoNodes(
-							_user$project$Model_Core$updateHierarchy(
+						_user$project$Model_TestTree$expandFailingAndTodoNodes(
+							_user$project$Model_TestTree$updateHierarchy(
 								_user$project$Model_TestTree$purgeObsoleteNodes(
 									A2(
 										_user$project$Model_RunDuration$set,
@@ -18668,10 +18668,10 @@ var _user$project$Main$update = F2(
 												_user$project$Model_RunStatus$setToPassing(model)))))))));
 			case 'TestListItemExpand':
 				return _user$project$Main$andNoCommand(
-					A3(_user$project$Model_Core$toggleNode, _p0._0, true, model));
+					A3(_user$project$Model_TestTree$toggleNode, _p0._0, true, model));
 			case 'TestListItemCollapse':
 				return _user$project$Main$andNoCommand(
-					A3(_user$project$Model_Core$toggleNode, _p0._0, false, model));
+					A3(_user$project$Model_TestTree$toggleNode, _p0._0, false, model));
 			case 'TestListItemMouseEnter':
 				return _user$project$Main$andNoCommand(
 					A2(

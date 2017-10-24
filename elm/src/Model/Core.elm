@@ -2,12 +2,9 @@ module Model.Core
     exposing
         ( Model
         , default
-        , expandFailingAndTodoNodes
         , initiateStatusBarTextFlicker
         , serialize
-        , toggleNode
         , updateFlicker
-        , updateHierarchy
         )
 
 import Animation exposing (State)
@@ -19,7 +16,6 @@ import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core as Tree exposing (CollapsibleTree, Tree(Node))
-import Tree.Node
 
 
 type alias Model =
@@ -77,35 +73,6 @@ serialize model =
     { autoRun = model.autoRunEnabled
     , autoNavigate = model.autoNavigateEnabled
     }
-
-
-updateHierarchy : Model -> Model
-updateHierarchy model =
-    { model
-        | testHierarchy =
-            model.testRuns
-                |> Tree.make
-    }
-
-
-expandFailingAndTodoNodes : Model -> Model
-expandFailingAndTodoNodes model =
-    { model | testHierarchy = toggleFailingAndTodoNodes model.testHierarchy }
-
-
-toggleFailingAndTodoNodes : CollapsibleTree String TestInstance -> CollapsibleTree String TestInstance
-toggleFailingAndTodoNodes (Node ( name, _, nodeId ) testInstance children) =
-    let
-        expanded =
-            TestInstance.isFailing testInstance || TestInstance.isTodo testInstance
-    in
-    Node ( name, expanded, nodeId ) testInstance <|
-        List.map toggleFailingAndTodoNodes children
-
-
-toggleNode : Int -> Bool -> Model -> Model
-toggleNode nodeId newState model =
-    { model | testHierarchy = Tree.Node.toggle nodeId newState model.testHierarchy }
 
 
 updateFlicker : Animation.Msg -> Model -> Model

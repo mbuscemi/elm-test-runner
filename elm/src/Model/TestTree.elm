@@ -1,10 +1,11 @@
-module Model.TestTree exposing (build, purgeObsoleteNodes, reset)
+module Model.TestTree exposing (build, expandFailingAndTodoNodes, purgeObsoleteNodes, reset, toggleNode, updateHierarchy)
 
 import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
 import TestInstance.Core as TestInstance exposing (TestInstance)
 import TestInstance.Reconcile
-import Tree.Core exposing (Tree)
+import Tree.Core as Tree exposing (CollapsibleTree, Tree(Node))
 import Tree.Merge
+import Tree.Node
 import Tree.Traverse
 
 
@@ -12,6 +13,7 @@ type alias WithTestRuns r =
     { r
         | projectName : String
         , testRuns : Tree String TestInstance
+        , testHierarchy : CollapsibleTree String TestInstance
     }
 
 
@@ -45,3 +47,32 @@ purgeObsoleteNodes model =
                 (not << TestInstance.isPending)
                 model.testRuns
     }
+
+
+updateHierarchy : WithTestRuns model -> WithTestRuns model
+updateHierarchy model =
+    { model
+        | testHierarchy =
+            model.testRuns
+                |> Tree.make
+    }
+
+
+toggleNode : Int -> Bool -> WithTestRuns model -> WithTestRuns model
+toggleNode nodeId newState model =
+    { model | testHierarchy = Tree.Node.toggle nodeId newState model.testHierarchy }
+
+
+expandFailingAndTodoNodes : WithTestRuns model -> WithTestRuns model
+expandFailingAndTodoNodes model =
+    { model | testHierarchy = toggleFailingAndTodoNodes model.testHierarchy }
+
+
+toggleFailingAndTodoNodes : CollapsibleTree String TestInstance -> CollapsibleTree String TestInstance
+toggleFailingAndTodoNodes (Node ( name, _, nodeId ) testInstance children) =
+    let
+        expanded =
+            TestInstance.isFailing testInstance || TestInstance.isTodo testInstance
+    in
+    Node ( name, expanded, nodeId ) testInstance <|
+        List.map toggleFailingAndTodoNodes children
