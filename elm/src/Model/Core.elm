@@ -1,22 +1,17 @@
 module Model.Core
     exposing
         ( Model
-        , buildTestRunDataTree
         , clearRunDuration
-        , clearRunSeed
         , default
         , expandFailingAndTodoNodes
         , initiateStatusBarTextFlicker
-        , purgeObsoleteNodes
         , randomSeedForJS
-        , resetTestRuns
         , serialize
         , setCompilerErrorMessage
         , setPaneLocation
         , setRandomSeed
         , setRandomSeedForcing
         , setRunDuration
-        , setRunSeed
         , setSelectedTestInstance
         , setSelectedTestNodeId
         , setTestMouseIsOver
@@ -33,14 +28,9 @@ import Model.ProjectName
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
-import TestEvent.RunStart as RunStart exposing (RunStart)
-import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
 import TestInstance.Core as TestInstance exposing (TestInstance)
-import TestInstance.Reconcile
 import Tree.Core as Tree exposing (CollapsibleTree, Tree(Node))
-import Tree.Merge
 import Tree.Node
-import Tree.Traverse
 
 
 type alias Model =
@@ -100,41 +90,9 @@ serialize model =
     }
 
 
-resetTestRuns : Model -> Model
-resetTestRuns model =
-    { model
-        | testRuns =
-            Tree.Traverse.update
-                (TestInstance.setStatus "pending")
-                model.testRuns
-    }
-
-
-setRunSeed : RunStart -> Model -> Model
-setRunSeed event model =
-    { model | runSeed = Just <| RunStart.initialSeed event }
-
-
-clearRunSeed : Model -> Model
-clearRunSeed model =
-    { model | runSeed = Nothing }
-
-
 setCompilerErrorMessage : Maybe String -> Model -> Model
 setCompilerErrorMessage maybeError model =
     { model | compilerError = maybeError }
-
-
-buildTestRunDataTree : TestCompleted -> Model -> Model
-buildTestRunDataTree event model =
-    { model
-        | testRuns =
-            Tree.Merge.fromPath
-                (model.projectName :: TestCompleted.labels event)
-                (TestInstance.fromEvent event)
-                TestInstance.Reconcile.transform
-                model.testRuns
-    }
 
 
 setTestMouseIsOver : Maybe Int -> Model -> Model
@@ -160,16 +118,6 @@ setRunDuration event model =
 clearRunDuration : Model -> Model
 clearRunDuration model =
     { model | runDuration = Nothing }
-
-
-purgeObsoleteNodes : Model -> Model
-purgeObsoleteNodes model =
-    { model
-        | testRuns =
-            Tree.Traverse.purge
-                (not << TestInstance.isPending)
-                model.testRuns
-    }
 
 
 updateHierarchy : Model -> Model

@@ -6,21 +6,16 @@ import Model.Config
 import Model.Core as Model
     exposing
         ( Model
-        , buildTestRunDataTree
         , clearRunDuration
-        , clearRunSeed
         , expandFailingAndTodoNodes
         , initiateStatusBarTextFlicker
-        , purgeObsoleteNodes
         , randomSeedForJS
-        , resetTestRuns
         , serialize
         , setCompilerErrorMessage
         , setPaneLocation
         , setRandomSeed
         , setRandomSeedForcing
         , setRunDuration
-        , setRunSeed
         , setSelectedTestInstance
         , setSelectedTestNodeId
         , setTestMouseIsOver
@@ -30,8 +25,10 @@ import Model.Core as Model
         )
 import Model.Flags as Flags exposing (Flags)
 import Model.ProjectName
+import Model.RunSeed
 import Model.RunStatus
 import Model.TestCount
+import Model.TestTree
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
@@ -109,8 +106,8 @@ update message model =
                 |> setSelectedTestInstance Nothing
                 |> setCompilerErrorMessage Nothing
                 |> clearRunDuration
-                |> clearRunSeed
-                |> resetTestRuns
+                |> Model.RunSeed.clear
+                |> Model.TestTree.reset
                 |> updateHierarchy
                 |> andPerform (runTest <| randomSeedForJS model)
 
@@ -127,7 +124,7 @@ update message model =
             Model.RunStatus.setToProcessing model
                 |> Model.ProjectName.setFromPath projectPath
                 |> Model.TestCount.setTotal event
-                |> setRunSeed event
+                |> Model.RunSeed.set event
                 |> andNoCommand
 
         TestCompleted data ->
@@ -136,7 +133,7 @@ update message model =
                     TestCompleted.parse data
             in
             Model.TestCount.updatePassed event model
-                |> buildTestRunDataTree event
+                |> Model.TestTree.build event
                 |> updateHierarchy
                 |> andNoCommand
 
@@ -149,7 +146,7 @@ update message model =
                 |> Model.RunStatus.setForTodo
                 |> Model.RunStatus.setForFailure event
                 |> setRunDuration event
-                |> purgeObsoleteNodes
+                |> Model.TestTree.purgeObsoleteNodes
                 |> updateHierarchy
                 |> expandFailingAndTodoNodes
                 |> initiateStatusBarTextFlicker
