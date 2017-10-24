@@ -2,31 +2,25 @@ port module Main exposing (main)
 
 import Animation
 import Html exposing (Html)
+import Model.Basics
 import Model.Config
 import Model.Core as Model
     exposing
         ( Model
-        , clearRunDuration
         , expandFailingAndTodoNodes
         , initiateStatusBarTextFlicker
-        , randomSeedForJS
         , serialize
-        , setCompilerErrorMessage
-        , setPaneLocation
-        , setRandomSeed
-        , setRandomSeedForcing
-        , setRunDuration
-        , setSelectedTestInstance
-        , setSelectedTestNodeId
-        , setTestMouseIsOver
         , toggleNode
         , updateFlicker
         , updateHierarchy
         )
 import Model.Flags as Flags exposing (Flags)
 import Model.ProjectName
+import Model.RandomSeed
+import Model.RunDuration
 import Model.RunSeed
 import Model.RunStatus
+import Model.SelectedTest
 import Model.TestCount
 import Model.TestTree
 import TestEvent.RunComplete as RunComplete
@@ -102,18 +96,18 @@ update message model =
         InitiateRunAll ->
             Model.RunStatus.setToProcessing model
                 |> Model.TestCount.resetPassed
-                |> setSelectedTestNodeId Nothing
-                |> setSelectedTestInstance Nothing
-                |> setCompilerErrorMessage Nothing
-                |> clearRunDuration
+                |> Model.SelectedTest.setNodeId Nothing
+                |> Model.SelectedTest.setInstance Nothing
+                |> Model.Basics.setCompilerErrorMessage Nothing
+                |> Model.RunDuration.clear
                 |> Model.RunSeed.clear
                 |> Model.TestTree.reset
                 |> updateHierarchy
-                |> andPerform (runTest <| randomSeedForJS model)
+                |> andPerform (runTest <| Model.RandomSeed.forJS model)
 
         CompilerErrored errorMessage ->
             Model.RunStatus.setToCompileError model
-                |> setCompilerErrorMessage (Just errorMessage)
+                |> Model.Basics.setCompilerErrorMessage (Just errorMessage)
                 |> andNoCommand
 
         RunStart ( projectPath, data ) ->
@@ -145,7 +139,7 @@ update message model =
             Model.RunStatus.setToPassing model
                 |> Model.RunStatus.setForTodo
                 |> Model.RunStatus.setForFailure event
-                |> setRunDuration event
+                |> Model.RunDuration.set event
                 |> Model.TestTree.purgeObsoleteNodes
                 |> updateHierarchy
                 |> expandFailingAndTodoNodes
@@ -161,16 +155,16 @@ update message model =
                 |> andNoCommand
 
         TestListItemMouseEnter nodeId ->
-            setTestMouseIsOver (Just nodeId) model
+            Model.Basics.setTestMouseIsOver (Just nodeId) model
                 |> andNoCommand
 
         TestListItemMouseLeave ->
-            setTestMouseIsOver Nothing model
+            Model.Basics.setTestMouseIsOver Nothing model
                 |> andNoCommand
 
         TestListItemSelect nodeId testInstance ->
-            setSelectedTestNodeId (Just nodeId) model
-                |> setSelectedTestInstance testInstance
+            Model.SelectedTest.setNodeId (Just nodeId) model
+                |> Model.SelectedTest.setInstance testInstance
                 |> (case ( testInstance, model.autoNavigateEnabled ) of
                         ( Just instance, True ) ->
                             andPerform <| navigateToFile (TestInstance.pathAndDescription instance)
@@ -192,12 +186,12 @@ update message model =
                 |> andPerform (copySeed seed)
 
         SetRandomSeed seed ->
-            setRandomSeed (Just seed) model
-                |> setRandomSeedForcing True
+            Model.RandomSeed.set (Just seed) model
+                |> Model.RandomSeed.setForcing True
                 |> andNoCommand
 
         SetForceSeed setting ->
-            setRandomSeedForcing setting model
+            Model.RandomSeed.setForcing setting model
                 |> andNoCommand
 
         AnimateFlicker animateMessage ->
@@ -205,7 +199,7 @@ update message model =
                 |> andNoCommand
 
         PaneMoved newLocation ->
-            setPaneLocation newLocation model
+            Model.Basics.setPaneLocation newLocation model
                 |> andNoCommand
 
         DoNothing ->

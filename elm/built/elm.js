@@ -16228,6 +16228,51 @@ var _user$project$Duration_Core$Seconds = function (a) {
 	return {ctor: 'Seconds', _0: a};
 };
 
+var _user$project$State_PaneLocation$toStyle = function (paneLocation) {
+	var _p0 = paneLocation;
+	if (_p0.ctor === 'Bottom') {
+		return 'landscape';
+	} else {
+		return 'portrait';
+	}
+};
+var _user$project$State_PaneLocation$Left = {ctor: 'Left'};
+var _user$project$State_PaneLocation$Bottom = {ctor: 'Bottom'};
+var _user$project$State_PaneLocation$default = _user$project$State_PaneLocation$Bottom;
+var _user$project$State_PaneLocation$Right = {ctor: 'Right'};
+var _user$project$State_PaneLocation$fromString = function (location) {
+	var _p1 = location;
+	switch (_p1) {
+		case 'bottom':
+			return _user$project$State_PaneLocation$Bottom;
+		case 'left':
+			return _user$project$State_PaneLocation$Left;
+		default:
+			return _user$project$State_PaneLocation$Right;
+	}
+};
+
+var _user$project$Model_Basics$setPaneLocation = F2(
+	function (newLocation, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				paneLocation: _user$project$State_PaneLocation$fromString(newLocation)
+			});
+	});
+var _user$project$Model_Basics$setTestMouseIsOver = F2(
+	function (nodeId, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{testMouseIsOver: nodeId});
+	});
+var _user$project$Model_Basics$setCompilerErrorMessage = F2(
+	function (maybeError, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{compilerError: maybeError});
+	});
+
 var _user$project$Model_Config$setAutoNavigate = F2(
 	function (setting, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -16329,30 +16374,6 @@ var _user$project$Model_ProjectName$setFromPath = F2(
 				}));
 	});
 
-var _user$project$State_PaneLocation$toStyle = function (paneLocation) {
-	var _p0 = paneLocation;
-	if (_p0.ctor === 'Bottom') {
-		return 'landscape';
-	} else {
-		return 'portrait';
-	}
-};
-var _user$project$State_PaneLocation$Left = {ctor: 'Left'};
-var _user$project$State_PaneLocation$Bottom = {ctor: 'Bottom'};
-var _user$project$State_PaneLocation$default = _user$project$State_PaneLocation$Bottom;
-var _user$project$State_PaneLocation$Right = {ctor: 'Right'};
-var _user$project$State_PaneLocation$fromString = function (location) {
-	var _p1 = location;
-	switch (_p1) {
-		case 'bottom':
-			return _user$project$State_PaneLocation$Bottom;
-		case 'left':
-			return _user$project$State_PaneLocation$Left;
-		default:
-			return _user$project$State_PaneLocation$Right;
-	}
-};
-
 var _user$project$State_RunStatus$toClass = function (runStatus) {
 	var _p0 = runStatus;
 	switch (_p0.ctor) {
@@ -16402,41 +16423,6 @@ var _user$project$State_RunStatus$Processing = {ctor: 'Processing'};
 var _user$project$State_RunStatus$processing = _user$project$State_RunStatus$Processing;
 var _user$project$State_RunStatus$NoData = {ctor: 'NoData'};
 var _user$project$State_RunStatus$noData = _user$project$State_RunStatus$NoData;
-
-var _user$project$TestEvent_Util$parseInt = function (string) {
-	return A2(
-		_elm_lang$core$Result$withDefault,
-		0,
-		_elm_lang$core$String$toInt(string));
-};
-
-var _user$project$TestEvent_RunComplete$duration = function (_p0) {
-	var _p1 = _p0;
-	return _user$project$Duration_Core$inMilliseconds(_p1._0.duration);
-};
-var _user$project$TestEvent_RunComplete$passed = function (_p2) {
-	var _p3 = _p2;
-	return _elm_lang$core$Native_Utils.eq(_p3._0.failed, 0);
-};
-var _user$project$TestEvent_RunComplete$RawData = F3(
-	function (a, b, c) {
-		return {passed: a, failed: b, duration: c};
-	});
-var _user$project$TestEvent_RunComplete$Parsed = F3(
-	function (a, b, c) {
-		return {passed: a, failed: b, duration: c};
-	});
-var _user$project$TestEvent_RunComplete$RunComplete = function (a) {
-	return {ctor: 'RunComplete', _0: a};
-};
-var _user$project$TestEvent_RunComplete$parse = function (rawData) {
-	return _user$project$TestEvent_RunComplete$RunComplete(
-		{
-			passed: _user$project$TestEvent_Util$parseInt(rawData.passed),
-			failed: _user$project$TestEvent_Util$parseInt(rawData.failed),
-			duration: _user$project$TestEvent_Util$parseInt(rawData.duration)
-		});
-};
 
 var _user$project$State_Failure$expectationText = function (values) {
 	return A2(
@@ -16775,6 +16761,13 @@ var _user$project$State_Labels$fromList = function (rawLabels) {
 	return _user$project$State_Labels$Basic(rawLabels);
 };
 
+var _user$project$TestEvent_Util$parseInt = function (string) {
+	return A2(
+		_elm_lang$core$Result$withDefault,
+		0,
+		_elm_lang$core$String$toInt(string));
+};
+
 var _user$project$TestEvent_TestCompleted$firstFailure = function (_p0) {
 	var _p1 = _p0;
 	return _elm_lang$core$List$head(_p1._0.failures);
@@ -16986,14 +16979,6 @@ var _user$project$Tree_Node$toggle = F3(
 				_p3));
 	});
 
-var _user$project$Model_Core$setPaneLocation = F2(
-	function (newLocation, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				paneLocation: _user$project$State_PaneLocation$fromString(newLocation)
-			});
-	});
 var _user$project$Model_Core$initiateStatusBarTextFlicker = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -17009,26 +16994,6 @@ var _user$project$Model_Core$updateFlicker = F2(
 				statusBarStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarStyle)
 			});
 	});
-var _user$project$Model_Core$randomSeedForJS = function (model) {
-	var _p0 = {ctor: '_Tuple2', _0: model.forceRandomSeedEnabled, _1: model.randomSeed};
-	if (((_p0.ctor === '_Tuple2') && (_p0._0 === true)) && (_p0._1.ctor === 'Just')) {
-		return _elm_lang$core$Basics$toString(_p0._1._0);
-	} else {
-		return '';
-	}
-};
-var _user$project$Model_Core$setRandomSeedForcing = F2(
-	function (setting, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{forceRandomSeedEnabled: setting});
-	});
-var _user$project$Model_Core$setRandomSeed = F2(
-	function (randomSeed, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{randomSeed: randomSeed});
-	});
 var _user$project$Model_Core$toggleNode = F3(
 	function (nodeId, newState, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -17037,15 +17002,15 @@ var _user$project$Model_Core$toggleNode = F3(
 				testHierarchy: A3(_user$project$Tree_Node$toggle, nodeId, newState, model.testHierarchy)
 			});
 	});
-var _user$project$Model_Core$toggleFailingAndTodoNodes = function (_p1) {
-	var _p2 = _p1;
-	var _p3 = _p2._1;
-	var expanded = _user$project$TestInstance_Core$isFailing(_p3) || _user$project$TestInstance_Core$isTodo(_p3);
+var _user$project$Model_Core$toggleFailingAndTodoNodes = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1._1;
+	var expanded = _user$project$TestInstance_Core$isFailing(_p2) || _user$project$TestInstance_Core$isTodo(_p2);
 	return A3(
 		_user$project$Tree_Core$Node,
-		{ctor: '_Tuple3', _0: _p2._0._0, _1: expanded, _2: _p2._0._2},
-		_p3,
-		A2(_elm_lang$core$List$map, _user$project$Model_Core$toggleFailingAndTodoNodes, _p2._2));
+		{ctor: '_Tuple3', _0: _p1._0._0, _1: expanded, _2: _p1._0._2},
+		_p2,
+		A2(_elm_lang$core$List$map, _user$project$Model_Core$toggleFailingAndTodoNodes, _p1._2));
 };
 var _user$project$Model_Core$expandFailingAndTodoNodes = function (model) {
 	return _elm_lang$core$Native_Utils.update(
@@ -17061,44 +17026,6 @@ var _user$project$Model_Core$updateHierarchy = function (model) {
 			testHierarchy: _user$project$Tree_Core$make(model.testRuns)
 		});
 };
-var _user$project$Model_Core$clearRunDuration = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{runDuration: _elm_lang$core$Maybe$Nothing});
-};
-var _user$project$Model_Core$setRunDuration = F2(
-	function (event, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				runDuration: _elm_lang$core$Maybe$Just(
-					_user$project$TestEvent_RunComplete$duration(event))
-			});
-	});
-var _user$project$Model_Core$setSelectedTestInstance = F2(
-	function (testInstance, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{selectedTestInstance: testInstance});
-	});
-var _user$project$Model_Core$setSelectedTestNodeId = F2(
-	function (nodeId, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{selectedTestNodeId: nodeId});
-	});
-var _user$project$Model_Core$setTestMouseIsOver = F2(
-	function (nodeId, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{testMouseIsOver: nodeId});
-	});
-var _user$project$Model_Core$setCompilerErrorMessage = F2(
-	function (maybeError, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{compilerError: maybeError});
-	});
 var _user$project$Model_Core$serialize = function (model) {
 	return {autoRun: model.autoRunEnabled, autoNavigate: model.autoNavigateEnabled};
 };
@@ -17169,6 +17096,70 @@ var _user$project$Model_Core$Model = function (a) {
 		};
 	};
 };
+
+var _user$project$Model_RandomSeed$forJS = function (model) {
+	var _p0 = {ctor: '_Tuple2', _0: model.forceRandomSeedEnabled, _1: model.randomSeed};
+	if (((_p0.ctor === '_Tuple2') && (_p0._0 === true)) && (_p0._1.ctor === 'Just')) {
+		return _elm_lang$core$Basics$toString(_p0._1._0);
+	} else {
+		return '';
+	}
+};
+var _user$project$Model_RandomSeed$setForcing = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{forceRandomSeedEnabled: setting});
+	});
+var _user$project$Model_RandomSeed$set = F2(
+	function (randomSeed, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{randomSeed: randomSeed});
+	});
+
+var _user$project$TestEvent_RunComplete$duration = function (_p0) {
+	var _p1 = _p0;
+	return _user$project$Duration_Core$inMilliseconds(_p1._0.duration);
+};
+var _user$project$TestEvent_RunComplete$passed = function (_p2) {
+	var _p3 = _p2;
+	return _elm_lang$core$Native_Utils.eq(_p3._0.failed, 0);
+};
+var _user$project$TestEvent_RunComplete$RawData = F3(
+	function (a, b, c) {
+		return {passed: a, failed: b, duration: c};
+	});
+var _user$project$TestEvent_RunComplete$Parsed = F3(
+	function (a, b, c) {
+		return {passed: a, failed: b, duration: c};
+	});
+var _user$project$TestEvent_RunComplete$RunComplete = function (a) {
+	return {ctor: 'RunComplete', _0: a};
+};
+var _user$project$TestEvent_RunComplete$parse = function (rawData) {
+	return _user$project$TestEvent_RunComplete$RunComplete(
+		{
+			passed: _user$project$TestEvent_Util$parseInt(rawData.passed),
+			failed: _user$project$TestEvent_Util$parseInt(rawData.failed),
+			duration: _user$project$TestEvent_Util$parseInt(rawData.duration)
+		});
+};
+
+var _user$project$Model_RunDuration$clear = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{runDuration: _elm_lang$core$Maybe$Nothing});
+};
+var _user$project$Model_RunDuration$set = F2(
+	function (event, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				runDuration: _elm_lang$core$Maybe$Just(
+					_user$project$TestEvent_RunComplete$duration(event))
+			});
+	});
 
 var _user$project$TestEvent_RunStart$initialSeed = function (_p0) {
 	var _p1 = _p0;
@@ -17295,6 +17286,19 @@ var _user$project$Model_RunStatus$setToProcessing = function (model) {
 		model,
 		{runStatus: _user$project$State_RunStatus$processing});
 };
+
+var _user$project$Model_SelectedTest$setInstance = F2(
+	function (testInstance, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{selectedTestInstance: testInstance});
+	});
+var _user$project$Model_SelectedTest$setNodeId = F2(
+	function (nodeId, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{selectedTestNodeId: nodeId});
+	});
 
 var _user$project$Model_TestCount$setTotal = F2(
 	function (event, model) {
@@ -18604,26 +18608,26 @@ var _user$project$Main$update = F2(
 				return A2(
 					_user$project$Main$andPerform,
 					_user$project$Main$runTest(
-						_user$project$Model_Core$randomSeedForJS(model)),
+						_user$project$Model_RandomSeed$forJS(model)),
 					_user$project$Model_Core$updateHierarchy(
 						_user$project$Model_TestTree$reset(
 							_user$project$Model_RunSeed$clear(
-								_user$project$Model_Core$clearRunDuration(
+								_user$project$Model_RunDuration$clear(
 									A2(
-										_user$project$Model_Core$setCompilerErrorMessage,
+										_user$project$Model_Basics$setCompilerErrorMessage,
 										_elm_lang$core$Maybe$Nothing,
 										A2(
-											_user$project$Model_Core$setSelectedTestInstance,
+											_user$project$Model_SelectedTest$setInstance,
 											_elm_lang$core$Maybe$Nothing,
 											A2(
-												_user$project$Model_Core$setSelectedTestNodeId,
+												_user$project$Model_SelectedTest$setNodeId,
 												_elm_lang$core$Maybe$Nothing,
 												_user$project$Model_TestCount$resetPassed(
 													_user$project$Model_RunStatus$setToProcessing(model))))))))));
 			case 'CompilerErrored':
 				return _user$project$Main$andNoCommand(
 					A2(
-						_user$project$Model_Core$setCompilerErrorMessage,
+						_user$project$Model_Basics$setCompilerErrorMessage,
 						_elm_lang$core$Maybe$Just(_p0._0),
 						_user$project$Model_RunStatus$setToCompileError(model)));
 			case 'RunStart':
@@ -18655,7 +18659,7 @@ var _user$project$Main$update = F2(
 							_user$project$Model_Core$updateHierarchy(
 								_user$project$Model_TestTree$purgeObsoleteNodes(
 									A2(
-										_user$project$Model_Core$setRunDuration,
+										_user$project$Model_RunDuration$set,
 										event,
 										A2(
 											_user$project$Model_RunStatus$setForFailure,
@@ -18671,12 +18675,12 @@ var _user$project$Main$update = F2(
 			case 'TestListItemMouseEnter':
 				return _user$project$Main$andNoCommand(
 					A2(
-						_user$project$Model_Core$setTestMouseIsOver,
+						_user$project$Model_Basics$setTestMouseIsOver,
 						_elm_lang$core$Maybe$Just(_p0._0),
 						model));
 			case 'TestListItemMouseLeave':
 				return _user$project$Main$andNoCommand(
-					A2(_user$project$Model_Core$setTestMouseIsOver, _elm_lang$core$Maybe$Nothing, model));
+					A2(_user$project$Model_Basics$setTestMouseIsOver, _elm_lang$core$Maybe$Nothing, model));
 			case 'TestListItemSelect':
 				var _p2 = _p0._1;
 				return function () {
@@ -18690,10 +18694,10 @@ var _user$project$Main$update = F2(
 					}
 				}()(
 					A2(
-						_user$project$Model_Core$setSelectedTestInstance,
+						_user$project$Model_SelectedTest$setInstance,
 						_p2,
 						A2(
-							_user$project$Model_Core$setSelectedTestNodeId,
+							_user$project$Model_SelectedTest$setNodeId,
 							_elm_lang$core$Maybe$Just(_p0._0),
 							model)));
 			case 'ToggleAutoRun':
@@ -18710,21 +18714,21 @@ var _user$project$Main$update = F2(
 			case 'SetRandomSeed':
 				return _user$project$Main$andNoCommand(
 					A2(
-						_user$project$Model_Core$setRandomSeedForcing,
+						_user$project$Model_RandomSeed$setForcing,
 						true,
 						A2(
-							_user$project$Model_Core$setRandomSeed,
+							_user$project$Model_RandomSeed$set,
 							_elm_lang$core$Maybe$Just(_p0._0),
 							model)));
 			case 'SetForceSeed':
 				return _user$project$Main$andNoCommand(
-					A2(_user$project$Model_Core$setRandomSeedForcing, _p0._0, model));
+					A2(_user$project$Model_RandomSeed$setForcing, _p0._0, model));
 			case 'AnimateFlicker':
 				return _user$project$Main$andNoCommand(
 					A2(_user$project$Model_Core$updateFlicker, _p0._0, model));
 			case 'PaneMoved':
 				return _user$project$Main$andNoCommand(
-					A2(_user$project$Model_Core$setPaneLocation, _p0._0, model));
+					A2(_user$project$Model_Basics$setPaneLocation, _p0._0, model));
 			default:
 				return _user$project$Main$andNoCommand(model);
 		}

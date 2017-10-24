@@ -1,20 +1,10 @@
 module Model.Core
     exposing
         ( Model
-        , clearRunDuration
         , default
         , expandFailingAndTodoNodes
         , initiateStatusBarTextFlicker
-        , randomSeedForJS
         , serialize
-        , setCompilerErrorMessage
-        , setPaneLocation
-        , setRandomSeed
-        , setRandomSeedForcing
-        , setRunDuration
-        , setSelectedTestInstance
-        , setSelectedTestNodeId
-        , setTestMouseIsOver
         , toggleNode
         , updateFlicker
         , updateHierarchy
@@ -27,7 +17,6 @@ import Model.Flags exposing (Flags)
 import Model.ProjectName
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus as RunStatus exposing (RunStatus)
-import TestEvent.RunComplete as RunComplete exposing (RunComplete)
 import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core as Tree exposing (CollapsibleTree, Tree(Node))
 import Tree.Node
@@ -90,36 +79,6 @@ serialize model =
     }
 
 
-setCompilerErrorMessage : Maybe String -> Model -> Model
-setCompilerErrorMessage maybeError model =
-    { model | compilerError = maybeError }
-
-
-setTestMouseIsOver : Maybe Int -> Model -> Model
-setTestMouseIsOver nodeId model =
-    { model | testMouseIsOver = nodeId }
-
-
-setSelectedTestNodeId : Maybe Int -> Model -> Model
-setSelectedTestNodeId nodeId model =
-    { model | selectedTestNodeId = nodeId }
-
-
-setSelectedTestInstance : Maybe TestInstance -> Model -> Model
-setSelectedTestInstance testInstance model =
-    { model | selectedTestInstance = testInstance }
-
-
-setRunDuration : RunComplete -> Model -> Model
-setRunDuration event model =
-    { model | runDuration = Just <| RunComplete.duration event }
-
-
-clearRunDuration : Model -> Model
-clearRunDuration model =
-    { model | runDuration = Nothing }
-
-
 updateHierarchy : Model -> Model
 updateHierarchy model =
     { model
@@ -149,26 +108,6 @@ toggleNode nodeId newState model =
     { model | testHierarchy = Tree.Node.toggle nodeId newState model.testHierarchy }
 
 
-setRandomSeed : Maybe Int -> Model -> Model
-setRandomSeed randomSeed model =
-    { model | randomSeed = randomSeed }
-
-
-setRandomSeedForcing : Bool -> Model -> Model
-setRandomSeedForcing setting model =
-    { model | forceRandomSeedEnabled = setting }
-
-
-randomSeedForJS : Model -> String
-randomSeedForJS model =
-    case ( model.forceRandomSeedEnabled, model.randomSeed ) of
-        ( True, Just seed ) ->
-            toString seed
-
-        _ ->
-            ""
-
-
 updateFlicker : Animation.Msg -> Model -> Model
 updateFlicker animationMessage model =
     { model | statusBarStyle = Animation.update animationMessage model.statusBarStyle }
@@ -177,8 +116,3 @@ updateFlicker animationMessage model =
 initiateStatusBarTextFlicker : Model -> Model
 initiateStatusBarTextFlicker model =
     { model | statusBarStyle = Animation.Flicker.animation model.statusBarStyle }
-
-
-setPaneLocation : String -> Model -> Model
-setPaneLocation newLocation model =
-    { model | paneLocation = PaneLocation.fromString newLocation }
