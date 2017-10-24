@@ -2,6 +2,7 @@ port module Main exposing (main)
 
 import Animation
 import Html exposing (Html)
+import Model.Config
 import Model.Core as Model
     exposing
         ( Model
@@ -10,15 +11,11 @@ import Model.Core as Model
         , clearRunSeed
         , expandFailingAndTodoNodes
         , initiateStatusBarTextFlicker
-        , invertAutoNavigate
-        , invertAutoRun
         , purgeObsoleteNodes
         , randomSeedForJS
         , resetPassedTests
         , resetTestRuns
         , serialize
-        , setAutoNavigate
-        , setAutoRun
         , setCompilerErrorMessage
         , setPaneLocation
         , setRandomSeed
@@ -86,8 +83,8 @@ init rawFlags =
             Flags.parse rawFlags
     in
     Model.default
-        |> setAutoRun flags.autoRun
-        |> setAutoNavigate flags.autoNavigate
+        |> Model.Config.setAutoRun flags.autoRun
+        |> Model.Config.setAutoNavigate flags.autoNavigate
         |> andNoCommand
 
 
@@ -192,11 +189,11 @@ update message model =
                    )
 
         ToggleAutoRun ->
-            invertAutoRun model
+            Model.Config.invertAutoRun model
                 |> andUpdatePersistentState
 
         ToggleAutoNavigate ->
-            invertAutoNavigate model
+            Model.Config.invertAutoNavigate model
                 |> andUpdatePersistentState
 
         CopySeed seed ->
