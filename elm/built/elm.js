@@ -16228,6 +16228,23 @@ var _user$project$Duration_Core$Seconds = function (a) {
 	return {ctor: 'Seconds', _0: a};
 };
 
+var _user$project$Model_Flags$default = {autoRun: false, autoNavigate: true};
+var _user$project$Model_Flags$Flags = F2(
+	function (a, b) {
+		return {autoRun: a, autoNavigate: b};
+	});
+var _user$project$Model_Flags$flags = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$Model_Flags$Flags,
+	A2(_elm_lang$core$Json_Decode$field, 'autoRun', _elm_lang$core$Json_Decode$bool),
+	A2(_elm_lang$core$Json_Decode$field, 'autoNavigate', _elm_lang$core$Json_Decode$bool));
+var _user$project$Model_Flags$parse = function (raw) {
+	return A2(
+		_elm_lang$core$Result$withDefault,
+		_user$project$Model_Flags$default,
+		A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Model_Flags$flags, raw));
+};
+
 var _user$project$State_PaneLocation$toStyle = function (paneLocation) {
 	var _p0 = paneLocation;
 	if (_p0.ctor === 'Bottom') {
@@ -17427,10 +17444,6 @@ var _user$project$Model_Core$Model = function (a) {
 		};
 	};
 };
-var _user$project$Model_Core$Flags = F2(
-	function (a, b) {
-		return {autoRun: a, autoNavigate: b};
-	});
 
 var _user$project$TestInstance_View$timeReport = function (testInstance) {
 	return A2(
@@ -18535,7 +18548,8 @@ var _user$project$Main$andPerform = F2(
 var _user$project$Main$andNoCommand = function (model) {
 	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 };
-var _user$project$Main$init = function (flags) {
+var _user$project$Main$init = function (rawFlags) {
+	var flags = _user$project$Model_Flags$parse(rawFlags);
 	return _user$project$Main$andNoCommand(
 		A2(
 			_user$project$Model_Core$setAutoNavigate,
@@ -18899,19 +18913,7 @@ var _user$project$Main$subscriptions = function (model) {
 		});
 };
 var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
-	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})(
-	A2(
-		_elm_lang$core$Json_Decode$andThen,
-		function (autoNavigate) {
-			return A2(
-				_elm_lang$core$Json_Decode$andThen,
-				function (autoRun) {
-					return _elm_lang$core$Json_Decode$succeed(
-						{autoNavigate: autoNavigate, autoRun: autoRun});
-				},
-				A2(_elm_lang$core$Json_Decode$field, 'autoRun', _elm_lang$core$Json_Decode$bool));
-		},
-		A2(_elm_lang$core$Json_Decode$field, 'autoNavigate', _elm_lang$core$Json_Decode$bool)));
+	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})(_elm_lang$core$Json_Decode$string);
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};

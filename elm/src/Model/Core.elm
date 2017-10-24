@@ -1,7 +1,6 @@
 module Model.Core
     exposing
-        ( Flags
-        , Model
+        ( Model
         , buildTestRunDataTree
         , clearRunDuration
         , clearRunSeed
@@ -42,6 +41,7 @@ module Model.Core
 import Animation exposing (State)
 import Animation.Flicker
 import Duration.Core exposing (Duration)
+import Model.Flags exposing (Flags)
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
@@ -74,12 +74,6 @@ type alias Model =
     , forceRandomSeedEnabled : Bool
     , statusBarStyle : State
     , paneLocation : PaneLocation
-    }
-
-
-type alias Flags =
-    { autoRun : Bool
-    , autoNavigate : Bool
     }
 
 

@@ -4,8 +4,7 @@ import Animation
 import Html exposing (Html)
 import Model.Core as Model
     exposing
-        ( Flags
-        , Model
+        ( Model
         , buildTestRunDataTree
         , clearRunDuration
         , clearRunSeed
@@ -41,6 +40,7 @@ import Model.Core as Model
         , updateHierarchy
         , updatePassedTestCount
         )
+import Model.Flags as Flags exposing (Flags)
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
@@ -69,7 +69,7 @@ type Message
     | DoNothing
 
 
-main : Program Flags Model Message
+main : Program String Model Message
 main =
     Html.programWithFlags
         { init = init
@@ -79,8 +79,12 @@ main =
         }
 
 
-init : Flags -> ( Model, Cmd Message )
-init flags =
+init : String -> ( Model, Cmd Message )
+init rawFlags =
+    let
+        flags =
+            Flags.parse rawFlags
+    in
     Model.default
         |> setAutoRun flags.autoRun
         |> setAutoNavigate flags.autoNavigate
