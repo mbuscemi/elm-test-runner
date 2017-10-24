@@ -16228,74 +16228,6 @@ var _user$project$Duration_Core$Seconds = function (a) {
 	return {ctor: 'Seconds', _0: a};
 };
 
-var _user$project$State_PaneLocation$toStyle = function (paneLocation) {
-	var _p0 = paneLocation;
-	if (_p0.ctor === 'Bottom') {
-		return 'landscape';
-	} else {
-		return 'portrait';
-	}
-};
-var _user$project$State_PaneLocation$Left = {ctor: 'Left'};
-var _user$project$State_PaneLocation$Bottom = {ctor: 'Bottom'};
-var _user$project$State_PaneLocation$default = _user$project$State_PaneLocation$Bottom;
-var _user$project$State_PaneLocation$Right = {ctor: 'Right'};
-var _user$project$State_PaneLocation$fromString = function (location) {
-	var _p1 = location;
-	switch (_p1) {
-		case 'bottom':
-			return _user$project$State_PaneLocation$Bottom;
-		case 'left':
-			return _user$project$State_PaneLocation$Left;
-		default:
-			return _user$project$State_PaneLocation$Right;
-	}
-};
-
-var _user$project$Model_Basics$setPaneLocation = F2(
-	function (newLocation, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				paneLocation: _user$project$State_PaneLocation$fromString(newLocation)
-			});
-	});
-var _user$project$Model_Basics$setTestMouseIsOver = F2(
-	function (nodeId, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{testMouseIsOver: nodeId});
-	});
-var _user$project$Model_Basics$setCompilerErrorMessage = F2(
-	function (maybeError, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{compilerError: maybeError});
-	});
-
-var _user$project$Model_Config$setAutoNavigate = F2(
-	function (setting, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{autoNavigateEnabled: setting});
-	});
-var _user$project$Model_Config$invertAutoNavigate = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{autoNavigateEnabled: !model.autoNavigateEnabled});
-};
-var _user$project$Model_Config$setAutoRun = F2(
-	function (setting, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{autoRunEnabled: setting});
-	});
-var _user$project$Model_Config$invertAutoRun = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{autoRunEnabled: !model.autoRunEnabled});
-};
-
 var _user$project$Model_Flags$default = {autoRun: false, autoNavigate: true};
 var _user$project$Model_Flags$Flags = F2(
 	function (a, b) {
@@ -16373,6 +16305,30 @@ var _user$project$Model_ProjectName$setFromPath = F2(
 								A2(_elm_lang$core$String$split, '/', projectPath))))
 				}));
 	});
+
+var _user$project$State_PaneLocation$toStyle = function (paneLocation) {
+	var _p0 = paneLocation;
+	if (_p0.ctor === 'Bottom') {
+		return 'landscape';
+	} else {
+		return 'portrait';
+	}
+};
+var _user$project$State_PaneLocation$Left = {ctor: 'Left'};
+var _user$project$State_PaneLocation$Bottom = {ctor: 'Bottom'};
+var _user$project$State_PaneLocation$default = _user$project$State_PaneLocation$Bottom;
+var _user$project$State_PaneLocation$Right = {ctor: 'Right'};
+var _user$project$State_PaneLocation$fromString = function (location) {
+	var _p1 = location;
+	switch (_p1) {
+		case 'bottom':
+			return _user$project$State_PaneLocation$Bottom;
+		case 'left':
+			return _user$project$State_PaneLocation$Left;
+		default:
+			return _user$project$State_PaneLocation$Right;
+	}
+};
 
 var _user$project$State_RunStatus$toClass = function (runStatus) {
 	var _p0 = runStatus;
@@ -16956,26 +16912,10 @@ var _user$project$TestInstance_Core$setStatus = F2(
 		}
 	});
 
-var _user$project$Model_Core$initiateStatusBarTextFlicker = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			statusBarStyle: _user$project$Animation_Flicker$animation(model.statusBarStyle)
-		});
-};
-var _user$project$Model_Core$updateFlicker = F2(
-	function (animationMessage, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				statusBarStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarStyle)
-			});
-	});
-var _user$project$Model_Core$serialize = function (model) {
+var _user$project$Model$serialize = function (model) {
 	return {autoRun: model.autoRunEnabled, autoNavigate: model.autoNavigateEnabled};
 };
-var _user$project$Model_Core$humanReadableTopLevelMessage = 'No Tests';
-var _user$project$Model_Core$default = {
+var _user$project$Model$default = {
 	projectName: '',
 	compilerError: _elm_lang$core$Maybe$Nothing,
 	runStatus: _user$project$State_RunStatus$noData,
@@ -16991,7 +16931,7 @@ var _user$project$Model_Core$default = {
 	testHierarchy: _user$project$Tree_Core$make(
 		A3(
 			_user$project$Tree_Core$Node,
-			_user$project$Model_Core$humanReadableTopLevelMessage,
+			'No Tests',
 			_user$project$TestInstance_Core$default,
 			{ctor: '[]'})),
 	testMouseIsOver: _elm_lang$core$Maybe$Nothing,
@@ -17004,7 +16944,7 @@ var _user$project$Model_Core$default = {
 	statusBarStyle: _user$project$Animation_Flicker$initial,
 	paneLocation: _user$project$State_PaneLocation$default
 };
-var _user$project$Model_Core$Model = function (a) {
+var _user$project$Model$Model = function (a) {
 	return function (b) {
 		return function (c) {
 			return function (d) {
@@ -17040,6 +16980,50 @@ var _user$project$Model_Core$Model = function (a) {
 			};
 		};
 	};
+};
+
+var _user$project$Model_Basics$setPaneLocation = F2(
+	function (newLocation, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				paneLocation: _user$project$State_PaneLocation$fromString(newLocation)
+			});
+	});
+var _user$project$Model_Basics$setTestMouseIsOver = F2(
+	function (nodeId, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{testMouseIsOver: nodeId});
+	});
+var _user$project$Model_Basics$setCompilerErrorMessage = F2(
+	function (maybeError, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{compilerError: maybeError});
+	});
+
+var _user$project$Model_Config$setAutoNavigate = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{autoNavigateEnabled: setting});
+	});
+var _user$project$Model_Config$invertAutoNavigate = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{autoNavigateEnabled: !model.autoNavigateEnabled});
+};
+var _user$project$Model_Config$setAutoRun = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{autoRunEnabled: setting});
+	});
+var _user$project$Model_Config$invertAutoRun = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{autoRunEnabled: !model.autoRunEnabled});
 };
 
 var _user$project$Model_RandomSeed$forJS = function (model) {
@@ -17243,6 +17227,22 @@ var _user$project$Model_SelectedTest$setNodeId = F2(
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{selectedTestNodeId: nodeId});
+	});
+
+var _user$project$Model_StatusBar$initiateTextFlicker = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			statusBarStyle: _user$project$Animation_Flicker$animation(model.statusBarStyle)
+		});
+};
+var _user$project$Model_StatusBar$updateFlicker = F2(
+	function (animationMessage, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				statusBarStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarStyle)
+			});
 	});
 
 var _user$project$Model_TestCount$setTotal = F2(
@@ -18564,7 +18564,7 @@ var _user$project$Main$init = function (rawFlags) {
 		A2(
 			_user$project$Model_Config$setAutoNavigate,
 			flags.autoNavigate,
-			A2(_user$project$Model_Config$setAutoRun, flags.autoRun, _user$project$Model_Core$default)));
+			A2(_user$project$Model_Config$setAutoRun, flags.autoRun, _user$project$Model$default)));
 };
 var _user$project$Main$runTest = _elm_lang$core$Native_Platform.outgoingPort(
 	'runTest',
@@ -18598,7 +18598,7 @@ var _user$project$Main$andUpdatePersistentState = function (model) {
 		_user$project$Main$andPerform,
 		model,
 		_user$project$Main$updatePersistentState(
-			_user$project$Model_Core$serialize(model)));
+			_user$project$Model$serialize(model)));
 };
 var _user$project$Main$update = F2(
 	function (message, model) {
@@ -18654,7 +18654,7 @@ var _user$project$Main$update = F2(
 			case 'RunComplete':
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
-					_user$project$Model_Core$initiateStatusBarTextFlicker(
+					_user$project$Model_StatusBar$initiateTextFlicker(
 						_user$project$Model_TestTree$expandFailingAndTodoNodes(
 							_user$project$Model_TestTree$updateHierarchy(
 								_user$project$Model_TestTree$purgeObsoleteNodes(
@@ -18725,7 +18725,7 @@ var _user$project$Main$update = F2(
 					A2(_user$project$Model_RandomSeed$setForcing, _p0._0, model));
 			case 'AnimateFlicker':
 				return _user$project$Main$andNoCommand(
-					A2(_user$project$Model_Core$updateFlicker, _p0._0, model));
+					A2(_user$project$Model_StatusBar$updateFlicker, _p0._0, model));
 			case 'PaneMoved':
 				return _user$project$Main$andNoCommand(
 					A2(_user$project$Model_Basics$setPaneLocation, _p0._0, model));

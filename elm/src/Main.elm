@@ -2,9 +2,9 @@ port module Main exposing (main)
 
 import Animation
 import Html exposing (Html)
+import Model exposing (Model)
 import Model.Basics
 import Model.Config
-import Model.Core as Model exposing (Model)
 import Model.Flags as Flags exposing (Flags)
 import Model.ProjectName
 import Model.RandomSeed

@@ -1,4 +1,4 @@
-module Model.Core exposing (Model, default, serialize)
+module Model exposing (Model, default, serialize)
 
 import Animation
 import Animation.Flicker
