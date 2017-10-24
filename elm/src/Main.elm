@@ -4,13 +4,7 @@ import Animation
 import Html exposing (Html)
 import Model.Basics
 import Model.Config
-import Model.Core as Model
-    exposing
-        ( Model
-        , initiateStatusBarTextFlicker
-        , serialize
-        , updateFlicker
-        )
+import Model.Core as Model exposing (Model)
 import Model.Flags as Flags exposing (Flags)
 import Model.ProjectName
 import Model.RandomSeed
@@ -18,6 +12,7 @@ import Model.RunDuration
 import Model.RunSeed
 import Model.RunStatus
 import Model.SelectedTest
+import Model.StatusBar
 import Model.TestCount
 import Model.TestTree
 import TestEvent.RunComplete as RunComplete
@@ -82,7 +77,7 @@ andPerform command model =
 
 andUpdatePersistentState : Model -> ( Model, Cmd Message )
 andUpdatePersistentState model =
-    serialize model
+    Model.serialize model
         |> updatePersistentState
         |> flip andPerform model
 
@@ -140,7 +135,7 @@ update message model =
                 |> Model.TestTree.purgeObsoleteNodes
                 |> Model.TestTree.updateHierarchy
                 |> Model.TestTree.expandFailingAndTodoNodes
-                |> initiateStatusBarTextFlicker
+                |> Model.StatusBar.initiateTextFlicker
                 |> andNoCommand
 
         TestListItemExpand nodeId ->
@@ -192,7 +187,7 @@ update message model =
                 |> andNoCommand
 
         AnimateFlicker animateMessage ->
-            updateFlicker animateMessage model
+            Model.StatusBar.updateFlicker animateMessage model
                 |> andNoCommand
 
         PaneMoved newLocation ->

@@ -1,13 +1,6 @@
-module Model.Core
-    exposing
-        ( Model
-        , default
-        , initiateStatusBarTextFlicker
-        , serialize
-        , updateFlicker
-        )
+module Model.Core exposing (Model, default, serialize)
 
-import Animation exposing (State)
+import Animation
 import Animation.Flicker
 import Duration.Core exposing (Duration)
 import Model.Flags exposing (Flags)
@@ -35,7 +28,7 @@ type alias Model =
     , autoNavigateEnabled : Bool
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
-    , statusBarStyle : State
+    , statusBarStyle : Animation.State
     , paneLocation : PaneLocation
     }
 
@@ -50,7 +43,7 @@ default =
     , runDuration = Nothing
     , runSeed = Nothing
     , testRuns = Node Model.ProjectName.default TestInstance.default []
-    , testHierarchy = Tree.make (Node humanReadableTopLevelMessage TestInstance.default [])
+    , testHierarchy = Tree.make (Node "No Tests" TestInstance.default [])
     , testMouseIsOver = Nothing
     , selectedTestNodeId = Nothing
     , selectedTestInstance = Nothing
@@ -63,23 +56,8 @@ default =
     }
 
 
-humanReadableTopLevelMessage : String
-humanReadableTopLevelMessage =
-    "No Tests"
-
-
 serialize : Model -> Flags
 serialize model =
     { autoRun = model.autoRunEnabled
     , autoNavigate = model.autoNavigateEnabled
     }
-
-
-updateFlicker : Animation.Msg -> Model -> Model
-updateFlicker animationMessage model =
-    { model | statusBarStyle = Animation.update animationMessage model.statusBarStyle }
-
-
-initiateStatusBarTextFlicker : Model -> Model
-initiateStatusBarTextFlicker model =
-    { model | statusBarStyle = Animation.Flicker.animation model.statusBarStyle }
