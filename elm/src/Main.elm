@@ -1,5 +1,6 @@
 port module Main exposing (main)
 
+import And
 import Animation
 import Html exposing (Html)
 import Model exposing (Model)
@@ -62,24 +63,7 @@ init rawFlags =
     Model.default
         |> Model.Config.setAutoRun flags.autoRun
         |> Model.Config.setAutoNavigate flags.autoNavigate
-        |> andNoCommand
-
-
-andNoCommand : Model -> ( Model, Cmd Message )
-andNoCommand model =
-    ( model, Cmd.none )
-
-
-andPerform : Cmd Message -> Model -> ( Model, Cmd Message )
-andPerform command model =
-    ( model, command )
-
-
-andUpdatePersistentState : Model -> ( Model, Cmd Message )
-andUpdatePersistentState model =
-    Model.serialize model
-        |> updatePersistentState
-        |> flip andPerform model
+        |> And.noCommand
 
 
 update : Message -> Model -> ( Model, Cmd Message )
@@ -95,12 +79,12 @@ update message model =
                 |> Model.RunSeed.clear
                 |> Model.TestTree.reset
                 |> Model.TestTree.updateHierarchy
-                |> andPerform (runTest <| Model.RandomSeed.forJS model)
+                |> And.execute (runTest <| Model.RandomSeed.forJS model)
 
         CompilerErrored errorMessage ->
             Model.RunStatus.setToCompileError model
                 |> Model.Basics.setCompilerErrorMessage (Just errorMessage)
-                |> andNoCommand
+                |> And.noCommand
 
         RunStart ( projectPath, data ) ->
             let
@@ -111,7 +95,7 @@ update message model =
                 |> Model.ProjectName.setFromPath projectPath
                 |> Model.TestCount.setTotal event
                 |> Model.RunSeed.set event
-                |> andNoCommand
+                |> And.noCommand
 
         TestCompleted data ->
             let
@@ -121,7 +105,7 @@ update message model =
             Model.TestCount.updatePassed event model
                 |> Model.TestTree.build event
                 |> Model.TestTree.updateHierarchy
-                |> andNoCommand
+                |> And.noCommand
 
         RunComplete data ->
             let
@@ -136,66 +120,66 @@ update message model =
                 |> Model.TestTree.updateHierarchy
                 |> Model.TestTree.expandFailingAndTodoNodes
                 |> Model.StatusBar.initiateTextFlicker
-                |> andNoCommand
+                |> And.noCommand
 
         TestListItemExpand nodeId ->
             Model.TestTree.toggleNode nodeId True model
-                |> andNoCommand
+                |> And.noCommand
 
         TestListItemCollapse nodeId ->
             Model.TestTree.toggleNode nodeId False model
-                |> andNoCommand
+                |> And.noCommand
 
         TestListItemMouseEnter nodeId ->
             Model.Basics.setTestMouseIsOver (Just nodeId) model
-                |> andNoCommand
+                |> And.noCommand
 
         TestListItemMouseLeave ->
             Model.Basics.setTestMouseIsOver Nothing model
-                |> andNoCommand
+                |> And.noCommand
 
         TestListItemSelect nodeId testInstance ->
             Model.SelectedTest.setNodeId (Just nodeId) model
                 |> Model.SelectedTest.setInstance testInstance
                 |> (case ( testInstance, model.autoNavigateEnabled ) of
                         ( Just instance, True ) ->
-                            andPerform <| navigateToFile (TestInstance.pathAndDescription instance)
+                            And.execute <| navigateToFile (TestInstance.pathAndDescription instance)
 
                         _ ->
-                            andNoCommand
+                            And.noCommand
                    )
 
         ToggleAutoRun ->
             Model.Config.invertAutoRun model
-                |> andUpdatePersistentState
+                |> And.updateAtomState
 
         ToggleAutoNavigate ->
             Model.Config.invertAutoNavigate model
-                |> andUpdatePersistentState
+                |> And.updateAtomState
 
         CopySeed seed ->
             model
-                |> andPerform (copySeed seed)
+                |> And.execute (copySeed seed)
 
         SetRandomSeed seed ->
             Model.RandomSeed.set (Just seed) model
                 |> Model.RandomSeed.setForcing True
-                |> andNoCommand
+                |> And.noCommand
 
         SetForceSeed setting ->
             Model.RandomSeed.setForcing setting model
-                |> andNoCommand
+                |> And.noCommand
 
         AnimateFlicker animateMessage ->
             Model.StatusBar.updateFlicker animateMessage model
-                |> andNoCommand
+                |> And.noCommand
 
         PaneMoved newLocation ->
             Model.Basics.setPaneLocation newLocation model
-                |> andNoCommand
+                |> And.noCommand
 
         DoNothing ->
-            model |> andNoCommand
+            model |> And.noCommand
 
 
 view : Model -> Html Message
@@ -261,9 +245,6 @@ port copySeed : String -> Cmd message
 
 
 port navigateToFile : ( String, List String ) -> Cmd message
-
-
-port updatePersistentState : Flags -> Cmd message
 
 
 port commandKeyTestStart : (() -> message) -> Sub message

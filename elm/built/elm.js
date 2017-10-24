@@ -15875,333 +15875,6 @@ var _user$project$Animation_Flicker$initial = _mdgriffith$elm_style_animation$An
 		_1: {ctor: '[]'}
 	});
 
-var _user$project$Diff_Core$snake = F5(
-	function (getA, getB, nextX, nextY, path) {
-		snake:
-		while (true) {
-			var _p0 = {
-				ctor: '_Tuple2',
-				_0: getA(nextX),
-				_1: getB(nextY)
-			};
-			_v0_2:
-			do {
-				if (_p0.ctor === '_Tuple2') {
-					if (_p0._0.ctor === 'Just') {
-						if (_p0._1.ctor === 'Just') {
-							if (_elm_lang$core$Native_Utils.eq(_p0._0._0, _p0._1._0)) {
-								var _v1 = getA,
-									_v2 = getB,
-									_v3 = nextX + 1,
-									_v4 = nextY + 1,
-									_v5 = {
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: nextX, _1: nextY},
-									_1: path
-								};
-								getA = _v1;
-								getB = _v2;
-								nextX = _v3;
-								nextY = _v4;
-								path = _v5;
-								continue snake;
-							} else {
-								return {ctor: '_Tuple2', _0: path, _1: false};
-							}
-						} else {
-							break _v0_2;
-						}
-					} else {
-						if (_p0._1.ctor === 'Nothing') {
-							return {ctor: '_Tuple2', _0: path, _1: true};
-						} else {
-							break _v0_2;
-						}
-					}
-				} else {
-					break _v0_2;
-				}
-			} while(false);
-			return {ctor: '_Tuple2', _0: path, _1: false};
-		}
-	});
-var _user$project$Diff_Core$NoChange = function (a) {
-	return {ctor: 'NoChange', _0: a};
-};
-var _user$project$Diff_Core$Removed = function (a) {
-	return {ctor: 'Removed', _0: a};
-};
-var _user$project$Diff_Core$Added = function (a) {
-	return {ctor: 'Added', _0: a};
-};
-var _user$project$Diff_Core$makeChangesHelp = F5(
-	function (changes, getA, getB, _p1, path) {
-		makeChangesHelp:
-		while (true) {
-			var _p2 = _p1;
-			var _p7 = _p2._1;
-			var _p6 = _p2._0;
-			var _p3 = path;
-			if (_p3.ctor === '[]') {
-				return changes;
-			} else {
-				var _p5 = _p3._0._1;
-				var _p4 = _p3._0._0;
-				var change = (_elm_lang$core$Native_Utils.eq(_p6 - 1, _p4) && _elm_lang$core$Native_Utils.eq(_p7 - 1, _p5)) ? _user$project$Diff_Core$NoChange(
-					getA(_p6)) : (_elm_lang$core$Native_Utils.eq(_p6, _p4) ? _user$project$Diff_Core$Added(
-					getB(_p7)) : (_elm_lang$core$Native_Utils.eq(_p7, _p5) ? _user$project$Diff_Core$Removed(
-					getA(_p6)) : _elm_lang$core$Native_Utils.crash(
-					'Diff.Core',
-					{
-						start: {line: 154, column: 25},
-						end: {line: 154, column: 36}
-					})(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'Unexpected path: ',
-						_elm_lang$core$Basics$toString(
-							{
-								ctor: '_Tuple2',
-								_0: {ctor: '_Tuple2', _0: _p6, _1: _p7},
-								_1: path
-							})))));
-				var _v8 = {ctor: '::', _0: change, _1: changes},
-					_v9 = getA,
-					_v10 = getB,
-					_v11 = {ctor: '_Tuple2', _0: _p4, _1: _p5},
-					_v12 = _p3._1;
-				changes = _v8;
-				getA = _v9;
-				getB = _v10;
-				_p1 = _v11;
-				path = _v12;
-				continue makeChangesHelp;
-			}
-		}
-	});
-var _user$project$Diff_Core$makeChanges = F3(
-	function (getA, getB, path) {
-		var _p8 = path;
-		if (_p8.ctor === '[]') {
-			return {ctor: '[]'};
-		} else {
-			return A5(
-				_user$project$Diff_Core$makeChangesHelp,
-				{ctor: '[]'},
-				getA,
-				getB,
-				_p8._0,
-				_p8._1);
-		}
-	});
-var _user$project$Diff_Core$Found = function (a) {
-	return {ctor: 'Found', _0: a};
-};
-var _user$project$Diff_Core$Continue = function (a) {
-	return {ctor: 'Continue', _0: a};
-};
-var _user$project$Diff_Core$step = F4(
-	function (snake, offset, k, v) {
-		var fromTop = A2(
-			_elm_lang$core$Maybe$withDefault,
-			{ctor: '[]'},
-			A2(_elm_lang$core$Array$get, (k + 1) + offset, v));
-		var fromLeft = A2(
-			_elm_lang$core$Maybe$withDefault,
-			{ctor: '[]'},
-			A2(_elm_lang$core$Array$get, (k - 1) + offset, v));
-		var _p9 = function () {
-			var _p10 = {ctor: '_Tuple2', _0: fromLeft, _1: fromTop};
-			if (_p10._0.ctor === '[]') {
-				if (_p10._1.ctor === '[]') {
-					return {
-						ctor: '_Tuple2',
-						_0: {ctor: '[]'},
-						_1: {ctor: '_Tuple2', _0: 0, _1: 0}
-					};
-				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: fromTop,
-						_1: {ctor: '_Tuple2', _0: _p10._1._0._0 + 1, _1: _p10._1._0._1}
-					};
-				}
-			} else {
-				if (_p10._1.ctor === '[]') {
-					return {
-						ctor: '_Tuple2',
-						_0: fromLeft,
-						_1: {ctor: '_Tuple2', _0: _p10._0._0._0, _1: _p10._0._0._1 + 1}
-					};
-				} else {
-					var _p12 = _p10._1._0._1;
-					var _p11 = _p10._0._0._1;
-					return (_elm_lang$core$Native_Utils.cmp(_p11 + 1, _p12) > -1) ? {
-						ctor: '_Tuple2',
-						_0: fromLeft,
-						_1: {ctor: '_Tuple2', _0: _p10._0._0._0, _1: _p11 + 1}
-					} : {
-						ctor: '_Tuple2',
-						_0: fromTop,
-						_1: {ctor: '_Tuple2', _0: _p10._1._0._0 + 1, _1: _p12}
-					};
-				}
-			}
-		}();
-		var path = _p9._0;
-		var x = _p9._1._0;
-		var y = _p9._1._1;
-		var _p13 = A3(
-			snake,
-			x + 1,
-			y + 1,
-			{
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: x, _1: y},
-				_1: path
-			});
-		var newPath = _p13._0;
-		var goal = _p13._1;
-		return goal ? _user$project$Diff_Core$Found(newPath) : _user$project$Diff_Core$Continue(
-			A3(_elm_lang$core$Array$set, k + offset, newPath, v));
-	});
-var _user$project$Diff_Core$onpLoopK = F4(
-	function (snake, offset, ks, v) {
-		onpLoopK:
-		while (true) {
-			var _p14 = ks;
-			if (_p14.ctor === '[]') {
-				return _user$project$Diff_Core$Continue(v);
-			} else {
-				var _p15 = A4(_user$project$Diff_Core$step, snake, offset, _p14._0, v);
-				if (_p15.ctor === 'Found') {
-					return _user$project$Diff_Core$Found(_p15._0);
-				} else {
-					var _v17 = snake,
-						_v18 = offset,
-						_v19 = _p14._1,
-						_v20 = _p15._0;
-					snake = _v17;
-					offset = _v18;
-					ks = _v19;
-					v = _v20;
-					continue onpLoopK;
-				}
-			}
-		}
-	});
-var _user$project$Diff_Core$onpLoopP = F5(
-	function (snake, delta, offset, p, v) {
-		onpLoopP:
-		while (true) {
-			var ks = (_elm_lang$core$Native_Utils.cmp(delta, 0) > 0) ? A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$List$reverse(
-					A2(_elm_lang$core$List$range, delta + 1, delta + p)),
-				A2(_elm_lang$core$List$range, 0 - p, delta)) : A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$List$reverse(
-					A2(_elm_lang$core$List$range, delta + 1, p)),
-				A2(_elm_lang$core$List$range, (0 - p) + delta, delta));
-			var _p16 = A4(_user$project$Diff_Core$onpLoopK, snake, offset, ks, v);
-			if (_p16.ctor === 'Found') {
-				return _p16._0;
-			} else {
-				var _v22 = snake,
-					_v23 = delta,
-					_v24 = offset,
-					_v25 = p + 1,
-					_v26 = _p16._0;
-				snake = _v22;
-				delta = _v23;
-				offset = _v24;
-				p = _v25;
-				v = _v26;
-				continue onpLoopP;
-			}
-		}
-	});
-var _user$project$Diff_Core$onp = F4(
-	function (getA, getB, m, n) {
-		var delta = n - m;
-		var v = A2(
-			_elm_lang$core$Array$initialize,
-			(m + n) + 1,
-			_elm_lang$core$Basics$always(
-				{ctor: '[]'}));
-		return A5(
-			_user$project$Diff_Core$onpLoopP,
-			A2(_user$project$Diff_Core$snake, getA, getB),
-			delta,
-			m,
-			0,
-			v);
-	});
-var _user$project$Diff_Core$diff = F2(
-	function (a, b) {
-		var arrB = _elm_lang$core$Array$fromList(b);
-		var n = _elm_lang$core$Array$length(arrB);
-		var getB = function (y) {
-			return A2(_elm_lang$core$Array$get, y - 1, arrB);
-		};
-		var getBOrCrash = function (y) {
-			var _p17 = getB(y);
-			if (_p17.ctor === 'Just') {
-				return _p17._0;
-			} else {
-				return _elm_lang$core$Native_Utils.crashCase(
-					'Diff.Core',
-					{
-						start: {line: 113, column: 13},
-						end: {line: 118, column: 71}
-					},
-					_p17)(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'Cannot get B[',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(y),
-							']')));
-			}
-		};
-		var arrA = _elm_lang$core$Array$fromList(a);
-		var m = _elm_lang$core$Array$length(arrA);
-		var getA = function (x) {
-			return A2(_elm_lang$core$Array$get, x - 1, arrA);
-		};
-		var getAOrCrash = function (x) {
-			var _p19 = getA(x);
-			if (_p19.ctor === 'Just') {
-				return _p19._0;
-			} else {
-				return _elm_lang$core$Native_Utils.crashCase(
-					'Diff.Core',
-					{
-						start: {line: 105, column: 13},
-						end: {line: 110, column: 71}
-					},
-					_p19)(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'Cannot get A[',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(x),
-							']')));
-			}
-		};
-		var path = A4(_user$project$Diff_Core$onp, getA, getB, m, n);
-		return A3(_user$project$Diff_Core$makeChanges, getAOrCrash, getBOrCrash, path);
-	});
-var _user$project$Diff_Core$diffLines = F2(
-	function (a, b) {
-		return A2(
-			_user$project$Diff_Core$diff,
-			_elm_lang$core$String$lines(a),
-			_elm_lang$core$String$lines(b));
-	});
-
 var _user$project$Duration_Core$asSeconds = function (duration) {
 	var _p0 = duration;
 	if (_p0.ctor === 'Milliseconds') {
@@ -16981,6 +16654,354 @@ var _user$project$Model$Model = function (a) {
 		};
 	};
 };
+
+var _user$project$And$execute = F2(
+	function (command, model) {
+		return {ctor: '_Tuple2', _0: model, _1: command};
+	});
+var _user$project$And$noCommand = function (model) {
+	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+};
+var _user$project$And$updatePersistentState = _elm_lang$core$Native_Platform.outgoingPort(
+	'updatePersistentState',
+	function (v) {
+		return {autoRun: v.autoRun, autoNavigate: v.autoNavigate};
+	});
+var _user$project$And$updateAtomState = function (model) {
+	return A3(
+		_elm_lang$core$Basics$flip,
+		_user$project$And$execute,
+		model,
+		_user$project$And$updatePersistentState(
+			_user$project$Model$serialize(model)));
+};
+
+var _user$project$Diff_Core$snake = F5(
+	function (getA, getB, nextX, nextY, path) {
+		snake:
+		while (true) {
+			var _p0 = {
+				ctor: '_Tuple2',
+				_0: getA(nextX),
+				_1: getB(nextY)
+			};
+			_v0_2:
+			do {
+				if (_p0.ctor === '_Tuple2') {
+					if (_p0._0.ctor === 'Just') {
+						if (_p0._1.ctor === 'Just') {
+							if (_elm_lang$core$Native_Utils.eq(_p0._0._0, _p0._1._0)) {
+								var _v1 = getA,
+									_v2 = getB,
+									_v3 = nextX + 1,
+									_v4 = nextY + 1,
+									_v5 = {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: nextX, _1: nextY},
+									_1: path
+								};
+								getA = _v1;
+								getB = _v2;
+								nextX = _v3;
+								nextY = _v4;
+								path = _v5;
+								continue snake;
+							} else {
+								return {ctor: '_Tuple2', _0: path, _1: false};
+							}
+						} else {
+							break _v0_2;
+						}
+					} else {
+						if (_p0._1.ctor === 'Nothing') {
+							return {ctor: '_Tuple2', _0: path, _1: true};
+						} else {
+							break _v0_2;
+						}
+					}
+				} else {
+					break _v0_2;
+				}
+			} while(false);
+			return {ctor: '_Tuple2', _0: path, _1: false};
+		}
+	});
+var _user$project$Diff_Core$NoChange = function (a) {
+	return {ctor: 'NoChange', _0: a};
+};
+var _user$project$Diff_Core$Removed = function (a) {
+	return {ctor: 'Removed', _0: a};
+};
+var _user$project$Diff_Core$Added = function (a) {
+	return {ctor: 'Added', _0: a};
+};
+var _user$project$Diff_Core$makeChangesHelp = F5(
+	function (changes, getA, getB, _p1, path) {
+		makeChangesHelp:
+		while (true) {
+			var _p2 = _p1;
+			var _p7 = _p2._1;
+			var _p6 = _p2._0;
+			var _p3 = path;
+			if (_p3.ctor === '[]') {
+				return changes;
+			} else {
+				var _p5 = _p3._0._1;
+				var _p4 = _p3._0._0;
+				var change = (_elm_lang$core$Native_Utils.eq(_p6 - 1, _p4) && _elm_lang$core$Native_Utils.eq(_p7 - 1, _p5)) ? _user$project$Diff_Core$NoChange(
+					getA(_p6)) : (_elm_lang$core$Native_Utils.eq(_p6, _p4) ? _user$project$Diff_Core$Added(
+					getB(_p7)) : (_elm_lang$core$Native_Utils.eq(_p7, _p5) ? _user$project$Diff_Core$Removed(
+					getA(_p6)) : _elm_lang$core$Native_Utils.crash(
+					'Diff.Core',
+					{
+						start: {line: 154, column: 25},
+						end: {line: 154, column: 36}
+					})(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'Unexpected path: ',
+						_elm_lang$core$Basics$toString(
+							{
+								ctor: '_Tuple2',
+								_0: {ctor: '_Tuple2', _0: _p6, _1: _p7},
+								_1: path
+							})))));
+				var _v8 = {ctor: '::', _0: change, _1: changes},
+					_v9 = getA,
+					_v10 = getB,
+					_v11 = {ctor: '_Tuple2', _0: _p4, _1: _p5},
+					_v12 = _p3._1;
+				changes = _v8;
+				getA = _v9;
+				getB = _v10;
+				_p1 = _v11;
+				path = _v12;
+				continue makeChangesHelp;
+			}
+		}
+	});
+var _user$project$Diff_Core$makeChanges = F3(
+	function (getA, getB, path) {
+		var _p8 = path;
+		if (_p8.ctor === '[]') {
+			return {ctor: '[]'};
+		} else {
+			return A5(
+				_user$project$Diff_Core$makeChangesHelp,
+				{ctor: '[]'},
+				getA,
+				getB,
+				_p8._0,
+				_p8._1);
+		}
+	});
+var _user$project$Diff_Core$Found = function (a) {
+	return {ctor: 'Found', _0: a};
+};
+var _user$project$Diff_Core$Continue = function (a) {
+	return {ctor: 'Continue', _0: a};
+};
+var _user$project$Diff_Core$step = F4(
+	function (snake, offset, k, v) {
+		var fromTop = A2(
+			_elm_lang$core$Maybe$withDefault,
+			{ctor: '[]'},
+			A2(_elm_lang$core$Array$get, (k + 1) + offset, v));
+		var fromLeft = A2(
+			_elm_lang$core$Maybe$withDefault,
+			{ctor: '[]'},
+			A2(_elm_lang$core$Array$get, (k - 1) + offset, v));
+		var _p9 = function () {
+			var _p10 = {ctor: '_Tuple2', _0: fromLeft, _1: fromTop};
+			if (_p10._0.ctor === '[]') {
+				if (_p10._1.ctor === '[]') {
+					return {
+						ctor: '_Tuple2',
+						_0: {ctor: '[]'},
+						_1: {ctor: '_Tuple2', _0: 0, _1: 0}
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: fromTop,
+						_1: {ctor: '_Tuple2', _0: _p10._1._0._0 + 1, _1: _p10._1._0._1}
+					};
+				}
+			} else {
+				if (_p10._1.ctor === '[]') {
+					return {
+						ctor: '_Tuple2',
+						_0: fromLeft,
+						_1: {ctor: '_Tuple2', _0: _p10._0._0._0, _1: _p10._0._0._1 + 1}
+					};
+				} else {
+					var _p12 = _p10._1._0._1;
+					var _p11 = _p10._0._0._1;
+					return (_elm_lang$core$Native_Utils.cmp(_p11 + 1, _p12) > -1) ? {
+						ctor: '_Tuple2',
+						_0: fromLeft,
+						_1: {ctor: '_Tuple2', _0: _p10._0._0._0, _1: _p11 + 1}
+					} : {
+						ctor: '_Tuple2',
+						_0: fromTop,
+						_1: {ctor: '_Tuple2', _0: _p10._1._0._0 + 1, _1: _p12}
+					};
+				}
+			}
+		}();
+		var path = _p9._0;
+		var x = _p9._1._0;
+		var y = _p9._1._1;
+		var _p13 = A3(
+			snake,
+			x + 1,
+			y + 1,
+			{
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: x, _1: y},
+				_1: path
+			});
+		var newPath = _p13._0;
+		var goal = _p13._1;
+		return goal ? _user$project$Diff_Core$Found(newPath) : _user$project$Diff_Core$Continue(
+			A3(_elm_lang$core$Array$set, k + offset, newPath, v));
+	});
+var _user$project$Diff_Core$onpLoopK = F4(
+	function (snake, offset, ks, v) {
+		onpLoopK:
+		while (true) {
+			var _p14 = ks;
+			if (_p14.ctor === '[]') {
+				return _user$project$Diff_Core$Continue(v);
+			} else {
+				var _p15 = A4(_user$project$Diff_Core$step, snake, offset, _p14._0, v);
+				if (_p15.ctor === 'Found') {
+					return _user$project$Diff_Core$Found(_p15._0);
+				} else {
+					var _v17 = snake,
+						_v18 = offset,
+						_v19 = _p14._1,
+						_v20 = _p15._0;
+					snake = _v17;
+					offset = _v18;
+					ks = _v19;
+					v = _v20;
+					continue onpLoopK;
+				}
+			}
+		}
+	});
+var _user$project$Diff_Core$onpLoopP = F5(
+	function (snake, delta, offset, p, v) {
+		onpLoopP:
+		while (true) {
+			var ks = (_elm_lang$core$Native_Utils.cmp(delta, 0) > 0) ? A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$List$reverse(
+					A2(_elm_lang$core$List$range, delta + 1, delta + p)),
+				A2(_elm_lang$core$List$range, 0 - p, delta)) : A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$List$reverse(
+					A2(_elm_lang$core$List$range, delta + 1, p)),
+				A2(_elm_lang$core$List$range, (0 - p) + delta, delta));
+			var _p16 = A4(_user$project$Diff_Core$onpLoopK, snake, offset, ks, v);
+			if (_p16.ctor === 'Found') {
+				return _p16._0;
+			} else {
+				var _v22 = snake,
+					_v23 = delta,
+					_v24 = offset,
+					_v25 = p + 1,
+					_v26 = _p16._0;
+				snake = _v22;
+				delta = _v23;
+				offset = _v24;
+				p = _v25;
+				v = _v26;
+				continue onpLoopP;
+			}
+		}
+	});
+var _user$project$Diff_Core$onp = F4(
+	function (getA, getB, m, n) {
+		var delta = n - m;
+		var v = A2(
+			_elm_lang$core$Array$initialize,
+			(m + n) + 1,
+			_elm_lang$core$Basics$always(
+				{ctor: '[]'}));
+		return A5(
+			_user$project$Diff_Core$onpLoopP,
+			A2(_user$project$Diff_Core$snake, getA, getB),
+			delta,
+			m,
+			0,
+			v);
+	});
+var _user$project$Diff_Core$diff = F2(
+	function (a, b) {
+		var arrB = _elm_lang$core$Array$fromList(b);
+		var n = _elm_lang$core$Array$length(arrB);
+		var getB = function (y) {
+			return A2(_elm_lang$core$Array$get, y - 1, arrB);
+		};
+		var getBOrCrash = function (y) {
+			var _p17 = getB(y);
+			if (_p17.ctor === 'Just') {
+				return _p17._0;
+			} else {
+				return _elm_lang$core$Native_Utils.crashCase(
+					'Diff.Core',
+					{
+						start: {line: 113, column: 13},
+						end: {line: 118, column: 71}
+					},
+					_p17)(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'Cannot get B[',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(y),
+							']')));
+			}
+		};
+		var arrA = _elm_lang$core$Array$fromList(a);
+		var m = _elm_lang$core$Array$length(arrA);
+		var getA = function (x) {
+			return A2(_elm_lang$core$Array$get, x - 1, arrA);
+		};
+		var getAOrCrash = function (x) {
+			var _p19 = getA(x);
+			if (_p19.ctor === 'Just') {
+				return _p19._0;
+			} else {
+				return _elm_lang$core$Native_Utils.crashCase(
+					'Diff.Core',
+					{
+						start: {line: 105, column: 13},
+						end: {line: 110, column: 71}
+					},
+					_p19)(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'Cannot get A[',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(x),
+							']')));
+			}
+		};
+		var path = A4(_user$project$Diff_Core$onp, getA, getB, m, n);
+		return A3(_user$project$Diff_Core$makeChanges, getAOrCrash, getBOrCrash, path);
+	});
+var _user$project$Diff_Core$diffLines = F2(
+	function (a, b) {
+		return A2(
+			_user$project$Diff_Core$diff,
+			_elm_lang$core$String$lines(a),
+			_elm_lang$core$String$lines(b));
+	});
 
 var _user$project$Model_Basics$setPaneLocation = F2(
 	function (newLocation, model) {
@@ -18551,16 +18572,9 @@ var _user$project$View_Core$DisplayData = function (a) {
 	};
 };
 
-var _user$project$Main$andPerform = F2(
-	function (command, model) {
-		return {ctor: '_Tuple2', _0: model, _1: command};
-	});
-var _user$project$Main$andNoCommand = function (model) {
-	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-};
 var _user$project$Main$init = function (rawFlags) {
 	var flags = _user$project$Model_Flags$parse(rawFlags);
-	return _user$project$Main$andNoCommand(
+	return _user$project$And$noCommand(
 		A2(
 			_user$project$Model_Config$setAutoNavigate,
 			flags.autoNavigate,
@@ -18587,26 +18601,13 @@ var _user$project$Main$navigateToFile = _elm_lang$core$Native_Platform.outgoingP
 			})
 		];
 	});
-var _user$project$Main$updatePersistentState = _elm_lang$core$Native_Platform.outgoingPort(
-	'updatePersistentState',
-	function (v) {
-		return {autoRun: v.autoRun, autoNavigate: v.autoNavigate};
-	});
-var _user$project$Main$andUpdatePersistentState = function (model) {
-	return A3(
-		_elm_lang$core$Basics$flip,
-		_user$project$Main$andPerform,
-		model,
-		_user$project$Main$updatePersistentState(
-			_user$project$Model$serialize(model)));
-};
 var _user$project$Main$update = F2(
 	function (message, model) {
 		var _p0 = message;
 		switch (_p0.ctor) {
 			case 'InitiateRunAll':
 				return A2(
-					_user$project$Main$andPerform,
+					_user$project$And$execute,
 					_user$project$Main$runTest(
 						_user$project$Model_RandomSeed$forJS(model)),
 					_user$project$Model_TestTree$updateHierarchy(
@@ -18625,14 +18626,14 @@ var _user$project$Main$update = F2(
 												_user$project$Model_TestCount$resetPassed(
 													_user$project$Model_RunStatus$setToProcessing(model))))))))));
 			case 'CompilerErrored':
-				return _user$project$Main$andNoCommand(
+				return _user$project$And$noCommand(
 					A2(
 						_user$project$Model_Basics$setCompilerErrorMessage,
 						_elm_lang$core$Maybe$Just(_p0._0),
 						_user$project$Model_RunStatus$setToCompileError(model)));
 			case 'RunStart':
 				var event = _user$project$TestEvent_RunStart$parse(_p0._0._1);
-				return _user$project$Main$andNoCommand(
+				return _user$project$And$noCommand(
 					A2(
 						_user$project$Model_RunSeed$set,
 						event,
@@ -18645,7 +18646,7 @@ var _user$project$Main$update = F2(
 								_user$project$Model_RunStatus$setToProcessing(model)))));
 			case 'TestCompleted':
 				var event = _user$project$TestEvent_TestCompleted$parse(_p0._0);
-				return _user$project$Main$andNoCommand(
+				return _user$project$And$noCommand(
 					_user$project$Model_TestTree$updateHierarchy(
 						A2(
 							_user$project$Model_TestTree$build,
@@ -18653,7 +18654,7 @@ var _user$project$Main$update = F2(
 							A2(_user$project$Model_TestCount$updatePassed, event, model))));
 			case 'RunComplete':
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
-				return _user$project$Main$andNoCommand(
+				return _user$project$And$noCommand(
 					_user$project$Model_StatusBar$initiateTextFlicker(
 						_user$project$Model_TestTree$expandFailingAndTodoNodes(
 							_user$project$Model_TestTree$updateHierarchy(
@@ -18667,30 +18668,30 @@ var _user$project$Main$update = F2(
 											_user$project$Model_RunStatus$setForTodo(
 												_user$project$Model_RunStatus$setToPassing(model)))))))));
 			case 'TestListItemExpand':
-				return _user$project$Main$andNoCommand(
+				return _user$project$And$noCommand(
 					A3(_user$project$Model_TestTree$toggleNode, _p0._0, true, model));
 			case 'TestListItemCollapse':
-				return _user$project$Main$andNoCommand(
+				return _user$project$And$noCommand(
 					A3(_user$project$Model_TestTree$toggleNode, _p0._0, false, model));
 			case 'TestListItemMouseEnter':
-				return _user$project$Main$andNoCommand(
+				return _user$project$And$noCommand(
 					A2(
 						_user$project$Model_Basics$setTestMouseIsOver,
 						_elm_lang$core$Maybe$Just(_p0._0),
 						model));
 			case 'TestListItemMouseLeave':
-				return _user$project$Main$andNoCommand(
+				return _user$project$And$noCommand(
 					A2(_user$project$Model_Basics$setTestMouseIsOver, _elm_lang$core$Maybe$Nothing, model));
 			case 'TestListItemSelect':
 				var _p2 = _p0._1;
 				return function () {
 					var _p1 = {ctor: '_Tuple2', _0: _p2, _1: model.autoNavigateEnabled};
 					if (((_p1.ctor === '_Tuple2') && (_p1._0.ctor === 'Just')) && (_p1._1 === true)) {
-						return _user$project$Main$andPerform(
+						return _user$project$And$execute(
 							_user$project$Main$navigateToFile(
 								_user$project$TestInstance_Core$pathAndDescription(_p1._0._0)));
 					} else {
-						return _user$project$Main$andNoCommand;
+						return _user$project$And$noCommand;
 					}
 				}()(
 					A2(
@@ -18701,18 +18702,18 @@ var _user$project$Main$update = F2(
 							_elm_lang$core$Maybe$Just(_p0._0),
 							model)));
 			case 'ToggleAutoRun':
-				return _user$project$Main$andUpdatePersistentState(
+				return _user$project$And$updateAtomState(
 					_user$project$Model_Config$invertAutoRun(model));
 			case 'ToggleAutoNavigate':
-				return _user$project$Main$andUpdatePersistentState(
+				return _user$project$And$updateAtomState(
 					_user$project$Model_Config$invertAutoNavigate(model));
 			case 'CopySeed':
 				return A2(
-					_user$project$Main$andPerform,
+					_user$project$And$execute,
 					_user$project$Main$copySeed(_p0._0),
 					model);
 			case 'SetRandomSeed':
-				return _user$project$Main$andNoCommand(
+				return _user$project$And$noCommand(
 					A2(
 						_user$project$Model_RandomSeed$setForcing,
 						true,
@@ -18721,16 +18722,16 @@ var _user$project$Main$update = F2(
 							_elm_lang$core$Maybe$Just(_p0._0),
 							model)));
 			case 'SetForceSeed':
-				return _user$project$Main$andNoCommand(
+				return _user$project$And$noCommand(
 					A2(_user$project$Model_RandomSeed$setForcing, _p0._0, model));
 			case 'AnimateFlicker':
-				return _user$project$Main$andNoCommand(
+				return _user$project$And$noCommand(
 					A2(_user$project$Model_StatusBar$updateFlicker, _p0._0, model));
 			case 'PaneMoved':
-				return _user$project$Main$andNoCommand(
+				return _user$project$And$noCommand(
 					A2(_user$project$Model_Basics$setPaneLocation, _p0._0, model));
 			default:
-				return _user$project$Main$andNoCommand(model);
+				return _user$project$And$noCommand(model);
 		}
 	});
 var _user$project$Main$commandKeyTestStart = _elm_lang$core$Native_Platform.incomingPort(
