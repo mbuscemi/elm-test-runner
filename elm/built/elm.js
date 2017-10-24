@@ -16228,6 +16228,29 @@ var _user$project$Duration_Core$Seconds = function (a) {
 	return {ctor: 'Seconds', _0: a};
 };
 
+var _user$project$Model_Config$setAutoNavigate = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{autoNavigateEnabled: setting});
+	});
+var _user$project$Model_Config$invertAutoNavigate = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{autoNavigateEnabled: !model.autoNavigateEnabled});
+};
+var _user$project$Model_Config$setAutoRun = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{autoRunEnabled: setting});
+	});
+var _user$project$Model_Config$invertAutoRun = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{autoRunEnabled: !model.autoRunEnabled});
+};
+
 var _user$project$Model_Flags$default = {autoRun: false, autoNavigate: true};
 var _user$project$Model_Flags$Flags = F2(
 	function (a, b) {
@@ -17323,58 +17346,6 @@ var _user$project$Model_Core$resetPassedTests = function (model) {
 		model,
 		{passedTests: 0});
 };
-var _user$project$Model_Core$setRunStatusToCompileError = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{runStatus: _user$project$State_RunStatus$compileError});
-};
-var _user$project$Model_Core$setRunStatusForTodo = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			runStatus: A2(_user$project$Tree_Traverse$hasMatchingNode, _user$project$TestInstance_Core$isTodo, model.testRuns) ? _user$project$State_RunStatus$incomplete : model.runStatus
-		});
-};
-var _user$project$Model_Core$setRunStatusForFailure = F2(
-	function (event, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				runStatus: (!_user$project$TestEvent_RunComplete$passed(event)) ? _user$project$State_RunStatus$lastFailed : model.runStatus
-			});
-	});
-var _user$project$Model_Core$setRunStatusToPassing = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{runStatus: _user$project$State_RunStatus$lastPassed});
-};
-var _user$project$Model_Core$setRunStatusToProcessing = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{runStatus: _user$project$State_RunStatus$processing});
-};
-var _user$project$Model_Core$setAutoNavigate = F2(
-	function (setting, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{autoNavigateEnabled: setting});
-	});
-var _user$project$Model_Core$invertAutoNavigate = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{autoNavigateEnabled: !model.autoNavigateEnabled});
-};
-var _user$project$Model_Core$setAutoRun = F2(
-	function (setting, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{autoRunEnabled: setting});
-	});
-var _user$project$Model_Core$invertAutoRun = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{autoRunEnabled: !model.autoRunEnabled});
-};
 var _user$project$Model_Core$serialize = function (model) {
 	return {autoRun: model.autoRunEnabled, autoNavigate: model.autoNavigateEnabled};
 };
@@ -17444,6 +17415,37 @@ var _user$project$Model_Core$Model = function (a) {
 			};
 		};
 	};
+};
+
+var _user$project$Model_RunStatus$setToCompileError = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{runStatus: _user$project$State_RunStatus$compileError});
+};
+var _user$project$Model_RunStatus$setForTodo = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			runStatus: A2(_user$project$Tree_Traverse$hasMatchingNode, _user$project$TestInstance_Core$isTodo, model.testRuns) ? _user$project$State_RunStatus$incomplete : model.runStatus
+		});
+};
+var _user$project$Model_RunStatus$setForFailure = F2(
+	function (event, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				runStatus: (!_user$project$TestEvent_RunComplete$passed(event)) ? _user$project$State_RunStatus$lastFailed : model.runStatus
+			});
+	});
+var _user$project$Model_RunStatus$setToPassing = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{runStatus: _user$project$State_RunStatus$lastPassed});
+};
+var _user$project$Model_RunStatus$setToProcessing = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{runStatus: _user$project$State_RunStatus$processing});
 };
 
 var _user$project$TestInstance_View$timeReport = function (testInstance) {
@@ -18553,9 +18555,9 @@ var _user$project$Main$init = function (rawFlags) {
 	var flags = _user$project$Model_Flags$parse(rawFlags);
 	return _user$project$Main$andNoCommand(
 		A2(
-			_user$project$Model_Core$setAutoNavigate,
+			_user$project$Model_Config$setAutoNavigate,
 			flags.autoNavigate,
-			A2(_user$project$Model_Core$setAutoRun, flags.autoRun, _user$project$Model_Core$default)));
+			A2(_user$project$Model_Config$setAutoRun, flags.autoRun, _user$project$Model_Core$default)));
 };
 var _user$project$Main$runTest = _elm_lang$core$Native_Platform.outgoingPort(
 	'runTest',
@@ -18614,13 +18616,13 @@ var _user$project$Main$update = F2(
 												_user$project$Model_Core$setSelectedTestNodeId,
 												_elm_lang$core$Maybe$Nothing,
 												_user$project$Model_Core$resetPassedTests(
-													_user$project$Model_Core$setRunStatusToProcessing(model))))))))));
+													_user$project$Model_RunStatus$setToProcessing(model))))))))));
 			case 'CompilerErrored':
 				return _user$project$Main$andNoCommand(
 					A2(
 						_user$project$Model_Core$setCompilerErrorMessage,
 						_elm_lang$core$Maybe$Just(_p0._0),
-						_user$project$Model_Core$setRunStatusToCompileError(model)));
+						_user$project$Model_RunStatus$setToCompileError(model)));
 			case 'RunStart':
 				var event = _user$project$TestEvent_RunStart$parse(_p0._0._1);
 				return _user$project$Main$andNoCommand(
@@ -18633,7 +18635,7 @@ var _user$project$Main$update = F2(
 							A2(
 								_user$project$Model_ProjectName$setFromPath,
 								_p0._0._0,
-								_user$project$Model_Core$setRunStatusToProcessing(model)))));
+								_user$project$Model_RunStatus$setToProcessing(model)))));
 			case 'TestCompleted':
 				var event = _user$project$TestEvent_TestCompleted$parse(_p0._0);
 				return _user$project$Main$andNoCommand(
@@ -18653,10 +18655,10 @@ var _user$project$Main$update = F2(
 										_user$project$Model_Core$setRunDuration,
 										event,
 										A2(
-											_user$project$Model_Core$setRunStatusForFailure,
+											_user$project$Model_RunStatus$setForFailure,
 											event,
-											_user$project$Model_Core$setRunStatusForTodo(
-												_user$project$Model_Core$setRunStatusToPassing(model)))))))));
+											_user$project$Model_RunStatus$setForTodo(
+												_user$project$Model_RunStatus$setToPassing(model)))))))));
 			case 'TestListItemExpand':
 				return _user$project$Main$andNoCommand(
 					A3(_user$project$Model_Core$toggleNode, _p0._0, true, model));
@@ -18693,10 +18695,10 @@ var _user$project$Main$update = F2(
 							model)));
 			case 'ToggleAutoRun':
 				return _user$project$Main$andUpdatePersistentState(
-					_user$project$Model_Core$invertAutoRun(model));
+					_user$project$Model_Config$invertAutoRun(model));
 			case 'ToggleAutoNavigate':
 				return _user$project$Main$andUpdatePersistentState(
-					_user$project$Model_Core$invertAutoNavigate(model));
+					_user$project$Model_Config$invertAutoNavigate(model));
 			case 'CopySeed':
 				return A2(
 					_user$project$Main$andPerform,

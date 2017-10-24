@@ -18,11 +18,6 @@ module Model.Core
         , setRandomSeedForcing
         , setRunDuration
         , setRunSeed
-        , setRunStatusForFailure
-        , setRunStatusForTodo
-        , setRunStatusToCompileError
-        , setRunStatusToPassing
-        , setRunStatusToProcessing
         , setSelectedTestInstance
         , setSelectedTestNodeId
         , setTestMouseIsOver
@@ -106,43 +101,6 @@ serialize model =
     { autoRun = model.autoRunEnabled
     , autoNavigate = model.autoNavigateEnabled
     }
-
-
-setRunStatusToProcessing : Model -> Model
-setRunStatusToProcessing model =
-    { model | runStatus = RunStatus.processing }
-
-
-setRunStatusToPassing : Model -> Model
-setRunStatusToPassing model =
-    { model | runStatus = RunStatus.lastPassed }
-
-
-setRunStatusForFailure : RunComplete -> Model -> Model
-setRunStatusForFailure event model =
-    { model
-        | runStatus =
-            if not <| RunComplete.passed event then
-                RunStatus.lastFailed
-            else
-                model.runStatus
-    }
-
-
-setRunStatusForTodo : Model -> Model
-setRunStatusForTodo model =
-    { model
-        | runStatus =
-            if Tree.Traverse.hasMatchingNode TestInstance.isTodo model.testRuns then
-                RunStatus.incomplete
-            else
-                model.runStatus
-    }
-
-
-setRunStatusToCompileError : Model -> Model
-setRunStatusToCompileError model =
-    { model | runStatus = RunStatus.compileError }
 
 
 resetPassedTests : Model -> Model

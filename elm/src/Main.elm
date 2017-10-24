@@ -22,11 +22,6 @@ import Model.Core as Model
         , setRandomSeedForcing
         , setRunDuration
         , setRunSeed
-        , setRunStatusForFailure
-        , setRunStatusForTodo
-        , setRunStatusToCompileError
-        , setRunStatusToPassing
-        , setRunStatusToProcessing
         , setSelectedTestInstance
         , setSelectedTestNodeId
         , setTestMouseIsOver
@@ -38,6 +33,7 @@ import Model.Core as Model
         )
 import Model.Flags as Flags exposing (Flags)
 import Model.ProjectName
+import Model.RunStatus
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
@@ -109,7 +105,7 @@ update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
         InitiateRunAll ->
-            setRunStatusToProcessing model
+            Model.RunStatus.setToProcessing model
                 |> resetPassedTests
                 |> setSelectedTestNodeId Nothing
                 |> setSelectedTestInstance Nothing
@@ -121,7 +117,7 @@ update message model =
                 |> andPerform (runTest <| randomSeedForJS model)
 
         CompilerErrored errorMessage ->
-            setRunStatusToCompileError model
+            Model.RunStatus.setToCompileError model
                 |> setCompilerErrorMessage (Just errorMessage)
                 |> andNoCommand
 
@@ -130,7 +126,7 @@ update message model =
                 event =
                     RunStart.parse data
             in
-            setRunStatusToProcessing model
+            Model.RunStatus.setToProcessing model
                 |> Model.ProjectName.setFromPath projectPath
                 |> setTotalTestCount event
                 |> setRunSeed event
@@ -151,9 +147,9 @@ update message model =
                 event =
                     RunComplete.parse data
             in
-            setRunStatusToPassing model
-                |> setRunStatusForTodo
-                |> setRunStatusForFailure event
+            Model.RunStatus.setToPassing model
+                |> Model.RunStatus.setForTodo
+                |> Model.RunStatus.setForFailure event
                 |> setRunDuration event
                 |> purgeObsoleteNodes
                 |> updateHierarchy
