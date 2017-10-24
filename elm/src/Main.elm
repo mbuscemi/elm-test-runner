@@ -21,7 +21,6 @@ import Model.Core as Model
         , setAutoRun
         , setCompilerErrorMessage
         , setPaneLocation
-        , setProjectNameFromPath
         , setRandomSeed
         , setRandomSeedForcing
         , setRunDuration
@@ -41,6 +40,7 @@ import Model.Core as Model
         , updatePassedTestCount
         )
 import Model.Flags as Flags exposing (Flags)
+import Model.ProjectName
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
@@ -134,7 +134,7 @@ update message model =
                     RunStart.parse data
             in
             setRunStatusToProcessing model
-                |> setProjectNameFromPath projectPath
+                |> Model.ProjectName.setFromPath projectPath
                 |> setTotalTestCount event
                 |> setRunSeed event
                 |> andNoCommand

@@ -18,7 +18,6 @@ module Model.Core
         , setAutoRun
         , setCompilerErrorMessage
         , setPaneLocation
-        , setProjectNameFromPath
         , setRandomSeed
         , setRandomSeedForcing
         , setRunDuration
@@ -42,6 +41,7 @@ import Animation exposing (State)
 import Animation.Flicker
 import Duration.Core exposing (Duration)
 import Model.Flags exposing (Flags)
+import Model.ProjectName
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
@@ -86,7 +86,7 @@ default =
     , passedTests = 0
     , runDuration = Nothing
     , runSeed = Nothing
-    , testRuns = Node defaultProjectName TestInstance.default []
+    , testRuns = Node Model.ProjectName.default TestInstance.default []
     , testHierarchy = Tree.make (Node humanReadableTopLevelMessage TestInstance.default [])
     , testMouseIsOver = Nothing
     , selectedTestNodeId = Nothing
@@ -100,11 +100,6 @@ default =
     }
 
 
-defaultProjectName : String
-defaultProjectName =
-    "Unknown Project"
-
-
 humanReadableTopLevelMessage : String
 humanReadableTopLevelMessage =
     "No Tests"
@@ -114,29 +109,6 @@ serialize : Model -> Flags
 serialize model =
     { autoRun = model.autoRunEnabled
     , autoNavigate = model.autoNavigateEnabled
-    }
-
-
-setProjectNameFromPath : String -> Model -> Model
-setProjectNameFromPath projectPath model =
-    { model
-        | projectName =
-            String.split "/" projectPath
-                |> List.reverse
-                |> List.head
-                |> Maybe.withDefault defaultProjectName
-    }
-        |> setProjectNameToTopNode
-
-
-setProjectNameToTopNode : Model -> Model
-setProjectNameToTopNode model =
-    let
-        (Node _ testInstance children) =
-            model.testRuns
-    in
-    { model
-        | testRuns = Node model.projectName testInstance children
     }
 
 

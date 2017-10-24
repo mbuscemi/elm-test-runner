@@ -16245,6 +16245,67 @@ var _user$project$Model_Flags$parse = function (raw) {
 		A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Model_Flags$flags, raw));
 };
 
+var _user$project$Tree_Core$newId = A2(
+	_folkertdev$elm_state$State$andThen,
+	function (_p0) {
+		return _folkertdev$elm_state$State$get;
+	},
+	_folkertdev$elm_state$State$modify(
+		function (x) {
+			return x + 1;
+		}));
+var _user$project$Tree_Core$Node = F3(
+	function (a, b, c) {
+		return {ctor: 'Node', _0: a, _1: b, _2: c};
+	});
+var _user$project$Tree_Core$label = function (_p1) {
+	var _p2 = _p1;
+	return A3(
+		_folkertdev$elm_state$State$map2,
+		F2(
+			function (nid, collapsibleChildren) {
+				return A3(
+					_user$project$Tree_Core$Node,
+					{ctor: '_Tuple3', _0: _p2._0, _1: false, _2: nid},
+					_p2._1,
+					collapsibleChildren);
+			}),
+		_user$project$Tree_Core$newId,
+		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Core$label, _p2._2));
+};
+var _user$project$Tree_Core$make = function (tree) {
+	return A2(
+		_folkertdev$elm_state$State$finalValue,
+		0,
+		_user$project$Tree_Core$label(tree));
+};
+
+var _user$project$Model_ProjectName$setToTopNode = function (model) {
+	var _p0 = model.testRuns;
+	var testInstance = _p0._1;
+	var children = _p0._2;
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testRuns: A3(_user$project$Tree_Core$Node, model.projectName, testInstance, children)
+		});
+};
+var _user$project$Model_ProjectName$default = 'Unknown Project';
+var _user$project$Model_ProjectName$setFromPath = F2(
+	function (projectPath, model) {
+		return _user$project$Model_ProjectName$setToTopNode(
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{
+					projectName: A2(
+						_elm_lang$core$Maybe$withDefault,
+						_user$project$Model_ProjectName$default,
+						_elm_lang$core$List$head(
+							_elm_lang$core$List$reverse(
+								A2(_elm_lang$core$String$split, '/', projectPath))))
+				}));
+	});
+
 var _user$project$State_PaneLocation$toStyle = function (paneLocation) {
 	var _p0 = paneLocation;
 	if (_p0.ctor === 'Bottom') {
@@ -16917,41 +16978,6 @@ var _user$project$TestInstance_Reconcile$transform = F2(
 		return A2(_user$project$TestInstance_Reconcile$updateStatusPreferringFail, $new, old);
 	});
 
-var _user$project$Tree_Core$newId = A2(
-	_folkertdev$elm_state$State$andThen,
-	function (_p0) {
-		return _folkertdev$elm_state$State$get;
-	},
-	_folkertdev$elm_state$State$modify(
-		function (x) {
-			return x + 1;
-		}));
-var _user$project$Tree_Core$Node = F3(
-	function (a, b, c) {
-		return {ctor: 'Node', _0: a, _1: b, _2: c};
-	});
-var _user$project$Tree_Core$label = function (_p1) {
-	var _p2 = _p1;
-	return A3(
-		_folkertdev$elm_state$State$map2,
-		F2(
-			function (nid, collapsibleChildren) {
-				return A3(
-					_user$project$Tree_Core$Node,
-					{ctor: '_Tuple3', _0: _p2._0, _1: false, _2: nid},
-					_p2._1,
-					collapsibleChildren);
-			}),
-		_user$project$Tree_Core$newId,
-		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Core$label, _p2._2));
-};
-var _user$project$Tree_Core$make = function (tree) {
-	return A2(
-		_folkertdev$elm_state$State$finalValue,
-		0,
-		_user$project$Tree_Core$label(tree));
-};
-
 var _user$project$Tree_Merge$listToTree = F3(
 	function (first, data, path) {
 		var _p0 = path;
@@ -17349,35 +17375,10 @@ var _user$project$Model_Core$invertAutoRun = function (model) {
 		model,
 		{autoRunEnabled: !model.autoRunEnabled});
 };
-var _user$project$Model_Core$setProjectNameToTopNode = function (model) {
-	var _p5 = model.testRuns;
-	var testInstance = _p5._1;
-	var children = _p5._2;
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			testRuns: A3(_user$project$Tree_Core$Node, model.projectName, testInstance, children)
-		});
-};
 var _user$project$Model_Core$serialize = function (model) {
 	return {autoRun: model.autoRunEnabled, autoNavigate: model.autoNavigateEnabled};
 };
 var _user$project$Model_Core$humanReadableTopLevelMessage = 'No Tests';
-var _user$project$Model_Core$defaultProjectName = 'Unknown Project';
-var _user$project$Model_Core$setProjectNameFromPath = F2(
-	function (projectPath, model) {
-		return _user$project$Model_Core$setProjectNameToTopNode(
-			_elm_lang$core$Native_Utils.update(
-				model,
-				{
-					projectName: A2(
-						_elm_lang$core$Maybe$withDefault,
-						_user$project$Model_Core$defaultProjectName,
-						_elm_lang$core$List$head(
-							_elm_lang$core$List$reverse(
-								A2(_elm_lang$core$String$split, '/', projectPath))))
-				}));
-	});
 var _user$project$Model_Core$default = {
 	projectName: '',
 	compilerError: _elm_lang$core$Maybe$Nothing,
@@ -17388,7 +17389,7 @@ var _user$project$Model_Core$default = {
 	runSeed: _elm_lang$core$Maybe$Nothing,
 	testRuns: A3(
 		_user$project$Tree_Core$Node,
-		_user$project$Model_Core$defaultProjectName,
+		_user$project$Model_ProjectName$default,
 		_user$project$TestInstance_Core$default,
 		{ctor: '[]'}),
 	testHierarchy: _user$project$Tree_Core$make(
@@ -18630,7 +18631,7 @@ var _user$project$Main$update = F2(
 							_user$project$Model_Core$setTotalTestCount,
 							event,
 							A2(
-								_user$project$Model_Core$setProjectNameFromPath,
+								_user$project$Model_ProjectName$setFromPath,
 								_p0._0._0,
 								_user$project$Model_Core$setRunStatusToProcessing(model)))));
 			case 'TestCompleted':
