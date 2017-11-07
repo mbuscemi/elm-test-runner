@@ -9,7 +9,7 @@ type PaneLocation
 
 default : PaneLocation
 default =
-    Bottom
+    Right
 
 
 fromString : String -> PaneLocation
