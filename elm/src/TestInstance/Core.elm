@@ -153,6 +153,6 @@ setLabels labels instance =
     { instance | labels = labels }
 
 
-pathAndDescription : TestInstance -> ( String, List String )
+pathAndDescription : TestInstance -> ( List String, String )
 pathAndDescription instance =
-    Labels.getPathAndTestDescription instance.labels
+    Labels.getPotentialPathPiecesAndTestDescription instance.labels

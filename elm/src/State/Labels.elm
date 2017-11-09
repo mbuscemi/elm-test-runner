@@ -1,7 +1,6 @@
-module State.Labels exposing (Labels, empty, fromList, getPathAndTestDescription)
+module State.Labels exposing (Labels, empty, fromList, getPotentialPathPiecesAndTestDescription)
 
-import Char
-import String.Extra as String
+import List.Extra as List
 
 
 type Labels
@@ -9,7 +8,7 @@ type Labels
 
 
 type alias PathAndTestDescription =
-    ( String, List String )
+    ( List String, String )
 
 
 empty : Labels
@@ -22,48 +21,33 @@ fromList rawLabels =
     Basic rawLabels
 
 
-getPathAndTestDescription : Labels -> PathAndTestDescription
-getPathAndTestDescription labels =
+getPotentialPathPiecesAndTestDescription : Labels -> PathAndTestDescription
+getPotentialPathPiecesAndTestDescription labels =
     case labels of
         Basic list ->
-            buildPathAndDescription "" list
+            splitDots list
+                |> toPathAndTestDescription
 
 
-buildPathAndDescription : String -> List String -> PathAndTestDescription
-buildPathAndDescription path labels =
-    case labels of
-        nextLabel :: rest ->
-            if firstCharIsUpper nextLabel then
-                buildPathAndDescription
-                    (addToPath nextLabel path)
-                    rest
-            else
-                ( lastSlashToElmSuffix path, [ nextLabel ] ++ rest )
-
-        [] ->
-            ( path, [] )
+splitDots : List String -> List String
+splitDots list =
+    List.map (\string -> String.split "." string) list
+        |> List.concat
 
 
-addToPath : String -> String -> String
-addToPath next path =
-    path ++ dotsToSlashes next ++ "/"
+toPathAndTestDescription : List String -> PathAndTestDescription
+toPathAndTestDescription list =
+    ( allButLastLabel list, lastLabel list )
 
 
-dotsToSlashes : String -> String
-dotsToSlashes string =
-    String.replace "." "/" string
+allButLastLabel : List String -> List String
+allButLastLabel list =
+    List.reverse list
+        |> List.drop 1
+        |> List.reverse
 
 
-lastSlashToElmSuffix : String -> String
-lastSlashToElmSuffix string =
-    String.dropRight 1 string ++ ".elm"
-
-
-firstCharIsUpper : String -> Bool
-firstCharIsUpper string =
-    case String.uncons string of
-        Just ( char, _ ) ->
-            Char.isUpper char
-
-        Nothing ->
-            False
+lastLabel : List String -> String
+lastLabel list =
+    List.last list
+        |> Maybe.withDefault ""

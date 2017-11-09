@@ -31,4 +31,4 @@ showInEditor testInstance autoNavigateEnabled =
             And.noCommand
 
 
-port navigateToFile : ( String, List String ) -> Cmd message
+port navigateToFile : ( List String, String ) -> Cmd message
