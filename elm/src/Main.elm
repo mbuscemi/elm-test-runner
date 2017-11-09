@@ -141,13 +141,7 @@ update message model =
         TestListItemSelect nodeId testInstance ->
             Model.SelectedTest.setNodeId (Just nodeId) model
                 |> Model.SelectedTest.setInstance testInstance
-                |> (case ( testInstance, model.autoNavigateEnabled ) of
-                        ( Just instance, True ) ->
-                            And.execute <| navigateToFile (TestInstance.pathAndDescription instance)
-
-                        _ ->
-                            And.noCommand
-                   )
+                |> Model.SelectedTest.showInEditor testInstance model.autoNavigateEnabled
 
         ToggleAutoRun ->
             Model.Config.invertAutoRun model
@@ -242,9 +236,6 @@ port runTest : String -> Cmd message
 
 
 port copySeed : String -> Cmd message
-
-
-port navigateToFile : ( String, List String ) -> Cmd message
 
 
 port commandKeyTestStart : (() -> message) -> Sub message

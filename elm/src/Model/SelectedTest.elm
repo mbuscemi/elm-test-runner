@@ -1,6 +1,7 @@
-module Model.SelectedTest exposing (setInstance, setNodeId)
+port module Model.SelectedTest exposing (setInstance, setNodeId, showInEditor)
 
-import TestInstance.Core exposing (TestInstance)
+import And
+import TestInstance.Core as TestInstance exposing (TestInstance)
 
 
 type alias HasSelectedTest r =
@@ -18,3 +19,16 @@ setNodeId nodeId model =
 setInstance : Maybe TestInstance -> HasSelectedTest model -> HasSelectedTest model
 setInstance testInstance model =
     { model | selectedTestInstance = testInstance }
+
+
+showInEditor : Maybe TestInstance -> Bool -> model -> ( model, Cmd message )
+showInEditor testInstance autoNavigateEnabled =
+    case ( testInstance, autoNavigateEnabled ) of
+        ( Just instance, True ) ->
+            And.execute <| navigateToFile (TestInstance.pathAndDescription instance)
+
+        _ ->
+            And.noCommand
+
+
+port navigateToFile : ( String, List String ) -> Cmd message

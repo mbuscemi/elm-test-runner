@@ -15989,8 +15989,8 @@ var _user$project$State_PaneLocation$toStyle = function (paneLocation) {
 };
 var _user$project$State_PaneLocation$Left = {ctor: 'Left'};
 var _user$project$State_PaneLocation$Bottom = {ctor: 'Bottom'};
-var _user$project$State_PaneLocation$default = _user$project$State_PaneLocation$Bottom;
 var _user$project$State_PaneLocation$Right = {ctor: 'Right'};
+var _user$project$State_PaneLocation$default = _user$project$State_PaneLocation$Right;
 var _user$project$State_PaneLocation$fromString = function (location) {
 	var _p1 = location;
 	switch (_p1) {
@@ -17248,6 +17248,28 @@ var _user$project$Model_SelectedTest$setNodeId = F2(
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{selectedTestNodeId: nodeId});
+	});
+var _user$project$Model_SelectedTest$navigateToFile = _elm_lang$core$Native_Platform.outgoingPort(
+	'navigateToFile',
+	function (v) {
+		return [
+			v._0,
+			_elm_lang$core$Native_List.toArray(v._1).map(
+			function (v) {
+				return v;
+			})
+		];
+	});
+var _user$project$Model_SelectedTest$showInEditor = F2(
+	function (testInstance, autoNavigateEnabled) {
+		var _p0 = {ctor: '_Tuple2', _0: testInstance, _1: autoNavigateEnabled};
+		if (((_p0.ctor === '_Tuple2') && (_p0._0.ctor === 'Just')) && (_p0._1 === true)) {
+			return _user$project$And$execute(
+				_user$project$Model_SelectedTest$navigateToFile(
+					_user$project$TestInstance_Core$pathAndDescription(_p0._0._0)));
+		} else {
+			return _user$project$And$noCommand;
+		}
 	});
 
 var _user$project$Model_StatusBar$initiateTextFlicker = function (model) {
@@ -18590,17 +18612,6 @@ var _user$project$Main$copySeed = _elm_lang$core$Native_Platform.outgoingPort(
 	function (v) {
 		return v;
 	});
-var _user$project$Main$navigateToFile = _elm_lang$core$Native_Platform.outgoingPort(
-	'navigateToFile',
-	function (v) {
-		return [
-			v._0,
-			_elm_lang$core$Native_List.toArray(v._1).map(
-			function (v) {
-				return v;
-			})
-		];
-	});
 var _user$project$Main$update = F2(
 	function (message, model) {
 		var _p0 = message;
@@ -18683,20 +18694,14 @@ var _user$project$Main$update = F2(
 				return _user$project$And$noCommand(
 					A2(_user$project$Model_Basics$setTestMouseIsOver, _elm_lang$core$Maybe$Nothing, model));
 			case 'TestListItemSelect':
-				var _p2 = _p0._1;
-				return function () {
-					var _p1 = {ctor: '_Tuple2', _0: _p2, _1: model.autoNavigateEnabled};
-					if (((_p1.ctor === '_Tuple2') && (_p1._0.ctor === 'Just')) && (_p1._1 === true)) {
-						return _user$project$And$execute(
-							_user$project$Main$navigateToFile(
-								_user$project$TestInstance_Core$pathAndDescription(_p1._0._0)));
-					} else {
-						return _user$project$And$noCommand;
-					}
-				}()(
+				var _p1 = _p0._1;
+				return A3(
+					_user$project$Model_SelectedTest$showInEditor,
+					_p1,
+					model.autoNavigateEnabled,
 					A2(
 						_user$project$Model_SelectedTest$setInstance,
-						_p2,
+						_p1,
 						A2(
 							_user$project$Model_SelectedTest$setNodeId,
 							_elm_lang$core$Maybe$Just(_p0._0),
@@ -18865,7 +18870,7 @@ var _user$project$Main$view = function (model) {
 		{runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed});
 };
 var _user$project$Main$saveEventMessage = F2(
-	function (model, _p3) {
+	function (model, _p2) {
 		return model.autoRunEnabled ? _user$project$Main$InitiateRunAll : _user$project$Main$DoNothing;
 	});
 var _user$project$Main$subscriptions = function (model) {
