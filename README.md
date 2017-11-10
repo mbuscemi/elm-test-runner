@@ -27,6 +27,9 @@ Run elm-test and view results without leaving Atom
 
 ### Dock Left, Right, or Center
 
+![Vertical Layout—Left & Right Dock](https://github.com/mbuscemi/elm-test-runner/blob/master/images/layout-vertical.png)
+![Horizontal Layout—Bottom Dock](https://github.com/mbuscemi/elm-test-runner/blob/master/images/layout-vertical.png)
+
 1. Drag the header bar for Elm Test Runner from its default position on the right side of the screen into the lower dock, or the left dock.
 2. Elm Test Runner will move to that dock. Landscape orientation for the center bottom dock is supported.
 
