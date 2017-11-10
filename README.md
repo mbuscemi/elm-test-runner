@@ -50,5 +50,4 @@ Run elm-test and view results without leaving Atom
 1. Click on a passing or failing test, and the file containing the selected test will open in your editor.*
 2. Auto-Navigate to Test is enabled by default. You can disable it by going to Packages → Elm Test Runner → Toggle Auto-Navigate to Test, or by using Ctrl-Alt-N. An indicator light in the lower right hand corner of the pane indicates whether this functionality is enabled or disabled.
 
-**Important Caveat:** The `elm-test` utility outputs file path components inline with test name components. As a result, it is only possible for Elm Test Runner to build the correct path to your tests if the top level `describe` function labels of your tests begin with lower case letters.
-It will also cause difficulty if you open a file from one project into another. Currently, it is recommended that you disable auto-navigate functionality if you need to work in such conditions.
+**Important Caveat:** Only files that are in the current active Atom project are capable of being opened in this way.
