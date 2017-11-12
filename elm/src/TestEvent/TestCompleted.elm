@@ -114,20 +114,3 @@ duration (TestCompleted parsed) =
 firstFailure : TestCompleted -> Maybe Failure
 firstFailure (TestCompleted parsed) =
     List.head parsed.failures
-
-
-
--- toTestInstance : TestCompleted -> TestInstance
--- toTestInstance ((TestCompleted parsed) as event) =
---     TestInstance.default
---         |> TestInstance.setStatus
---             (if passed event then
---                 "pass"
---              else if isTodo event then
---                 "todo"
---              else
---                 "fail"
---             )
---         |> TestInstance.setLabels (Labels.fromList parsed.labels)
---         |> TestInstance.setDuration parsed.duration
---         |> TestInstance.setFailure (List.head parsed.failures)
