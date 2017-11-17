@@ -1,6 +1,7 @@
 module Model.Flags exposing (Flags, parse)
 
-import Json.Decode exposing (Decoder, bool, decodeString, field, map2)
+import Json.Decode exposing (Decoder, bool, decodeValue, field, map2)
+import Json.Encode exposing (Value)
 
 
 type alias Flags =
@@ -9,9 +10,9 @@ type alias Flags =
     }
 
 
-parse : String -> Flags
+parse : Value -> Flags
 parse raw =
-    decodeString flags raw
+    decodeValue flags raw
         |> Result.withDefault default
 
 

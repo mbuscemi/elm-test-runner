@@ -16261,7 +16261,7 @@ var _user$project$Model_Flags$parse = function (raw) {
 	return A2(
 		_elm_lang$core$Result$withDefault,
 		_user$project$Model_Flags$default,
-		A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Model_Flags$flags, raw));
+		A2(_elm_lang$core$Json_Decode$decodeValue, _user$project$Model_Flags$flags, raw));
 };
 
 var _user$project$Tree_Core$newId = A2(
@@ -19241,7 +19241,7 @@ var _user$project$Main$subscriptions = function (model) {
 		});
 };
 var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
-	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})(_elm_lang$core$Json_Decode$string);
+	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})(_elm_lang$core$Json_Decode$value);
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};

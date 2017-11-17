@@ -3,6 +3,7 @@ port module Main exposing (main)
 import And
 import Animation
 import Html exposing (Html)
+import Json.Encode exposing (Value)
 import Model exposing (Model)
 import Model.Basics
 import Model.Config
@@ -44,7 +45,7 @@ type Message
     | DoNothing
 
 
-main : Program String Model Message
+main : Program Value Model Message
 main =
     Html.programWithFlags
         { init = init
@@ -54,7 +55,7 @@ main =
         }
 
 
-init : String -> ( Model, Cmd Message )
+init : Value -> ( Model, Cmd Message )
 init rawFlags =
     let
         flags =
