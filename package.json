@@ -16,7 +16,7 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-      "elm-test": "0.18.9"
+      "elm-test": "0.18.10"
   },
   "deserializers": {
       "ElmTestRunnerView": "deserialize"
