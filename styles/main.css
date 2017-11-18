@@ -192,6 +192,7 @@
 
 .etr-main-view .output-display .failure span.removal {
     padding: 3px 0;
+    text-decoration: line-through black;
     background-color: #5c2121;
 }
 

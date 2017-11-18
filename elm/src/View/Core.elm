@@ -6,7 +6,7 @@ import Html exposing (Html, div)
 import Html.Attributes exposing (class)
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus exposing (RunStatus)
-import TestInstance.Core exposing (TestInstance)
+import TestInstance.Core as TestInstance exposing (TestInstance)
 import TestInstance.View
 import Tree.Core exposing (CollapsibleTree)
 import View.DurationAndSeedDisplay
@@ -82,7 +82,7 @@ render data messages =
             ]
         , div [ class "section-two" ]
             [ div [ class "output-display" ]
-                [ View.OutputDisplay.render data.compilerError data.selectedTestInstance ]
+                [ View.OutputDisplay.render data.compilerError <| TestInstance.getFailureData data.selectedTestInstance ]
             , div [ class "footer" ]
                 (View.SeedAndSettings.render
                     messages.setForceSeedHandler

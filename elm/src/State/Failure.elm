@@ -1,6 +1,7 @@
 module State.Failure
     exposing
-        ( Failure
+        ( Data
+        , Failure
         , failure
         , getActual
         , getExpected
@@ -10,6 +11,7 @@ module State.Failure
         , isTodo
         , nullInstance
         , shouldDiff
+        , toData
         )
 
 import Json.Decode exposing (Decoder, field, list, map, map2, map3, map4, oneOf, string)
@@ -151,53 +153,27 @@ nullInstance =
     SimpleFailure "NULL"
 
 
-getMessage : Failure -> String
-getMessage failure =
-    case failure of
-        SimpleFailure messsage ->
-            messsage
-
-        ComplexFailure complexFailure ->
-            complexFailure.message
-
-        ConditionalFailure conditionalFailure ->
-            conditionalFailure.message
+type alias Data =
+    { actual : String
+    , expected : String
+    , given : Maybe String
+    , message : String
+    , hasComplexComparison : Bool
+    , isTodo : Bool
+    , shouldDiff : Bool
+    }
 
 
-getGiven : Failure -> Maybe String
-getGiven failure =
-    case failure of
-        SimpleFailure _ ->
-            Nothing
-
-        ComplexFailure _ ->
-            Nothing
-
-        ConditionalFailure fail ->
-            Just fail.given
-
-
-hasComplexComparison : Failure -> Bool
-hasComplexComparison failure =
-    case failure of
-        SimpleFailure _ ->
-            False
-
-        ComplexFailure complexFailure ->
-            case complexFailure.reason of
-                SimpleComparison _ ->
-                    False
-
-                _ ->
-                    True
-
-        ConditionalFailure conditionalFailure ->
-            case conditionalFailure.reason of
-                SimpleComparison _ ->
-                    False
-
-                _ ->
-                    True
+toData : Failure -> Data
+toData failure =
+    { actual = getActual failure
+    , expected = getExpected failure
+    , given = getGiven failure
+    , message = getMessage failure
+    , hasComplexComparison = hasComplexComparison failure
+    , isTodo = isTodo failure
+    , shouldDiff = shouldDiff failure
+    }
 
 
 getExpected : Failure -> String
@@ -238,6 +214,68 @@ getActual failure =
             data.actual
 
 
+getGiven : Failure -> Maybe String
+getGiven failure =
+    case failure of
+        SimpleFailure _ ->
+            Nothing
+
+        ComplexFailure _ ->
+            Nothing
+
+        ConditionalFailure fail ->
+            Just fail.given
+
+
+getMessage : Failure -> String
+getMessage failure =
+    case failure of
+        SimpleFailure messsage ->
+            messsage
+
+        ComplexFailure complexFailure ->
+            complexFailure.message
+
+        ConditionalFailure conditionalFailure ->
+            conditionalFailure.message
+
+
+hasComplexComparison : Failure -> Bool
+hasComplexComparison failure =
+    case failure of
+        SimpleFailure _ ->
+            False
+
+        ComplexFailure complexFailure ->
+            case complexFailure.reason of
+                SimpleComparison _ ->
+                    False
+
+                _ ->
+                    True
+
+        ConditionalFailure conditionalFailure ->
+            case conditionalFailure.reason of
+                SimpleComparison _ ->
+                    False
+
+                _ ->
+                    True
+
+
+isTodo : Failure -> Bool
+isTodo failure =
+    case failure of
+        SimpleFailure _ ->
+            True
+
+        ComplexFailure _ ->
+            False
+
+        ConditionalFailure _ ->
+            False
+
+
 shouldDiff : Failure -> Bool
 shouldDiff failure =
     case getComparison failure of
@@ -255,19 +293,6 @@ shouldDiff failure =
 
         DictSetComparison _ ->
             True
-
-
-isTodo : Failure -> Bool
-isTodo failure =
-    case failure of
-        SimpleFailure _ ->
-            True
-
-        ComplexFailure _ ->
-            False
-
-        ConditionalFailure _ ->
-            False
 
 
 getComparison : Failure -> Comparison

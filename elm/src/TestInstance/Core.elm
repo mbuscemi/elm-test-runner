@@ -5,6 +5,7 @@ module TestInstance.Core
         , durationAsString
         , fromEvent
         , getFailure
+        , getFailureData
         , isFailing
         , isPending
         , isTodo
@@ -18,7 +19,8 @@ module TestInstance.Core
         )
 
 import Duration.Core as Duration exposing (Duration, inMilliseconds)
-import State.Failure exposing (Failure)
+import Maybe.Extra as Maybe
+import State.Failure as Failure exposing (Failure)
 import State.Labels as Labels exposing (Labels)
 import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
 
@@ -112,6 +114,13 @@ isTodo instance =
 getFailure : TestInstance -> Maybe Failure
 getFailure instance =
     instance.failure
+
+
+getFailureData : Maybe TestInstance -> Maybe Failure.Data
+getFailureData maybeTestInstance =
+    Maybe.map getFailure maybeTestInstance
+        |> Maybe.join
+        |> Maybe.map Failure.toData
 
 
 setStatus : String -> TestInstance -> TestInstance

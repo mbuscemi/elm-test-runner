@@ -3,33 +3,27 @@ module View.OutputDisplay exposing (render)
 import Diff.Core exposing (Change(Added, NoChange, Removed), diff)
 import Html exposing (Html, br, div, span, strong, text)
 import Html.Attributes exposing (class)
-import State.Failure
-    exposing
-        ( Failure
-        , getActual
-        , getExpected
-        , getGiven
-        , getMessage
-        , hasComplexComparison
-        , isTodo
-        , shouldDiff
-        )
-import TestInstance.Core as TestInstance exposing (TestInstance)
 
 
-render : Maybe String -> Maybe TestInstance -> Html message
-render compilerError testInstance =
-    case ( compilerError, testInstance ) of
+type alias FailureData =
+    { actual : String
+    , expected : String
+    , given : Maybe String
+    , message : String
+    , hasComplexComparison : Bool
+    , isTodo : Bool
+    , shouldDiff : Bool
+    }
+
+
+render : Maybe String -> Maybe FailureData -> Html message
+render compilerError maybeFailureData =
+    case ( compilerError, maybeFailureData ) of
         ( Just error, _ ) ->
             div [ class "failure" ] (errorText error)
 
-        ( Nothing, Just instance ) ->
-            case TestInstance.getFailure instance of
-                Just failure ->
-                    div [ class "failure" ] (failureText failure)
-
-                Nothing ->
-                    div [] []
+        ( Nothing, Just failureData ) ->
+            div [ class "failure" ] (failureText failureData)
 
         ( Nothing, Nothing ) ->
             div [] []
@@ -49,38 +43,31 @@ errorHtml message =
         |> List.intersperse (br [] [])
 
 
-failureText : Failure -> List (Html message)
-failureText failure =
+failureText : FailureData -> List (Html message)
+failureText failureData =
     let
         ( expected, actual ) =
-            process failure
+            process failureData
     in
     [ div [ class "failure-header" ]
-        [ text <| headerText failure
-        , strong [] [ text <| getMessage failure ]
+        [ text <| headerText failureData
+        , strong [] [ text <| failureData.message ]
         ]
-    , givenDisplay failure
+    , givenDisplay failureData
     , div [ class "actual" ] actual
-    , barTop failure
-    , barMiddle (getMessage failure) failure
-    , barBottom failure
+    , barTop failureData
+    , barMiddle failureData.message failureData
+    , barBottom failureData
     , div [ class "expected" ] expected
     ]
 
 
-process : Failure -> ( List (Html message), List (Html message) )
-process failure =
-    let
-        expected =
-            getExpected failure
-
-        actual =
-            getActual failure
-    in
-    if shouldDiff failure then
-        diffed expected actual
+process : FailureData -> ( List (Html message), List (Html message) )
+process failureData =
+    if failureData.shouldDiff then
+        diffed failureData.expected failureData.actual
     else
-        ( [ text expected ], [ text actual ] )
+        ( [ text failureData.expected ], [ text failureData.actual ] )
 
 
 diffed : String -> String -> ( List (Html message), List (Html message) )
@@ -113,17 +100,17 @@ toHtml change =
             text <| String.fromChar char
 
 
-headerText : Failure -> String
-headerText failure =
-    if isTodo failure then
+headerText : FailureData -> String
+headerText failureData =
+    if failureData.isTodo then
         "TODO: "
     else
         "Failed on: "
 
 
-givenDisplay : Failure -> Html message
-givenDisplay failure =
-    case getGiven failure of
+givenDisplay : FailureData -> Html message
+givenDisplay failureData =
+    case failureData.given of
         Just givenText ->
             div [ class "given-display" ] [ text <| "Given: " ++ givenText ]
 
@@ -131,24 +118,24 @@ givenDisplay failure =
             text ""
 
 
-barTop : Failure -> Html message
+barTop : FailureData -> Html message
 barTop =
     barPiece "╷" ""
 
 
-barMiddle : String -> Failure -> Html message
+barMiddle : String -> FailureData -> Html message
 barMiddle comparison =
     barPiece "│ " comparison
 
 
-barBottom : Failure -> Html message
+barBottom : FailureData -> Html message
 barBottom =
     barPiece "╵" ""
 
 
-barPiece : String -> String -> Failure -> Html message
-barPiece piece extra failure =
-    if hasComplexComparison failure then
+barPiece : String -> String -> FailureData -> Html message
+barPiece piece extra failureData =
+    if failureData.hasComplexComparison then
         div [] [ text <| piece ++ extra ]
     else
         text extra

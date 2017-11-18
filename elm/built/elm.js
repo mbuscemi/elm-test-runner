@@ -6446,6 +6446,185 @@ var _elm_lang$core$Array$repeat = F2(
 	});
 var _elm_lang$core$Array$Array = {ctor: 'Array'};
 
+var _elm_community$maybe_extra$Maybe_Extra$foldrValues = F2(
+	function (item, list) {
+		var _p0 = item;
+		if (_p0.ctor === 'Nothing') {
+			return list;
+		} else {
+			return {ctor: '::', _0: _p0._0, _1: list};
+		}
+	});
+var _elm_community$maybe_extra$Maybe_Extra$values = A2(
+	_elm_lang$core$List$foldr,
+	_elm_community$maybe_extra$Maybe_Extra$foldrValues,
+	{ctor: '[]'});
+var _elm_community$maybe_extra$Maybe_Extra$filter = F2(
+	function (f, m) {
+		var _p1 = A2(_elm_lang$core$Maybe$map, f, m);
+		if ((_p1.ctor === 'Just') && (_p1._0 === true)) {
+			return m;
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _elm_community$maybe_extra$Maybe_Extra$traverseArray = function (f) {
+	var step = F2(
+		function (e, acc) {
+			var _p2 = f(e);
+			if (_p2.ctor === 'Nothing') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				return A2(
+					_elm_lang$core$Maybe$map,
+					_elm_lang$core$Array$push(_p2._0),
+					acc);
+			}
+		});
+	return A2(
+		_elm_lang$core$Array$foldl,
+		step,
+		_elm_lang$core$Maybe$Just(_elm_lang$core$Array$empty));
+};
+var _elm_community$maybe_extra$Maybe_Extra$combineArray = _elm_community$maybe_extra$Maybe_Extra$traverseArray(_elm_lang$core$Basics$identity);
+var _elm_community$maybe_extra$Maybe_Extra$traverse = function (f) {
+	var step = F2(
+		function (e, acc) {
+			var _p3 = f(e);
+			if (_p3.ctor === 'Nothing') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				return A2(
+					_elm_lang$core$Maybe$map,
+					F2(
+						function (x, y) {
+							return {ctor: '::', _0: x, _1: y};
+						})(_p3._0),
+					acc);
+			}
+		});
+	return A2(
+		_elm_lang$core$List$foldr,
+		step,
+		_elm_lang$core$Maybe$Just(
+			{ctor: '[]'}));
+};
+var _elm_community$maybe_extra$Maybe_Extra$combine = _elm_community$maybe_extra$Maybe_Extra$traverse(_elm_lang$core$Basics$identity);
+var _elm_community$maybe_extra$Maybe_Extra$toArray = function (m) {
+	var _p4 = m;
+	if (_p4.ctor === 'Nothing') {
+		return _elm_lang$core$Array$empty;
+	} else {
+		return A2(_elm_lang$core$Array$repeat, 1, _p4._0);
+	}
+};
+var _elm_community$maybe_extra$Maybe_Extra$toList = function (m) {
+	var _p5 = m;
+	if (_p5.ctor === 'Nothing') {
+		return {ctor: '[]'};
+	} else {
+		return {
+			ctor: '::',
+			_0: _p5._0,
+			_1: {ctor: '[]'}
+		};
+	}
+};
+var _elm_community$maybe_extra$Maybe_Extra$orElse = F2(
+	function (ma, mb) {
+		var _p6 = mb;
+		if (_p6.ctor === 'Nothing') {
+			return ma;
+		} else {
+			return mb;
+		}
+	});
+var _elm_community$maybe_extra$Maybe_Extra$orElseLazy = F2(
+	function (fma, mb) {
+		var _p7 = mb;
+		if (_p7.ctor === 'Nothing') {
+			return fma(
+				{ctor: '_Tuple0'});
+		} else {
+			return mb;
+		}
+	});
+var _elm_community$maybe_extra$Maybe_Extra$orLazy = F2(
+	function (ma, fmb) {
+		var _p8 = ma;
+		if (_p8.ctor === 'Nothing') {
+			return fmb(
+				{ctor: '_Tuple0'});
+		} else {
+			return ma;
+		}
+	});
+var _elm_community$maybe_extra$Maybe_Extra$or = F2(
+	function (ma, mb) {
+		var _p9 = ma;
+		if (_p9.ctor === 'Nothing') {
+			return mb;
+		} else {
+			return ma;
+		}
+	});
+var _elm_community$maybe_extra$Maybe_Extra$prev = _elm_lang$core$Maybe$map2(_elm_lang$core$Basics$always);
+var _elm_community$maybe_extra$Maybe_Extra$next = _elm_lang$core$Maybe$map2(
+	_elm_lang$core$Basics$flip(_elm_lang$core$Basics$always));
+var _elm_community$maybe_extra$Maybe_Extra$andMap = _elm_lang$core$Maybe$map2(
+	F2(
+		function (x, y) {
+			return y(x);
+		}));
+var _elm_community$maybe_extra$Maybe_Extra$unpack = F3(
+	function (d, f, m) {
+		var _p10 = m;
+		if (_p10.ctor === 'Nothing') {
+			return d(
+				{ctor: '_Tuple0'});
+		} else {
+			return f(_p10._0);
+		}
+	});
+var _elm_community$maybe_extra$Maybe_Extra$unwrap = F3(
+	function (d, f, m) {
+		var _p11 = m;
+		if (_p11.ctor === 'Nothing') {
+			return d;
+		} else {
+			return f(_p11._0);
+		}
+	});
+var _elm_community$maybe_extra$Maybe_Extra$isJust = function (m) {
+	var _p12 = m;
+	if (_p12.ctor === 'Nothing') {
+		return false;
+	} else {
+		return true;
+	}
+};
+var _elm_community$maybe_extra$Maybe_Extra$isNothing = function (m) {
+	var _p13 = m;
+	if (_p13.ctor === 'Nothing') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var _elm_community$maybe_extra$Maybe_Extra$join = function (mx) {
+	var _p14 = mx;
+	if (_p14.ctor === 'Just') {
+		return _p14._0;
+	} else {
+		return _elm_lang$core$Maybe$Nothing;
+	}
+};
+var _elm_community$maybe_extra$Maybe_Extra_ops = _elm_community$maybe_extra$Maybe_Extra_ops || {};
+_elm_community$maybe_extra$Maybe_Extra_ops['?'] = F2(
+	function (mx, x) {
+		return A2(_elm_lang$core$Maybe$withDefault, x, mx);
+	});
+
 var _elm_lang$animation_frame$Native_AnimationFrame = function()
 {
 
@@ -16447,26 +16626,26 @@ var _user$project$State_Failure$hasComplexComparison = function (failure) {
 			}
 	}
 };
-var _user$project$State_Failure$getGiven = function (failure) {
+var _user$project$State_Failure$getMessage = function (failure) {
 	var _p4 = failure;
 	switch (_p4.ctor) {
 		case 'SimpleFailure':
-			return _elm_lang$core$Maybe$Nothing;
+			return _p4._0;
 		case 'ComplexFailure':
-			return _elm_lang$core$Maybe$Nothing;
+			return _p4._0.message;
 		default:
-			return _elm_lang$core$Maybe$Just(_p4._0.given);
+			return _p4._0.message;
 	}
 };
-var _user$project$State_Failure$getMessage = function (failure) {
+var _user$project$State_Failure$getGiven = function (failure) {
 	var _p5 = failure;
 	switch (_p5.ctor) {
 		case 'SimpleFailure':
-			return _p5._0;
+			return _elm_lang$core$Maybe$Nothing;
 		case 'ComplexFailure':
-			return _p5._0.message;
+			return _elm_lang$core$Maybe$Nothing;
 		default:
-			return _p5._0.message;
+			return _elm_lang$core$Maybe$Just(_p5._0.given);
 	}
 };
 var _user$project$State_Failure$EqualityComparisonData = F3(
@@ -16528,6 +16707,10 @@ var _user$project$State_Failure$ComplexFailureData = F2(
 var _user$project$State_Failure$ConditionalFailureData = F3(
 	function (a, b, c) {
 		return {message: a, reason: b, given: c};
+	});
+var _user$project$State_Failure$Data = F7(
+	function (a, b, c, d, e, f, g) {
+		return {actual: a, expected: b, given: c, message: d, hasComplexComparison: e, isTodo: f, shouldDiff: g};
 	});
 var _user$project$State_Failure$DictSetComparison = function (a) {
 	return {ctor: 'DictSetComparison', _0: a};
@@ -16633,6 +16816,17 @@ var _user$project$State_Failure$shouldDiff = function (failure) {
 		default:
 			return true;
 	}
+};
+var _user$project$State_Failure$toData = function (failure) {
+	return {
+		actual: _user$project$State_Failure$getActual(failure),
+		expected: _user$project$State_Failure$getExpected(failure),
+		given: _user$project$State_Failure$getGiven(failure),
+		message: _user$project$State_Failure$getMessage(failure),
+		hasComplexComparison: _user$project$State_Failure$hasComplexComparison(failure),
+		isTodo: _user$project$State_Failure$isTodo(failure),
+		shouldDiff: _user$project$State_Failure$shouldDiff(failure)
+	};
 };
 var _user$project$State_Failure$ComplexFailure = function (a) {
 	return {ctor: 'ComplexFailure', _0: a};
@@ -16815,6 +17009,13 @@ var _user$project$TestInstance_Core$setDuration = F2(
 	});
 var _user$project$TestInstance_Core$getFailure = function (instance) {
 	return instance.failure;
+};
+var _user$project$TestInstance_Core$getFailureData = function (maybeTestInstance) {
+	return A2(
+		_elm_lang$core$Maybe$map,
+		_user$project$State_Failure$toData,
+		_elm_community$maybe_extra$Maybe_Extra$join(
+			A2(_elm_lang$core$Maybe$map, _user$project$TestInstance_Core$getFailure, maybeTestInstance)));
 };
 var _user$project$TestInstance_Core$toClass = function (instance) {
 	var _p0 = instance.testStatus;
@@ -17999,8 +18200,8 @@ var _user$project$View_DurationAndSeedDisplay$Messages = F2(
 	});
 
 var _user$project$View_OutputDisplay$barPiece = F3(
-	function (piece, extra, failure) {
-		return _user$project$State_Failure$hasComplexComparison(failure) ? A2(
+	function (piece, extra, failureData) {
+		return failureData.hasComplexComparison ? A2(
 			_elm_lang$html$Html$div,
 			{ctor: '[]'},
 			{
@@ -18015,8 +18216,8 @@ var _user$project$View_OutputDisplay$barMiddle = function (comparison) {
 	return A2(_user$project$View_OutputDisplay$barPiece, '│ ', comparison);
 };
 var _user$project$View_OutputDisplay$barTop = A2(_user$project$View_OutputDisplay$barPiece, '╷', '');
-var _user$project$View_OutputDisplay$givenDisplay = function (failure) {
-	var _p0 = _user$project$State_Failure$getGiven(failure);
+var _user$project$View_OutputDisplay$givenDisplay = function (failureData) {
+	var _p0 = failureData.given;
 	if (_p0.ctor === 'Just') {
 		return A2(
 			_elm_lang$html$Html$div,
@@ -18035,8 +18236,8 @@ var _user$project$View_OutputDisplay$givenDisplay = function (failure) {
 		return _elm_lang$html$Html$text('');
 	}
 };
-var _user$project$View_OutputDisplay$headerText = function (failure) {
-	return _user$project$State_Failure$isTodo(failure) ? 'TODO: ' : 'Failed on: ';
+var _user$project$View_OutputDisplay$headerText = function (failureData) {
+	return failureData.isTodo ? 'TODO: ' : 'Failed on: ';
 };
 var _user$project$View_OutputDisplay$toHtml = function (change) {
 	var _p1 = change;
@@ -18108,25 +18309,23 @@ var _user$project$View_OutputDisplay$diffed = F2(
 					_elm_lang$core$String$toList(expected),
 					_elm_lang$core$String$toList(actual))));
 	});
-var _user$project$View_OutputDisplay$process = function (failure) {
-	var actual = _user$project$State_Failure$getActual(failure);
-	var expected = _user$project$State_Failure$getExpected(failure);
-	return _user$project$State_Failure$shouldDiff(failure) ? A2(_user$project$View_OutputDisplay$diffed, expected, actual) : {
+var _user$project$View_OutputDisplay$process = function (failureData) {
+	return failureData.shouldDiff ? A2(_user$project$View_OutputDisplay$diffed, failureData.expected, failureData.actual) : {
 		ctor: '_Tuple2',
 		_0: {
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(expected),
+			_0: _elm_lang$html$Html$text(failureData.expected),
 			_1: {ctor: '[]'}
 		},
 		_1: {
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(actual),
+			_0: _elm_lang$html$Html$text(failureData.actual),
 			_1: {ctor: '[]'}
 		}
 	};
 };
-var _user$project$View_OutputDisplay$failureText = function (failure) {
-	var _p2 = _user$project$View_OutputDisplay$process(failure);
+var _user$project$View_OutputDisplay$failureText = function (failureData) {
+	var _p2 = _user$project$View_OutputDisplay$process(failureData);
 	var expected = _p2._0;
 	var actual = _p2._1;
 	return {
@@ -18141,7 +18340,7 @@ var _user$project$View_OutputDisplay$failureText = function (failure) {
 			{
 				ctor: '::',
 				_0: _elm_lang$html$Html$text(
-					_user$project$View_OutputDisplay$headerText(failure)),
+					_user$project$View_OutputDisplay$headerText(failureData)),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -18149,8 +18348,7 @@ var _user$project$View_OutputDisplay$failureText = function (failure) {
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text(
-								_user$project$State_Failure$getMessage(failure)),
+							_0: _elm_lang$html$Html$text(failureData.message),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
@@ -18158,7 +18356,7 @@ var _user$project$View_OutputDisplay$failureText = function (failure) {
 			}),
 		_1: {
 			ctor: '::',
-			_0: _user$project$View_OutputDisplay$givenDisplay(failure),
+			_0: _user$project$View_OutputDisplay$givenDisplay(failureData),
 			_1: {
 				ctor: '::',
 				_0: A2(
@@ -18171,16 +18369,13 @@ var _user$project$View_OutputDisplay$failureText = function (failure) {
 					actual),
 				_1: {
 					ctor: '::',
-					_0: _user$project$View_OutputDisplay$barTop(failure),
+					_0: _user$project$View_OutputDisplay$barTop(failureData),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_user$project$View_OutputDisplay$barMiddle,
-							_user$project$State_Failure$getMessage(failure),
-							failure),
+						_0: A2(_user$project$View_OutputDisplay$barMiddle, failureData.message, failureData),
 						_1: {
 							ctor: '::',
-							_0: _user$project$View_OutputDisplay$barBottom(failure),
+							_0: _user$project$View_OutputDisplay$barBottom(failureData),
 							_1: {
 								ctor: '::',
 								_0: A2(
@@ -18241,8 +18436,8 @@ var _user$project$View_OutputDisplay$errorText = function (errorMessage) {
 	};
 };
 var _user$project$View_OutputDisplay$render = F2(
-	function (compilerError, testInstance) {
-		var _p3 = {ctor: '_Tuple2', _0: compilerError, _1: testInstance};
+	function (compilerError, maybeFailureData) {
+		var _p3 = {ctor: '_Tuple2', _0: compilerError, _1: maybeFailureData};
 		if (_p3._0.ctor === 'Just') {
 			return A2(
 				_elm_lang$html$Html$div,
@@ -18254,22 +18449,14 @@ var _user$project$View_OutputDisplay$render = F2(
 				_user$project$View_OutputDisplay$errorText(_p3._0._0));
 		} else {
 			if (_p3._1.ctor === 'Just') {
-				var _p4 = _user$project$TestInstance_Core$getFailure(_p3._1._0);
-				if (_p4.ctor === 'Just') {
-					return A2(
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('failure'),
-							_1: {ctor: '[]'}
-						},
-						_user$project$View_OutputDisplay$failureText(_p4._0));
-				} else {
-					return A2(
-						_elm_lang$html$Html$div,
-						{ctor: '[]'},
-						{ctor: '[]'});
-				}
+				return A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('failure'),
+						_1: {ctor: '[]'}
+					},
+					_user$project$View_OutputDisplay$failureText(_p3._1._0));
 			} else {
 				return A2(
 					_elm_lang$html$Html$div,
@@ -18277,6 +18464,10 @@ var _user$project$View_OutputDisplay$render = F2(
 					{ctor: '[]'});
 			}
 		}
+	});
+var _user$project$View_OutputDisplay$FailureData = F7(
+	function (a, b, c, d, e, f, g) {
+		return {actual: a, expected: b, given: c, message: d, hasComplexComparison: e, isTodo: f, shouldDiff: g};
 	});
 
 var _user$project$View_SeedAndSettings$enabledString = function (enabled) {
@@ -18852,7 +19043,10 @@ var _user$project$View_Core$render = F2(
 								},
 								{
 									ctor: '::',
-									_0: A2(_user$project$View_OutputDisplay$render, data.compilerError, data.selectedTestInstance),
+									_0: A2(
+										_user$project$View_OutputDisplay$render,
+										data.compilerError,
+										_user$project$TestInstance_Core$getFailureData(data.selectedTestInstance)),
 									_1: {ctor: '[]'}
 								}),
 							_1: {
