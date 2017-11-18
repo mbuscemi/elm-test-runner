@@ -6,8 +6,6 @@ import Html exposing (Html, div)
 import Html.Attributes exposing (class)
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus exposing (RunStatus)
-import TestInstance.Core as TestInstance exposing (TestInstance)
-import TestInstance.View
 import Tree.Core exposing (CollapsibleTree)
 import View.DurationAndSeedDisplay
 import View.OutputDisplay
@@ -16,30 +14,33 @@ import View.TestHierarchy.Core
 import View.Toolbar
 
 
-type alias Messages message =
+type alias Messages message testInstance =
     { runAllButtonClickHandler : message
     , testListItemExpand : Int -> message
     , testListItemCollapse : Int -> message
     , testListItemMouseEnter : Int -> message
     , testListItemMouseLeave : message
-    , testClickHandler : Int -> Maybe TestInstance -> message
+    , testClickHandler : Int -> Maybe testInstance -> message
     , copySeedClickHandler : String -> message
     , setSeedClickHandler : Int -> message
     , setForceSeedHandler : Bool -> message
     }
 
 
-type alias DisplayData =
+type alias DisplayData message testInstance =
     { runStatus : RunStatus
     , compilerError : Maybe String
     , totalTests : Int
     , passedTests : Int
     , runDuration : Maybe Duration
     , runSeed : Maybe Int
-    , testHierarchy : CollapsibleTree String TestInstance
+    , testHierarchy : CollapsibleTree String testInstance
+    , statusIndicator : testInstance -> Html message
+    , conditionallyEmbolden : Bool -> String -> testInstance -> Html message
     , nodeMouseIsOver : Maybe Int
     , selectedNodeId : Maybe Int
-    , selectedTestInstance : Maybe TestInstance
+    , selectedTestInstance : Maybe testInstance
+    , failure : Maybe Failure
     , autoRunEnabled : Bool
     , autoNavigateEnabled : Bool
     , randomSeed : Maybe Int
@@ -49,7 +50,18 @@ type alias DisplayData =
     }
 
 
-render : DisplayData -> Messages message -> Html message
+type alias Failure =
+    { actual : String
+    , expected : String
+    , given : Maybe String
+    , message : String
+    , hasComplexComparison : Bool
+    , isTodo : Bool
+    , shouldDiff : Bool
+    }
+
+
+render : DisplayData message testInstance -> Messages message testInstance -> Html message
 render data messages =
     div [ class <| "etr-main-view " ++ PaneLocation.toStyle data.paneLocation ]
         [ div [ class "section-one" ]
@@ -64,8 +76,8 @@ render data messages =
                 ]
             , div [ class "test-hierarchy" ]
                 [ View.TestHierarchy.Core.render
-                    { statusIndicator = TestInstance.View.statusIndicator
-                    , conditionallyEmbolden = TestInstance.View.conditionallyEmbolden
+                    { statusIndicator = data.statusIndicator
+                    , conditionallyEmbolden = data.conditionallyEmbolden
                     }
                     { expand = messages.testListItemExpand
                     , collapse = messages.testListItemCollapse
@@ -82,7 +94,7 @@ render data messages =
             ]
         , div [ class "section-two" ]
             [ div [ class "output-display" ]
-                [ View.OutputDisplay.render data.compilerError <| TestInstance.getFailureData data.selectedTestInstance ]
+                [ View.OutputDisplay.render data.compilerError data.failure ]
             , div [ class "footer" ]
                 (View.SeedAndSettings.render
                     messages.setForceSeedHandler

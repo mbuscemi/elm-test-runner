@@ -19013,7 +19013,7 @@ var _user$project$View_Core$render = F2(
 									ctor: '::',
 									_0: A5(
 										_user$project$View_TestHierarchy_Core$render,
-										{statusIndicator: _user$project$TestInstance_View$statusIndicator, conditionallyEmbolden: _user$project$TestInstance_View$conditionallyEmbolden},
+										{statusIndicator: data.statusIndicator, conditionallyEmbolden: data.conditionallyEmbolden},
 										{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse},
 										{mouseIn: messages.testListItemMouseEnter, mouseOut: messages.testListItemMouseLeave, testClick: messages.testClickHandler},
 										{nodeMouseIsOver: data.nodeMouseIsOver, selectedNode: data.selectedNodeId},
@@ -19043,10 +19043,7 @@ var _user$project$View_Core$render = F2(
 								},
 								{
 									ctor: '::',
-									_0: A2(
-										_user$project$View_OutputDisplay$render,
-										data.compilerError,
-										_user$project$TestInstance_Core$getFailureData(data.selectedTestInstance)),
+									_0: A2(_user$project$View_OutputDisplay$render, data.compilerError, data.failure),
 									_1: {ctor: '[]'}
 								}),
 							_1: {
@@ -19086,7 +19083,13 @@ var _user$project$View_Core$DisplayData = function (a) {
 													return function (n) {
 														return function (o) {
 															return function (p) {
-																return {runStatus: a, compilerError: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testHierarchy: g, nodeMouseIsOver: h, selectedNodeId: i, selectedTestInstance: j, autoRunEnabled: k, autoNavigateEnabled: l, randomSeed: m, forceRandomSeedEnabled: n, statusBarTextStyle: o, paneLocation: p};
+																return function (q) {
+																	return function (r) {
+																		return function (s) {
+																			return {runStatus: a, compilerError: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testHierarchy: g, statusIndicator: h, conditionallyEmbolden: i, nodeMouseIsOver: j, selectedNodeId: k, selectedTestInstance: l, failure: m, autoRunEnabled: n, autoNavigateEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarTextStyle: r, paneLocation: s};
+																		};
+																	};
+																};
 															};
 														};
 													};
@@ -19103,6 +19106,10 @@ var _user$project$View_Core$DisplayData = function (a) {
 		};
 	};
 };
+var _user$project$View_Core$Failure = F7(
+	function (a, b, c, d, e, f, g) {
+		return {actual: a, expected: b, given: c, message: d, hasComplexComparison: e, isTodo: f, shouldDiff: g};
+	});
 
 var _user$project$Main$init = function (rawFlags) {
 	var flags = _user$project$Model_Flags$parse(rawFlags);
@@ -19376,7 +19383,27 @@ var _user$project$Main$InitiateRunAll = {ctor: 'InitiateRunAll'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View_Core$render,
-		{runStatus: model.runStatus, compilerError: model.compilerError, totalTests: model.totalTests, passedTests: model.passedTests, runDuration: model.runDuration, runSeed: model.runSeed, testHierarchy: model.testHierarchy, nodeMouseIsOver: model.testMouseIsOver, selectedNodeId: model.selectedTestNodeId, selectedTestInstance: model.selectedTestInstance, autoRunEnabled: model.autoRunEnabled, autoNavigateEnabled: model.autoNavigateEnabled, randomSeed: model.randomSeed, forceRandomSeedEnabled: model.forceRandomSeedEnabled, statusBarTextStyle: model.statusBarStyle, paneLocation: model.paneLocation},
+		{
+			runStatus: model.runStatus,
+			compilerError: model.compilerError,
+			totalTests: model.totalTests,
+			passedTests: model.passedTests,
+			runDuration: model.runDuration,
+			runSeed: model.runSeed,
+			testHierarchy: model.testHierarchy,
+			statusIndicator: _user$project$TestInstance_View$statusIndicator,
+			conditionallyEmbolden: _user$project$TestInstance_View$conditionallyEmbolden,
+			nodeMouseIsOver: model.testMouseIsOver,
+			selectedNodeId: model.selectedTestNodeId,
+			selectedTestInstance: model.selectedTestInstance,
+			failure: _user$project$TestInstance_Core$getFailureData(model.selectedTestInstance),
+			autoRunEnabled: model.autoRunEnabled,
+			autoNavigateEnabled: model.autoNavigateEnabled,
+			randomSeed: model.randomSeed,
+			forceRandomSeedEnabled: model.forceRandomSeedEnabled,
+			statusBarTextStyle: model.statusBarStyle,
+			paneLocation: model.paneLocation
+		},
 		{runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed});
 };
 var _user$project$Main$saveEventMessage = F2(

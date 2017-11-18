@@ -20,7 +20,8 @@ import Model.TestTree
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
-import TestInstance.Core exposing (TestInstance)
+import TestInstance.Core as TestInstance exposing (TestInstance)
+import TestInstance.View
 import View.Core
 
 
@@ -187,9 +188,12 @@ view model =
         , runDuration = model.runDuration
         , runSeed = model.runSeed
         , testHierarchy = model.testHierarchy
+        , statusIndicator = TestInstance.View.statusIndicator
+        , conditionallyEmbolden = TestInstance.View.conditionallyEmbolden
         , nodeMouseIsOver = model.testMouseIsOver
         , selectedNodeId = model.selectedTestNodeId
         , selectedTestInstance = model.selectedTestInstance
+        , failure = TestInstance.getFailureData model.selectedTestInstance
         , autoRunEnabled = model.autoRunEnabled
         , autoNavigateEnabled = model.autoNavigateEnabled
         , randomSeed = model.randomSeed
