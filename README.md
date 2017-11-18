@@ -65,3 +65,7 @@ Run elm-test and view results without leaving Atom
 * Can set seed for a run
 * Can enable/disable auto-run on save
 * Can enable/disable auto-navigation to file when clicking on a test
+
+### 0.1.1
+
+* Minor correction to README.
