@@ -28,7 +28,7 @@ type Message
     = InitiateRunAll
     | CompilerErrored String
     | RunStart ( String, RunStart.RawData )
-    | TestCompleted String
+    | TestCompleted Value
     | RunComplete RunComplete.RawData
     | TestListItemExpand Int
     | TestListItemCollapse Int
@@ -101,7 +101,7 @@ update message model =
         TestCompleted data ->
             let
                 event =
-                    TestCompleted.parse data
+                    TestCompleted.parseJson data
             in
             Model.TestCount.updatePassed event model
                 |> Model.TestTree.build event
@@ -260,7 +260,7 @@ port notifyPaneMoved : (String -> message) -> Sub message
 port runStart : (( String, RunStart.RawData ) -> message) -> Sub message
 
 
-port testCompleted : (String -> message) -> Sub message
+port testCompleted : (Value -> message) -> Sub message
 
 
 port runComplete : (RunComplete.RawData -> message) -> Sub message

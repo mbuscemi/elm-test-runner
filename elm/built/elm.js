@@ -16744,12 +16744,6 @@ var _user$project$TestEvent_TestCompleted$rawData = A5(
 		'failures',
 		_elm_lang$core$Json_Decode$list(_user$project$State_Failure$failure)),
 	A2(_elm_lang$core$Json_Decode$field, 'duration', _elm_lang$core$Json_Decode$string));
-var _user$project$TestEvent_TestCompleted$parseJson = function (jsonString) {
-	return A2(
-		_elm_lang$core$Result$withDefault,
-		_user$project$TestEvent_TestCompleted$defaultRawData,
-		A2(_elm_lang$core$Json_Decode$decodeString, _user$project$TestEvent_TestCompleted$rawData, jsonString));
-};
 var _user$project$TestEvent_TestCompleted$Parsed = F4(
 	function (a, b, c, d) {
 		return {status: a, labels: b, failures: c, duration: d};
@@ -16764,15 +16758,25 @@ var _user$project$TestEvent_TestCompleted$isTodo = function (_p6) {
 };
 var _user$project$TestEvent_TestCompleted$Fail = {ctor: 'Fail'};
 var _user$project$TestEvent_TestCompleted$Pass = {ctor: 'Pass'};
-var _user$project$TestEvent_TestCompleted$parse = function (rawData) {
-	var parsed = _user$project$TestEvent_TestCompleted$parseJson(rawData);
-	return _user$project$TestEvent_TestCompleted$TestCompleted(
-		{
-			status: _elm_lang$core$Native_Utils.eq(parsed.status, 'pass') ? _user$project$TestEvent_TestCompleted$Pass : (_elm_lang$core$Native_Utils.eq(parsed.status, 'todo') ? _user$project$TestEvent_TestCompleted$Todo : _user$project$TestEvent_TestCompleted$Fail),
-			labels: parsed.labels,
-			failures: parsed.failures,
-			duration: _user$project$TestEvent_Util$parseInt(parsed.duration)
-		});
+var _user$project$TestEvent_TestCompleted$parse = F2(
+	function (decoder, input) {
+		var parsed = A2(
+			_elm_lang$core$Result$withDefault,
+			_user$project$TestEvent_TestCompleted$defaultRawData,
+			A2(decoder, _user$project$TestEvent_TestCompleted$rawData, input));
+		return _user$project$TestEvent_TestCompleted$TestCompleted(
+			{
+				status: _elm_lang$core$Native_Utils.eq(parsed.status, 'pass') ? _user$project$TestEvent_TestCompleted$Pass : (_elm_lang$core$Native_Utils.eq(parsed.status, 'todo') ? _user$project$TestEvent_TestCompleted$Todo : _user$project$TestEvent_TestCompleted$Fail),
+				labels: parsed.labels,
+				failures: parsed.failures,
+				duration: _user$project$TestEvent_Util$parseInt(parsed.duration)
+			});
+	});
+var _user$project$TestEvent_TestCompleted$parseJson = function (json) {
+	return A2(_user$project$TestEvent_TestCompleted$parse, _elm_lang$core$Json_Decode$decodeValue, json);
+};
+var _user$project$TestEvent_TestCompleted$parseString = function (jsonString) {
+	return A2(_user$project$TestEvent_TestCompleted$parse, _elm_lang$core$Json_Decode$decodeString, jsonString);
 };
 var _user$project$TestEvent_TestCompleted$passed = function (_p8) {
 	var _p9 = _p8;
@@ -18968,7 +18972,7 @@ var _user$project$Main$update = F2(
 								_p0._0._0,
 								_user$project$Model_RunStatus$setToProcessing(model)))));
 			case 'TestCompleted':
-				var event = _user$project$TestEvent_TestCompleted$parse(_p0._0);
+				var event = _user$project$TestEvent_TestCompleted$parseJson(_p0._0);
 				return _user$project$And$noCommand(
 					_user$project$Model_TestTree$updateHierarchy(
 						A2(
@@ -19110,7 +19114,7 @@ var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(
 						A2(_elm_lang$core$Json_Decode$field, 'testCount', _elm_lang$core$Json_Decode$string))));
 		},
 		A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$string)));
-var _user$project$Main$testCompleted = _elm_lang$core$Native_Platform.incomingPort('testCompleted', _elm_lang$core$Json_Decode$string);
+var _user$project$Main$testCompleted = _elm_lang$core$Native_Platform.incomingPort('testCompleted', _elm_lang$core$Json_Decode$value);
 var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort(
 	'runComplete',
 	A2(

@@ -4,7 +4,7 @@ import Expect
 import Maybe.Extra as Maybe
 import State.Failure as Failure exposing (Failure)
 import Test exposing (Test, describe, test)
-import TestEvent.TestCompleted exposing (TestCompleted, parse)
+import TestEvent.TestCompleted exposing (TestCompleted, parseString)
 import TestInstance.Core as TestInstance exposing (TestInstance, fromEvent)
 
 
@@ -13,7 +13,7 @@ parsesCorrectly =
     let
         event : TestCompleted
         event =
-            parse failingJsonString
+            parseString failingJsonString
 
         testInstance : TestInstance
         testInstance =

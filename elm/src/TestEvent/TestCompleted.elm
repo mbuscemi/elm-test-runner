@@ -6,13 +6,15 @@ module TestEvent.TestCompleted
         , firstFailure
         , isTodo
         , labels
-        , parse
+        , parseJson
+        , parseString
         , passed
         , passedTestCountToIncrement
         )
 
 import Duration.Core as Duration exposing (Duration)
-import Json.Decode exposing (Decoder, decodeString, field, list, map4, string)
+import Json.Decode exposing (Decoder, decodeString, decodeValue, field, list, map4, string)
+import Json.Encode exposing (Value)
 import State.Failure exposing (Failure, failure)
 import TestEvent.Util
 
@@ -57,11 +59,22 @@ type alias Parsed =
     }
 
 
-parse : String -> TestCompleted
-parse rawData =
+parseJson : Value -> TestCompleted
+parseJson json =
+    parse decodeValue json
+
+
+parseString : String -> TestCompleted
+parseString jsonString =
+    parse decodeString jsonString
+
+
+parse : (Decoder RawData -> input -> Result String RawData) -> input -> TestCompleted
+parse decoder input =
     let
         parsed =
-            parseJson rawData
+            decoder rawData input
+                |> Result.withDefault defaultRawData
     in
     TestCompleted
         { status =
@@ -75,12 +88,6 @@ parse rawData =
         , failures = parsed.failures
         , duration = TestEvent.Util.parseInt parsed.duration
         }
-
-
-parseJson : String -> RawData
-parseJson jsonString =
-    decodeString rawData jsonString
-        |> Result.withDefault defaultRawData
 
 
 passedTestCountToIncrement : TestCompleted -> Int
