@@ -17728,13 +17728,14 @@ var _user$project$Model_RunStatus$setToCompileError = function (model) {
 		model,
 		{runStatus: _user$project$State_RunStatus$compileError});
 };
-var _user$project$Model_RunStatus$setForTodo = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			runStatus: A2(_user$project$Tree_Traverse$hasMatchingNode, _user$project$TestInstance_Core$isTodo, model.testRuns) ? _user$project$State_RunStatus$incomplete : model.runStatus
-		});
-};
+var _user$project$Model_RunStatus$setForTodo = F2(
+	function (isTodo, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				runStatus: A2(_user$project$Tree_Traverse$hasMatchingNode, isTodo, model.testRuns) ? _user$project$State_RunStatus$incomplete : model.runStatus
+			});
+	});
 var _user$project$Model_RunStatus$setForFailure = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -19193,7 +19194,9 @@ var _user$project$Main$update = F2(
 										A2(
 											_user$project$Model_RunStatus$setForFailure,
 											event,
-											_user$project$Model_RunStatus$setForTodo(
+											A2(
+												_user$project$Model_RunStatus$setForTodo,
+												_user$project$TestInstance_Core$isTodo,
 												_user$project$Model_RunStatus$setToPassing(model)))))))));
 			case 'TestListItemExpand':
 				return _user$project$And$noCommand(

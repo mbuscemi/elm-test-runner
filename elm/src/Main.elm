@@ -115,7 +115,7 @@ update message model =
                     RunComplete.parse data
             in
             Model.RunStatus.setToPassing model
-                |> Model.RunStatus.setForTodo
+                |> Model.RunStatus.setForTodo TestInstance.isTodo
                 |> Model.RunStatus.setForFailure event
                 |> Model.RunDuration.set event
                 |> Model.TestTree.purgeObsoleteNodes
