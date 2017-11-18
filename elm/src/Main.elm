@@ -7,7 +7,7 @@ import Json.Encode exposing (Value)
 import Model exposing (Model)
 import Model.Basics
 import Model.Config
-import Model.Flags as Flags exposing (Flags)
+import Model.Flags as Flags
 import Model.ProjectName
 import Model.RandomSeed
 import Model.RunDuration
@@ -20,7 +20,7 @@ import Model.TestTree
 import TestEvent.RunComplete as RunComplete
 import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
-import TestInstance.Core as TestInstance exposing (TestInstance)
+import TestInstance.Core exposing (TestInstance)
 import View.Core
 
 

@@ -1,6 +1,6 @@
 module Model.ProjectName exposing (default, setFromPath)
 
-import Tree.Core as Tree exposing (Tree(Node))
+import Tree.Core exposing (Tree(Node))
 
 
 type alias HasProject r a =

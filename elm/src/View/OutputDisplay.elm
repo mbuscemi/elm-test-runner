@@ -23,8 +23,8 @@ render compilerError testInstance =
         ( Just error, _ ) ->
             div [ class "failure" ] (errorText error)
 
-        ( Nothing, Just testInstance ) ->
-            case TestInstance.getFailure testInstance of
+        ( Nothing, Just instance ) ->
+            case TestInstance.getFailure instance of
                 Just failure ->
                     div [ class "failure" ] (failureText failure)
 

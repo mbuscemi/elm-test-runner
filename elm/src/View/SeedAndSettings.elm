@@ -1,7 +1,7 @@
 module View.SeedAndSettings exposing (render)
 
 import Html exposing (Attribute, Html, div, input, span, text)
-import Html.Attributes exposing (checked, class, disabled, placeholder, style, type_, value)
+import Html.Attributes exposing (checked, class, disabled, placeholder, type_, value)
 import Html.Events exposing (onCheck)
 
 

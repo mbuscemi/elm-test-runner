@@ -1,7 +1,7 @@
 module View.Toolbar exposing (render)
 
 import Animation exposing (State)
-import Html exposing (Html, div, section, span, strong, text)
+import Html exposing (Html, div, span, strong, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import State.RunStatus as RunStatus exposing (RunStatus)
