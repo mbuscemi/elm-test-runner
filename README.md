@@ -52,3 +52,17 @@ Run elm-test and view results without leaving Atom
 2. Auto-Navigate to Test is enabled by default. You can disable it by going to Packages → Elm Test Runner → Toggle Auto-Navigate to Test, or by using ⌘-Alt-N. An indicator light in the lower right hand corner of the pane indicates whether this functionality is enabled or disabled.
 
 **Important Caveat:** Only files that are in the current active Atom project are capable of being opened in this way.
+
+## Release History
+
+### 0.1.0
+
+* Basic interface with run button
+* Displays test passes, failures, and failure output
+* Can click on a test to auto-navigate to the test file and location
+* Key bindings and package menu entries
+* Test pane dockable in all docks
+* Can copy seed from a run
+* Can set seed for a run
+* Can enable/disable auto-run on save
+* Can enable/disable auto-navigation to file when clicking on a test
