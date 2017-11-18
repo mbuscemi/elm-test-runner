@@ -2,7 +2,7 @@
 
 Run elm-test and view results without leaving Atom
 
-![Elm Test Runner](https://github.com/mbuscemi/elm-test-runner/blob/master/images/elm-test-runner-animated-header-only.gif)
+![Elm Test Runner](https://raw.githubusercontent.com/mbuscemi/elm-test-runner/master/images/elm-test-runner-animated-header-only.gif?raw=true)
 
 ## Setup
 
@@ -16,7 +16,7 @@ Run elm-test and view results without leaving Atom
 
 ### Run Tests Without Leaving Atom
 
-![Running Tests](https://github.com/mbuscemi/elm-test-runner/blob/master/images/menu.png)
+![Running Tests](https://raw.githubusercontent.com/mbuscemi/elm-test-runner/master/images/menu.png?raw=true)
 
 1. Open a project folder that has Elm tests in it. Typically, this is a directory that has an `elm-package.json` file, a `tests` directory that contains Elm files exposing functions of type `Test`. I recommend that you set up your test directory with `elm-test init` in order to ensure compatibility.
 2. Go to Packages → Elm Test Runner → Toggle Dashboard, or use ⌘-Alt-T to open the test pane.
@@ -26,15 +26,15 @@ Run elm-test and view results without leaving Atom
 
 ### Dock Left, Right, or Center
 
-![Vertical Layout—Left & Right Dock](https://github.com/mbuscemi/elm-test-runner/blob/master/images/layout-vertical.png)
-![Horizontal Layout—Bottom Dock](https://github.com/mbuscemi/elm-test-runner/blob/master/images/layout-horizontal.png)
+![Vertical Layout—Left & Right Dock](https://raw.githubusercontent.com/mbuscemi/elm-test-runner/master/images/layout-vertical.png?raw=true)
+![Horizontal Layout—Bottom Dock](https://raw.githubusercontent.com/mbuscemi/elm-test-runner/master/images/layout-horizontal.png?raw=true)
 
 1. Drag the header bar for Elm Test Runner from its default position on the right side of the screen into the lower dock, or the left dock.
 2. Elm Test Runner will move to that dock. Landscape orientation for the center bottom dock is supported.
 
 ### Seed Utilities
 
-![Setting the Seed](https://github.com/mbuscemi/elm-test-runner/blob/master/images/set-seed-example.gif)
+![Setting the Seed](https://raw.githubusercontent.com/mbuscemi/elm-test-runner/master/images/set-seed-example.gif?raw=true)
 
 1. Toggle the "Seed" checkbox on and off in the lower left corner of the pane. If the checkbox is active, the number in the adjacent field will be used when running `elm-test`. If the box is unchecked, or if the number field is empty (it will read "Generate Random"), then a random seed will be used.
 2. To lock-in the seed used on the last test run, click the "Set" button. This will set the seed the number field and activate the "Seed" checkbox if it is not already active.
@@ -68,4 +68,6 @@ Run elm-test and view results without leaving Atom
 
 ### 0.1.1
 
-* Minor correction to README.
+* README fixes
+    * Minor correction to setup instructions.
+    * Fixed broken images on Atom package page.
