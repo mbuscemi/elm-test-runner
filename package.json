@@ -1,5 +1,5 @@
 {
-    "name": "Elm Test Runner",
+    "name": "elm-test-runner",
     "main": "./lib/elm-test-runner",
     "version": "0.0.0",
     "description": "Run elm-test and view results without leaving Atom",
