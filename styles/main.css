@@ -107,10 +107,18 @@
     float: left;
 }
 
+.theme-nord-atom-ui .etr-main-view .toolbar .status-bar .title {
+    padding-top: 3px;
+}
+
 .etr-main-view .passing-tests {
     padding-right: 10px;
     text-align: right;
     float: right;
+}
+
+.theme-nord-atom-ui .etr-main-view .passing-tests {
+    padding-top: 6px;
 }
 
 .etr-main-view .passing-tests .number-field {
