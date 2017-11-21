@@ -93,7 +93,7 @@ render data messages =
                 ]
             ]
         , div [ class "section-two" ]
-            [ div [ class "output-display" ]
+            [ div [ class "output-display native-key-bindings" ]
                 [ View.OutputDisplay.render data.compilerError data.failure ]
             , div [ class "footer" ]
                 (View.SeedAndSettings.render

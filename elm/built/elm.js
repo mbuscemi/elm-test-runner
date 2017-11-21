@@ -19039,7 +19039,7 @@ var _user$project$View_Core$render = F2(
 								_elm_lang$html$Html$div,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('output-display'),
+									_0: _elm_lang$html$Html_Attributes$class('output-display native-key-bindings'),
 									_1: {ctor: '[]'}
 								},
 								{
