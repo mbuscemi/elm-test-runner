@@ -40,26 +40,59 @@ Run elm-test and view results without leaving Atom
 2. To lock-in the seed used on the last test run, click the "Set" button. This will set the seed the number field and activate the "Seed" checkbox if it is not already active.
 3. To copy the seed for the last test run to the clipboard, click the "Copy" button. This will allow you to paste the seed into another location.
 
+### Test Generation with _Elm Verify Examples_
+
+![Generating Tests](https://raw.githubusercontent.com/mbuscemi/elm-test-runner/master/images/elm-verify-examples-enabled.gif?raw=true)
+
+1. To see the current state of this setting, toggle the settings panel open by clicking on the gear icon in the lower right corner of the panel.
+2. To change this setting:
+    * Click the checkbox next to the option
+    * Go to Packages → Elm Test Runner → Toggle Running with 'Elm Verify Examples'
+    * Use the key command Ctrl-Alt-V
+3. When initiating a test run, Elm Test Runner will first run `elm-verify-examples` in your project directory before proceeding to run `elm-test`. The status bar at the top Elm Test Runner panel will indicate when tests are being generated as opposed to being run.
+
 ### Auto-Run Tests on Save
 
-1. Go to Packages → Elm Test Runner → Toggle Auto-Run on Save, or use Ctrl-R to toggle 'Auto-Run on Save' on and off. When it is active, an indicator will light up in the lower right hand corner of the pane.
-2. When 'Auto-Run on Save' is enabled, executing a "save" action on any project file will initiate a test run in Elm Test Runner.
+1. To see the current state of this setting, toggle the settings panel open by clicking on the gear icon in the lower right corner of the panel.
+2. To change this setting:
+    * Click the checkbox next to the option
+    * Go to Packages → Elm Test Runner → Toggle Auto-Run on Save
+    * Use the key command Ctrl-R
+3. When 'Auto-Run on Save' is enabled, executing a "save" action on any project file will initiate a test run in Elm Test Runner.
 
 ### Auto-Navigate to Test
 
 1. Click on a passing or failing test, and the file containing the selected test will open in your editor.*
-2. Auto-Navigate to Test is enabled by default. You can disable it by going to Packages → Elm Test Runner → Toggle Auto-Navigate to Test, or by using ⌘-Alt-N. An indicator light in the lower right hand corner of the pane indicates whether this functionality is enabled or disabled.
+2. To see the current state of this setting, toggle the settings panel open by clicking on the gear icon in the lower right corner of the panel.
+3. To change this setting:
+    * Click the checkbox next to the option
+    * Go to Packages → Elm Test Runner → Toggle Auto-Navigate to Test
+    * Use the command key Ctrl-Alt-N
 
 **Important Caveat:** Only files that are in the current active Atom project are capable of being opened in this way.
 
 ## Release History
+
+### 0.2.0
+
+* Test generation with `elm-verify-examples`.
+* Project Directory Detection
+    * In order to qualify as a valid target, a directory must now have an `elm-package.json` file _and_ a `tests` subdirectory.
+    * All open projects are scanned for a qualifying target directory before giving up the search.
+* Settings
+    * Changed settings panel to slide up and down.
+    * Changed highlighted text to checkbox options.
+* Can now set an alternate path for elm-test on the plugin configuration page.
+* Node processes are now killed when the plugin is deactivated, which should help prevent orphaned processes from eating system resources.
+* Minor fixes for the Nord-UI Atom theme
+* Text can now be copied out of the test output display.
 
 ### 0.1.1
 
 * README fixes
     * Minor correction to setup instructions.
     * Fixed broken images on Atom package page.
-    
+
 ### 0.1.0
 
 * Basic interface with run button
