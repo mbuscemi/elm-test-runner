@@ -5,6 +5,7 @@ import Animation
 import Html exposing (Html)
 import Json.Encode exposing (Value)
 import Model exposing (Model)
+import Model.Animation
 import Model.Basics
 import Model.Config
 import Model.Flags as Flags
@@ -14,7 +15,6 @@ import Model.RunDuration
 import Model.RunSeed
 import Model.RunStatus
 import Model.SelectedTest
-import Model.StatusBar
 import Model.TestCount
 import Model.TestTree
 import TestEvent.RunComplete as RunComplete
@@ -42,7 +42,9 @@ type Message
     | SetRandomSeed Int
     | SetForceSeed Bool
     | AnimateFlicker Animation.Msg
+    | AnimateSettingsTransition Animation.Msg
     | PaneMoved String
+    | ToggleSettings
     | DoNothing
 
 
@@ -121,7 +123,7 @@ update message model =
                 |> Model.TestTree.purgeObsoleteNodes
                 |> Model.TestTree.updateHierarchy
                 |> Model.TestTree.expandFailingAndTodoNodes
-                |> Model.StatusBar.initiateTextFlicker
+                |> Model.Animation.initiateStatusBarTextFlicker
                 |> And.noCommand
 
         TestListItemExpand nodeId ->
@@ -167,11 +169,19 @@ update message model =
                 |> And.noCommand
 
         AnimateFlicker animateMessage ->
-            Model.StatusBar.updateFlicker animateMessage model
+            Model.Animation.updateStatusBar animateMessage model
+                |> And.noCommand
+
+        AnimateSettingsTransition animateMessage ->
+            Model.Animation.updateFooter animateMessage model
                 |> And.noCommand
 
         PaneMoved newLocation ->
             Model.Basics.setPaneLocation newLocation model
+                |> And.noCommand
+
+        ToggleSettings ->
+            Model.Animation.toggleFooter model
                 |> And.noCommand
 
         DoNothing ->
@@ -199,6 +209,7 @@ view model =
         , randomSeed = model.randomSeed
         , forceRandomSeedEnabled = model.forceRandomSeedEnabled
         , statusBarTextStyle = model.statusBarStyle
+        , footerStyle = model.footerStyle
         , paneLocation = model.paneLocation
         }
         { runAllButtonClickHandler = InitiateRunAll
@@ -210,6 +221,7 @@ view model =
         , copySeedClickHandler = CopySeed
         , setSeedClickHandler = SetRandomSeed
         , setForceSeedHandler = SetForceSeed
+        , settingsToggle = ToggleSettings
         }
 
 
@@ -226,6 +238,7 @@ subscriptions model =
         , testCompleted TestCompleted
         , runComplete RunComplete
         , Animation.subscription AnimateFlicker [ model.statusBarStyle ]
+        , Animation.subscription AnimateSettingsTransition [ model.footerStyle ]
         ]
 
 

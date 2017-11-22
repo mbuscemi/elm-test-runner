@@ -2,6 +2,7 @@ module Model exposing (Model, default, serialize)
 
 import Animation
 import Animation.Flicker
+import Animation.Footer
 import Duration.Core exposing (Duration)
 import Model.Flags exposing (Flags)
 import Model.ProjectName
@@ -29,6 +30,8 @@ type alias Model =
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
     , statusBarStyle : Animation.State
+    , footerStyle : Animation.State
+    , footerExpanded : Bool
     , paneLocation : PaneLocation
     }
 
@@ -52,6 +55,8 @@ default =
     , randomSeed = Nothing
     , forceRandomSeedEnabled = False
     , statusBarStyle = Animation.Flicker.initial
+    , footerStyle = Animation.Footer.initial
+    , footerExpanded = False
     , paneLocation = PaneLocation.default
     }
 

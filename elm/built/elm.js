@@ -890,6 +890,39 @@ var _elm_lang$core$Basics$JustOneMore = function (a) {
 	return {ctor: 'JustOneMore', _0: a};
 };
 
+//import Native.Utils //
+
+var _elm_lang$core$Native_Debug = function() {
+
+function log(tag, value)
+{
+	var msg = tag + ': ' + _elm_lang$core$Native_Utils.toString(value);
+	var process = process || {};
+	if (process.stdout)
+	{
+		process.stdout.write(msg);
+	}
+	else
+	{
+		console.log(msg);
+	}
+	return value;
+}
+
+function crash(message)
+{
+	throw new Error(message);
+}
+
+return {
+	crash: crash,
+	log: F2(log)
+};
+
+}();
+var _elm_lang$core$Debug$crash = _elm_lang$core$Native_Debug.crash;
+var _elm_lang$core$Debug$log = _elm_lang$core$Native_Debug.log;
+
 var _elm_lang$core$Maybe$withDefault = F2(
 	function ($default, maybe) {
 		var _p0 = maybe;
@@ -1653,36 +1686,148 @@ var _elm_lang$core$List$indexedMap = F2(
 			xs);
 	});
 
-//import Native.Utils //
-
-var _elm_lang$core$Native_Debug = function() {
-
-function log(tag, value)
-{
-	var msg = tag + ': ' + _elm_lang$core$Native_Utils.toString(value);
-	var process = process || {};
-	if (process.stdout)
-	{
-		process.stdout.write(msg);
+var _elm_lang$core$Result$toMaybe = function (result) {
+	var _p0 = result;
+	if (_p0.ctor === 'Ok') {
+		return _elm_lang$core$Maybe$Just(_p0._0);
+	} else {
+		return _elm_lang$core$Maybe$Nothing;
 	}
-	else
-	{
-		console.log(msg);
-	}
-	return value;
-}
-
-function crash(message)
-{
-	throw new Error(message);
-}
-
-return {
-	crash: crash,
-	log: F2(log)
 };
+var _elm_lang$core$Result$withDefault = F2(
+	function (def, result) {
+		var _p1 = result;
+		if (_p1.ctor === 'Ok') {
+			return _p1._0;
+		} else {
+			return def;
+		}
+	});
+var _elm_lang$core$Result$Err = function (a) {
+	return {ctor: 'Err', _0: a};
+};
+var _elm_lang$core$Result$andThen = F2(
+	function (callback, result) {
+		var _p2 = result;
+		if (_p2.ctor === 'Ok') {
+			return callback(_p2._0);
+		} else {
+			return _elm_lang$core$Result$Err(_p2._0);
+		}
+	});
+var _elm_lang$core$Result$Ok = function (a) {
+	return {ctor: 'Ok', _0: a};
+};
+var _elm_lang$core$Result$map = F2(
+	function (func, ra) {
+		var _p3 = ra;
+		if (_p3.ctor === 'Ok') {
+			return _elm_lang$core$Result$Ok(
+				func(_p3._0));
+		} else {
+			return _elm_lang$core$Result$Err(_p3._0);
+		}
+	});
+var _elm_lang$core$Result$map2 = F3(
+	function (func, ra, rb) {
+		var _p4 = {ctor: '_Tuple2', _0: ra, _1: rb};
+		if (_p4._0.ctor === 'Ok') {
+			if (_p4._1.ctor === 'Ok') {
+				return _elm_lang$core$Result$Ok(
+					A2(func, _p4._0._0, _p4._1._0));
+			} else {
+				return _elm_lang$core$Result$Err(_p4._1._0);
+			}
+		} else {
+			return _elm_lang$core$Result$Err(_p4._0._0);
+		}
+	});
+var _elm_lang$core$Result$map3 = F4(
+	function (func, ra, rb, rc) {
+		var _p5 = {ctor: '_Tuple3', _0: ra, _1: rb, _2: rc};
+		if (_p5._0.ctor === 'Ok') {
+			if (_p5._1.ctor === 'Ok') {
+				if (_p5._2.ctor === 'Ok') {
+					return _elm_lang$core$Result$Ok(
+						A3(func, _p5._0._0, _p5._1._0, _p5._2._0));
+				} else {
+					return _elm_lang$core$Result$Err(_p5._2._0);
+				}
+			} else {
+				return _elm_lang$core$Result$Err(_p5._1._0);
+			}
+		} else {
+			return _elm_lang$core$Result$Err(_p5._0._0);
+		}
+	});
+var _elm_lang$core$Result$map4 = F5(
+	function (func, ra, rb, rc, rd) {
+		var _p6 = {ctor: '_Tuple4', _0: ra, _1: rb, _2: rc, _3: rd};
+		if (_p6._0.ctor === 'Ok') {
+			if (_p6._1.ctor === 'Ok') {
+				if (_p6._2.ctor === 'Ok') {
+					if (_p6._3.ctor === 'Ok') {
+						return _elm_lang$core$Result$Ok(
+							A4(func, _p6._0._0, _p6._1._0, _p6._2._0, _p6._3._0));
+					} else {
+						return _elm_lang$core$Result$Err(_p6._3._0);
+					}
+				} else {
+					return _elm_lang$core$Result$Err(_p6._2._0);
+				}
+			} else {
+				return _elm_lang$core$Result$Err(_p6._1._0);
+			}
+		} else {
+			return _elm_lang$core$Result$Err(_p6._0._0);
+		}
+	});
+var _elm_lang$core$Result$map5 = F6(
+	function (func, ra, rb, rc, rd, re) {
+		var _p7 = {ctor: '_Tuple5', _0: ra, _1: rb, _2: rc, _3: rd, _4: re};
+		if (_p7._0.ctor === 'Ok') {
+			if (_p7._1.ctor === 'Ok') {
+				if (_p7._2.ctor === 'Ok') {
+					if (_p7._3.ctor === 'Ok') {
+						if (_p7._4.ctor === 'Ok') {
+							return _elm_lang$core$Result$Ok(
+								A5(func, _p7._0._0, _p7._1._0, _p7._2._0, _p7._3._0, _p7._4._0));
+						} else {
+							return _elm_lang$core$Result$Err(_p7._4._0);
+						}
+					} else {
+						return _elm_lang$core$Result$Err(_p7._3._0);
+					}
+				} else {
+					return _elm_lang$core$Result$Err(_p7._2._0);
+				}
+			} else {
+				return _elm_lang$core$Result$Err(_p7._1._0);
+			}
+		} else {
+			return _elm_lang$core$Result$Err(_p7._0._0);
+		}
+	});
+var _elm_lang$core$Result$mapError = F2(
+	function (f, result) {
+		var _p8 = result;
+		if (_p8.ctor === 'Ok') {
+			return _elm_lang$core$Result$Ok(_p8._0);
+		} else {
+			return _elm_lang$core$Result$Err(
+				f(_p8._0));
+		}
+	});
+var _elm_lang$core$Result$fromMaybe = F2(
+	function (err, maybe) {
+		var _p9 = maybe;
+		if (_p9.ctor === 'Just') {
+			return _elm_lang$core$Result$Ok(_p9._0);
+		} else {
+			return _elm_lang$core$Result$Err(err);
+		}
+	});
 
-}();
 //import Maybe, Native.List, Native.Utils, Result //
 
 var _elm_lang$core$Native_String = function() {
@@ -2080,148 +2225,6 @@ var _elm_lang$core$Char$isHexDigit = function ($char) {
 		$char));
 };
 
-var _elm_lang$core$Result$toMaybe = function (result) {
-	var _p0 = result;
-	if (_p0.ctor === 'Ok') {
-		return _elm_lang$core$Maybe$Just(_p0._0);
-	} else {
-		return _elm_lang$core$Maybe$Nothing;
-	}
-};
-var _elm_lang$core$Result$withDefault = F2(
-	function (def, result) {
-		var _p1 = result;
-		if (_p1.ctor === 'Ok') {
-			return _p1._0;
-		} else {
-			return def;
-		}
-	});
-var _elm_lang$core$Result$Err = function (a) {
-	return {ctor: 'Err', _0: a};
-};
-var _elm_lang$core$Result$andThen = F2(
-	function (callback, result) {
-		var _p2 = result;
-		if (_p2.ctor === 'Ok') {
-			return callback(_p2._0);
-		} else {
-			return _elm_lang$core$Result$Err(_p2._0);
-		}
-	});
-var _elm_lang$core$Result$Ok = function (a) {
-	return {ctor: 'Ok', _0: a};
-};
-var _elm_lang$core$Result$map = F2(
-	function (func, ra) {
-		var _p3 = ra;
-		if (_p3.ctor === 'Ok') {
-			return _elm_lang$core$Result$Ok(
-				func(_p3._0));
-		} else {
-			return _elm_lang$core$Result$Err(_p3._0);
-		}
-	});
-var _elm_lang$core$Result$map2 = F3(
-	function (func, ra, rb) {
-		var _p4 = {ctor: '_Tuple2', _0: ra, _1: rb};
-		if (_p4._0.ctor === 'Ok') {
-			if (_p4._1.ctor === 'Ok') {
-				return _elm_lang$core$Result$Ok(
-					A2(func, _p4._0._0, _p4._1._0));
-			} else {
-				return _elm_lang$core$Result$Err(_p4._1._0);
-			}
-		} else {
-			return _elm_lang$core$Result$Err(_p4._0._0);
-		}
-	});
-var _elm_lang$core$Result$map3 = F4(
-	function (func, ra, rb, rc) {
-		var _p5 = {ctor: '_Tuple3', _0: ra, _1: rb, _2: rc};
-		if (_p5._0.ctor === 'Ok') {
-			if (_p5._1.ctor === 'Ok') {
-				if (_p5._2.ctor === 'Ok') {
-					return _elm_lang$core$Result$Ok(
-						A3(func, _p5._0._0, _p5._1._0, _p5._2._0));
-				} else {
-					return _elm_lang$core$Result$Err(_p5._2._0);
-				}
-			} else {
-				return _elm_lang$core$Result$Err(_p5._1._0);
-			}
-		} else {
-			return _elm_lang$core$Result$Err(_p5._0._0);
-		}
-	});
-var _elm_lang$core$Result$map4 = F5(
-	function (func, ra, rb, rc, rd) {
-		var _p6 = {ctor: '_Tuple4', _0: ra, _1: rb, _2: rc, _3: rd};
-		if (_p6._0.ctor === 'Ok') {
-			if (_p6._1.ctor === 'Ok') {
-				if (_p6._2.ctor === 'Ok') {
-					if (_p6._3.ctor === 'Ok') {
-						return _elm_lang$core$Result$Ok(
-							A4(func, _p6._0._0, _p6._1._0, _p6._2._0, _p6._3._0));
-					} else {
-						return _elm_lang$core$Result$Err(_p6._3._0);
-					}
-				} else {
-					return _elm_lang$core$Result$Err(_p6._2._0);
-				}
-			} else {
-				return _elm_lang$core$Result$Err(_p6._1._0);
-			}
-		} else {
-			return _elm_lang$core$Result$Err(_p6._0._0);
-		}
-	});
-var _elm_lang$core$Result$map5 = F6(
-	function (func, ra, rb, rc, rd, re) {
-		var _p7 = {ctor: '_Tuple5', _0: ra, _1: rb, _2: rc, _3: rd, _4: re};
-		if (_p7._0.ctor === 'Ok') {
-			if (_p7._1.ctor === 'Ok') {
-				if (_p7._2.ctor === 'Ok') {
-					if (_p7._3.ctor === 'Ok') {
-						if (_p7._4.ctor === 'Ok') {
-							return _elm_lang$core$Result$Ok(
-								A5(func, _p7._0._0, _p7._1._0, _p7._2._0, _p7._3._0, _p7._4._0));
-						} else {
-							return _elm_lang$core$Result$Err(_p7._4._0);
-						}
-					} else {
-						return _elm_lang$core$Result$Err(_p7._3._0);
-					}
-				} else {
-					return _elm_lang$core$Result$Err(_p7._2._0);
-				}
-			} else {
-				return _elm_lang$core$Result$Err(_p7._1._0);
-			}
-		} else {
-			return _elm_lang$core$Result$Err(_p7._0._0);
-		}
-	});
-var _elm_lang$core$Result$mapError = F2(
-	function (f, result) {
-		var _p8 = result;
-		if (_p8.ctor === 'Ok') {
-			return _elm_lang$core$Result$Ok(_p8._0);
-		} else {
-			return _elm_lang$core$Result$Err(
-				f(_p8._0));
-		}
-	});
-var _elm_lang$core$Result$fromMaybe = F2(
-	function (err, maybe) {
-		var _p9 = maybe;
-		if (_p9.ctor === 'Just') {
-			return _elm_lang$core$Result$Ok(_p9._0);
-		} else {
-			return _elm_lang$core$Result$Err(err);
-		}
-	});
-
 var _elm_lang$core$String$fromList = _elm_lang$core$Native_String.fromList;
 var _elm_lang$core$String$toList = _elm_lang$core$Native_String.toList;
 var _elm_lang$core$String$toFloat = _elm_lang$core$Native_String.toFloat;
@@ -2265,6 +2268,1044 @@ var _elm_lang$core$String$fromChar = function ($char) {
 	return A2(_elm_lang$core$String$cons, $char, '');
 };
 var _elm_lang$core$String$isEmpty = _elm_lang$core$Native_String.isEmpty;
+
+var _elm_lang$core$Tuple$mapSecond = F2(
+	function (func, _p0) {
+		var _p1 = _p0;
+		return {
+			ctor: '_Tuple2',
+			_0: _p1._0,
+			_1: func(_p1._1)
+		};
+	});
+var _elm_lang$core$Tuple$mapFirst = F2(
+	function (func, _p2) {
+		var _p3 = _p2;
+		return {
+			ctor: '_Tuple2',
+			_0: func(_p3._0),
+			_1: _p3._1
+		};
+	});
+var _elm_lang$core$Tuple$second = function (_p4) {
+	var _p5 = _p4;
+	return _p5._1;
+};
+var _elm_lang$core$Tuple$first = function (_p6) {
+	var _p7 = _p6;
+	return _p7._0;
+};
+
+//import //
+
+var _elm_lang$core$Native_Platform = function() {
+
+
+// PROGRAMS
+
+function program(impl)
+{
+	return function(flagDecoder)
+	{
+		return function(object, moduleName)
+		{
+			object['worker'] = function worker(flags)
+			{
+				if (typeof flags !== 'undefined')
+				{
+					throw new Error(
+						'The `' + moduleName + '` module does not need flags.\n'
+						+ 'Call ' + moduleName + '.worker() with no arguments and you should be all set!'
+					);
+				}
+
+				return initialize(
+					impl.init,
+					impl.update,
+					impl.subscriptions,
+					renderer
+				);
+			};
+		};
+	};
+}
+
+function programWithFlags(impl)
+{
+	return function(flagDecoder)
+	{
+		return function(object, moduleName)
+		{
+			object['worker'] = function worker(flags)
+			{
+				if (typeof flagDecoder === 'undefined')
+				{
+					throw new Error(
+						'Are you trying to sneak a Never value into Elm? Trickster!\n'
+						+ 'It looks like ' + moduleName + '.main is defined with `programWithFlags` but has type `Program Never`.\n'
+						+ 'Use `program` instead if you do not want flags.'
+					);
+				}
+
+				var result = A2(_elm_lang$core$Native_Json.run, flagDecoder, flags);
+				if (result.ctor === 'Err')
+				{
+					throw new Error(
+						moduleName + '.worker(...) was called with an unexpected argument.\n'
+						+ 'I tried to convert it to an Elm value, but ran into this problem:\n\n'
+						+ result._0
+					);
+				}
+
+				return initialize(
+					impl.init(result._0),
+					impl.update,
+					impl.subscriptions,
+					renderer
+				);
+			};
+		};
+	};
+}
+
+function renderer(enqueue, _)
+{
+	return function(_) {};
+}
+
+
+// HTML TO PROGRAM
+
+function htmlToProgram(vnode)
+{
+	var emptyBag = batch(_elm_lang$core$Native_List.Nil);
+	var noChange = _elm_lang$core$Native_Utils.Tuple2(
+		_elm_lang$core$Native_Utils.Tuple0,
+		emptyBag
+	);
+
+	return _elm_lang$virtual_dom$VirtualDom$program({
+		init: noChange,
+		view: function(model) { return main; },
+		update: F2(function(msg, model) { return noChange; }),
+		subscriptions: function (model) { return emptyBag; }
+	});
+}
+
+
+// INITIALIZE A PROGRAM
+
+function initialize(init, update, subscriptions, renderer)
+{
+	// ambient state
+	var managers = {};
+	var updateView;
+
+	// init and update state in main process
+	var initApp = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
+		var model = init._0;
+		updateView = renderer(enqueue, model);
+		var cmds = init._1;
+		var subs = subscriptions(model);
+		dispatchEffects(managers, cmds, subs);
+		callback(_elm_lang$core$Native_Scheduler.succeed(model));
+	});
+
+	function onMessage(msg, model)
+	{
+		return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
+			var results = A2(update, msg, model);
+			model = results._0;
+			updateView(model);
+			var cmds = results._1;
+			var subs = subscriptions(model);
+			dispatchEffects(managers, cmds, subs);
+			callback(_elm_lang$core$Native_Scheduler.succeed(model));
+		});
+	}
+
+	var mainProcess = spawnLoop(initApp, onMessage);
+
+	function enqueue(msg)
+	{
+		_elm_lang$core$Native_Scheduler.rawSend(mainProcess, msg);
+	}
+
+	var ports = setupEffects(managers, enqueue);
+
+	return ports ? { ports: ports } : {};
+}
+
+
+// EFFECT MANAGERS
+
+var effectManagers = {};
+
+function setupEffects(managers, callback)
+{
+	var ports;
+
+	// setup all necessary effect managers
+	for (var key in effectManagers)
+	{
+		var manager = effectManagers[key];
+
+		if (manager.isForeign)
+		{
+			ports = ports || {};
+			ports[key] = manager.tag === 'cmd'
+				? setupOutgoingPort(key)
+				: setupIncomingPort(key, callback);
+		}
+
+		managers[key] = makeManager(manager, callback);
+	}
+
+	return ports;
+}
+
+function makeManager(info, callback)
+{
+	var router = {
+		main: callback,
+		self: undefined
+	};
+
+	var tag = info.tag;
+	var onEffects = info.onEffects;
+	var onSelfMsg = info.onSelfMsg;
+
+	function onMessage(msg, state)
+	{
+		if (msg.ctor === 'self')
+		{
+			return A3(onSelfMsg, router, msg._0, state);
+		}
+
+		var fx = msg._0;
+		switch (tag)
+		{
+			case 'cmd':
+				return A3(onEffects, router, fx.cmds, state);
+
+			case 'sub':
+				return A3(onEffects, router, fx.subs, state);
+
+			case 'fx':
+				return A4(onEffects, router, fx.cmds, fx.subs, state);
+		}
+	}
+
+	var process = spawnLoop(info.init, onMessage);
+	router.self = process;
+	return process;
+}
+
+function sendToApp(router, msg)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		router.main(msg);
+		callback(_elm_lang$core$Native_Scheduler.succeed(_elm_lang$core$Native_Utils.Tuple0));
+	});
+}
+
+function sendToSelf(router, msg)
+{
+	return A2(_elm_lang$core$Native_Scheduler.send, router.self, {
+		ctor: 'self',
+		_0: msg
+	});
+}
+
+
+// HELPER for STATEFUL LOOPS
+
+function spawnLoop(init, onMessage)
+{
+	var andThen = _elm_lang$core$Native_Scheduler.andThen;
+
+	function loop(state)
+	{
+		var handleMsg = _elm_lang$core$Native_Scheduler.receive(function(msg) {
+			return onMessage(msg, state);
+		});
+		return A2(andThen, loop, handleMsg);
+	}
+
+	var task = A2(andThen, loop, init);
+
+	return _elm_lang$core$Native_Scheduler.rawSpawn(task);
+}
+
+
+// BAGS
+
+function leaf(home)
+{
+	return function(value)
+	{
+		return {
+			type: 'leaf',
+			home: home,
+			value: value
+		};
+	};
+}
+
+function batch(list)
+{
+	return {
+		type: 'node',
+		branches: list
+	};
+}
+
+function map(tagger, bag)
+{
+	return {
+		type: 'map',
+		tagger: tagger,
+		tree: bag
+	}
+}
+
+
+// PIPE BAGS INTO EFFECT MANAGERS
+
+function dispatchEffects(managers, cmdBag, subBag)
+{
+	var effectsDict = {};
+	gatherEffects(true, cmdBag, effectsDict, null);
+	gatherEffects(false, subBag, effectsDict, null);
+
+	for (var home in managers)
+	{
+		var fx = home in effectsDict
+			? effectsDict[home]
+			: {
+				cmds: _elm_lang$core$Native_List.Nil,
+				subs: _elm_lang$core$Native_List.Nil
+			};
+
+		_elm_lang$core$Native_Scheduler.rawSend(managers[home], { ctor: 'fx', _0: fx });
+	}
+}
+
+function gatherEffects(isCmd, bag, effectsDict, taggers)
+{
+	switch (bag.type)
+	{
+		case 'leaf':
+			var home = bag.home;
+			var effect = toEffect(isCmd, home, taggers, bag.value);
+			effectsDict[home] = insert(isCmd, effect, effectsDict[home]);
+			return;
+
+		case 'node':
+			var list = bag.branches;
+			while (list.ctor !== '[]')
+			{
+				gatherEffects(isCmd, list._0, effectsDict, taggers);
+				list = list._1;
+			}
+			return;
+
+		case 'map':
+			gatherEffects(isCmd, bag.tree, effectsDict, {
+				tagger: bag.tagger,
+				rest: taggers
+			});
+			return;
+	}
+}
+
+function toEffect(isCmd, home, taggers, value)
+{
+	function applyTaggers(x)
+	{
+		var temp = taggers;
+		while (temp)
+		{
+			x = temp.tagger(x);
+			temp = temp.rest;
+		}
+		return x;
+	}
+
+	var map = isCmd
+		? effectManagers[home].cmdMap
+		: effectManagers[home].subMap;
+
+	return A2(map, applyTaggers, value)
+}
+
+function insert(isCmd, newEffect, effects)
+{
+	effects = effects || {
+		cmds: _elm_lang$core$Native_List.Nil,
+		subs: _elm_lang$core$Native_List.Nil
+	};
+	if (isCmd)
+	{
+		effects.cmds = _elm_lang$core$Native_List.Cons(newEffect, effects.cmds);
+		return effects;
+	}
+	effects.subs = _elm_lang$core$Native_List.Cons(newEffect, effects.subs);
+	return effects;
+}
+
+
+// PORTS
+
+function checkPortName(name)
+{
+	if (name in effectManagers)
+	{
+		throw new Error('There can only be one port named `' + name + '`, but your program has multiple.');
+	}
+}
+
+
+// OUTGOING PORTS
+
+function outgoingPort(name, converter)
+{
+	checkPortName(name);
+	effectManagers[name] = {
+		tag: 'cmd',
+		cmdMap: outgoingPortMap,
+		converter: converter,
+		isForeign: true
+	};
+	return leaf(name);
+}
+
+var outgoingPortMap = F2(function cmdMap(tagger, value) {
+	return value;
+});
+
+function setupOutgoingPort(name)
+{
+	var subs = [];
+	var converter = effectManagers[name].converter;
+
+	// CREATE MANAGER
+
+	var init = _elm_lang$core$Native_Scheduler.succeed(null);
+
+	function onEffects(router, cmdList, state)
+	{
+		while (cmdList.ctor !== '[]')
+		{
+			// grab a separate reference to subs in case unsubscribe is called
+			var currentSubs = subs;
+			var value = converter(cmdList._0);
+			for (var i = 0; i < currentSubs.length; i++)
+			{
+				currentSubs[i](value);
+			}
+			cmdList = cmdList._1;
+		}
+		return init;
+	}
+
+	effectManagers[name].init = init;
+	effectManagers[name].onEffects = F3(onEffects);
+
+	// PUBLIC API
+
+	function subscribe(callback)
+	{
+		subs.push(callback);
+	}
+
+	function unsubscribe(callback)
+	{
+		// copy subs into a new array in case unsubscribe is called within a
+		// subscribed callback
+		subs = subs.slice();
+		var index = subs.indexOf(callback);
+		if (index >= 0)
+		{
+			subs.splice(index, 1);
+		}
+	}
+
+	return {
+		subscribe: subscribe,
+		unsubscribe: unsubscribe
+	};
+}
+
+
+// INCOMING PORTS
+
+function incomingPort(name, converter)
+{
+	checkPortName(name);
+	effectManagers[name] = {
+		tag: 'sub',
+		subMap: incomingPortMap,
+		converter: converter,
+		isForeign: true
+	};
+	return leaf(name);
+}
+
+var incomingPortMap = F2(function subMap(tagger, finalTagger)
+{
+	return function(value)
+	{
+		return tagger(finalTagger(value));
+	};
+});
+
+function setupIncomingPort(name, callback)
+{
+	var sentBeforeInit = [];
+	var subs = _elm_lang$core$Native_List.Nil;
+	var converter = effectManagers[name].converter;
+	var currentOnEffects = preInitOnEffects;
+	var currentSend = preInitSend;
+
+	// CREATE MANAGER
+
+	var init = _elm_lang$core$Native_Scheduler.succeed(null);
+
+	function preInitOnEffects(router, subList, state)
+	{
+		var postInitResult = postInitOnEffects(router, subList, state);
+
+		for(var i = 0; i < sentBeforeInit.length; i++)
+		{
+			postInitSend(sentBeforeInit[i]);
+		}
+
+		sentBeforeInit = null; // to release objects held in queue
+		currentSend = postInitSend;
+		currentOnEffects = postInitOnEffects;
+		return postInitResult;
+	}
+
+	function postInitOnEffects(router, subList, state)
+	{
+		subs = subList;
+		return init;
+	}
+
+	function onEffects(router, subList, state)
+	{
+		return currentOnEffects(router, subList, state);
+	}
+
+	effectManagers[name].init = init;
+	effectManagers[name].onEffects = F3(onEffects);
+
+	// PUBLIC API
+
+	function preInitSend(value)
+	{
+		sentBeforeInit.push(value);
+	}
+
+	function postInitSend(value)
+	{
+		var temp = subs;
+		while (temp.ctor !== '[]')
+		{
+			callback(temp._0(value));
+			temp = temp._1;
+		}
+	}
+
+	function send(incomingValue)
+	{
+		var result = A2(_elm_lang$core$Json_Decode$decodeValue, converter, incomingValue);
+		if (result.ctor === 'Err')
+		{
+			throw new Error('Trying to send an unexpected type of value through port `' + name + '`:\n' + result._0);
+		}
+
+		currentSend(result._0);
+	}
+
+	return { send: send };
+}
+
+return {
+	// routers
+	sendToApp: F2(sendToApp),
+	sendToSelf: F2(sendToSelf),
+
+	// global setup
+	effectManagers: effectManagers,
+	outgoingPort: outgoingPort,
+	incomingPort: incomingPort,
+
+	htmlToProgram: htmlToProgram,
+	program: program,
+	programWithFlags: programWithFlags,
+	initialize: initialize,
+
+	// effect bags
+	leaf: leaf,
+	batch: batch,
+	map: F2(map)
+};
+
+}();
+
+//import Native.Utils //
+
+var _elm_lang$core$Native_Scheduler = function() {
+
+var MAX_STEPS = 10000;
+
+
+// TASKS
+
+function succeed(value)
+{
+	return {
+		ctor: '_Task_succeed',
+		value: value
+	};
+}
+
+function fail(error)
+{
+	return {
+		ctor: '_Task_fail',
+		value: error
+	};
+}
+
+function nativeBinding(callback)
+{
+	return {
+		ctor: '_Task_nativeBinding',
+		callback: callback,
+		cancel: null
+	};
+}
+
+function andThen(callback, task)
+{
+	return {
+		ctor: '_Task_andThen',
+		callback: callback,
+		task: task
+	};
+}
+
+function onError(callback, task)
+{
+	return {
+		ctor: '_Task_onError',
+		callback: callback,
+		task: task
+	};
+}
+
+function receive(callback)
+{
+	return {
+		ctor: '_Task_receive',
+		callback: callback
+	};
+}
+
+
+// PROCESSES
+
+function rawSpawn(task)
+{
+	var process = {
+		ctor: '_Process',
+		id: _elm_lang$core$Native_Utils.guid(),
+		root: task,
+		stack: null,
+		mailbox: []
+	};
+
+	enqueue(process);
+
+	return process;
+}
+
+function spawn(task)
+{
+	return nativeBinding(function(callback) {
+		var process = rawSpawn(task);
+		callback(succeed(process));
+	});
+}
+
+function rawSend(process, msg)
+{
+	process.mailbox.push(msg);
+	enqueue(process);
+}
+
+function send(process, msg)
+{
+	return nativeBinding(function(callback) {
+		rawSend(process, msg);
+		callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
+	});
+}
+
+function kill(process)
+{
+	return nativeBinding(function(callback) {
+		var root = process.root;
+		if (root.ctor === '_Task_nativeBinding' && root.cancel)
+		{
+			root.cancel();
+		}
+
+		process.root = null;
+
+		callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
+	});
+}
+
+function sleep(time)
+{
+	return nativeBinding(function(callback) {
+		var id = setTimeout(function() {
+			callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
+		}, time);
+
+		return function() { clearTimeout(id); };
+	});
+}
+
+
+// STEP PROCESSES
+
+function step(numSteps, process)
+{
+	while (numSteps < MAX_STEPS)
+	{
+		var ctor = process.root.ctor;
+
+		if (ctor === '_Task_succeed')
+		{
+			while (process.stack && process.stack.ctor === '_Task_onError')
+			{
+				process.stack = process.stack.rest;
+			}
+			if (process.stack === null)
+			{
+				break;
+			}
+			process.root = process.stack.callback(process.root.value);
+			process.stack = process.stack.rest;
+			++numSteps;
+			continue;
+		}
+
+		if (ctor === '_Task_fail')
+		{
+			while (process.stack && process.stack.ctor === '_Task_andThen')
+			{
+				process.stack = process.stack.rest;
+			}
+			if (process.stack === null)
+			{
+				break;
+			}
+			process.root = process.stack.callback(process.root.value);
+			process.stack = process.stack.rest;
+			++numSteps;
+			continue;
+		}
+
+		if (ctor === '_Task_andThen')
+		{
+			process.stack = {
+				ctor: '_Task_andThen',
+				callback: process.root.callback,
+				rest: process.stack
+			};
+			process.root = process.root.task;
+			++numSteps;
+			continue;
+		}
+
+		if (ctor === '_Task_onError')
+		{
+			process.stack = {
+				ctor: '_Task_onError',
+				callback: process.root.callback,
+				rest: process.stack
+			};
+			process.root = process.root.task;
+			++numSteps;
+			continue;
+		}
+
+		if (ctor === '_Task_nativeBinding')
+		{
+			process.root.cancel = process.root.callback(function(newRoot) {
+				process.root = newRoot;
+				enqueue(process);
+			});
+
+			break;
+		}
+
+		if (ctor === '_Task_receive')
+		{
+			var mailbox = process.mailbox;
+			if (mailbox.length === 0)
+			{
+				break;
+			}
+
+			process.root = process.root.callback(mailbox.shift());
+			++numSteps;
+			continue;
+		}
+
+		throw new Error(ctor);
+	}
+
+	if (numSteps < MAX_STEPS)
+	{
+		return numSteps + 1;
+	}
+	enqueue(process);
+
+	return numSteps;
+}
+
+
+// WORK QUEUE
+
+var working = false;
+var workQueue = [];
+
+function enqueue(process)
+{
+	workQueue.push(process);
+
+	if (!working)
+	{
+		setTimeout(work, 0);
+		working = true;
+	}
+}
+
+function work()
+{
+	var numSteps = 0;
+	var process;
+	while (numSteps < MAX_STEPS && (process = workQueue.shift()))
+	{
+		if (process.root)
+		{
+			numSteps = step(numSteps, process);
+		}
+	}
+	if (!process)
+	{
+		working = false;
+		return;
+	}
+	setTimeout(work, 0);
+}
+
+
+return {
+	succeed: succeed,
+	fail: fail,
+	nativeBinding: nativeBinding,
+	andThen: F2(andThen),
+	onError: F2(onError),
+	receive: receive,
+
+	spawn: spawn,
+	kill: kill,
+	sleep: sleep,
+	send: F2(send),
+
+	rawSpawn: rawSpawn,
+	rawSend: rawSend
+};
+
+}();
+var _elm_lang$core$Platform_Cmd$batch = _elm_lang$core$Native_Platform.batch;
+var _elm_lang$core$Platform_Cmd$none = _elm_lang$core$Platform_Cmd$batch(
+	{ctor: '[]'});
+var _elm_lang$core$Platform_Cmd_ops = _elm_lang$core$Platform_Cmd_ops || {};
+_elm_lang$core$Platform_Cmd_ops['!'] = F2(
+	function (model, commands) {
+		return {
+			ctor: '_Tuple2',
+			_0: model,
+			_1: _elm_lang$core$Platform_Cmd$batch(commands)
+		};
+	});
+var _elm_lang$core$Platform_Cmd$map = _elm_lang$core$Native_Platform.map;
+var _elm_lang$core$Platform_Cmd$Cmd = {ctor: 'Cmd'};
+
+var _elm_lang$core$Platform_Sub$batch = _elm_lang$core$Native_Platform.batch;
+var _elm_lang$core$Platform_Sub$none = _elm_lang$core$Platform_Sub$batch(
+	{ctor: '[]'});
+var _elm_lang$core$Platform_Sub$map = _elm_lang$core$Native_Platform.map;
+var _elm_lang$core$Platform_Sub$Sub = {ctor: 'Sub'};
+
+var _elm_lang$core$Platform$hack = _elm_lang$core$Native_Scheduler.succeed;
+var _elm_lang$core$Platform$sendToSelf = _elm_lang$core$Native_Platform.sendToSelf;
+var _elm_lang$core$Platform$sendToApp = _elm_lang$core$Native_Platform.sendToApp;
+var _elm_lang$core$Platform$programWithFlags = _elm_lang$core$Native_Platform.programWithFlags;
+var _elm_lang$core$Platform$program = _elm_lang$core$Native_Platform.program;
+var _elm_lang$core$Platform$Program = {ctor: 'Program'};
+var _elm_lang$core$Platform$Task = {ctor: 'Task'};
+var _elm_lang$core$Platform$ProcessId = {ctor: 'ProcessId'};
+var _elm_lang$core$Platform$Router = {ctor: 'Router'};
+
+var _elm_community$easing_functions$Ease$reverse = F2(
+	function (easing, time) {
+		return easing(1 - time);
+	});
+var _elm_community$easing_functions$Ease$flip = F2(
+	function (easing, time) {
+		return 1 - easing(1 - time);
+	});
+var _elm_community$easing_functions$Ease$retour = F2(
+	function (easing, time) {
+		return (_elm_lang$core$Native_Utils.cmp(time, 0.5) < 0) ? easing(time * 2) : A2(_elm_community$easing_functions$Ease$flip, easing, (time - 0.5) * 2);
+	});
+var _elm_community$easing_functions$Ease$inOut = F3(
+	function (e1, e2, time) {
+		return (_elm_lang$core$Native_Utils.cmp(time, 0.5) < 0) ? (e1(time * 2) / 2) : (0.5 + (e2((time - 0.5) * 2) / 2));
+	});
+var _elm_community$easing_functions$Ease$inElastic = function (time) {
+	if (_elm_lang$core$Native_Utils.eq(time, 0.0)) {
+		return 0.0;
+	} else {
+		var t = time - 1;
+		var p = 0.3;
+		var s = 7.5e-2;
+		return 0 - (Math.pow(2, 10 * t) * _elm_lang$core$Basics$sin(((t - s) * (2 * _elm_lang$core$Basics$pi)) / p));
+	}
+};
+var _elm_community$easing_functions$Ease$outElastic = _elm_community$easing_functions$Ease$flip(_elm_community$easing_functions$Ease$inElastic);
+var _elm_community$easing_functions$Ease$inOutElastic = A2(_elm_community$easing_functions$Ease$inOut, _elm_community$easing_functions$Ease$inElastic, _elm_community$easing_functions$Ease$outElastic);
+var _elm_community$easing_functions$Ease$outBounce = function (time) {
+	var t4 = time - (2.625 / 2.75);
+	var t3 = time - (2.25 / 2.75);
+	var t2 = time - (1.5 / 2.75);
+	var a = 7.5625;
+	return (_elm_lang$core$Native_Utils.cmp(time, 1 / 2.75) < 0) ? ((a * time) * time) : ((_elm_lang$core$Native_Utils.cmp(time, 2 / 2.75) < 0) ? (((a * t2) * t2) + 0.75) : ((_elm_lang$core$Native_Utils.cmp(time, 2.5 / 2.75) < 0) ? (((a * t3) * t3) + 0.9375) : (((a * t4) * t4) + 0.984375)));
+};
+var _elm_community$easing_functions$Ease$inBounce = _elm_community$easing_functions$Ease$flip(_elm_community$easing_functions$Ease$outBounce);
+var _elm_community$easing_functions$Ease$inOutBounce = A2(_elm_community$easing_functions$Ease$inOut, _elm_community$easing_functions$Ease$inBounce, _elm_community$easing_functions$Ease$outBounce);
+var _elm_community$easing_functions$Ease$inBack = function (time) {
+	return (time * time) * ((2.70158 * time) - 1.70158);
+};
+var _elm_community$easing_functions$Ease$outBack = _elm_community$easing_functions$Ease$flip(_elm_community$easing_functions$Ease$inBack);
+var _elm_community$easing_functions$Ease$inOutBack = A2(_elm_community$easing_functions$Ease$inOut, _elm_community$easing_functions$Ease$inBack, _elm_community$easing_functions$Ease$outBack);
+var _elm_community$easing_functions$Ease$outCirc = function (time) {
+	return _elm_lang$core$Basics$sqrt(
+		1 - Math.pow(time - 1, 2));
+};
+var _elm_community$easing_functions$Ease$inCirc = _elm_community$easing_functions$Ease$flip(_elm_community$easing_functions$Ease$outCirc);
+var _elm_community$easing_functions$Ease$inOutCirc = A2(_elm_community$easing_functions$Ease$inOut, _elm_community$easing_functions$Ease$inCirc, _elm_community$easing_functions$Ease$outCirc);
+var _elm_community$easing_functions$Ease$inExpo = function (time) {
+	return _elm_lang$core$Native_Utils.eq(time, 0.0) ? 0.0 : Math.pow(2, 10 * (time - 1));
+};
+var _elm_community$easing_functions$Ease$outExpo = _elm_community$easing_functions$Ease$flip(_elm_community$easing_functions$Ease$inExpo);
+var _elm_community$easing_functions$Ease$inOutExpo = A2(_elm_community$easing_functions$Ease$inOut, _elm_community$easing_functions$Ease$inExpo, _elm_community$easing_functions$Ease$outExpo);
+var _elm_community$easing_functions$Ease$outSine = function (time) {
+	return _elm_lang$core$Basics$sin(time * (_elm_lang$core$Basics$pi / 2));
+};
+var _elm_community$easing_functions$Ease$inSine = _elm_community$easing_functions$Ease$flip(_elm_community$easing_functions$Ease$outSine);
+var _elm_community$easing_functions$Ease$inOutSine = A2(_elm_community$easing_functions$Ease$inOut, _elm_community$easing_functions$Ease$inSine, _elm_community$easing_functions$Ease$outSine);
+var _elm_community$easing_functions$Ease$inQuint = function (time) {
+	return Math.pow(time, 5);
+};
+var _elm_community$easing_functions$Ease$outQuint = _elm_community$easing_functions$Ease$flip(_elm_community$easing_functions$Ease$inQuint);
+var _elm_community$easing_functions$Ease$inOutQuint = A2(_elm_community$easing_functions$Ease$inOut, _elm_community$easing_functions$Ease$inQuint, _elm_community$easing_functions$Ease$outQuint);
+var _elm_community$easing_functions$Ease$inQuart = function (time) {
+	return Math.pow(time, 4);
+};
+var _elm_community$easing_functions$Ease$outQuart = _elm_community$easing_functions$Ease$flip(_elm_community$easing_functions$Ease$inQuart);
+var _elm_community$easing_functions$Ease$inOutQuart = A2(_elm_community$easing_functions$Ease$inOut, _elm_community$easing_functions$Ease$inQuart, _elm_community$easing_functions$Ease$outQuart);
+var _elm_community$easing_functions$Ease$inCubic = function (time) {
+	return Math.pow(time, 3);
+};
+var _elm_community$easing_functions$Ease$outCubic = _elm_community$easing_functions$Ease$flip(_elm_community$easing_functions$Ease$inCubic);
+var _elm_community$easing_functions$Ease$inOutCubic = A2(_elm_community$easing_functions$Ease$inOut, _elm_community$easing_functions$Ease$inCubic, _elm_community$easing_functions$Ease$outCubic);
+var _elm_community$easing_functions$Ease$inQuad = function (time) {
+	return Math.pow(time, 2);
+};
+var _elm_community$easing_functions$Ease$outQuad = _elm_community$easing_functions$Ease$flip(_elm_community$easing_functions$Ease$inQuad);
+var _elm_community$easing_functions$Ease$inOutQuad = A2(_elm_community$easing_functions$Ease$inOut, _elm_community$easing_functions$Ease$inQuad, _elm_community$easing_functions$Ease$outQuad);
+var _elm_community$easing_functions$Ease$bezier = F5(
+	function (x1, y1, x2, y2, time) {
+		var pair = F4(
+			function (interpolate, _p1, _p0, v) {
+				var _p2 = _p1;
+				var _p3 = _p0;
+				return {
+					ctor: '_Tuple2',
+					_0: A3(interpolate, _p2._0, _p3._0, v),
+					_1: A3(interpolate, _p2._1, _p3._1, v)
+				};
+			});
+		var lerp = F3(
+			function (from, to, v) {
+				return from + ((to - from) * v);
+			});
+		var casteljau = function (ps) {
+			casteljau:
+			while (true) {
+				var _p4 = ps;
+				if (((_p4.ctor === '::') && (_p4._0.ctor === '_Tuple2')) && (_p4._1.ctor === '[]')) {
+					return _p4._0._1;
+				} else {
+					var _p5 = _p4;
+					var _v3 = A3(
+						_elm_lang$core$List$map2,
+						F2(
+							function (x, y) {
+								return A4(pair, lerp, x, y, time);
+							}),
+						_p5,
+						A2(
+							_elm_lang$core$Maybe$withDefault,
+							{ctor: '[]'},
+							_elm_lang$core$List$tail(_p5)));
+					ps = _v3;
+					continue casteljau;
+				}
+			}
+		};
+		return casteljau(
+			{
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 0, _1: 0},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: x1, _1: y1},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: x2, _1: y2},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 1, _1: 1},
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+	});
+var _elm_community$easing_functions$Ease$linear = _elm_lang$core$Basics$identity;
 
 var _elm_lang$core$Dict$foldr = F3(
 	function (f, acc, t) {
@@ -3313,908 +4354,6 @@ var _elm_lang$core$Set$partition = F2(
 			_1: _elm_lang$core$Set$Set_elm_builtin(p2)
 		};
 	});
-
-var _elm_lang$core$Tuple$mapSecond = F2(
-	function (func, _p0) {
-		var _p1 = _p0;
-		return {
-			ctor: '_Tuple2',
-			_0: _p1._0,
-			_1: func(_p1._1)
-		};
-	});
-var _elm_lang$core$Tuple$mapFirst = F2(
-	function (func, _p2) {
-		var _p3 = _p2;
-		return {
-			ctor: '_Tuple2',
-			_0: func(_p3._0),
-			_1: _p3._1
-		};
-	});
-var _elm_lang$core$Tuple$second = function (_p4) {
-	var _p5 = _p4;
-	return _p5._1;
-};
-var _elm_lang$core$Tuple$first = function (_p6) {
-	var _p7 = _p6;
-	return _p7._0;
-};
-
-var _elm_lang$core$Debug$crash = _elm_lang$core$Native_Debug.crash;
-var _elm_lang$core$Debug$log = _elm_lang$core$Native_Debug.log;
-
-//import //
-
-var _elm_lang$core$Native_Platform = function() {
-
-
-// PROGRAMS
-
-function program(impl)
-{
-	return function(flagDecoder)
-	{
-		return function(object, moduleName)
-		{
-			object['worker'] = function worker(flags)
-			{
-				if (typeof flags !== 'undefined')
-				{
-					throw new Error(
-						'The `' + moduleName + '` module does not need flags.\n'
-						+ 'Call ' + moduleName + '.worker() with no arguments and you should be all set!'
-					);
-				}
-
-				return initialize(
-					impl.init,
-					impl.update,
-					impl.subscriptions,
-					renderer
-				);
-			};
-		};
-	};
-}
-
-function programWithFlags(impl)
-{
-	return function(flagDecoder)
-	{
-		return function(object, moduleName)
-		{
-			object['worker'] = function worker(flags)
-			{
-				if (typeof flagDecoder === 'undefined')
-				{
-					throw new Error(
-						'Are you trying to sneak a Never value into Elm? Trickster!\n'
-						+ 'It looks like ' + moduleName + '.main is defined with `programWithFlags` but has type `Program Never`.\n'
-						+ 'Use `program` instead if you do not want flags.'
-					);
-				}
-
-				var result = A2(_elm_lang$core$Native_Json.run, flagDecoder, flags);
-				if (result.ctor === 'Err')
-				{
-					throw new Error(
-						moduleName + '.worker(...) was called with an unexpected argument.\n'
-						+ 'I tried to convert it to an Elm value, but ran into this problem:\n\n'
-						+ result._0
-					);
-				}
-
-				return initialize(
-					impl.init(result._0),
-					impl.update,
-					impl.subscriptions,
-					renderer
-				);
-			};
-		};
-	};
-}
-
-function renderer(enqueue, _)
-{
-	return function(_) {};
-}
-
-
-// HTML TO PROGRAM
-
-function htmlToProgram(vnode)
-{
-	var emptyBag = batch(_elm_lang$core$Native_List.Nil);
-	var noChange = _elm_lang$core$Native_Utils.Tuple2(
-		_elm_lang$core$Native_Utils.Tuple0,
-		emptyBag
-	);
-
-	return _elm_lang$virtual_dom$VirtualDom$program({
-		init: noChange,
-		view: function(model) { return main; },
-		update: F2(function(msg, model) { return noChange; }),
-		subscriptions: function (model) { return emptyBag; }
-	});
-}
-
-
-// INITIALIZE A PROGRAM
-
-function initialize(init, update, subscriptions, renderer)
-{
-	// ambient state
-	var managers = {};
-	var updateView;
-
-	// init and update state in main process
-	var initApp = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
-		var model = init._0;
-		updateView = renderer(enqueue, model);
-		var cmds = init._1;
-		var subs = subscriptions(model);
-		dispatchEffects(managers, cmds, subs);
-		callback(_elm_lang$core$Native_Scheduler.succeed(model));
-	});
-
-	function onMessage(msg, model)
-	{
-		return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
-			var results = A2(update, msg, model);
-			model = results._0;
-			updateView(model);
-			var cmds = results._1;
-			var subs = subscriptions(model);
-			dispatchEffects(managers, cmds, subs);
-			callback(_elm_lang$core$Native_Scheduler.succeed(model));
-		});
-	}
-
-	var mainProcess = spawnLoop(initApp, onMessage);
-
-	function enqueue(msg)
-	{
-		_elm_lang$core$Native_Scheduler.rawSend(mainProcess, msg);
-	}
-
-	var ports = setupEffects(managers, enqueue);
-
-	return ports ? { ports: ports } : {};
-}
-
-
-// EFFECT MANAGERS
-
-var effectManagers = {};
-
-function setupEffects(managers, callback)
-{
-	var ports;
-
-	// setup all necessary effect managers
-	for (var key in effectManagers)
-	{
-		var manager = effectManagers[key];
-
-		if (manager.isForeign)
-		{
-			ports = ports || {};
-			ports[key] = manager.tag === 'cmd'
-				? setupOutgoingPort(key)
-				: setupIncomingPort(key, callback);
-		}
-
-		managers[key] = makeManager(manager, callback);
-	}
-
-	return ports;
-}
-
-function makeManager(info, callback)
-{
-	var router = {
-		main: callback,
-		self: undefined
-	};
-
-	var tag = info.tag;
-	var onEffects = info.onEffects;
-	var onSelfMsg = info.onSelfMsg;
-
-	function onMessage(msg, state)
-	{
-		if (msg.ctor === 'self')
-		{
-			return A3(onSelfMsg, router, msg._0, state);
-		}
-
-		var fx = msg._0;
-		switch (tag)
-		{
-			case 'cmd':
-				return A3(onEffects, router, fx.cmds, state);
-
-			case 'sub':
-				return A3(onEffects, router, fx.subs, state);
-
-			case 'fx':
-				return A4(onEffects, router, fx.cmds, fx.subs, state);
-		}
-	}
-
-	var process = spawnLoop(info.init, onMessage);
-	router.self = process;
-	return process;
-}
-
-function sendToApp(router, msg)
-{
-	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
-	{
-		router.main(msg);
-		callback(_elm_lang$core$Native_Scheduler.succeed(_elm_lang$core$Native_Utils.Tuple0));
-	});
-}
-
-function sendToSelf(router, msg)
-{
-	return A2(_elm_lang$core$Native_Scheduler.send, router.self, {
-		ctor: 'self',
-		_0: msg
-	});
-}
-
-
-// HELPER for STATEFUL LOOPS
-
-function spawnLoop(init, onMessage)
-{
-	var andThen = _elm_lang$core$Native_Scheduler.andThen;
-
-	function loop(state)
-	{
-		var handleMsg = _elm_lang$core$Native_Scheduler.receive(function(msg) {
-			return onMessage(msg, state);
-		});
-		return A2(andThen, loop, handleMsg);
-	}
-
-	var task = A2(andThen, loop, init);
-
-	return _elm_lang$core$Native_Scheduler.rawSpawn(task);
-}
-
-
-// BAGS
-
-function leaf(home)
-{
-	return function(value)
-	{
-		return {
-			type: 'leaf',
-			home: home,
-			value: value
-		};
-	};
-}
-
-function batch(list)
-{
-	return {
-		type: 'node',
-		branches: list
-	};
-}
-
-function map(tagger, bag)
-{
-	return {
-		type: 'map',
-		tagger: tagger,
-		tree: bag
-	}
-}
-
-
-// PIPE BAGS INTO EFFECT MANAGERS
-
-function dispatchEffects(managers, cmdBag, subBag)
-{
-	var effectsDict = {};
-	gatherEffects(true, cmdBag, effectsDict, null);
-	gatherEffects(false, subBag, effectsDict, null);
-
-	for (var home in managers)
-	{
-		var fx = home in effectsDict
-			? effectsDict[home]
-			: {
-				cmds: _elm_lang$core$Native_List.Nil,
-				subs: _elm_lang$core$Native_List.Nil
-			};
-
-		_elm_lang$core$Native_Scheduler.rawSend(managers[home], { ctor: 'fx', _0: fx });
-	}
-}
-
-function gatherEffects(isCmd, bag, effectsDict, taggers)
-{
-	switch (bag.type)
-	{
-		case 'leaf':
-			var home = bag.home;
-			var effect = toEffect(isCmd, home, taggers, bag.value);
-			effectsDict[home] = insert(isCmd, effect, effectsDict[home]);
-			return;
-
-		case 'node':
-			var list = bag.branches;
-			while (list.ctor !== '[]')
-			{
-				gatherEffects(isCmd, list._0, effectsDict, taggers);
-				list = list._1;
-			}
-			return;
-
-		case 'map':
-			gatherEffects(isCmd, bag.tree, effectsDict, {
-				tagger: bag.tagger,
-				rest: taggers
-			});
-			return;
-	}
-}
-
-function toEffect(isCmd, home, taggers, value)
-{
-	function applyTaggers(x)
-	{
-		var temp = taggers;
-		while (temp)
-		{
-			x = temp.tagger(x);
-			temp = temp.rest;
-		}
-		return x;
-	}
-
-	var map = isCmd
-		? effectManagers[home].cmdMap
-		: effectManagers[home].subMap;
-
-	return A2(map, applyTaggers, value)
-}
-
-function insert(isCmd, newEffect, effects)
-{
-	effects = effects || {
-		cmds: _elm_lang$core$Native_List.Nil,
-		subs: _elm_lang$core$Native_List.Nil
-	};
-	if (isCmd)
-	{
-		effects.cmds = _elm_lang$core$Native_List.Cons(newEffect, effects.cmds);
-		return effects;
-	}
-	effects.subs = _elm_lang$core$Native_List.Cons(newEffect, effects.subs);
-	return effects;
-}
-
-
-// PORTS
-
-function checkPortName(name)
-{
-	if (name in effectManagers)
-	{
-		throw new Error('There can only be one port named `' + name + '`, but your program has multiple.');
-	}
-}
-
-
-// OUTGOING PORTS
-
-function outgoingPort(name, converter)
-{
-	checkPortName(name);
-	effectManagers[name] = {
-		tag: 'cmd',
-		cmdMap: outgoingPortMap,
-		converter: converter,
-		isForeign: true
-	};
-	return leaf(name);
-}
-
-var outgoingPortMap = F2(function cmdMap(tagger, value) {
-	return value;
-});
-
-function setupOutgoingPort(name)
-{
-	var subs = [];
-	var converter = effectManagers[name].converter;
-
-	// CREATE MANAGER
-
-	var init = _elm_lang$core$Native_Scheduler.succeed(null);
-
-	function onEffects(router, cmdList, state)
-	{
-		while (cmdList.ctor !== '[]')
-		{
-			// grab a separate reference to subs in case unsubscribe is called
-			var currentSubs = subs;
-			var value = converter(cmdList._0);
-			for (var i = 0; i < currentSubs.length; i++)
-			{
-				currentSubs[i](value);
-			}
-			cmdList = cmdList._1;
-		}
-		return init;
-	}
-
-	effectManagers[name].init = init;
-	effectManagers[name].onEffects = F3(onEffects);
-
-	// PUBLIC API
-
-	function subscribe(callback)
-	{
-		subs.push(callback);
-	}
-
-	function unsubscribe(callback)
-	{
-		// copy subs into a new array in case unsubscribe is called within a
-		// subscribed callback
-		subs = subs.slice();
-		var index = subs.indexOf(callback);
-		if (index >= 0)
-		{
-			subs.splice(index, 1);
-		}
-	}
-
-	return {
-		subscribe: subscribe,
-		unsubscribe: unsubscribe
-	};
-}
-
-
-// INCOMING PORTS
-
-function incomingPort(name, converter)
-{
-	checkPortName(name);
-	effectManagers[name] = {
-		tag: 'sub',
-		subMap: incomingPortMap,
-		converter: converter,
-		isForeign: true
-	};
-	return leaf(name);
-}
-
-var incomingPortMap = F2(function subMap(tagger, finalTagger)
-{
-	return function(value)
-	{
-		return tagger(finalTagger(value));
-	};
-});
-
-function setupIncomingPort(name, callback)
-{
-	var sentBeforeInit = [];
-	var subs = _elm_lang$core$Native_List.Nil;
-	var converter = effectManagers[name].converter;
-	var currentOnEffects = preInitOnEffects;
-	var currentSend = preInitSend;
-
-	// CREATE MANAGER
-
-	var init = _elm_lang$core$Native_Scheduler.succeed(null);
-
-	function preInitOnEffects(router, subList, state)
-	{
-		var postInitResult = postInitOnEffects(router, subList, state);
-
-		for(var i = 0; i < sentBeforeInit.length; i++)
-		{
-			postInitSend(sentBeforeInit[i]);
-		}
-
-		sentBeforeInit = null; // to release objects held in queue
-		currentSend = postInitSend;
-		currentOnEffects = postInitOnEffects;
-		return postInitResult;
-	}
-
-	function postInitOnEffects(router, subList, state)
-	{
-		subs = subList;
-		return init;
-	}
-
-	function onEffects(router, subList, state)
-	{
-		return currentOnEffects(router, subList, state);
-	}
-
-	effectManagers[name].init = init;
-	effectManagers[name].onEffects = F3(onEffects);
-
-	// PUBLIC API
-
-	function preInitSend(value)
-	{
-		sentBeforeInit.push(value);
-	}
-
-	function postInitSend(value)
-	{
-		var temp = subs;
-		while (temp.ctor !== '[]')
-		{
-			callback(temp._0(value));
-			temp = temp._1;
-		}
-	}
-
-	function send(incomingValue)
-	{
-		var result = A2(_elm_lang$core$Json_Decode$decodeValue, converter, incomingValue);
-		if (result.ctor === 'Err')
-		{
-			throw new Error('Trying to send an unexpected type of value through port `' + name + '`:\n' + result._0);
-		}
-
-		currentSend(result._0);
-	}
-
-	return { send: send };
-}
-
-return {
-	// routers
-	sendToApp: F2(sendToApp),
-	sendToSelf: F2(sendToSelf),
-
-	// global setup
-	effectManagers: effectManagers,
-	outgoingPort: outgoingPort,
-	incomingPort: incomingPort,
-
-	htmlToProgram: htmlToProgram,
-	program: program,
-	programWithFlags: programWithFlags,
-	initialize: initialize,
-
-	// effect bags
-	leaf: leaf,
-	batch: batch,
-	map: F2(map)
-};
-
-}();
-
-//import Native.Utils //
-
-var _elm_lang$core$Native_Scheduler = function() {
-
-var MAX_STEPS = 10000;
-
-
-// TASKS
-
-function succeed(value)
-{
-	return {
-		ctor: '_Task_succeed',
-		value: value
-	};
-}
-
-function fail(error)
-{
-	return {
-		ctor: '_Task_fail',
-		value: error
-	};
-}
-
-function nativeBinding(callback)
-{
-	return {
-		ctor: '_Task_nativeBinding',
-		callback: callback,
-		cancel: null
-	};
-}
-
-function andThen(callback, task)
-{
-	return {
-		ctor: '_Task_andThen',
-		callback: callback,
-		task: task
-	};
-}
-
-function onError(callback, task)
-{
-	return {
-		ctor: '_Task_onError',
-		callback: callback,
-		task: task
-	};
-}
-
-function receive(callback)
-{
-	return {
-		ctor: '_Task_receive',
-		callback: callback
-	};
-}
-
-
-// PROCESSES
-
-function rawSpawn(task)
-{
-	var process = {
-		ctor: '_Process',
-		id: _elm_lang$core$Native_Utils.guid(),
-		root: task,
-		stack: null,
-		mailbox: []
-	};
-
-	enqueue(process);
-
-	return process;
-}
-
-function spawn(task)
-{
-	return nativeBinding(function(callback) {
-		var process = rawSpawn(task);
-		callback(succeed(process));
-	});
-}
-
-function rawSend(process, msg)
-{
-	process.mailbox.push(msg);
-	enqueue(process);
-}
-
-function send(process, msg)
-{
-	return nativeBinding(function(callback) {
-		rawSend(process, msg);
-		callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
-	});
-}
-
-function kill(process)
-{
-	return nativeBinding(function(callback) {
-		var root = process.root;
-		if (root.ctor === '_Task_nativeBinding' && root.cancel)
-		{
-			root.cancel();
-		}
-
-		process.root = null;
-
-		callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
-	});
-}
-
-function sleep(time)
-{
-	return nativeBinding(function(callback) {
-		var id = setTimeout(function() {
-			callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
-		}, time);
-
-		return function() { clearTimeout(id); };
-	});
-}
-
-
-// STEP PROCESSES
-
-function step(numSteps, process)
-{
-	while (numSteps < MAX_STEPS)
-	{
-		var ctor = process.root.ctor;
-
-		if (ctor === '_Task_succeed')
-		{
-			while (process.stack && process.stack.ctor === '_Task_onError')
-			{
-				process.stack = process.stack.rest;
-			}
-			if (process.stack === null)
-			{
-				break;
-			}
-			process.root = process.stack.callback(process.root.value);
-			process.stack = process.stack.rest;
-			++numSteps;
-			continue;
-		}
-
-		if (ctor === '_Task_fail')
-		{
-			while (process.stack && process.stack.ctor === '_Task_andThen')
-			{
-				process.stack = process.stack.rest;
-			}
-			if (process.stack === null)
-			{
-				break;
-			}
-			process.root = process.stack.callback(process.root.value);
-			process.stack = process.stack.rest;
-			++numSteps;
-			continue;
-		}
-
-		if (ctor === '_Task_andThen')
-		{
-			process.stack = {
-				ctor: '_Task_andThen',
-				callback: process.root.callback,
-				rest: process.stack
-			};
-			process.root = process.root.task;
-			++numSteps;
-			continue;
-		}
-
-		if (ctor === '_Task_onError')
-		{
-			process.stack = {
-				ctor: '_Task_onError',
-				callback: process.root.callback,
-				rest: process.stack
-			};
-			process.root = process.root.task;
-			++numSteps;
-			continue;
-		}
-
-		if (ctor === '_Task_nativeBinding')
-		{
-			process.root.cancel = process.root.callback(function(newRoot) {
-				process.root = newRoot;
-				enqueue(process);
-			});
-
-			break;
-		}
-
-		if (ctor === '_Task_receive')
-		{
-			var mailbox = process.mailbox;
-			if (mailbox.length === 0)
-			{
-				break;
-			}
-
-			process.root = process.root.callback(mailbox.shift());
-			++numSteps;
-			continue;
-		}
-
-		throw new Error(ctor);
-	}
-
-	if (numSteps < MAX_STEPS)
-	{
-		return numSteps + 1;
-	}
-	enqueue(process);
-
-	return numSteps;
-}
-
-
-// WORK QUEUE
-
-var working = false;
-var workQueue = [];
-
-function enqueue(process)
-{
-	workQueue.push(process);
-
-	if (!working)
-	{
-		setTimeout(work, 0);
-		working = true;
-	}
-}
-
-function work()
-{
-	var numSteps = 0;
-	var process;
-	while (numSteps < MAX_STEPS && (process = workQueue.shift()))
-	{
-		if (process.root)
-		{
-			numSteps = step(numSteps, process);
-		}
-	}
-	if (!process)
-	{
-		working = false;
-		return;
-	}
-	setTimeout(work, 0);
-}
-
-
-return {
-	succeed: succeed,
-	fail: fail,
-	nativeBinding: nativeBinding,
-	andThen: F2(andThen),
-	onError: F2(onError),
-	receive: receive,
-
-	spawn: spawn,
-	kill: kill,
-	sleep: sleep,
-	send: F2(send),
-
-	rawSpawn: rawSpawn,
-	rawSend: rawSend
-};
-
-}();
-var _elm_lang$core$Platform_Cmd$batch = _elm_lang$core$Native_Platform.batch;
-var _elm_lang$core$Platform_Cmd$none = _elm_lang$core$Platform_Cmd$batch(
-	{ctor: '[]'});
-var _elm_lang$core$Platform_Cmd_ops = _elm_lang$core$Platform_Cmd_ops || {};
-_elm_lang$core$Platform_Cmd_ops['!'] = F2(
-	function (model, commands) {
-		return {
-			ctor: '_Tuple2',
-			_0: model,
-			_1: _elm_lang$core$Platform_Cmd$batch(commands)
-		};
-	});
-var _elm_lang$core$Platform_Cmd$map = _elm_lang$core$Native_Platform.map;
-var _elm_lang$core$Platform_Cmd$Cmd = {ctor: 'Cmd'};
-
-var _elm_lang$core$Platform_Sub$batch = _elm_lang$core$Native_Platform.batch;
-var _elm_lang$core$Platform_Sub$none = _elm_lang$core$Platform_Sub$batch(
-	{ctor: '[]'});
-var _elm_lang$core$Platform_Sub$map = _elm_lang$core$Native_Platform.map;
-var _elm_lang$core$Platform_Sub$Sub = {ctor: 'Sub'};
-
-var _elm_lang$core$Platform$hack = _elm_lang$core$Native_Scheduler.succeed;
-var _elm_lang$core$Platform$sendToSelf = _elm_lang$core$Native_Platform.sendToSelf;
-var _elm_lang$core$Platform$sendToApp = _elm_lang$core$Native_Platform.sendToApp;
-var _elm_lang$core$Platform$programWithFlags = _elm_lang$core$Native_Platform.programWithFlags;
-var _elm_lang$core$Platform$program = _elm_lang$core$Native_Platform.program;
-var _elm_lang$core$Platform$Program = {ctor: 'Program'};
-var _elm_lang$core$Platform$Task = {ctor: 'Task'};
-var _elm_lang$core$Platform$ProcessId = {ctor: 'ProcessId'};
-var _elm_lang$core$Platform$Router = {ctor: 'Router'};
 
 var _elm_community$list_extra$List_Extra$greedyGroupsOfWithStep = F3(
 	function (size, step, xs) {
@@ -16400,6 +16539,47 @@ var _user$project$Animation_Flicker$initial = _mdgriffith$elm_style_animation$An
 		_1: {ctor: '[]'}
 	});
 
+var _user$project$Animation_Footer$duration = 700;
+var _user$project$Animation_Footer$expandedHeight = 120;
+var _user$project$Animation_Footer$animateUp = _mdgriffith$elm_style_animation$Animation$interrupt(
+	{
+		ctor: '::',
+		_0: A2(
+			_mdgriffith$elm_style_animation$Animation$toWith,
+			_mdgriffith$elm_style_animation$Animation$easing(
+				{duration: _user$project$Animation_Footer$duration, ease: _elm_community$easing_functions$Ease$inQuad}),
+			{
+				ctor: '::',
+				_0: _mdgriffith$elm_style_animation$Animation$height(
+					_mdgriffith$elm_style_animation$Animation$px(_user$project$Animation_Footer$expandedHeight)),
+				_1: {ctor: '[]'}
+			}),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Animation_Footer$initialHeight = 45;
+var _user$project$Animation_Footer$initial = _mdgriffith$elm_style_animation$Animation$style(
+	{
+		ctor: '::',
+		_0: _mdgriffith$elm_style_animation$Animation$height(
+			_mdgriffith$elm_style_animation$Animation$px(_user$project$Animation_Footer$initialHeight)),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Animation_Footer$animateDown = _mdgriffith$elm_style_animation$Animation$interrupt(
+	{
+		ctor: '::',
+		_0: A2(
+			_mdgriffith$elm_style_animation$Animation$toWith,
+			_mdgriffith$elm_style_animation$Animation$easing(
+				{duration: _user$project$Animation_Footer$duration, ease: _elm_community$easing_functions$Ease$outQuad}),
+			{
+				ctor: '::',
+				_0: _mdgriffith$elm_style_animation$Animation$height(
+					_mdgriffith$elm_style_animation$Animation$px(_user$project$Animation_Footer$initialHeight)),
+				_1: {ctor: '[]'}
+			}),
+		_1: {ctor: '[]'}
+	});
+
 var _user$project$Duration_Core$asSeconds = function (duration) {
 	var _p0 = duration;
 	if (_p0.ctor === 'Milliseconds') {
@@ -17132,6 +17312,8 @@ var _user$project$Model$default = {
 	randomSeed: _elm_lang$core$Maybe$Nothing,
 	forceRandomSeedEnabled: false,
 	statusBarStyle: _user$project$Animation_Flicker$initial,
+	footerStyle: _user$project$Animation_Footer$initial,
+	footerExpanded: false,
 	paneLocation: _user$project$State_PaneLocation$default
 };
 var _user$project$Model$Model = function (a) {
@@ -17152,7 +17334,11 @@ var _user$project$Model$Model = function (a) {
 															return function (p) {
 																return function (q) {
 																	return function (r) {
-																		return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, randomSeed: o, forceRandomSeedEnabled: p, statusBarStyle: q, paneLocation: r};
+																		return function (s) {
+																			return function (t) {
+																				return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, randomSeed: o, forceRandomSeedEnabled: p, statusBarStyle: q, footerStyle: r, footerExpanded: s, paneLocation: t};
+																			};
+																		};
 																	};
 																};
 															};
@@ -17520,6 +17706,49 @@ var _user$project$Diff_Core$diffLines = F2(
 			_elm_lang$core$String$lines(b));
 	});
 
+var _user$project$Model_Animation$retractFooter = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			footerStyle: _user$project$Animation_Footer$animateDown(model.footerStyle),
+			footerExpanded: false
+		});
+};
+var _user$project$Model_Animation$expandFooter = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			footerStyle: _user$project$Animation_Footer$animateUp(model.footerStyle),
+			footerExpanded: true
+		});
+};
+var _user$project$Model_Animation$toggleFooter = function (model) {
+	return model.footerExpanded ? _user$project$Model_Animation$retractFooter(model) : _user$project$Model_Animation$expandFooter(model);
+};
+var _user$project$Model_Animation$updateFooter = F2(
+	function (animationMessage, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				footerStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.footerStyle)
+			});
+	});
+var _user$project$Model_Animation$initiateStatusBarTextFlicker = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			statusBarStyle: _user$project$Animation_Flicker$animation(model.statusBarStyle)
+		});
+};
+var _user$project$Model_Animation$updateStatusBar = F2(
+	function (animationMessage, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				statusBarStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarStyle)
+			});
+	});
+
 var _user$project$Model_Basics$setPaneLocation = F2(
 	function (newLocation, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -17788,22 +18017,6 @@ var _user$project$Model_SelectedTest$showInEditor = F2(
 		} else {
 			return _user$project$And$noCommand;
 		}
-	});
-
-var _user$project$Model_StatusBar$initiateTextFlicker = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			statusBarStyle: _user$project$Animation_Flicker$animation(model.statusBarStyle)
-		});
-};
-var _user$project$Model_StatusBar$updateFlicker = F2(
-	function (animationMessage, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				statusBarStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarStyle)
-			});
 	});
 
 var _user$project$Model_TestCount$setTotal = F2(
@@ -18494,8 +18707,8 @@ var _user$project$View_SeedAndSettings$seedCheckboxStyles = function (forceRando
 		_1: {ctor: '[]'}
 	};
 };
-var _user$project$View_SeedAndSettings$render = F5(
-	function (setForceSeedHandler, autoRunEnabled, autoNavigateEnabled, forceRandomSeedEnabled, randomSeed) {
+var _user$project$View_SeedAndSettings$render = F2(
+	function (messages, data) {
 		return {
 			ctor: '::',
 			_0: A2(
@@ -18516,11 +18729,11 @@ var _user$project$View_SeedAndSettings$render = F5(
 								_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onCheck(setForceSeedHandler),
+									_0: _elm_lang$html$Html_Events$onCheck(messages.setForceSeedHandler),
 									_1: {ctor: '[]'}
 								}
 							},
-							_user$project$View_SeedAndSettings$seedCheckboxStyles(forceRandomSeedEnabled)),
+							_user$project$View_SeedAndSettings$seedCheckboxStyles(data.forceRandomSeedEnabled)),
 						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
@@ -18546,12 +18759,12 @@ var _user$project$View_SeedAndSettings$render = F5(
 											_0: _elm_lang$html$Html_Attributes$placeholder('Generate Random'),
 											_1: {
 												ctor: '::',
-												_0: _user$project$View_SeedAndSettings$seedInputValue(randomSeed),
+												_0: _user$project$View_SeedAndSettings$seedInputValue(data.randomSeed),
 												_1: {ctor: '[]'}
 											}
 										}
 									},
-									_user$project$View_SeedAndSettings$seedTextInputStyles(forceRandomSeedEnabled)),
+									_user$project$View_SeedAndSettings$seedTextInputStyles(data.forceRandomSeedEnabled)),
 								{ctor: '[]'}),
 							_1: {ctor: '[]'}
 						}
@@ -18564,12 +18777,24 @@ var _user$project$View_SeedAndSettings$render = F5(
 					{
 						ctor: '::',
 						_0: _elm_lang$html$Html_Attributes$class('settings-toggle btn btn-xs icon icon-gear'),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(messages.settingsToggle),
+							_1: {ctor: '[]'}
+						}
 					},
 					{ctor: '[]'}),
 				_1: {ctor: '[]'}
 			}
 		};
+	});
+var _user$project$View_SeedAndSettings$Messages = F2(
+	function (a, b) {
+		return {setForceSeedHandler: a, settingsToggle: b};
+	});
+var _user$project$View_SeedAndSettings$Data = F4(
+	function (a, b, c, d) {
+		return {autoRunEnabled: a, autoNavigateEnabled: b, forceRandomSeedEnabled: c, randomSeed: d};
 	});
 
 var _user$project$View_TestHierarchy_ChildTree$mouseOverHexColor = '2c333e';
@@ -18805,14 +19030,11 @@ var _user$project$View_Toolbar$render = F5(
 						ctor: '::',
 						_0: A2(
 							_elm_lang$html$Html$strong,
-							A2(
-								_elm_lang$core$List$append,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('title'),
-									_1: {ctor: '[]'}
-								},
-								_mdgriffith$elm_style_animation$Animation$render(statusBarTextStyle)),
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('title'),
+								_1: _mdgriffith$elm_style_animation$Animation$render(statusBarTextStyle)
+							},
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html$text(
@@ -18823,14 +19045,11 @@ var _user$project$View_Toolbar$render = F5(
 							ctor: '::',
 							_0: A2(
 								_elm_lang$html$Html$span,
-								A2(
-									_elm_lang$core$List$append,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('passing-tests'),
-										_1: {ctor: '[]'}
-									},
-									_mdgriffith$elm_style_animation$Animation$render(statusBarTextStyle)),
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('passing-tests'),
+									_1: _mdgriffith$elm_style_animation$Animation$render(statusBarTextStyle)
+								},
 								{
 									ctor: '::',
 									_0: A2(
@@ -19009,9 +19228,12 @@ var _user$project$View_Core$render = F2(
 									{
 										ctor: '::',
 										_0: _elm_lang$html$Html_Attributes$class('footer'),
-										_1: {ctor: '[]'}
+										_1: _mdgriffith$elm_style_animation$Animation$render(data.footerStyle)
 									},
-									A5(_user$project$View_SeedAndSettings$render, messages.setForceSeedHandler, data.autoRunEnabled, data.autoNavigateEnabled, data.forceRandomSeedEnabled, data.randomSeed)),
+									A2(
+										_user$project$View_SeedAndSettings$render,
+										{setForceSeedHandler: messages.setForceSeedHandler, settingsToggle: messages.settingsToggle},
+										{autoRunEnabled: data.autoRunEnabled, autoNavigateEnabled: data.autoNavigateEnabled, forceRandomSeedEnabled: data.forceRandomSeedEnabled, randomSeed: data.randomSeed})),
 								_1: {ctor: '[]'}
 							}
 						}),
@@ -19019,10 +19241,27 @@ var _user$project$View_Core$render = F2(
 				}
 			});
 	});
-var _user$project$View_Core$Messages = F9(
-	function (a, b, c, d, e, f, g, h, i) {
-		return {runAllButtonClickHandler: a, testListItemExpand: b, testListItemCollapse: c, testListItemMouseEnter: d, testListItemMouseLeave: e, testClickHandler: f, copySeedClickHandler: g, setSeedClickHandler: h, setForceSeedHandler: i};
-	});
+var _user$project$View_Core$Messages = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {runAllButtonClickHandler: a, testListItemExpand: b, testListItemCollapse: c, testListItemMouseEnter: d, testListItemMouseLeave: e, testClickHandler: f, copySeedClickHandler: g, setSeedClickHandler: h, setForceSeedHandler: i, settingsToggle: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var _user$project$View_Core$DisplayData = function (a) {
 	return function (b) {
 		return function (c) {
@@ -19042,7 +19281,9 @@ var _user$project$View_Core$DisplayData = function (a) {
 																return function (q) {
 																	return function (r) {
 																		return function (s) {
-																			return {runStatus: a, compilerError: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testHierarchy: g, statusIndicator: h, conditionallyEmbolden: i, nodeMouseIsOver: j, selectedNodeId: k, selectedTestInstance: l, failure: m, autoRunEnabled: n, autoNavigateEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarTextStyle: r, paneLocation: s};
+																			return function (t) {
+																				return {runStatus: a, compilerError: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testHierarchy: g, statusIndicator: h, conditionallyEmbolden: i, nodeMouseIsOver: j, selectedNodeId: k, selectedTestInstance: l, failure: m, autoRunEnabled: n, autoNavigateEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarTextStyle: r, footerStyle: s, paneLocation: t};
+																			};
 																		};
 																	};
 																};
@@ -19139,7 +19380,7 @@ var _user$project$Main$update = F2(
 			case 'RunComplete':
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
 				return _user$project$And$noCommand(
-					_user$project$Model_StatusBar$initiateTextFlicker(
+					_user$project$Model_Animation$initiateStatusBarTextFlicker(
 						_user$project$Model_TestTree$expandFailingAndTodoNodes(
 							_user$project$Model_TestTree$updateHierarchy(
 								_user$project$Model_TestTree$purgeObsoleteNodes(
@@ -19206,10 +19447,16 @@ var _user$project$Main$update = F2(
 					A2(_user$project$Model_RandomSeed$setForcing, _p0._0, model));
 			case 'AnimateFlicker':
 				return _user$project$And$noCommand(
-					A2(_user$project$Model_StatusBar$updateFlicker, _p0._0, model));
+					A2(_user$project$Model_Animation$updateStatusBar, _p0._0, model));
+			case 'AnimateSettingsTransition':
+				return _user$project$And$noCommand(
+					A2(_user$project$Model_Animation$updateFooter, _p0._0, model));
 			case 'PaneMoved':
 				return _user$project$And$noCommand(
 					A2(_user$project$Model_Basics$setPaneLocation, _p0._0, model));
+			case 'ToggleSettings':
+				return _user$project$And$noCommand(
+					_user$project$Model_Animation$toggleFooter(model));
 			default:
 				return _user$project$And$noCommand(model);
 		}
@@ -19294,8 +19541,12 @@ var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
 var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
+var _user$project$Main$ToggleSettings = {ctor: 'ToggleSettings'};
 var _user$project$Main$PaneMoved = function (a) {
 	return {ctor: 'PaneMoved', _0: a};
+};
+var _user$project$Main$AnimateSettingsTransition = function (a) {
+	return {ctor: 'AnimateSettingsTransition', _0: a};
 };
 var _user$project$Main$AnimateFlicker = function (a) {
 	return {ctor: 'AnimateFlicker', _0: a};
@@ -19360,9 +19611,10 @@ var _user$project$Main$view = function (model) {
 			randomSeed: model.randomSeed,
 			forceRandomSeedEnabled: model.forceRandomSeedEnabled,
 			statusBarTextStyle: model.statusBarStyle,
+			footerStyle: model.footerStyle,
 			paneLocation: model.paneLocation
 		},
-		{runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed});
+		{runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed, settingsToggle: _user$project$Main$ToggleSettings});
 };
 var _user$project$Main$saveEventMessage = F2(
 	function (model, _p2) {
@@ -19411,7 +19663,18 @@ var _user$project$Main$subscriptions = function (model) {
 														_0: model.statusBarStyle,
 														_1: {ctor: '[]'}
 													}),
-												_1: {ctor: '[]'}
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_mdgriffith$elm_style_animation$Animation$subscription,
+														_user$project$Main$AnimateSettingsTransition,
+														{
+															ctor: '::',
+															_0: model.footerStyle,
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}
 											}
 										}
 									}

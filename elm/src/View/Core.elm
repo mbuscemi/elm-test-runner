@@ -24,6 +24,7 @@ type alias Messages message testInstance =
     , copySeedClickHandler : String -> message
     , setSeedClickHandler : Int -> message
     , setForceSeedHandler : Bool -> message
+    , settingsToggle : message
     }
 
 
@@ -46,6 +47,7 @@ type alias DisplayData message testInstance =
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
     , statusBarTextStyle : State
+    , footerStyle : State
     , paneLocation : PaneLocation
     }
 
@@ -95,13 +97,16 @@ render data messages =
         , div [ class "section-two" ]
             [ div [ class "output-display native-key-bindings" ]
                 [ View.OutputDisplay.render data.compilerError data.failure ]
-            , div [ class "footer" ]
+            , div (class "footer" :: Animation.render data.footerStyle)
                 (View.SeedAndSettings.render
-                    messages.setForceSeedHandler
-                    data.autoRunEnabled
-                    data.autoNavigateEnabled
-                    data.forceRandomSeedEnabled
-                    data.randomSeed
+                    { setForceSeedHandler = messages.setForceSeedHandler
+                    , settingsToggle = messages.settingsToggle
+                    }
+                    { autoRunEnabled = data.autoRunEnabled
+                    , autoNavigateEnabled = data.autoNavigateEnabled
+                    , forceRandomSeedEnabled = data.forceRandomSeedEnabled
+                    , randomSeed = data.randomSeed
+                    }
                 )
             ]
         ]

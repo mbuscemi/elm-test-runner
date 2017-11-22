@@ -2,18 +2,32 @@ module View.SeedAndSettings exposing (render)
 
 import Html exposing (Attribute, Html, div, input, span, text)
 import Html.Attributes exposing (checked, class, disabled, placeholder, type_, value)
-import Html.Events exposing (onCheck)
+import Html.Events exposing (onCheck, onClick)
 
 
-render : (Bool -> message) -> Bool -> Bool -> Bool -> Maybe Int -> List (Html message)
-render setForceSeedHandler autoRunEnabled autoNavigateEnabled forceRandomSeedEnabled randomSeed =
+type alias Messages message =
+    { setForceSeedHandler : Bool -> message
+    , settingsToggle : message
+    }
+
+
+type alias Data =
+    { autoRunEnabled : Bool
+    , autoNavigateEnabled : Bool
+    , forceRandomSeedEnabled : Bool
+    , randomSeed : Maybe Int
+    }
+
+
+render : Messages message -> Data -> List (Html message)
+render messages data =
     [ div [ class "seed-settings" ]
         [ input
             (List.append
                 [ type_ "checkbox"
-                , onCheck setForceSeedHandler
+                , onCheck messages.setForceSeedHandler
                 ]
-                (seedCheckboxStyles forceRandomSeedEnabled)
+                (seedCheckboxStyles data.forceRandomSeedEnabled)
             )
             []
         , span [] [ text "Seed:" ]
@@ -21,14 +35,16 @@ render setForceSeedHandler autoRunEnabled autoNavigateEnabled forceRandomSeedEna
             (List.append
                 [ type_ "number"
                 , placeholder "Generate Random"
-                , seedInputValue randomSeed
+                , seedInputValue data.randomSeed
                 ]
-                (seedTextInputStyles forceRandomSeedEnabled)
+                (seedTextInputStyles data.forceRandomSeedEnabled)
             )
             []
         ]
     , div
-        [ class "settings-toggle btn btn-xs icon icon-gear" ]
+        [ class "settings-toggle btn btn-xs icon icon-gear"
+        , onClick messages.settingsToggle
+        ]
         []
     ]
 

@@ -12,10 +12,10 @@ render totalTests passingTests runStatus statusBarTextStyle runAllButtonClickHan
     div [ class "toolbar" ]
         [ div [ class <| "status-bar " ++ RunStatus.toClass runStatus ]
             [ strong
-                (List.append [ class "title" ] (Animation.render statusBarTextStyle))
+                (class "title" :: Animation.render statusBarTextStyle)
                 [ text <| RunStatus.toText runStatus ]
             , span
-                (List.append [ class "passing-tests" ] (Animation.render statusBarTextStyle))
+                (class "passing-tests" :: Animation.render statusBarTextStyle)
                 [ span [ class "number-field passing" ] [ text <| toString passingTests ]
                 , span [] [ text " / " ]
                 , span [ class "number-field total" ] [ text <| toString totalTests ]
