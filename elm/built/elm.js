@@ -18471,9 +18471,6 @@ var _user$project$View_OutputDisplay$FailureData = F7(
 		return {actual: a, expected: b, given: c, message: d, hasComplexComparison: e, isTodo: f, shouldDiff: g};
 	});
 
-var _user$project$View_SeedAndSettings$enabledString = function (enabled) {
-	return enabled ? 'enabled' : 'disabled';
-};
 var _user$project$View_SeedAndSettings$seedInputValue = function (randomSeed) {
 	var _p0 = randomSeed;
 	if (_p0.ctor === 'Just') {
@@ -18560,60 +18557,7 @@ var _user$project$View_SeedAndSettings$render = F5(
 						}
 					}
 				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class(
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								'auto-run-display ',
-								_user$project$View_SeedAndSettings$enabledString(autoRunEnabled))),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('AUTO-RUN'),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('divider'),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(' | '),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class(
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										'auto-navigate-display ',
-										_user$project$View_SeedAndSettings$enabledString(autoNavigateEnabled))),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('AUTO-NAVIGATE'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
+			_1: {ctor: '[]'}
 		};
 	});
 

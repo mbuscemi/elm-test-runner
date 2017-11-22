@@ -27,9 +27,6 @@ render setForceSeedHandler autoRunEnabled autoNavigateEnabled forceRandomSeedEna
             )
             []
         ]
-    , div [ class <| "auto-run-display " ++ enabledString autoRunEnabled ] [ text "AUTO-RUN" ]
-    , div [ class "divider" ] [ text " | " ]
-    , div [ class <| "auto-navigate-display " ++ enabledString autoNavigateEnabled ] [ text "AUTO-NAVIGATE" ]
     ]
 
 
@@ -51,11 +48,3 @@ seedInputValue randomSeed =
 
         Nothing ->
             value ""
-
-
-enabledString : Bool -> String
-enabledString enabled =
-    if enabled then
-        "enabled"
-    else
-        "disabled"
