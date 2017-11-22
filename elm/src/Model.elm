@@ -27,6 +27,7 @@ type alias Model =
     , selectedTestInstance : Maybe TestInstance
     , autoRunEnabled : Bool
     , autoNavigateEnabled : Bool
+    , runElmVerifyExamplesEnabled : Bool
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
     , statusBarStyle : Animation.State
@@ -52,6 +53,7 @@ default =
     , selectedTestInstance = Nothing
     , autoRunEnabled = False
     , autoNavigateEnabled = True
+    , runElmVerifyExamplesEnabled = False
     , randomSeed = Nothing
     , forceRandomSeedEnabled = False
     , statusBarStyle = Animation.Flicker.initial

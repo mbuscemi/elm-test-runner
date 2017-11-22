@@ -7,6 +7,9 @@ import Html.Events exposing (onCheck, onClick)
 
 type alias Messages message =
     { setForceSeedHandler : Bool -> message
+    , setAutoRun : Bool -> message
+    , setAutoNavigate : Bool -> message
+    , setRunElmVerifyExamples : Bool -> message
     , settingsToggle : message
     }
 
@@ -14,6 +17,7 @@ type alias Messages message =
 type alias Data =
     { autoRunEnabled : Bool
     , autoNavigateEnabled : Bool
+    , elmVerifyExamplesEnabled : Bool
     , forceRandomSeedEnabled : Bool
     , randomSeed : Maybe Int
     }
@@ -47,17 +51,32 @@ render messages data =
         [ div
             [ class "setting auto-run" ]
             [ text "Auto-Run on Save "
-            , input [ type_ "checkbox", checked data.autoRunEnabled ] []
+            , input
+                [ type_ "checkbox"
+                , onCheck messages.setAutoRun
+                , checked data.autoRunEnabled
+                ]
+                []
             ]
         , div
             [ class "setting auto-navigate" ]
             [ text "Auto-Navigate to Test File "
-            , input [ type_ "checkbox", checked data.autoNavigateEnabled ] []
+            , input
+                [ type_ "checkbox"
+                , onCheck messages.setAutoNavigate
+                , checked data.autoNavigateEnabled
+                ]
+                []
             ]
         , div
             [ class "setting auto-navigate" ]
             [ text "Enable elm-verify-examples "
-            , input [ type_ "checkbox" ] []
+            , input
+                [ type_ "checkbox"
+                , onCheck messages.setRunElmVerifyExamples
+                , checked data.elmVerifyExamplesEnabled
+                ]
+                []
             ]
         ]
     ]

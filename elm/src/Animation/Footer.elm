@@ -28,7 +28,7 @@ animateUp : State -> State
 animateUp =
     interrupt
         [ toWith
-            (easing { duration = duration, ease = inQuad })
+            (easing { duration = duration, ease = outQuad })
             [ height <| px expandedHeight ]
         ]
 
@@ -37,6 +37,6 @@ animateDown : State -> State
 animateDown =
     interrupt
         [ toWith
-            (easing { duration = duration, ease = outQuad })
+            (easing { duration = duration, ease = inQuad })
             [ height <| px initialHeight ]
         ]

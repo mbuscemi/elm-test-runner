@@ -37,7 +37,10 @@ type Message
     | TestListItemMouseLeave
     | TestListItemSelect Int (Maybe TestInstance)
     | ToggleAutoRun
+    | SetAutoRun Bool
     | ToggleAutoNavigate
+    | SetAutoNavigate Bool
+    | SetRunElmVerifyExamples Bool
     | CopySeed String
     | SetRandomSeed Int
     | SetForceSeed Bool
@@ -151,8 +154,20 @@ update message model =
             Model.Config.invertAutoRun model
                 |> And.updateAtomState
 
+        SetAutoRun state ->
+            Model.Config.setAutoRun state model
+                |> And.updateAtomState
+
         ToggleAutoNavigate ->
             Model.Config.invertAutoNavigate model
+                |> And.updateAtomState
+
+        SetAutoNavigate state ->
+            Model.Config.setAutoNavigate state model
+                |> And.updateAtomState
+
+        SetRunElmVerifyExamples state ->
+            Model.Config.setElmVerifyExamples state model
                 |> And.updateAtomState
 
         CopySeed seed ->
@@ -206,6 +221,7 @@ view model =
         , failure = TestInstance.getFailureData model.selectedTestInstance
         , autoRunEnabled = model.autoRunEnabled
         , autoNavigateEnabled = model.autoNavigateEnabled
+        , elmVerifyExamplesEnabled = model.runElmVerifyExamplesEnabled
         , randomSeed = model.randomSeed
         , forceRandomSeedEnabled = model.forceRandomSeedEnabled
         , statusBarTextStyle = model.statusBarStyle
@@ -221,6 +237,9 @@ view model =
         , copySeedClickHandler = CopySeed
         , setSeedClickHandler = SetRandomSeed
         , setForceSeedHandler = SetForceSeed
+        , setAutoRun = SetAutoRun
+        , setAutoNavigate = SetAutoNavigate
+        , setRunElmVerifyExamples = SetRunElmVerifyExamples
         , settingsToggle = ToggleSettings
         }
 

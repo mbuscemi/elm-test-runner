@@ -24,6 +24,9 @@ type alias Messages message testInstance =
     , copySeedClickHandler : String -> message
     , setSeedClickHandler : Int -> message
     , setForceSeedHandler : Bool -> message
+    , setAutoRun : Bool -> message
+    , setAutoNavigate : Bool -> message
+    , setRunElmVerifyExamples : Bool -> message
     , settingsToggle : message
     }
 
@@ -44,6 +47,7 @@ type alias DisplayData message testInstance =
     , failure : Maybe Failure
     , autoRunEnabled : Bool
     , autoNavigateEnabled : Bool
+    , elmVerifyExamplesEnabled : Bool
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
     , statusBarTextStyle : State
@@ -100,10 +104,14 @@ render data messages =
             , div (class "footer" :: Animation.render data.footerStyle)
                 (View.SeedAndSettings.render
                     { setForceSeedHandler = messages.setForceSeedHandler
+                    , setAutoRun = messages.setAutoRun
+                    , setAutoNavigate = messages.setAutoNavigate
+                    , setRunElmVerifyExamples = messages.setRunElmVerifyExamples
                     , settingsToggle = messages.settingsToggle
                     }
                     { autoRunEnabled = data.autoRunEnabled
                     , autoNavigateEnabled = data.autoNavigateEnabled
+                    , elmVerifyExamplesEnabled = data.elmVerifyExamplesEnabled
                     , forceRandomSeedEnabled = data.forceRandomSeedEnabled
                     , randomSeed = data.randomSeed
                     }

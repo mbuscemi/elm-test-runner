@@ -16547,7 +16547,7 @@ var _user$project$Animation_Footer$animateUp = _mdgriffith$elm_style_animation$A
 		_0: A2(
 			_mdgriffith$elm_style_animation$Animation$toWith,
 			_mdgriffith$elm_style_animation$Animation$easing(
-				{duration: _user$project$Animation_Footer$duration, ease: _elm_community$easing_functions$Ease$inQuad}),
+				{duration: _user$project$Animation_Footer$duration, ease: _elm_community$easing_functions$Ease$outQuad}),
 			{
 				ctor: '::',
 				_0: _mdgriffith$elm_style_animation$Animation$height(
@@ -16570,7 +16570,7 @@ var _user$project$Animation_Footer$animateDown = _mdgriffith$elm_style_animation
 		_0: A2(
 			_mdgriffith$elm_style_animation$Animation$toWith,
 			_mdgriffith$elm_style_animation$Animation$easing(
-				{duration: _user$project$Animation_Footer$duration, ease: _elm_community$easing_functions$Ease$outQuad}),
+				{duration: _user$project$Animation_Footer$duration, ease: _elm_community$easing_functions$Ease$inQuad}),
 			{
 				ctor: '::',
 				_0: _mdgriffith$elm_style_animation$Animation$height(
@@ -17309,6 +17309,7 @@ var _user$project$Model$default = {
 	selectedTestInstance: _elm_lang$core$Maybe$Nothing,
 	autoRunEnabled: false,
 	autoNavigateEnabled: true,
+	runElmVerifyExamplesEnabled: false,
 	randomSeed: _elm_lang$core$Maybe$Nothing,
 	forceRandomSeedEnabled: false,
 	statusBarStyle: _user$project$Animation_Flicker$initial,
@@ -17336,7 +17337,9 @@ var _user$project$Model$Model = function (a) {
 																	return function (r) {
 																		return function (s) {
 																			return function (t) {
-																				return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, randomSeed: o, forceRandomSeedEnabled: p, statusBarStyle: q, footerStyle: r, footerExpanded: s, paneLocation: t};
+																				return function (u) {
+																					return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, runElmVerifyExamplesEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarStyle: r, footerStyle: s, footerExpanded: t, paneLocation: u};
+																				};
 																			};
 																		};
 																	};
@@ -17770,6 +17773,12 @@ var _user$project$Model_Basics$setCompilerErrorMessage = F2(
 			{compilerError: maybeError});
 	});
 
+var _user$project$Model_Config$setElmVerifyExamples = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{runElmVerifyExamplesEnabled: setting});
+	});
 var _user$project$Model_Config$setAutoNavigate = F2(
 	function (setting, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -18802,8 +18811,12 @@ var _user$project$View_SeedAndSettings$render = F2(
 												_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$checked(data.autoRunEnabled),
-													_1: {ctor: '[]'}
+													_0: _elm_lang$html$Html_Events$onCheck(messages.setAutoRun),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$checked(data.autoRunEnabled),
+														_1: {ctor: '[]'}
+													}
 												}
 											},
 											{ctor: '[]'}),
@@ -18831,8 +18844,12 @@ var _user$project$View_SeedAndSettings$render = F2(
 													_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$checked(data.autoNavigateEnabled),
-														_1: {ctor: '[]'}
+														_0: _elm_lang$html$Html_Events$onCheck(messages.setAutoNavigate),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$checked(data.autoNavigateEnabled),
+															_1: {ctor: '[]'}
+														}
 													}
 												},
 												{ctor: '[]'}),
@@ -18858,7 +18875,15 @@ var _user$project$View_SeedAndSettings$render = F2(
 													{
 														ctor: '::',
 														_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
-														_1: {ctor: '[]'}
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Events$onCheck(messages.setRunElmVerifyExamples),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$checked(data.elmVerifyExamplesEnabled),
+																_1: {ctor: '[]'}
+															}
+														}
 													},
 													{ctor: '[]'}),
 												_1: {ctor: '[]'}
@@ -18873,13 +18898,13 @@ var _user$project$View_SeedAndSettings$render = F2(
 			}
 		};
 	});
-var _user$project$View_SeedAndSettings$Messages = F2(
-	function (a, b) {
-		return {setForceSeedHandler: a, settingsToggle: b};
+var _user$project$View_SeedAndSettings$Messages = F5(
+	function (a, b, c, d, e) {
+		return {setForceSeedHandler: a, setAutoRun: b, setAutoNavigate: c, setRunElmVerifyExamples: d, settingsToggle: e};
 	});
-var _user$project$View_SeedAndSettings$Data = F4(
-	function (a, b, c, d) {
-		return {autoRunEnabled: a, autoNavigateEnabled: b, forceRandomSeedEnabled: c, randomSeed: d};
+var _user$project$View_SeedAndSettings$Data = F5(
+	function (a, b, c, d, e) {
+		return {autoRunEnabled: a, autoNavigateEnabled: b, elmVerifyExamplesEnabled: c, forceRandomSeedEnabled: d, randomSeed: e};
 	});
 
 var _user$project$View_TestHierarchy_ChildTree$mouseOverHexColor = '2c333e';
@@ -19317,8 +19342,8 @@ var _user$project$View_Core$render = F2(
 									},
 									A2(
 										_user$project$View_SeedAndSettings$render,
-										{setForceSeedHandler: messages.setForceSeedHandler, settingsToggle: messages.settingsToggle},
-										{autoRunEnabled: data.autoRunEnabled, autoNavigateEnabled: data.autoNavigateEnabled, forceRandomSeedEnabled: data.forceRandomSeedEnabled, randomSeed: data.randomSeed})),
+										{setForceSeedHandler: messages.setForceSeedHandler, setAutoRun: messages.setAutoRun, setAutoNavigate: messages.setAutoNavigate, setRunElmVerifyExamples: messages.setRunElmVerifyExamples, settingsToggle: messages.settingsToggle},
+										{autoRunEnabled: data.autoRunEnabled, autoNavigateEnabled: data.autoNavigateEnabled, elmVerifyExamplesEnabled: data.elmVerifyExamplesEnabled, forceRandomSeedEnabled: data.forceRandomSeedEnabled, randomSeed: data.randomSeed})),
 								_1: {ctor: '[]'}
 							}
 						}),
@@ -19336,7 +19361,13 @@ var _user$project$View_Core$Messages = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return {runAllButtonClickHandler: a, testListItemExpand: b, testListItemCollapse: c, testListItemMouseEnter: d, testListItemMouseLeave: e, testClickHandler: f, copySeedClickHandler: g, setSeedClickHandler: h, setForceSeedHandler: i, settingsToggle: j};
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return {runAllButtonClickHandler: a, testListItemExpand: b, testListItemCollapse: c, testListItemMouseEnter: d, testListItemMouseLeave: e, testClickHandler: f, copySeedClickHandler: g, setSeedClickHandler: h, setForceSeedHandler: i, setAutoRun: j, setAutoNavigate: k, setRunElmVerifyExamples: l, settingsToggle: m};
+												};
+											};
+										};
 									};
 								};
 							};
@@ -19367,7 +19398,9 @@ var _user$project$View_Core$DisplayData = function (a) {
 																	return function (r) {
 																		return function (s) {
 																			return function (t) {
-																				return {runStatus: a, compilerError: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testHierarchy: g, statusIndicator: h, conditionallyEmbolden: i, nodeMouseIsOver: j, selectedNodeId: k, selectedTestInstance: l, failure: m, autoRunEnabled: n, autoNavigateEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarTextStyle: r, footerStyle: s, paneLocation: t};
+																				return function (u) {
+																					return {runStatus: a, compilerError: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testHierarchy: g, statusIndicator: h, conditionallyEmbolden: i, nodeMouseIsOver: j, selectedNodeId: k, selectedTestInstance: l, failure: m, autoRunEnabled: n, autoNavigateEnabled: o, elmVerifyExamplesEnabled: p, randomSeed: q, forceRandomSeedEnabled: r, statusBarTextStyle: s, footerStyle: t, paneLocation: u};
+																				};
 																			};
 																		};
 																	};
@@ -19510,9 +19543,18 @@ var _user$project$Main$update = F2(
 			case 'ToggleAutoRun':
 				return _user$project$And$updateAtomState(
 					_user$project$Model_Config$invertAutoRun(model));
+			case 'SetAutoRun':
+				return _user$project$And$updateAtomState(
+					A2(_user$project$Model_Config$setAutoRun, _p0._0, model));
 			case 'ToggleAutoNavigate':
 				return _user$project$And$updateAtomState(
 					_user$project$Model_Config$invertAutoNavigate(model));
+			case 'SetAutoNavigate':
+				return _user$project$And$updateAtomState(
+					A2(_user$project$Model_Config$setAutoNavigate, _p0._0, model));
+			case 'SetRunElmVerifyExamples':
+				return _user$project$And$updateAtomState(
+					A2(_user$project$Model_Config$setElmVerifyExamples, _p0._0, model));
 			case 'CopySeed':
 				return A2(
 					_user$project$And$execute,
@@ -19645,7 +19687,16 @@ var _user$project$Main$SetRandomSeed = function (a) {
 var _user$project$Main$CopySeed = function (a) {
 	return {ctor: 'CopySeed', _0: a};
 };
+var _user$project$Main$SetRunElmVerifyExamples = function (a) {
+	return {ctor: 'SetRunElmVerifyExamples', _0: a};
+};
+var _user$project$Main$SetAutoNavigate = function (a) {
+	return {ctor: 'SetAutoNavigate', _0: a};
+};
 var _user$project$Main$ToggleAutoNavigate = {ctor: 'ToggleAutoNavigate'};
+var _user$project$Main$SetAutoRun = function (a) {
+	return {ctor: 'SetAutoRun', _0: a};
+};
 var _user$project$Main$ToggleAutoRun = {ctor: 'ToggleAutoRun'};
 var _user$project$Main$TestListItemSelect = F2(
 	function (a, b) {
@@ -19693,13 +19744,14 @@ var _user$project$Main$view = function (model) {
 			failure: _user$project$TestInstance_Core$getFailureData(model.selectedTestInstance),
 			autoRunEnabled: model.autoRunEnabled,
 			autoNavigateEnabled: model.autoNavigateEnabled,
+			elmVerifyExamplesEnabled: model.runElmVerifyExamplesEnabled,
 			randomSeed: model.randomSeed,
 			forceRandomSeedEnabled: model.forceRandomSeedEnabled,
 			statusBarTextStyle: model.statusBarStyle,
 			footerStyle: model.footerStyle,
 			paneLocation: model.paneLocation
 		},
-		{runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed, settingsToggle: _user$project$Main$ToggleSettings});
+		{runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed, setAutoRun: _user$project$Main$SetAutoRun, setAutoNavigate: _user$project$Main$SetAutoNavigate, setRunElmVerifyExamples: _user$project$Main$SetRunElmVerifyExamples, settingsToggle: _user$project$Main$ToggleSettings});
 };
 var _user$project$Main$saveEventMessage = F2(
 	function (model, _p2) {
