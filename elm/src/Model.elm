@@ -67,4 +67,5 @@ serialize : Model -> Flags
 serialize model =
     { autoRun = model.autoRunEnabled
     , autoNavigate = model.autoNavigateEnabled
+    , useElmVerifyExamples = model.runElmVerifyExamplesEnabled
     }

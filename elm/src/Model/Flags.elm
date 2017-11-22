@@ -1,12 +1,13 @@
 module Model.Flags exposing (Flags, parse)
 
-import Json.Decode exposing (Decoder, bool, decodeValue, field, map2)
+import Json.Decode exposing (Decoder, bool, decodeValue, field, map3)
 import Json.Encode exposing (Value)
 
 
 type alias Flags =
     { autoRun : Bool
     , autoNavigate : Bool
+    , useElmVerifyExamples : Bool
     }
 
 
@@ -20,11 +21,13 @@ default : Flags
 default =
     { autoRun = False
     , autoNavigate = True
+    , useElmVerifyExamples = False
     }
 
 
 flags : Decoder Flags
 flags =
-    map2 Flags
+    map3 Flags
         (field "autoRun" bool)
         (field "autoNavigate" bool)
+        (field "useElmVerifyExamples" bool)

@@ -16606,16 +16606,17 @@ var _user$project$Duration_Core$Seconds = function (a) {
 	return {ctor: 'Seconds', _0: a};
 };
 
-var _user$project$Model_Flags$default = {autoRun: false, autoNavigate: true};
-var _user$project$Model_Flags$Flags = F2(
-	function (a, b) {
-		return {autoRun: a, autoNavigate: b};
+var _user$project$Model_Flags$default = {autoRun: false, autoNavigate: true, useElmVerifyExamples: false};
+var _user$project$Model_Flags$Flags = F3(
+	function (a, b, c) {
+		return {autoRun: a, autoNavigate: b, useElmVerifyExamples: c};
 	});
-var _user$project$Model_Flags$flags = A3(
-	_elm_lang$core$Json_Decode$map2,
+var _user$project$Model_Flags$flags = A4(
+	_elm_lang$core$Json_Decode$map3,
 	_user$project$Model_Flags$Flags,
 	A2(_elm_lang$core$Json_Decode$field, 'autoRun', _elm_lang$core$Json_Decode$bool),
-	A2(_elm_lang$core$Json_Decode$field, 'autoNavigate', _elm_lang$core$Json_Decode$bool));
+	A2(_elm_lang$core$Json_Decode$field, 'autoNavigate', _elm_lang$core$Json_Decode$bool),
+	A2(_elm_lang$core$Json_Decode$field, 'useElmVerifyExamples', _elm_lang$core$Json_Decode$bool));
 var _user$project$Model_Flags$parse = function (raw) {
 	return A2(
 		_elm_lang$core$Result$withDefault,
@@ -17283,7 +17284,7 @@ var _user$project$TestInstance_Core$setStatus = F2(
 	});
 
 var _user$project$Model$serialize = function (model) {
-	return {autoRun: model.autoRunEnabled, autoNavigate: model.autoNavigateEnabled};
+	return {autoRun: model.autoRunEnabled, autoNavigate: model.autoNavigateEnabled, useElmVerifyExamples: model.runElmVerifyExamplesEnabled};
 };
 var _user$project$Model$default = {
 	projectName: '',
@@ -17371,7 +17372,7 @@ var _user$project$And$noCommand = function (model) {
 var _user$project$And$updatePersistentState = _elm_lang$core$Native_Platform.outgoingPort(
 	'updatePersistentState',
 	function (v) {
-		return {autoRun: v.autoRun, autoNavigate: v.autoNavigate};
+		return {autoRun: v.autoRun, autoNavigate: v.autoNavigate, useElmVerifyExamples: v.useElmVerifyExamples};
 	});
 var _user$project$And$updateAtomState = function (model) {
 	return A3(
