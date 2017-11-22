@@ -1,7 +1,7 @@
 {
   "name": "elm-test-runner",
   "main": "./lib/elm-test-runner",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Run elm-test and view results without leaving Atom",
   "keywords": [
     "elm",
