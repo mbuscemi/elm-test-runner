@@ -19436,9 +19436,12 @@ var _user$project$Main$init = function (rawFlags) {
 	var flags = _user$project$Model_Flags$parse(rawFlags);
 	return _user$project$And$noCommand(
 		A2(
-			_user$project$Model_Config$setAutoNavigate,
-			flags.autoNavigate,
-			A2(_user$project$Model_Config$setAutoRun, flags.autoRun, _user$project$Model$default)));
+			_user$project$Model_Config$setElmVerifyExamples,
+			flags.useElmVerifyExamples,
+			A2(
+				_user$project$Model_Config$setAutoNavigate,
+				flags.autoNavigate,
+				A2(_user$project$Model_Config$setAutoRun, flags.autoRun, _user$project$Model$default))));
 };
 var _user$project$Main$runTest = _elm_lang$core$Native_Platform.outgoingPort(
 	'runTest',

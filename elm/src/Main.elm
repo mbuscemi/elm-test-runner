@@ -71,6 +71,7 @@ init rawFlags =
     Model.default
         |> Model.Config.setAutoRun flags.autoRun
         |> Model.Config.setAutoNavigate flags.autoNavigate
+        |> Model.Config.setElmVerifyExamples flags.useElmVerifyExamples
         |> And.noCommand
 
 
