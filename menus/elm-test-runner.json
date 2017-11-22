@@ -24,6 +24,10 @@
                         {
                             "label": "Toggle Auto-Navigate to Test",
                             "command": "elm-test-runner:toggle-auto-navigate"
+                        },
+                        {
+                            "label": "Toggle Running with 'Elm Verify Examples'",
+                            "command": "elm-test-runner:toggle-elm-verify-examples"
                         }
                     ]
                 }

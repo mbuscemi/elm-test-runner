@@ -48,6 +48,8 @@
 .etr-main-view .footer {
     height: 45px;
     flex: initial;
+    cursor: default;
+    user-select: none;
 }
 
 .etr-main-view .toolbar {

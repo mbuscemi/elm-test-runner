@@ -70,7 +70,7 @@ render messages data =
             ]
         , div
             [ class "setting auto-navigate" ]
-            [ text "Enable elm-verify-examples "
+            [ text "Run with 'Elm Verify Examples' "
             , input
                 [ type_ "checkbox"
                 , onCheck messages.setRunElmVerifyExamples

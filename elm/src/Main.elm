@@ -40,6 +40,7 @@ type Message
     | SetAutoRun Bool
     | ToggleAutoNavigate
     | SetAutoNavigate Bool
+    | ToggleRunElmVerifyExamples
     | SetRunElmVerifyExamples Bool
     | CopySeed String
     | SetRandomSeed Int
@@ -166,6 +167,10 @@ update message model =
             Model.Config.setAutoNavigate state model
                 |> And.updateAtomState
 
+        ToggleRunElmVerifyExamples ->
+            Model.Config.invertElmVerifyExamples model
+                |> And.updateAtomState
+
         SetRunElmVerifyExamples state ->
             Model.Config.setElmVerifyExamples state model
                 |> And.updateAtomState
@@ -251,6 +256,7 @@ subscriptions model =
         , notifyCompilerErrored CompilerErrored
         , toggleAutoRun (always ToggleAutoRun)
         , toggleAutoNavigate (always ToggleAutoNavigate)
+        , toggleElmVerifyExamples (always ToggleRunElmVerifyExamples)
         , notifySaveEvent <| saveEventMessage model
         , notifyPaneMoved PaneMoved
         , runStart RunStart
@@ -285,6 +291,9 @@ port toggleAutoRun : (() -> message) -> Sub message
 
 
 port toggleAutoNavigate : (() -> message) -> Sub message
+
+
+port toggleElmVerifyExamples : (() -> message) -> Sub message
 
 
 port notifySaveEvent : (() -> message) -> Sub message

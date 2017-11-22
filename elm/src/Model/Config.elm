@@ -1,4 +1,4 @@
-module Model.Config exposing (invertAutoNavigate, invertAutoRun, setAutoNavigate, setAutoRun, setElmVerifyExamples)
+module Model.Config exposing (invertAutoNavigate, invertAutoRun, invertElmVerifyExamples, setAutoNavigate, setAutoRun, setElmVerifyExamples)
 
 
 type alias HasConfig r =
@@ -27,6 +27,11 @@ invertAutoNavigate model =
 setAutoNavigate : Bool -> HasConfig model -> HasConfig model
 setAutoNavigate setting model =
     { model | autoNavigateEnabled = setting }
+
+
+invertElmVerifyExamples : HasConfig model -> HasConfig model
+invertElmVerifyExamples model =
+    { model | runElmVerifyExamplesEnabled = not model.runElmVerifyExamplesEnabled }
 
 
 setElmVerifyExamples : Bool -> HasConfig model -> HasConfig model

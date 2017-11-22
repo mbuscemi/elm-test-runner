@@ -17780,6 +17780,11 @@ var _user$project$Model_Config$setElmVerifyExamples = F2(
 			model,
 			{runElmVerifyExamplesEnabled: setting});
 	});
+var _user$project$Model_Config$invertElmVerifyExamples = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{runElmVerifyExamplesEnabled: !model.runElmVerifyExamplesEnabled});
+};
 var _user$project$Model_Config$setAutoNavigate = F2(
 	function (setting, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -18868,7 +18873,7 @@ var _user$project$View_SeedAndSettings$render = F2(
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Enable elm-verify-examples '),
+											_0: _elm_lang$html$Html$text('Run with \'Elm Verify Examples\' '),
 											_1: {
 												ctor: '::',
 												_0: A2(
@@ -19553,6 +19558,9 @@ var _user$project$Main$update = F2(
 			case 'SetAutoNavigate':
 				return _user$project$And$updateAtomState(
 					A2(_user$project$Model_Config$setAutoNavigate, _p0._0, model));
+			case 'ToggleRunElmVerifyExamples':
+				return _user$project$And$updateAtomState(
+					_user$project$Model_Config$invertElmVerifyExamples(model));
 			case 'SetRunElmVerifyExamples':
 				return _user$project$And$updateAtomState(
 					A2(_user$project$Model_Config$setElmVerifyExamples, _p0._0, model));
@@ -19600,6 +19608,10 @@ var _user$project$Main$toggleAutoRun = _elm_lang$core$Native_Platform.incomingPo
 		{ctor: '_Tuple0'}));
 var _user$project$Main$toggleAutoNavigate = _elm_lang$core$Native_Platform.incomingPort(
 	'toggleAutoNavigate',
+	_elm_lang$core$Json_Decode$null(
+		{ctor: '_Tuple0'}));
+var _user$project$Main$toggleElmVerifyExamples = _elm_lang$core$Native_Platform.incomingPort(
+	'toggleElmVerifyExamples',
 	_elm_lang$core$Json_Decode$null(
 		{ctor: '_Tuple0'}));
 var _user$project$Main$notifySaveEvent = _elm_lang$core$Native_Platform.incomingPort(
@@ -19691,6 +19703,7 @@ var _user$project$Main$CopySeed = function (a) {
 var _user$project$Main$SetRunElmVerifyExamples = function (a) {
 	return {ctor: 'SetRunElmVerifyExamples', _0: a};
 };
+var _user$project$Main$ToggleRunElmVerifyExamples = {ctor: 'ToggleRunElmVerifyExamples'};
 var _user$project$Main$SetAutoNavigate = function (a) {
 	return {ctor: 'SetAutoNavigate', _0: a};
 };
@@ -19777,41 +19790,46 @@ var _user$project$Main$subscriptions = function (model) {
 							_elm_lang$core$Basics$always(_user$project$Main$ToggleAutoNavigate)),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Main$notifySaveEvent(
-								_user$project$Main$saveEventMessage(model)),
+							_0: _user$project$Main$toggleElmVerifyExamples(
+								_elm_lang$core$Basics$always(_user$project$Main$ToggleRunElmVerifyExamples)),
 							_1: {
 								ctor: '::',
-								_0: _user$project$Main$notifyPaneMoved(_user$project$Main$PaneMoved),
+								_0: _user$project$Main$notifySaveEvent(
+									_user$project$Main$saveEventMessage(model)),
 								_1: {
 									ctor: '::',
-									_0: _user$project$Main$runStart(_user$project$Main$RunStart),
+									_0: _user$project$Main$notifyPaneMoved(_user$project$Main$PaneMoved),
 									_1: {
 										ctor: '::',
-										_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+										_0: _user$project$Main$runStart(_user$project$Main$RunStart),
 										_1: {
 											ctor: '::',
-											_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
+											_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
 											_1: {
 												ctor: '::',
-												_0: A2(
-													_mdgriffith$elm_style_animation$Animation$subscription,
-													_user$project$Main$AnimateFlicker,
-													{
-														ctor: '::',
-														_0: model.statusBarStyle,
-														_1: {ctor: '[]'}
-													}),
+												_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
 												_1: {
 													ctor: '::',
 													_0: A2(
 														_mdgriffith$elm_style_animation$Animation$subscription,
-														_user$project$Main$AnimateSettingsTransition,
+														_user$project$Main$AnimateFlicker,
 														{
 															ctor: '::',
-															_0: model.footerStyle,
+															_0: model.statusBarStyle,
 															_1: {ctor: '[]'}
 														}),
-													_1: {ctor: '[]'}
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_mdgriffith$elm_style_animation$Animation$subscription,
+															_user$project$Main$AnimateSettingsTransition,
+															{
+																ctor: '::',
+																_0: model.footerStyle,
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
 												}
 											}
 										}
