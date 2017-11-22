@@ -208,6 +208,7 @@
 }
 
 .etr-main-view .seed-settings {
+    width: 100%;
     text-align: left;
     position: absolute;
     bottom: 8px;
@@ -224,4 +225,8 @@
 
 .etr-main-view .seed-settings input:disabled {
     background-color: rgb(84, 84, 84);
+}
+
+.etr-main-view .settings-toggle {
+    float: right;
 }

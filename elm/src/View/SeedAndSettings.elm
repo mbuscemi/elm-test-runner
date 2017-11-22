@@ -27,6 +27,9 @@ render setForceSeedHandler autoRunEnabled autoNavigateEnabled forceRandomSeedEna
             )
             []
         ]
+    , div
+        [ class "settings-toggle btn btn-xs icon icon-gear" ]
+        []
     ]
 
 
