@@ -16570,7 +16570,7 @@ var _user$project$Animation_Footer$animateDown = _mdgriffith$elm_style_animation
 		_0: A2(
 			_mdgriffith$elm_style_animation$Animation$toWith,
 			_mdgriffith$elm_style_animation$Animation$easing(
-				{duration: _user$project$Animation_Footer$duration, ease: _elm_community$easing_functions$Ease$inQuad}),
+				{duration: _user$project$Animation_Footer$duration, ease: _elm_community$easing_functions$Ease$outQuad}),
 			{
 				ctor: '::',
 				_0: _mdgriffith$elm_style_animation$Animation$height(

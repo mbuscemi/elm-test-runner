@@ -1,7 +1,7 @@
 module Animation.Footer exposing (animateDown, animateUp, initial)
 
 import Animation exposing (State, easing, height, interrupt, px, style, toWith)
-import Ease exposing (inQuad, outQuad)
+import Ease exposing (outQuad)
 
 
 initialHeight : Float
@@ -37,6 +37,6 @@ animateDown : State -> State
 animateDown =
     interrupt
         [ toWith
-            (easing { duration = duration, ease = inQuad })
+            (easing { duration = duration, ease = outQuad })
             [ height <| px initialHeight ]
         ]
