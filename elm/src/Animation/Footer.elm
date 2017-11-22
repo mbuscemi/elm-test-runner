@@ -11,12 +11,12 @@ initialHeight =
 
 expandedHeight : Float
 expandedHeight =
-    120
+    103
 
 
 duration : Float
 duration =
-    700
+    600
 
 
 initial : State

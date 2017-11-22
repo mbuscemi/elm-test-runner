@@ -16539,8 +16539,8 @@ var _user$project$Animation_Flicker$initial = _mdgriffith$elm_style_animation$An
 		_1: {ctor: '[]'}
 	});
 
-var _user$project$Animation_Footer$duration = 700;
-var _user$project$Animation_Footer$expandedHeight = 120;
+var _user$project$Animation_Footer$duration = 600;
+var _user$project$Animation_Footer$expandedHeight = 103;
 var _user$project$Animation_Footer$animateUp = _mdgriffith$elm_style_animation$Animation$interrupt(
 	{
 		ctor: '::',
@@ -18693,20 +18693,6 @@ var _user$project$View_SeedAndSettings$seedInputValue = function (randomSeed) {
 		return _elm_lang$html$Html_Attributes$value('');
 	}
 };
-var _user$project$View_SeedAndSettings$seedTextInputStyles = function (forceRandomSeedEnabled) {
-	return {
-		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$disabled(!forceRandomSeedEnabled),
-		_1: {ctor: '[]'}
-	};
-};
-var _user$project$View_SeedAndSettings$seedCheckboxStyles = function (forceRandomSeedEnabled) {
-	return {
-		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$checked(forceRandomSeedEnabled),
-		_1: {ctor: '[]'}
-	};
-};
 var _user$project$View_SeedAndSettings$render = F2(
 	function (messages, data) {
 		return {
@@ -18722,18 +18708,19 @@ var _user$project$View_SeedAndSettings$render = F2(
 					ctor: '::',
 					_0: A2(
 						_elm_lang$html$Html$input,
-						A2(
-							_elm_lang$core$List$append,
-							{
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+								_0: _elm_lang$html$Html_Events$onCheck(messages.setForceSeedHandler),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onCheck(messages.setForceSeedHandler),
+									_0: _elm_lang$html$Html_Attributes$checked(data.forceRandomSeedEnabled),
 									_1: {ctor: '[]'}
 								}
-							},
-							_user$project$View_SeedAndSettings$seedCheckboxStyles(data.forceRandomSeedEnabled)),
+							}
+						},
 						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
@@ -18749,22 +18736,23 @@ var _user$project$View_SeedAndSettings$render = F2(
 							ctor: '::',
 							_0: A2(
 								_elm_lang$html$Html$input,
-								A2(
-									_elm_lang$core$List$append,
-									{
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$type_('number'),
+									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$type_('number'),
+										_0: _elm_lang$html$Html_Attributes$placeholder('Generate Random'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$placeholder('Generate Random'),
+											_0: _user$project$View_SeedAndSettings$seedInputValue(data.randomSeed),
 											_1: {
 												ctor: '::',
-												_0: _user$project$View_SeedAndSettings$seedInputValue(data.randomSeed),
+												_0: _elm_lang$html$Html_Attributes$disabled(!data.forceRandomSeedEnabled),
 												_1: {ctor: '[]'}
 											}
 										}
-									},
-									_user$project$View_SeedAndSettings$seedTextInputStyles(data.forceRandomSeedEnabled)),
+									}
+								},
 								{ctor: '[]'}),
 							_1: {ctor: '[]'}
 						}
@@ -18784,7 +18772,104 @@ var _user$project$View_SeedAndSettings$render = F2(
 						}
 					},
 					{ctor: '[]'}),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('expanded-settings'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('setting auto-run'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Auto-Run on Save '),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$input,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$checked(data.autoRunEnabled),
+													_1: {ctor: '[]'}
+												}
+											},
+											{ctor: '[]'}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('setting auto-navigate'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Auto-Navigate to Test File '),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$input,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$checked(data.autoNavigateEnabled),
+														_1: {ctor: '[]'}
+													}
+												},
+												{ctor: '[]'}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('setting auto-navigate'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Enable elm-verify-examples '),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$input,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+														_1: {ctor: '[]'}
+													},
+													{ctor: '[]'}),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
 			}
 		};
 	});

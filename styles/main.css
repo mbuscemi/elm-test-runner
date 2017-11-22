@@ -230,3 +230,9 @@
 .etr-main-view .settings-toggle {
     float: right;
 }
+
+.etr-main-view .footer .expanded-settings {
+    width: 100%;
+    text-align: right;
+    float: right;
+}

@@ -23,22 +23,18 @@ render : Messages message -> Data -> List (Html message)
 render messages data =
     [ div [ class "seed-settings" ]
         [ input
-            (List.append
-                [ type_ "checkbox"
-                , onCheck messages.setForceSeedHandler
-                ]
-                (seedCheckboxStyles data.forceRandomSeedEnabled)
-            )
+            [ type_ "checkbox"
+            , onCheck messages.setForceSeedHandler
+            , checked data.forceRandomSeedEnabled
+            ]
             []
         , span [] [ text "Seed:" ]
         , input
-            (List.append
-                [ type_ "number"
-                , placeholder "Generate Random"
-                , seedInputValue data.randomSeed
-                ]
-                (seedTextInputStyles data.forceRandomSeedEnabled)
-            )
+            [ type_ "number"
+            , placeholder "Generate Random"
+            , seedInputValue data.randomSeed
+            , disabled <| not data.forceRandomSeedEnabled
+            ]
             []
         ]
     , div
@@ -46,17 +42,25 @@ render messages data =
         , onClick messages.settingsToggle
         ]
         []
+    , div
+        [ class "expanded-settings" ]
+        [ div
+            [ class "setting auto-run" ]
+            [ text "Auto-Run on Save "
+            , input [ type_ "checkbox", checked data.autoRunEnabled ] []
+            ]
+        , div
+            [ class "setting auto-navigate" ]
+            [ text "Auto-Navigate to Test File "
+            , input [ type_ "checkbox", checked data.autoNavigateEnabled ] []
+            ]
+        , div
+            [ class "setting auto-navigate" ]
+            [ text "Enable elm-verify-examples "
+            , input [ type_ "checkbox" ] []
+            ]
+        ]
     ]
-
-
-seedCheckboxStyles : Bool -> List (Attribute message)
-seedCheckboxStyles forceRandomSeedEnabled =
-    [ checked forceRandomSeedEnabled ]
-
-
-seedTextInputStyles : Bool -> List (Attribute message)
-seedTextInputStyles forceRandomSeedEnabled =
-    [ disabled <| not forceRandomSeedEnabled ]
 
 
 seedInputValue : Maybe Int -> Attribute message
