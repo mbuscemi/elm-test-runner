@@ -20,7 +20,8 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-    "elm-test": "0.18.10"
+    "elm-test": "0.18.10",
+    "elm-verify-examples": "1.0.2"
   },
   "deserializers": {
     "ElmTestRunnerView": "deserialize"
