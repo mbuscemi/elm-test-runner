@@ -16714,6 +16714,8 @@ var _user$project$State_RunStatus$toClass = function (runStatus) {
 	switch (_p0.ctor) {
 		case 'NoData':
 			return 'no-data';
+		case 'GeneratingTests':
+			return 'generating-tests';
 		case 'Processing':
 			return 'processing';
 		case 'LastPassed':
@@ -16731,6 +16733,8 @@ var _user$project$State_RunStatus$toText = function (runStatus) {
 	switch (_p1.ctor) {
 		case 'NoData':
 			return 'No Data';
+		case 'GeneratingTests':
+			return '... Generating Tests ... ';
 		case 'Processing':
 			return '... Running ...';
 		case 'LastPassed':
@@ -16756,6 +16760,8 @@ var _user$project$State_RunStatus$passFail = function (didPass) {
 };
 var _user$project$State_RunStatus$Processing = {ctor: 'Processing'};
 var _user$project$State_RunStatus$processing = _user$project$State_RunStatus$Processing;
+var _user$project$State_RunStatus$GeneratingTests = {ctor: 'GeneratingTests'};
+var _user$project$State_RunStatus$generatingTests = _user$project$State_RunStatus$GeneratingTests;
 var _user$project$State_RunStatus$NoData = {ctor: 'NoData'};
 var _user$project$State_RunStatus$noData = _user$project$State_RunStatus$NoData;
 
@@ -17997,6 +18003,11 @@ var _user$project$Model_RunStatus$setToProcessing = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{runStatus: _user$project$State_RunStatus$processing});
+};
+var _user$project$Model_RunStatus$setToGeneratingTests = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{runStatus: _user$project$State_RunStatus$generatingTests});
 };
 
 var _user$project$Model_SelectedTest$setInstance = F2(
@@ -19475,8 +19486,13 @@ var _user$project$Main$update = F2(
 											A2(
 												_user$project$Model_SelectedTest$setNodeId,
 												_elm_lang$core$Maybe$Nothing,
-												_user$project$Model_TestCount$resetPassed(
-													_user$project$Model_RunStatus$setToProcessing(model))))))))));
+												_user$project$Model_TestCount$resetPassed(model)))))))));
+			case 'GenerateTestsStart':
+				return _user$project$And$noCommand(
+					_user$project$Model_RunStatus$setToGeneratingTests(model));
+			case 'ExecuteTestsStart':
+				return _user$project$And$noCommand(
+					_user$project$Model_RunStatus$setToProcessing(model));
 			case 'CompilerErrored':
 				return _user$project$And$noCommand(
 					A2(
@@ -19492,10 +19508,7 @@ var _user$project$Main$update = F2(
 						A2(
 							_user$project$Model_TestCount$setTotal,
 							event,
-							A2(
-								_user$project$Model_ProjectName$setFromPath,
-								_p0._0._0,
-								_user$project$Model_RunStatus$setToProcessing(model)))));
+							A2(_user$project$Model_ProjectName$setFromPath, _p0._0._0, model))));
 			case 'TestCompleted':
 				var event = _user$project$TestEvent_TestCompleted$parseJson(_p0._0);
 				return _user$project$And$noCommand(
@@ -19602,6 +19615,14 @@ var _user$project$Main$update = F2(
 	});
 var _user$project$Main$commandKeyTestStart = _elm_lang$core$Native_Platform.incomingPort(
 	'commandKeyTestStart',
+	_elm_lang$core$Json_Decode$null(
+		{ctor: '_Tuple0'}));
+var _user$project$Main$notifyGeneratingTests = _elm_lang$core$Native_Platform.incomingPort(
+	'notifyGeneratingTests',
+	_elm_lang$core$Json_Decode$null(
+		{ctor: '_Tuple0'}));
+var _user$project$Main$notifyExecutingTests = _elm_lang$core$Native_Platform.incomingPort(
+	'notifyExecutingTests',
 	_elm_lang$core$Json_Decode$null(
 		{ctor: '_Tuple0'}));
 var _user$project$Main$notifyCompilerErrored = _elm_lang$core$Native_Platform.incomingPort('notifyCompilerErrored', _elm_lang$core$Json_Decode$string);
@@ -19741,6 +19762,8 @@ var _user$project$Main$RunStart = function (a) {
 var _user$project$Main$CompilerErrored = function (a) {
 	return {ctor: 'CompilerErrored', _0: a};
 };
+var _user$project$Main$ExecuteTestsStart = {ctor: 'ExecuteTestsStart'};
+var _user$project$Main$GenerateTestsStart = {ctor: 'GenerateTestsStart'};
 var _user$project$Main$InitiateRunAll = {ctor: 'InitiateRunAll'};
 var _user$project$Main$view = function (model) {
 	return A2(
@@ -19782,56 +19805,66 @@ var _user$project$Main$subscriptions = function (model) {
 				_elm_lang$core$Basics$always(_user$project$Main$InitiateRunAll)),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Main$notifyCompilerErrored(_user$project$Main$CompilerErrored),
+				_0: _user$project$Main$notifyGeneratingTests(
+					_elm_lang$core$Basics$always(_user$project$Main$GenerateTestsStart)),
 				_1: {
 					ctor: '::',
-					_0: _user$project$Main$toggleAutoRun(
-						_elm_lang$core$Basics$always(_user$project$Main$ToggleAutoRun)),
+					_0: _user$project$Main$notifyExecutingTests(
+						_elm_lang$core$Basics$always(_user$project$Main$ExecuteTestsStart)),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Main$toggleAutoNavigate(
-							_elm_lang$core$Basics$always(_user$project$Main$ToggleAutoNavigate)),
+						_0: _user$project$Main$notifyCompilerErrored(_user$project$Main$CompilerErrored),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Main$toggleElmVerifyExamples(
-								_elm_lang$core$Basics$always(_user$project$Main$ToggleRunElmVerifyExamples)),
+							_0: _user$project$Main$toggleAutoRun(
+								_elm_lang$core$Basics$always(_user$project$Main$ToggleAutoRun)),
 							_1: {
 								ctor: '::',
-								_0: _user$project$Main$notifySaveEvent(
-									_user$project$Main$saveEventMessage(model)),
+								_0: _user$project$Main$toggleAutoNavigate(
+									_elm_lang$core$Basics$always(_user$project$Main$ToggleAutoNavigate)),
 								_1: {
 									ctor: '::',
-									_0: _user$project$Main$notifyPaneMoved(_user$project$Main$PaneMoved),
+									_0: _user$project$Main$toggleElmVerifyExamples(
+										_elm_lang$core$Basics$always(_user$project$Main$ToggleRunElmVerifyExamples)),
 									_1: {
 										ctor: '::',
-										_0: _user$project$Main$runStart(_user$project$Main$RunStart),
+										_0: _user$project$Main$notifySaveEvent(
+											_user$project$Main$saveEventMessage(model)),
 										_1: {
 											ctor: '::',
-											_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+											_0: _user$project$Main$notifyPaneMoved(_user$project$Main$PaneMoved),
 											_1: {
 												ctor: '::',
-												_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
+												_0: _user$project$Main$runStart(_user$project$Main$RunStart),
 												_1: {
 													ctor: '::',
-													_0: A2(
-														_mdgriffith$elm_style_animation$Animation$subscription,
-														_user$project$Main$AnimateFlicker,
-														{
-															ctor: '::',
-															_0: model.statusBarStyle,
-															_1: {ctor: '[]'}
-														}),
+													_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
 													_1: {
 														ctor: '::',
-														_0: A2(
-															_mdgriffith$elm_style_animation$Animation$subscription,
-															_user$project$Main$AnimateSettingsTransition,
-															{
+														_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_mdgriffith$elm_style_animation$Animation$subscription,
+																_user$project$Main$AnimateFlicker,
+																{
+																	ctor: '::',
+																	_0: model.statusBarStyle,
+																	_1: {ctor: '[]'}
+																}),
+															_1: {
 																ctor: '::',
-																_0: model.footerStyle,
+																_0: A2(
+																	_mdgriffith$elm_style_animation$Animation$subscription,
+																	_user$project$Main$AnimateSettingsTransition,
+																	{
+																		ctor: '::',
+																		_0: model.footerStyle,
+																		_1: {ctor: '[]'}
+																	}),
 																_1: {ctor: '[]'}
-															}),
-														_1: {ctor: '[]'}
+															}
+														}
 													}
 												}
 											}

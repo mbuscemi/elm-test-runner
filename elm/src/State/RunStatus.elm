@@ -2,6 +2,7 @@ module State.RunStatus
     exposing
         ( RunStatus
         , compileError
+        , generatingTests
         , incomplete
         , lastFailed
         , lastPassed
@@ -15,21 +16,12 @@ module State.RunStatus
 
 type RunStatus
     = NoData
+    | GeneratingTests
     | Processing
     | LastPassed
     | LastFailed
     | CompileError
     | Incomplete
-
-
-lastPassed : RunStatus
-lastPassed =
-    LastPassed
-
-
-lastFailed : RunStatus
-lastFailed =
-    LastFailed
 
 
 noData : RunStatus
@@ -40,6 +32,21 @@ noData =
 processing : RunStatus
 processing =
     Processing
+
+
+generatingTests : RunStatus
+generatingTests =
+    GeneratingTests
+
+
+lastPassed : RunStatus
+lastPassed =
+    LastPassed
+
+
+lastFailed : RunStatus
+lastFailed =
+    LastFailed
 
 
 compileError : RunStatus
@@ -66,6 +73,9 @@ toText runStatus =
         NoData ->
             "No Data"
 
+        GeneratingTests ->
+            "... Generating Tests ... "
+
         Processing ->
             "... Running ..."
 
@@ -87,6 +97,9 @@ toClass runStatus =
     case runStatus of
         NoData ->
             "no-data"
+
+        GeneratingTests ->
+            "generating-tests"
 
         Processing ->
             "processing"

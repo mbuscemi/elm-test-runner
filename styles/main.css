@@ -82,6 +82,10 @@
     background-color: #101318;
 }
 
+.etr-main-view .status-bar.generating-tests {
+    background-color: #461b4b;
+}
+
 .etr-main-view .status-bar.processing {
     background-color: #303023;
 }

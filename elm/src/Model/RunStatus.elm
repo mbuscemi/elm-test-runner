@@ -1,4 +1,12 @@
-module Model.RunStatus exposing (setForFailure, setForTodo, setToCompileError, setToPassing, setToProcessing)
+module Model.RunStatus
+    exposing
+        ( setForFailure
+        , setForTodo
+        , setToCompileError
+        , setToGeneratingTests
+        , setToPassing
+        , setToProcessing
+        )
 
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
@@ -11,6 +19,11 @@ type alias HasRunStatus model testInstance =
         | runStatus : RunStatus
         , testRuns : Tree String testInstance
     }
+
+
+setToGeneratingTests : HasRunStatus model testInstance -> HasRunStatus model testInstance
+setToGeneratingTests model =
+    { model | runStatus = RunStatus.generatingTests }
 
 
 setToProcessing : HasRunStatus model testInstance -> HasRunStatus model testInstance

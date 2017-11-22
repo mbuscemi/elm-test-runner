@@ -27,6 +27,8 @@ import View.Core
 
 type Message
     = InitiateRunAll
+    | GenerateTestsStart
+    | ExecuteTestsStart
     | CompilerErrored String
     | RunStart ( String, RunStart.RawData )
     | TestCompleted Value
@@ -79,8 +81,7 @@ update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
         InitiateRunAll ->
-            Model.RunStatus.setToProcessing model
-                |> Model.TestCount.resetPassed
+            Model.TestCount.resetPassed model
                 |> Model.SelectedTest.setNodeId Nothing
                 |> Model.SelectedTest.setInstance Nothing
                 |> Model.Basics.setCompilerErrorMessage Nothing
@@ -89,6 +90,14 @@ update message model =
                 |> Model.TestTree.reset
                 |> Model.TestTree.updateHierarchy
                 |> And.execute (runTest <| Model.RandomSeed.forJS model)
+
+        GenerateTestsStart ->
+            Model.RunStatus.setToGeneratingTests model
+                |> And.noCommand
+
+        ExecuteTestsStart ->
+            Model.RunStatus.setToProcessing model
+                |> And.noCommand
 
         CompilerErrored errorMessage ->
             Model.RunStatus.setToCompileError model
@@ -100,8 +109,7 @@ update message model =
                 event =
                     RunStart.parse data
             in
-            Model.RunStatus.setToProcessing model
-                |> Model.ProjectName.setFromPath projectPath
+            Model.ProjectName.setFromPath projectPath model
                 |> Model.TestCount.setTotal event
                 |> Model.RunSeed.set event
                 |> And.noCommand
@@ -254,6 +262,8 @@ subscriptions : Model -> Sub Message
 subscriptions model =
     Sub.batch
         [ commandKeyTestStart (always InitiateRunAll)
+        , notifyGeneratingTests (always GenerateTestsStart)
+        , notifyExecutingTests (always ExecuteTestsStart)
         , notifyCompilerErrored CompilerErrored
         , toggleAutoRun (always ToggleAutoRun)
         , toggleAutoNavigate (always ToggleAutoNavigate)
@@ -283,6 +293,12 @@ port copySeed : String -> Cmd message
 
 
 port commandKeyTestStart : (() -> message) -> Sub message
+
+
+port notifyGeneratingTests : (() -> message) -> Sub message
+
+
+port notifyExecutingTests : (() -> message) -> Sub message
 
 
 port notifyCompilerErrored : (String -> message) -> Sub message
