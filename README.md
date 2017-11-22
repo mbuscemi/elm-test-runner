@@ -43,6 +43,7 @@ Run elm-test and view results without leaving Atom
 ### Test Generation with _Elm Verify Examples_
 
 ![Generating Tests](https://raw.githubusercontent.com/mbuscemi/elm-test-runner/master/images/elm-verify-examples-enabled.gif?raw=true)
+![Accessing Settings](https://raw.githubusercontent.com/mbuscemi/elm-test-runner/master/images/how-to-show-settings.gif?raw=true)
 
 1. To see the current state of this setting, toggle the settings panel open by clicking on the gear icon in the lower right corner of the panel.
 2. To change this setting:
