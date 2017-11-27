@@ -12,6 +12,7 @@ module State.Failure
         , nullInstance
         , shouldDiff
         , toData
+        , toString
         )
 
 import Json.Decode exposing (Decoder, field, list, map, map2, map3, map4, oneOf, string)
@@ -274,6 +275,16 @@ isTodo failure =
 
         ConditionalFailure _ ->
             False
+
+
+toString : Failure -> String
+toString failure =
+    case failure of
+        SimpleFailure string ->
+            string
+
+        _ ->
+            ""
 
 
 shouldDiff : Failure -> Bool

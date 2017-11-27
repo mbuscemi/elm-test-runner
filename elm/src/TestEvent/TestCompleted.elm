@@ -15,7 +15,7 @@ module TestEvent.TestCompleted
 import Duration.Core as Duration exposing (Duration)
 import Json.Decode exposing (Decoder, decodeString, decodeValue, field, list, map4, string)
 import Json.Encode exposing (Value)
-import State.Failure exposing (Failure, failure)
+import State.Failure as Failure exposing (Failure, failure)
 import TestEvent.Util
 
 
@@ -75,16 +75,26 @@ parse decoder input =
         parsed =
             decoder rawData input
                 |> Result.withDefault defaultRawData
-    in
-    TestCompleted
-        { status =
+
+        status =
             if parsed.status == "pass" then
                 Pass
             else if parsed.status == "todo" then
                 Todo
             else
                 Fail
-        , labels = parsed.labels
+
+        labels =
+            case status of
+                Todo ->
+                    parsed.labels ++ List.map Failure.toString parsed.failures
+
+                _ ->
+                    parsed.labels
+    in
+    TestCompleted
+        { status = status
+        , labels = labels
         , failures = parsed.failures
         , duration = TestEvent.Util.parseInt parsed.duration
         }

@@ -16781,9 +16781,17 @@ var _user$project$State_Failure$expectationText = function (values) {
 				A2(_elm_lang$core$List$intersperse, '\",\"', values)),
 			'\"]'));
 };
-var _user$project$State_Failure$isTodo = function (failure) {
+var _user$project$State_Failure$toString = function (failure) {
 	var _p0 = failure;
-	switch (_p0.ctor) {
+	if (_p0.ctor === 'SimpleFailure') {
+		return _p0._0;
+	} else {
+		return '';
+	}
+};
+var _user$project$State_Failure$isTodo = function (failure) {
+	var _p1 = failure;
+	switch (_p1.ctor) {
 		case 'SimpleFailure':
 			return true;
 		case 'ComplexFailure':
@@ -16793,20 +16801,20 @@ var _user$project$State_Failure$isTodo = function (failure) {
 	}
 };
 var _user$project$State_Failure$hasComplexComparison = function (failure) {
-	var _p1 = failure;
-	switch (_p1.ctor) {
+	var _p2 = failure;
+	switch (_p2.ctor) {
 		case 'SimpleFailure':
 			return false;
 		case 'ComplexFailure':
-			var _p2 = _p1._0.reason;
-			if (_p2.ctor === 'SimpleComparison') {
+			var _p3 = _p2._0.reason;
+			if (_p3.ctor === 'SimpleComparison') {
 				return false;
 			} else {
 				return true;
 			}
 		default:
-			var _p3 = _p1._0.reason;
-			if (_p3.ctor === 'SimpleComparison') {
+			var _p4 = _p2._0.reason;
+			if (_p4.ctor === 'SimpleComparison') {
 				return false;
 			} else {
 				return true;
@@ -16814,25 +16822,25 @@ var _user$project$State_Failure$hasComplexComparison = function (failure) {
 	}
 };
 var _user$project$State_Failure$getMessage = function (failure) {
-	var _p4 = failure;
-	switch (_p4.ctor) {
-		case 'SimpleFailure':
-			return _p4._0;
-		case 'ComplexFailure':
-			return _p4._0.message;
-		default:
-			return _p4._0.message;
-	}
-};
-var _user$project$State_Failure$getGiven = function (failure) {
 	var _p5 = failure;
 	switch (_p5.ctor) {
 		case 'SimpleFailure':
+			return _p5._0;
+		case 'ComplexFailure':
+			return _p5._0.message;
+		default:
+			return _p5._0.message;
+	}
+};
+var _user$project$State_Failure$getGiven = function (failure) {
+	var _p6 = failure;
+	switch (_p6.ctor) {
+		case 'SimpleFailure':
 			return _elm_lang$core$Maybe$Nothing;
 		case 'ComplexFailure':
 			return _elm_lang$core$Maybe$Nothing;
 		default:
-			return _elm_lang$core$Maybe$Just(_p5._0.given);
+			return _elm_lang$core$Maybe$Just(_p6._0.given);
 	}
 };
 var _user$project$State_Failure$EqualityComparisonData = F3(
@@ -16949,49 +16957,49 @@ var _user$project$State_Failure$conditionalFailureData = A4(
 	A2(_elm_lang$core$Json_Decode$field, 'reason', _user$project$State_Failure$reason),
 	A2(_elm_lang$core$Json_Decode$field, 'given', _elm_lang$core$Json_Decode$string));
 var _user$project$State_Failure$getComparison = function (failure) {
-	var _p6 = failure;
-	switch (_p6.ctor) {
+	var _p7 = failure;
+	switch (_p7.ctor) {
 		case 'SimpleFailure':
-			return _user$project$State_Failure$SimpleComparison(_p6._0);
+			return _user$project$State_Failure$SimpleComparison(_p7._0);
 		case 'ComplexFailure':
-			return _p6._0.reason;
+			return _p7._0.reason;
 		default:
-			return _p6._0.reason;
+			return _p7._0.reason;
 	}
 };
 var _user$project$State_Failure$getExpected = function (failure) {
-	var _p7 = _user$project$State_Failure$getComparison(failure);
-	switch (_p7.ctor) {
-		case 'SimpleComparison':
-			return '';
-		case 'EqualityComparison':
-			return _p7._0.expected;
-		case 'QuantityComparison':
-			return _p7._0.first;
-		case 'ListComparison':
-			return _user$project$State_Failure$expectationText(_p7._0.expected);
-		default:
-			return _p7._0.expected;
-	}
-};
-var _user$project$State_Failure$getActual = function (failure) {
 	var _p8 = _user$project$State_Failure$getComparison(failure);
 	switch (_p8.ctor) {
 		case 'SimpleComparison':
 			return '';
 		case 'EqualityComparison':
-			return _p8._0.actual;
+			return _p8._0.expected;
 		case 'QuantityComparison':
-			return _p8._0.second;
+			return _p8._0.first;
 		case 'ListComparison':
-			return _user$project$State_Failure$expectationText(_p8._0.actual);
+			return _user$project$State_Failure$expectationText(_p8._0.expected);
 		default:
-			return _p8._0.actual;
+			return _p8._0.expected;
+	}
+};
+var _user$project$State_Failure$getActual = function (failure) {
+	var _p9 = _user$project$State_Failure$getComparison(failure);
+	switch (_p9.ctor) {
+		case 'SimpleComparison':
+			return '';
+		case 'EqualityComparison':
+			return _p9._0.actual;
+		case 'QuantityComparison':
+			return _p9._0.second;
+		case 'ListComparison':
+			return _user$project$State_Failure$expectationText(_p9._0.actual);
+		default:
+			return _p9._0.actual;
 	}
 };
 var _user$project$State_Failure$shouldDiff = function (failure) {
-	var _p9 = _user$project$State_Failure$getComparison(failure);
-	switch (_p9.ctor) {
+	var _p10 = _user$project$State_Failure$getComparison(failure);
+	switch (_p10.ctor) {
 		case 'SimpleComparison':
 			return false;
 		case 'EqualityComparison':
@@ -17145,10 +17153,22 @@ var _user$project$TestEvent_TestCompleted$parse = F2(
 			_elm_lang$core$Result$withDefault,
 			_user$project$TestEvent_TestCompleted$defaultRawData,
 			A2(decoder, _user$project$TestEvent_TestCompleted$rawData, input));
+		var status = _elm_lang$core$Native_Utils.eq(parsed.status, 'pass') ? _user$project$TestEvent_TestCompleted$Pass : (_elm_lang$core$Native_Utils.eq(parsed.status, 'todo') ? _user$project$TestEvent_TestCompleted$Todo : _user$project$TestEvent_TestCompleted$Fail);
+		var labels = function () {
+			var _p8 = status;
+			if (_p8.ctor === 'Todo') {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					parsed.labels,
+					A2(_elm_lang$core$List$map, _user$project$State_Failure$toString, parsed.failures));
+			} else {
+				return parsed.labels;
+			}
+		}();
 		return _user$project$TestEvent_TestCompleted$TestCompleted(
 			{
-				status: _elm_lang$core$Native_Utils.eq(parsed.status, 'pass') ? _user$project$TestEvent_TestCompleted$Pass : (_elm_lang$core$Native_Utils.eq(parsed.status, 'todo') ? _user$project$TestEvent_TestCompleted$Todo : _user$project$TestEvent_TestCompleted$Fail),
-				labels: parsed.labels,
+				status: status,
+				labels: labels,
 				failures: parsed.failures,
 				duration: _user$project$TestEvent_Util$parseInt(parsed.duration)
 			});
@@ -17159,9 +17179,9 @@ var _user$project$TestEvent_TestCompleted$parseJson = function (json) {
 var _user$project$TestEvent_TestCompleted$parseString = function (jsonString) {
 	return A2(_user$project$TestEvent_TestCompleted$parse, _elm_lang$core$Json_Decode$decodeString, jsonString);
 };
-var _user$project$TestEvent_TestCompleted$passed = function (_p8) {
-	var _p9 = _p8;
-	return _elm_lang$core$Native_Utils.eq(_p9._0.status, _user$project$TestEvent_TestCompleted$Pass);
+var _user$project$TestEvent_TestCompleted$passed = function (_p9) {
+	var _p10 = _p9;
+	return _elm_lang$core$Native_Utils.eq(_p10._0.status, _user$project$TestEvent_TestCompleted$Pass);
 };
 var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
 	return _user$project$TestEvent_TestCompleted$passed(event) ? 1 : 0;
