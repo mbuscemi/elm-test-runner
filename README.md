@@ -74,34 +74,4 @@ Run elm-test and view results without leaving Atom
 
 ## Release History
 
-### 0.2.0
-
-* Test generation with `elm-verify-examples`.
-* Project Directory Detection
-    * In order to qualify as a valid target, a directory must now have an `elm-package.json` file _and_ a `tests` subdirectory.
-    * All open projects are scanned for a qualifying target directory before giving up the search.
-* Settings
-    * Changed settings panel to slide up and down.
-    * Changed highlighted text to checkbox options.
-* Can now set an alternate path for elm-test on the plugin configuration page.
-* Node processes are now killed when the plugin is deactivated, which should help prevent orphaned processes from eating system resources.
-* Minor fixes for the Nord-UI Atom theme
-* Text can now be copied out of the test output display.
-
-### 0.1.1
-
-* README fixes
-    * Minor correction to setup instructions.
-    * Fixed broken images on Atom package page.
-
-### 0.1.0
-
-* Basic interface with run button
-* Displays test passes, failures, and failure output
-* Can click on a test to auto-navigate to the test file and location
-* Key bindings and package menu entries
-* Test pane dockable in all docks
-* Can copy seed from a run
-* Can set seed for a run
-* Can enable/disable auto-run on save
-* Can enable/disable auto-navigation to file when clicking on a test
+* [Elm Test Runner Release History](https://github.com/mbuscemi/elm-test-runner/releases)
