@@ -20,7 +20,7 @@ Run elm-test and view results without leaving Atom
 
 1. Open a project folder that has Elm tests in it. Typically, this is a directory that has an `elm-package.json` file, a `tests` directory that contains Elm files exposing functions of type `Test`. I recommend that you set up your test directory with `elm-test init` in order to ensure compatibility.
 2. Go to Packages → Elm Test Runner → Toggle Dashboard, or use ⌘-Alt-T to open the test pane.
-3. Click the "Run All" button, or use ⌘-T to run tests.
+3. Click the "Run All" button, or use Alt-T to run tests.
 4. Wait for the test run to complete.
 5. Click on individual failing tests to view the failure results for those tests.
 
@@ -58,7 +58,7 @@ Run elm-test and view results without leaving Atom
 2. To change this setting:
     * Click the checkbox next to the option
     * Go to Packages → Elm Test Runner → Toggle Auto-Run on Save
-    * Use the key command Ctrl-R
+    * Use the key command Ctrl-Alt-R
 3. When 'Auto-Run on Save' is enabled, executing a "save" action on any project file will initiate a test run in Elm Test Runner.
 
 ### Auto-Navigate to Test
