@@ -1,9 +1,9 @@
 {
   "atom-workspace": {
     "cmd-alt-t": "elm-test-runner:toggle",
-    "ctrl-r": "elm-test-runner:toggle-auto-run",
+    "ctrl-alt-r": "elm-test-runner:toggle-auto-run",
     "ctrl-alt-n": "elm-test-runner:toggle-auto-navigate",
     "ctrl-alt-v": "elm-test-runner:toggle-elm-verify-examples",
-    "cmd-t": "elm-test-runner:run-test"
+    "alt-t": "elm-test-runner:run-test"
   }
 }
