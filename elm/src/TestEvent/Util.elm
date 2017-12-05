@@ -1,4 +1,11 @@
-module TestEvent.Util exposing (parseInt)
+module TestEvent.Util exposing (intString)
+
+import Json.Decode exposing (Decoder, map, string)
+
+
+intString : Decoder Int
+intString =
+    map parseInt string
 
 
 parseInt : String -> Int

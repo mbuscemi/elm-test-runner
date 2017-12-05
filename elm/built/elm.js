@@ -17091,12 +17091,54 @@ var _user$project$State_Labels$fromList = function (rawLabels) {
 	return _user$project$State_Labels$Basic(rawLabels);
 };
 
+var _user$project$TestEvent_TestStatus$isTodo = function (testStatus) {
+	var _p0 = testStatus;
+	if (_p0.ctor === 'Todo') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var _user$project$TestEvent_TestStatus$isFail = function (testStatus) {
+	var _p1 = testStatus;
+	if (_p1.ctor === 'Fail') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var _user$project$TestEvent_TestStatus$isPass = function (testStatus) {
+	var _p2 = testStatus;
+	if (_p2.ctor === 'Pass') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var _user$project$TestEvent_TestStatus$Todo = {ctor: 'Todo'};
+var _user$project$TestEvent_TestStatus$Fail = {ctor: 'Fail'};
+var _user$project$TestEvent_TestStatus$default = _user$project$TestEvent_TestStatus$Fail;
+var _user$project$TestEvent_TestStatus$Pass = {ctor: 'Pass'};
+var _user$project$TestEvent_TestStatus$fromString = function (string) {
+	var _p3 = string;
+	switch (_p3) {
+		case 'pass':
+			return _user$project$TestEvent_TestStatus$Pass;
+		case 'todo':
+			return _user$project$TestEvent_TestStatus$Todo;
+		default:
+			return _user$project$TestEvent_TestStatus$Fail;
+	}
+};
+var _user$project$TestEvent_TestStatus$testStatus = A2(_elm_lang$core$Json_Decode$map, _user$project$TestEvent_TestStatus$fromString, _elm_lang$core$Json_Decode$string);
+
 var _user$project$TestEvent_Util$parseInt = function (string) {
 	return A2(
 		_elm_lang$core$Result$withDefault,
 		0,
 		_elm_lang$core$String$toInt(string));
 };
+var _user$project$TestEvent_Util$intString = A2(_elm_lang$core$Json_Decode$map, _user$project$TestEvent_Util$parseInt, _elm_lang$core$Json_Decode$string);
 
 var _user$project$TestEvent_TestCompleted$firstFailure = function (_p0) {
 	var _p1 = _p0;
@@ -17110,20 +17152,41 @@ var _user$project$TestEvent_TestCompleted$labels = function (_p4) {
 	var _p5 = _p4;
 	return _p5._0.labels;
 };
-var _user$project$TestEvent_TestCompleted$defaultRawData = {
-	status: '',
+var _user$project$TestEvent_TestCompleted$isTodo = function (_p6) {
+	var _p7 = _p6;
+	return _user$project$TestEvent_TestStatus$isTodo(_p7._0.status);
+};
+var _user$project$TestEvent_TestCompleted$passed = function (_p8) {
+	var _p9 = _p8;
+	return _user$project$TestEvent_TestStatus$isPass(_p9._0.status);
+};
+var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
+	return _user$project$TestEvent_TestCompleted$passed(event) ? 1 : 0;
+};
+var _user$project$TestEvent_TestCompleted$default = {
+	status: _user$project$TestEvent_TestStatus$default,
 	labels: {ctor: '[]'},
 	failures: {ctor: '[]'},
-	duration: ''
+	duration: 0
 };
-var _user$project$TestEvent_TestCompleted$RawData = F4(
+var _user$project$TestEvent_TestCompleted$supplementLabels = function (data) {
+	return _user$project$TestEvent_TestStatus$isTodo(data.status) ? _elm_lang$core$Native_Utils.update(
+		data,
+		{
+			labels: A2(
+				_elm_lang$core$Basics_ops['++'],
+				data.labels,
+				A2(_elm_lang$core$List$map, _user$project$State_Failure$toString, data.failures))
+		}) : data;
+};
+var _user$project$TestEvent_TestCompleted$Data = F4(
 	function (a, b, c, d) {
 		return {status: a, labels: b, failures: c, duration: d};
 	});
-var _user$project$TestEvent_TestCompleted$rawData = A5(
+var _user$project$TestEvent_TestCompleted$testComplete = A5(
 	_elm_lang$core$Json_Decode$map4,
-	_user$project$TestEvent_TestCompleted$RawData,
-	A2(_elm_lang$core$Json_Decode$field, 'status', _elm_lang$core$Json_Decode$string),
+	_user$project$TestEvent_TestCompleted$Data,
+	A2(_elm_lang$core$Json_Decode$field, 'status', _user$project$TestEvent_TestStatus$testStatus),
 	A2(
 		_elm_lang$core$Json_Decode$field,
 		'labels',
@@ -17132,59 +17195,24 @@ var _user$project$TestEvent_TestCompleted$rawData = A5(
 		_elm_lang$core$Json_Decode$field,
 		'failures',
 		_elm_lang$core$Json_Decode$list(_user$project$State_Failure$failure)),
-	A2(_elm_lang$core$Json_Decode$field, 'duration', _elm_lang$core$Json_Decode$string));
-var _user$project$TestEvent_TestCompleted$Parsed = F4(
-	function (a, b, c, d) {
-		return {status: a, labels: b, failures: c, duration: d};
-	});
+	A2(_elm_lang$core$Json_Decode$field, 'duration', _user$project$TestEvent_Util$intString));
 var _user$project$TestEvent_TestCompleted$TestCompleted = function (a) {
 	return {ctor: 'TestCompleted', _0: a};
 };
-var _user$project$TestEvent_TestCompleted$Todo = {ctor: 'Todo'};
-var _user$project$TestEvent_TestCompleted$isTodo = function (_p6) {
-	var _p7 = _p6;
-	return _elm_lang$core$Native_Utils.eq(_p7._0.status, _user$project$TestEvent_TestCompleted$Todo);
-};
-var _user$project$TestEvent_TestCompleted$Fail = {ctor: 'Fail'};
-var _user$project$TestEvent_TestCompleted$Pass = {ctor: 'Pass'};
 var _user$project$TestEvent_TestCompleted$parse = F2(
 	function (decoder, input) {
-		var parsed = A2(
-			_elm_lang$core$Result$withDefault,
-			_user$project$TestEvent_TestCompleted$defaultRawData,
-			A2(decoder, _user$project$TestEvent_TestCompleted$rawData, input));
-		var status = _elm_lang$core$Native_Utils.eq(parsed.status, 'pass') ? _user$project$TestEvent_TestCompleted$Pass : (_elm_lang$core$Native_Utils.eq(parsed.status, 'todo') ? _user$project$TestEvent_TestCompleted$Todo : _user$project$TestEvent_TestCompleted$Fail);
-		var labels = function () {
-			var _p8 = status;
-			if (_p8.ctor === 'Todo') {
-				return A2(
-					_elm_lang$core$Basics_ops['++'],
-					parsed.labels,
-					A2(_elm_lang$core$List$map, _user$project$State_Failure$toString, parsed.failures));
-			} else {
-				return parsed.labels;
-			}
-		}();
 		return _user$project$TestEvent_TestCompleted$TestCompleted(
-			{
-				status: status,
-				labels: labels,
-				failures: parsed.failures,
-				duration: _user$project$TestEvent_Util$parseInt(parsed.duration)
-			});
+			_user$project$TestEvent_TestCompleted$supplementLabels(
+				A2(
+					_elm_lang$core$Result$withDefault,
+					_user$project$TestEvent_TestCompleted$default,
+					A2(decoder, _user$project$TestEvent_TestCompleted$testComplete, input))));
 	});
 var _user$project$TestEvent_TestCompleted$parseJson = function (json) {
 	return A2(_user$project$TestEvent_TestCompleted$parse, _elm_lang$core$Json_Decode$decodeValue, json);
 };
 var _user$project$TestEvent_TestCompleted$parseString = function (jsonString) {
 	return A2(_user$project$TestEvent_TestCompleted$parse, _elm_lang$core$Json_Decode$decodeString, jsonString);
-};
-var _user$project$TestEvent_TestCompleted$passed = function (_p9) {
-	var _p10 = _p9;
-	return _elm_lang$core$Native_Utils.eq(_p10._0.status, _user$project$TestEvent_TestCompleted$Pass);
-};
-var _user$project$TestEvent_TestCompleted$passedTestCountToIncrement = function (event) {
-	return _user$project$TestEvent_TestCompleted$passed(event) ? 1 : 0;
 };
 
 var _user$project$TestInstance_Core$pathAndDescription = function (instance) {
@@ -17863,24 +17891,26 @@ var _user$project$TestEvent_RunComplete$passed = function (_p2) {
 	var _p3 = _p2;
 	return _elm_lang$core$Native_Utils.eq(_p3._0.failed, 0);
 };
-var _user$project$TestEvent_RunComplete$RawData = F3(
+var _user$project$TestEvent_RunComplete$default = {passed: 0, failed: 0, duration: 0};
+var _user$project$TestEvent_RunComplete$Data = F3(
 	function (a, b, c) {
 		return {passed: a, failed: b, duration: c};
 	});
-var _user$project$TestEvent_RunComplete$Parsed = F3(
-	function (a, b, c) {
-		return {passed: a, failed: b, duration: c};
-	});
+var _user$project$TestEvent_RunComplete$runComplete = A4(
+	_elm_lang$core$Json_Decode$map3,
+	_user$project$TestEvent_RunComplete$Data,
+	A2(_elm_lang$core$Json_Decode$field, 'passed', _user$project$TestEvent_Util$intString),
+	A2(_elm_lang$core$Json_Decode$field, 'failed', _user$project$TestEvent_Util$intString),
+	A2(_elm_lang$core$Json_Decode$field, 'duration', _user$project$TestEvent_Util$intString));
 var _user$project$TestEvent_RunComplete$RunComplete = function (a) {
 	return {ctor: 'RunComplete', _0: a};
 };
-var _user$project$TestEvent_RunComplete$parse = function (rawData) {
+var _user$project$TestEvent_RunComplete$parse = function (value) {
 	return _user$project$TestEvent_RunComplete$RunComplete(
-		{
-			passed: _user$project$TestEvent_Util$parseInt(rawData.passed),
-			failed: _user$project$TestEvent_Util$parseInt(rawData.failed),
-			duration: _user$project$TestEvent_Util$parseInt(rawData.duration)
-		});
+		A2(
+			_elm_lang$core$Result$withDefault,
+			_user$project$TestEvent_RunComplete$default,
+			A2(_elm_lang$core$Json_Decode$decodeValue, _user$project$TestEvent_RunComplete$runComplete, value)));
 };
 
 var _user$project$Model_RunDuration$clear = function (model) {
@@ -17906,25 +17936,35 @@ var _user$project$TestEvent_RunStart$numTotalTests = function (_p2) {
 	var _p3 = _p2;
 	return _p3._0.testCount;
 };
-var _user$project$TestEvent_RunStart$RawData = F4(
+var _user$project$TestEvent_RunStart$default = {
+	testCount: 0,
+	fuzzRuns: 0,
+	paths: {ctor: '[]'},
+	initialSeed: 0
+};
+var _user$project$TestEvent_RunStart$Data = F4(
 	function (a, b, c, d) {
 		return {testCount: a, fuzzRuns: b, paths: c, initialSeed: d};
 	});
-var _user$project$TestEvent_RunStart$Parsed = F4(
-	function (a, b, c, d) {
-		return {testCount: a, fuzzRuns: b, paths: c, initialSeed: d};
-	});
+var _user$project$TestEvent_RunStart$runComplete = A5(
+	_elm_lang$core$Json_Decode$map4,
+	_user$project$TestEvent_RunStart$Data,
+	A2(_elm_lang$core$Json_Decode$field, 'testCount', _user$project$TestEvent_Util$intString),
+	A2(_elm_lang$core$Json_Decode$field, 'fuzzRuns', _user$project$TestEvent_Util$intString),
+	A2(
+		_elm_lang$core$Json_Decode$field,
+		'paths',
+		_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)),
+	A2(_elm_lang$core$Json_Decode$field, 'initialSeed', _user$project$TestEvent_Util$intString));
 var _user$project$TestEvent_RunStart$RunStart = function (a) {
 	return {ctor: 'RunStart', _0: a};
 };
-var _user$project$TestEvent_RunStart$parse = function (rawData) {
+var _user$project$TestEvent_RunStart$parse = function (value) {
 	return _user$project$TestEvent_RunStart$RunStart(
-		{
-			testCount: _user$project$TestEvent_Util$parseInt(rawData.testCount),
-			fuzzRuns: _user$project$TestEvent_Util$parseInt(rawData.fuzzRuns),
-			paths: rawData.paths,
-			initialSeed: _user$project$TestEvent_Util$parseInt(rawData.initialSeed)
-		});
+		A2(
+			_elm_lang$core$Result$withDefault,
+			_user$project$TestEvent_RunStart$default,
+			A2(_elm_lang$core$Json_Decode$decodeValue, _user$project$TestEvent_RunStart$runComplete, value)));
 };
 
 var _user$project$Model_RunSeed$clear = function (model) {
@@ -19674,56 +19714,11 @@ var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(
 					return _elm_lang$core$Json_Decode$succeed(
 						{ctor: '_Tuple2', _0: x0, _1: x1});
 				},
-				A2(
-					_elm_lang$core$Json_Decode$index,
-					1,
-					A2(
-						_elm_lang$core$Json_Decode$andThen,
-						function (testCount) {
-							return A2(
-								_elm_lang$core$Json_Decode$andThen,
-								function (fuzzRuns) {
-									return A2(
-										_elm_lang$core$Json_Decode$andThen,
-										function (paths) {
-											return A2(
-												_elm_lang$core$Json_Decode$andThen,
-												function (initialSeed) {
-													return _elm_lang$core$Json_Decode$succeed(
-														{testCount: testCount, fuzzRuns: fuzzRuns, paths: paths, initialSeed: initialSeed});
-												},
-												A2(_elm_lang$core$Json_Decode$field, 'initialSeed', _elm_lang$core$Json_Decode$string));
-										},
-										A2(
-											_elm_lang$core$Json_Decode$field,
-											'paths',
-											_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)));
-								},
-								A2(_elm_lang$core$Json_Decode$field, 'fuzzRuns', _elm_lang$core$Json_Decode$string));
-						},
-						A2(_elm_lang$core$Json_Decode$field, 'testCount', _elm_lang$core$Json_Decode$string))));
+				A2(_elm_lang$core$Json_Decode$index, 1, _elm_lang$core$Json_Decode$value));
 		},
 		A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$string)));
 var _user$project$Main$testCompleted = _elm_lang$core$Native_Platform.incomingPort('testCompleted', _elm_lang$core$Json_Decode$value);
-var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort(
-	'runComplete',
-	A2(
-		_elm_lang$core$Json_Decode$andThen,
-		function (passed) {
-			return A2(
-				_elm_lang$core$Json_Decode$andThen,
-				function (failed) {
-					return A2(
-						_elm_lang$core$Json_Decode$andThen,
-						function (duration) {
-							return _elm_lang$core$Json_Decode$succeed(
-								{passed: passed, failed: failed, duration: duration});
-						},
-						A2(_elm_lang$core$Json_Decode$field, 'duration', _elm_lang$core$Json_Decode$string));
-				},
-				A2(_elm_lang$core$Json_Decode$field, 'failed', _elm_lang$core$Json_Decode$string));
-		},
-		A2(_elm_lang$core$Json_Decode$field, 'passed', _elm_lang$core$Json_Decode$string)));
+var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort('runComplete', _elm_lang$core$Json_Decode$value);
 var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
 var _user$project$Main$ToggleSettings = {ctor: 'ToggleSettings'};
 var _user$project$Main$PaneMoved = function (a) {

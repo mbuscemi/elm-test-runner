@@ -30,9 +30,9 @@ type Message
     | GenerateTestsStart
     | ExecuteTestsStart
     | CompilerErrored String
-    | RunStart ( String, RunStart.RawData )
+    | RunStart ( String, Value )
     | TestCompleted Value
-    | RunComplete RunComplete.RawData
+    | RunComplete Value
     | TestListItemExpand Int
     | TestListItemCollapse Int
     | TestListItemMouseEnter Int
@@ -104,10 +104,10 @@ update message model =
                 |> Model.Basics.setCompilerErrorMessage (Just errorMessage)
                 |> And.noCommand
 
-        RunStart ( projectPath, data ) ->
+        RunStart ( projectPath, value ) ->
             let
                 event =
-                    RunStart.parse data
+                    RunStart.parse value
             in
             Model.ProjectName.setFromPath projectPath model
                 |> Model.TestCount.setTotal event
@@ -124,10 +124,10 @@ update message model =
                 |> Model.TestTree.updateHierarchy
                 |> And.noCommand
 
-        RunComplete data ->
+        RunComplete value ->
             let
                 event =
-                    RunComplete.parse data
+                    RunComplete.parse value
             in
             Model.RunStatus.setToPassing model
                 |> Model.RunStatus.setForTodo TestInstance.isTodo
@@ -319,10 +319,10 @@ port notifySaveEvent : (() -> message) -> Sub message
 port notifyPaneMoved : (String -> message) -> Sub message
 
 
-port runStart : (( String, RunStart.RawData ) -> message) -> Sub message
+port runStart : (( String, Value ) -> message) -> Sub message
 
 
 port testCompleted : (Value -> message) -> Sub message
 
 
-port runComplete : (RunComplete.RawData -> message) -> Sub message
+port runComplete : (Value -> message) -> Sub message

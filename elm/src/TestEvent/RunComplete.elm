@@ -1,41 +1,46 @@
-module TestEvent.RunComplete exposing (RawData, RunComplete, duration, parse, passed)
+module TestEvent.RunComplete exposing (RunComplete, duration, parse, passed)
 
 import Duration.Core as Duration exposing (Duration)
-import TestEvent.Util
+import Json.Decode exposing (Decoder, Value, decodeValue, field, int, map, map3, string)
+import TestEvent.Util exposing (intString)
 
 
-type RunComplete
-    = RunComplete Parsed
-
-
-type alias RawData =
-    { passed : String
-    , failed : String
-    , duration : String
-    }
-
-
-type alias Parsed =
+type alias Data =
     { passed : Int
     , failed : Int
     , duration : Int
     }
 
 
-parse : RawData -> RunComplete
-parse rawData =
-    RunComplete
-        { passed = TestEvent.Util.parseInt rawData.passed
-        , failed = TestEvent.Util.parseInt rawData.failed
-        , duration = TestEvent.Util.parseInt rawData.duration
-        }
+type RunComplete
+    = RunComplete Data
+
+
+parse : Value -> RunComplete
+parse value =
+    decodeValue runComplete value
+        |> Result.withDefault default
+        |> RunComplete
+
+
+default : Data
+default =
+    { passed = 0, failed = 0, duration = 0 }
+
+
+runComplete : Decoder Data
+runComplete =
+    map3 Data
+        (field "passed" intString)
+        (field "failed" intString)
+        (field "duration" intString)
 
 
 passed : RunComplete -> Bool
-passed (RunComplete parsed) =
-    parsed.failed == 0
+passed (RunComplete data) =
+    data.failed == 0
 
 
 duration : RunComplete -> Duration
-duration (RunComplete parsed) =
-    Duration.inMilliseconds parsed.duration
+duration (RunComplete data) =
+    Duration.inMilliseconds data.duration

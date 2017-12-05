@@ -1,21 +1,14 @@
-module TestEvent.RunStart exposing (RawData, RunStart, initialSeed, numTotalTests, parse)
+module TestEvent.RunStart exposing (RunStart, initialSeed, numTotalTests, parse)
 
-import TestEvent.Util
+import Json.Decode exposing (Decoder, Value, decodeValue, field, int, list, map4, string)
+import TestEvent.Util exposing (intString)
 
 
 type RunStart
-    = RunStart Parsed
+    = RunStart Data
 
 
-type alias RawData =
-    { testCount : String
-    , fuzzRuns : String
-    , paths : List String
-    , initialSeed : String
-    }
-
-
-type alias Parsed =
+type alias Data =
     { testCount : Int
     , fuzzRuns : Int
     , paths : List String
@@ -23,14 +16,25 @@ type alias Parsed =
     }
 
 
-parse : RawData -> RunStart
-parse rawData =
-    RunStart
-        { testCount = TestEvent.Util.parseInt rawData.testCount
-        , fuzzRuns = TestEvent.Util.parseInt rawData.fuzzRuns
-        , paths = rawData.paths
-        , initialSeed = TestEvent.Util.parseInt rawData.initialSeed
-        }
+parse : Value -> RunStart
+parse value =
+    decodeValue runComplete value
+        |> Result.withDefault default
+        |> RunStart
+
+
+default : Data
+default =
+    { testCount = 0, fuzzRuns = 0, paths = [], initialSeed = 0 }
+
+
+runComplete : Decoder Data
+runComplete =
+    map4 Data
+        (field "testCount" intString)
+        (field "fuzzRuns" intString)
+        (field "paths" (list string))
+        (field "initialSeed" intString)
 
 
 numTotalTests : RunStart -> Int

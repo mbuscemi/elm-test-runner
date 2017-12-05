@@ -1,57 +1,18 @@
-module TestEvent.TestCompleted
-    exposing
-        ( RawData
-        , TestCompleted
-        , duration
-        , firstFailure
-        , isTodo
-        , labels
-        , parseJson
-        , parseString
-        , passed
-        , passedTestCountToIncrement
-        )
+module TestEvent.TestCompleted exposing (TestCompleted, duration, firstFailure, isTodo, labels, parseJson, parseString, passed, passedTestCountToIncrement)
 
 import Duration.Core as Duration exposing (Duration)
-import Json.Decode exposing (Decoder, decodeString, decodeValue, field, list, map4, string)
+import Json.Decode exposing (Decoder, andThen, decodeString, decodeValue, field, list, map, map4, string, succeed)
 import Json.Encode exposing (Value)
 import State.Failure as Failure exposing (Failure, failure)
-import TestEvent.Util
+import TestEvent.TestStatus as TestStatus exposing (TestStatus, testStatus)
+import TestEvent.Util exposing (intString)
 
 
 type TestCompleted
-    = TestCompleted Parsed
+    = TestCompleted Data
 
 
-type alias RawData =
-    { status : String
-    , labels : List String
-    , failures : List Failure
-    , duration : String
-    }
-
-
-rawData : Decoder RawData
-rawData =
-    map4 RawData
-        (field "status" string)
-        (field "labels" (list string))
-        (field "failures" (list failure))
-        (field "duration" string)
-
-
-defaultRawData : RawData
-defaultRawData =
-    { status = "", labels = [], failures = [], duration = "" }
-
-
-type TestStatus
-    = Pass
-    | Fail
-    | Todo
-
-
-type alias Parsed =
+type alias Data =
     { status : TestStatus
     , labels : List String
     , failures : List Failure
@@ -69,35 +30,34 @@ parseString jsonString =
     parse decodeString jsonString
 
 
-parse : (Decoder RawData -> input -> Result String RawData) -> input -> TestCompleted
+parse : (Decoder Data -> input -> Result String Data) -> input -> TestCompleted
 parse decoder input =
-    let
-        parsed =
-            decoder rawData input
-                |> Result.withDefault defaultRawData
+    decoder testComplete input
+        |> Result.withDefault default
+        |> supplementLabels
+        |> TestCompleted
 
-        status =
-            if parsed.status == "pass" then
-                Pass
-            else if parsed.status == "todo" then
-                Todo
-            else
-                Fail
 
-        labels =
-            case status of
-                Todo ->
-                    parsed.labels ++ List.map Failure.toString parsed.failures
+supplementLabels : Data -> Data
+supplementLabels data =
+    if TestStatus.isTodo data.status then
+        { data | labels = data.labels ++ List.map Failure.toString data.failures }
+    else
+        data
 
-                _ ->
-                    parsed.labels
-    in
-    TestCompleted
-        { status = status
-        , labels = labels
-        , failures = parsed.failures
-        , duration = TestEvent.Util.parseInt parsed.duration
-        }
+
+testComplete : Decoder Data
+testComplete =
+    map4 Data
+        (field "status" testStatus)
+        (field "labels" (list string))
+        (field "failures" (list failure))
+        (field "duration" intString)
+
+
+default : Data
+default =
+    { status = TestStatus.default, labels = [], failures = [], duration = 0 }
 
 
 passedTestCountToIncrement : TestCompleted -> Int
@@ -109,25 +69,25 @@ passedTestCountToIncrement event =
 
 
 passed : TestCompleted -> Bool
-passed (TestCompleted parsed) =
-    parsed.status == Pass
+passed (TestCompleted data) =
+    TestStatus.isPass data.status
 
 
 isTodo : TestCompleted -> Bool
-isTodo (TestCompleted parsed) =
-    parsed.status == Todo
+isTodo (TestCompleted data) =
+    TestStatus.isTodo data.status
 
 
 labels : TestCompleted -> List String
-labels (TestCompleted parsed) =
-    parsed.labels
+labels (TestCompleted data) =
+    data.labels
 
 
 duration : TestCompleted -> Duration
-duration (TestCompleted parsed) =
-    Duration.inMilliseconds parsed.duration
+duration (TestCompleted data) =
+    Duration.inMilliseconds data.duration
 
 
 firstFailure : TestCompleted -> Maybe Failure
-firstFailure (TestCompleted parsed) =
-    List.head parsed.failures
+firstFailure (TestCompleted data) =
+    List.head data.failures
