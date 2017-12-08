@@ -27,6 +27,6 @@
     "ElmTestRunnerView": "deserialize"
   },
   "scripts": {
-    "test": "elm-test"
+    "test": "cd elm ; elm-test"
   }
 }
