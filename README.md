@@ -1,4 +1,5 @@
 # Elm Test Runner
+[![Build Status](https://travis-ci.org/mbuscemi/elm-test-runner.svg?branch=master)](https://travis-ci.org/mbuscemi/elm-test-runner)
 
 Run elm-test and view results without leaving Atom
 
