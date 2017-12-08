@@ -25,5 +25,8 @@
   },
   "deserializers": {
     "ElmTestRunnerView": "deserialize"
+  },
+  "scripts": {
+    "test": "elm-test"
   }
 }

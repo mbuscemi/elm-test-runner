@@ -6,7 +6,7 @@ env: ELM_VERSION=0.18.0
 
 cache:
   directories:
-    - tests/elm-stuff/build-artifacts
+    - elm/tests/elm-stuff/build-artifacts
     - sysconfcpus
 
 before_install:
@@ -33,4 +33,4 @@ install:
   - elm package install --yes
 
 script:
-  - elm-test --report junit
+  - npm test
