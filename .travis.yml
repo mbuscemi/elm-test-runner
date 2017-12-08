@@ -33,5 +33,6 @@ install:
   - elm package install --yes
 
 script:
+  - cd ..
   - pwd
   - npm test
