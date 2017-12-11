@@ -1,24 +1,36 @@
 module View.Toolbar exposing (render)
 
 import Animation exposing (State)
-import Html exposing (Html, div, span, strong, text)
-import Html.Attributes exposing (class)
+import Html exposing (Attribute, Html, div, span, strong, text)
+import Html.Attributes exposing (class, style)
 import Html.Events exposing (onClick)
 import State.RunStatus as RunStatus exposing (RunStatus)
 
 
-render : Int -> Int -> RunStatus -> State -> message -> Html message
-render totalTests passingTests runStatus statusBarTextStyle runAllButtonClickHandler =
+type alias Data =
+    { totalTests : Int
+    , passedTests : Int
+    , runStatus : RunStatus
+    , statusBarTextStyle : State
+    , statusBarColorStyle : State
+    }
+
+
+render : Data -> message -> Html message
+render data runAllButtonClickHandler =
     div [ class "toolbar" ]
-        [ div [ class <| "status-bar " ++ RunStatus.toClass runStatus ]
+        [ div
+            ((class <| "status-bar " ++ RunStatus.toClass data.runStatus)
+                :: statusBarStyle data.runStatus data.statusBarColorStyle
+            )
             [ strong
-                (class "title" :: Animation.render statusBarTextStyle)
-                [ text <| RunStatus.toText runStatus ]
+                (class "title" :: Animation.render data.statusBarTextStyle)
+                [ text <| RunStatus.toText data.runStatus ]
             , span
-                (class "passing-tests" :: Animation.render statusBarTextStyle)
-                [ span [ class "number-field passing" ] [ text <| toString passingTests ]
+                (class "passing-tests" :: Animation.render data.statusBarTextStyle)
+                [ span [ class "number-field passing" ] [ text <| toString data.passedTests ]
                 , span [] [ text " / " ]
-                , span [ class "number-field total" ] [ text <| toString totalTests ]
+                , span [ class "number-field total" ] [ text <| toString data.totalTests ]
                 ]
             ]
         , div [ class "run-all-button" ]
@@ -29,3 +41,13 @@ render totalTests passingTests runStatus statusBarTextStyle runAllButtonClickHan
                 [ text "Run All" ]
             ]
         ]
+
+
+statusBarStyle : RunStatus -> State -> List (Attribute message)
+statusBarStyle runStatus colorStyle =
+    case runStatus of
+        RunStatus.Processing ->
+            Animation.render colorStyle
+
+        _ ->
+            [ style [] ]

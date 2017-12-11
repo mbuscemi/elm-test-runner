@@ -75,7 +75,6 @@
     margin-right: 90px;
     border-radius: 4px;
     text-align: center;
-    transition: background-color 0.33s ease-in-out;
 }
 
 .etr-main-view .status-bar.no-data {
@@ -84,10 +83,6 @@
 
 .etr-main-view .status-bar.generating-tests {
     background-color: #461b4b;
-}
-
-.etr-main-view .status-bar.processing {
-    background-color: #303023;
 }
 
 .etr-main-view .status-bar.last-passed {

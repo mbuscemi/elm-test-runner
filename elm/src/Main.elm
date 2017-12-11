@@ -48,6 +48,7 @@ type Message
     | SetRandomSeed Int
     | SetForceSeed Bool
     | AnimateFlicker Animation.Msg
+    | AnimateProcessingColorOscillate Animation.Msg
     | AnimateSettingsTransition Animation.Msg
     | PaneMoved String
     | ToggleSettings
@@ -97,10 +98,12 @@ update message model =
 
         ExecuteTestsStart ->
             Model.RunStatus.setToProcessing model
+                |> Model.Animation.initiateProcessingColorOscillation
                 |> And.noCommand
 
         CompilerErrored errorMessage ->
             Model.RunStatus.setToCompileError model
+                |> Model.Animation.haltColorOscillation
                 |> Model.Basics.setCompilerErrorMessage (Just errorMessage)
                 |> And.noCommand
 
@@ -132,6 +135,7 @@ update message model =
             Model.RunStatus.setToPassing model
                 |> Model.RunStatus.setForTodo TestInstance.isTodo
                 |> Model.RunStatus.setForFailure event
+                |> Model.Animation.haltColorOscillation
                 |> Model.RunDuration.set event
                 |> Model.TestTree.purgeObsoleteNodes
                 |> Model.TestTree.updateHierarchy
@@ -198,7 +202,11 @@ update message model =
                 |> And.noCommand
 
         AnimateFlicker animateMessage ->
-            Model.Animation.updateStatusBar animateMessage model
+            Model.Animation.updateStatusBarText animateMessage model
+                |> And.noCommand
+
+        AnimateProcessingColorOscillate animateMessage ->
+            Model.Animation.updateStatusBarColor animateMessage model
                 |> And.noCommand
 
         AnimateSettingsTransition animateMessage ->
@@ -238,7 +246,8 @@ view model =
         , elmVerifyExamplesEnabled = model.runElmVerifyExamplesEnabled
         , randomSeed = model.randomSeed
         , forceRandomSeedEnabled = model.forceRandomSeedEnabled
-        , statusBarTextStyle = model.statusBarStyle
+        , statusBarTextStyle = model.statusBarTextStyle
+        , statusBarColorStyle = model.statusBarColorStyle
         , footerStyle = model.footerStyle
         , paneLocation = model.paneLocation
         }
@@ -273,7 +282,8 @@ subscriptions model =
         , runStart RunStart
         , testCompleted TestCompleted
         , runComplete RunComplete
-        , Animation.subscription AnimateFlicker [ model.statusBarStyle ]
+        , Animation.subscription AnimateFlicker [ model.statusBarTextStyle ]
+        , Animation.subscription AnimateProcessingColorOscillate [ model.statusBarColorStyle ]
         , Animation.subscription AnimateSettingsTransition [ model.footerStyle ]
         ]
 

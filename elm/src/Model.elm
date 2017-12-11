@@ -1,6 +1,7 @@
 module Model exposing (Model, default, serialize)
 
 import Animation
+import Animation.ColorOscillate
 import Animation.Flicker
 import Animation.Footer
 import Duration.Core exposing (Duration)
@@ -30,7 +31,8 @@ type alias Model =
     , runElmVerifyExamplesEnabled : Bool
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
-    , statusBarStyle : Animation.State
+    , statusBarTextStyle : Animation.State
+    , statusBarColorStyle : Animation.State
     , footerStyle : Animation.State
     , footerExpanded : Bool
     , paneLocation : PaneLocation
@@ -56,7 +58,8 @@ default =
     , runElmVerifyExamplesEnabled = False
     , randomSeed = Nothing
     , forceRandomSeedEnabled = False
-    , statusBarStyle = Animation.Flicker.initial
+    , statusBarTextStyle = Animation.Flicker.initial
+    , statusBarColorStyle = Animation.ColorOscillate.processingInitial
     , footerStyle = Animation.Footer.initial
     , footerExpanded = False
     , paneLocation = PaneLocation.default

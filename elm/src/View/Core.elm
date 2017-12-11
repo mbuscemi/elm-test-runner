@@ -14,24 +14,7 @@ import View.TestHierarchy.Core
 import View.Toolbar
 
 
-type alias Messages message testInstance =
-    { runAllButtonClickHandler : message
-    , testListItemExpand : Int -> message
-    , testListItemCollapse : Int -> message
-    , testListItemMouseEnter : Int -> message
-    , testListItemMouseLeave : message
-    , testClickHandler : Int -> Maybe testInstance -> message
-    , copySeedClickHandler : String -> message
-    , setSeedClickHandler : Int -> message
-    , setForceSeedHandler : Bool -> message
-    , setAutoRun : Bool -> message
-    , setAutoNavigate : Bool -> message
-    , setRunElmVerifyExamples : Bool -> message
-    , settingsToggle : message
-    }
-
-
-type alias DisplayData message testInstance =
+type alias Data message testInstance =
     { runStatus : RunStatus
     , compilerError : Maybe String
     , totalTests : Int
@@ -51,8 +34,26 @@ type alias DisplayData message testInstance =
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
     , statusBarTextStyle : State
+    , statusBarColorStyle : State
     , footerStyle : State
     , paneLocation : PaneLocation
+    }
+
+
+type alias Messages message testInstance =
+    { runAllButtonClickHandler : message
+    , testListItemExpand : Int -> message
+    , testListItemCollapse : Int -> message
+    , testListItemMouseEnter : Int -> message
+    , testListItemMouseLeave : message
+    , testClickHandler : Int -> Maybe testInstance -> message
+    , copySeedClickHandler : String -> message
+    , setSeedClickHandler : Int -> message
+    , setForceSeedHandler : Bool -> message
+    , setAutoRun : Bool -> message
+    , setAutoNavigate : Bool -> message
+    , setRunElmVerifyExamples : Bool -> message
+    , settingsToggle : message
     }
 
 
@@ -67,12 +68,19 @@ type alias Failure =
     }
 
 
-render : DisplayData message testInstance -> Messages message testInstance -> Html message
+render : Data message testInstance -> Messages message testInstance -> Html message
 render data messages =
     div [ class <| "etr-main-view " ++ PaneLocation.toStyle data.paneLocation ]
         [ div [ class "section-one" ]
             [ div [ class "core" ]
-                [ View.Toolbar.render data.totalTests data.passedTests data.runStatus data.statusBarTextStyle messages.runAllButtonClickHandler
+                [ View.Toolbar.render
+                    { totalTests = data.totalTests
+                    , passedTests = data.passedTests
+                    , runStatus = data.runStatus
+                    , statusBarTextStyle = data.statusBarTextStyle
+                    , statusBarColorStyle = data.statusBarColorStyle
+                    }
+                    messages.runAllButtonClickHandler
                 , View.DurationAndSeedDisplay.render
                     data.runDuration
                     data.runSeed

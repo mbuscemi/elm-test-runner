@@ -1,6 +1,6 @@
 module State.RunStatus
     exposing
-        ( RunStatus
+        ( RunStatus(Processing)
         , compileError
         , generatingTests
         , incomplete

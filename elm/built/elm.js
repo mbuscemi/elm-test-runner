@@ -16477,6 +16477,57 @@ var _myrho$elm_round$Round$roundCom = _myrho$elm_round$Round$roundFun(
 	});
 var _myrho$elm_round$Round$roundNumCom = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$roundCom);
 
+var _user$project$Animation_ColorOscillate$halt = _mdgriffith$elm_style_animation$Animation$interrupt(
+	{ctor: '[]'});
+var _user$project$Animation_ColorOscillate$processingColor2 = A3(_elm_lang$core$Color$rgb, 64, 64, 34);
+var _user$project$Animation_ColorOscillate$processingColor1 = A3(_elm_lang$core$Color$rgb, 48, 48, 35);
+var _user$project$Animation_ColorOscillate$processingInitial = _mdgriffith$elm_style_animation$Animation$style(
+	{
+		ctor: '::',
+		_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(_user$project$Animation_ColorOscillate$processingColor1),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Animation_ColorOscillate$duration = 660;
+var _user$project$Animation_ColorOscillate$oscillate = F2(
+	function (color1, color2) {
+		return {
+			ctor: '::',
+			_0: A2(
+				_mdgriffith$elm_style_animation$Animation$toWith,
+				_mdgriffith$elm_style_animation$Animation$easing(
+					{duration: _user$project$Animation_ColorOscillate$duration, ease: _elm_community$easing_functions$Ease$linear}),
+				{
+					ctor: '::',
+					_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(color1),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_mdgriffith$elm_style_animation$Animation$toWith,
+					_mdgriffith$elm_style_animation$Animation$easing(
+						{duration: _user$project$Animation_ColorOscillate$duration, ease: _elm_community$easing_functions$Ease$linear}),
+					{
+						ctor: '::',
+						_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(color2),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		};
+	});
+var _user$project$Animation_ColorOscillate$animation = F2(
+	function (color1, color2) {
+		return _mdgriffith$elm_style_animation$Animation$interrupt(
+			{
+				ctor: '::',
+				_0: _mdgriffith$elm_style_animation$Animation$loop(
+					A2(_user$project$Animation_ColorOscillate$oscillate, color1, color2)),
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$Animation_ColorOscillate$processingAnimation = A2(_user$project$Animation_ColorOscillate$animation, _user$project$Animation_ColorOscillate$processingColor1, _user$project$Animation_ColorOscillate$processingColor2);
+
 var _user$project$Animation_Flicker$onAndOff = F2(
 	function (times, milliseconds) {
 		return A2(
@@ -17367,7 +17418,8 @@ var _user$project$Model$default = {
 	runElmVerifyExamplesEnabled: false,
 	randomSeed: _elm_lang$core$Maybe$Nothing,
 	forceRandomSeedEnabled: false,
-	statusBarStyle: _user$project$Animation_Flicker$initial,
+	statusBarTextStyle: _user$project$Animation_Flicker$initial,
+	statusBarColorStyle: _user$project$Animation_ColorOscillate$processingInitial,
 	footerStyle: _user$project$Animation_Footer$initial,
 	footerExpanded: false,
 	paneLocation: _user$project$State_PaneLocation$default
@@ -17393,7 +17445,9 @@ var _user$project$Model$Model = function (a) {
 																		return function (s) {
 																			return function (t) {
 																				return function (u) {
-																					return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, runElmVerifyExamplesEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarStyle: r, footerStyle: s, footerExpanded: t, paneLocation: u};
+																					return function (v) {
+																						return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, runElmVerifyExamplesEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarTextStyle: r, statusBarColorStyle: s, footerStyle: t, footerExpanded: u, paneLocation: v};
+																					};
 																				};
 																			};
 																		};
@@ -17791,21 +17845,43 @@ var _user$project$Model_Animation$updateFooter = F2(
 				footerStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.footerStyle)
 			});
 	});
-var _user$project$Model_Animation$initiateStatusBarTextFlicker = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			statusBarStyle: _user$project$Animation_Flicker$animation(model.statusBarStyle)
-		});
-};
-var _user$project$Model_Animation$updateStatusBar = F2(
+var _user$project$Model_Animation$updateStatusBarText = F2(
 	function (animationMessage, model) {
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{
-				statusBarStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarStyle)
+				statusBarTextStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarTextStyle)
 			});
 	});
+var _user$project$Model_Animation$initiateStatusBarTextFlicker = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			statusBarTextStyle: _user$project$Animation_Flicker$animation(model.statusBarTextStyle)
+		});
+};
+var _user$project$Model_Animation$haltColorOscillation = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			statusBarColorStyle: _user$project$Animation_ColorOscillate$halt(model.statusBarColorStyle)
+		});
+};
+var _user$project$Model_Animation$updateStatusBarColor = F2(
+	function (animationMessage, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				statusBarColorStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarColorStyle)
+			});
+	});
+var _user$project$Model_Animation$initiateProcessingColorOscillation = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			statusBarColorStyle: _user$project$Animation_ColorOscillate$processingAnimation(model.statusBarColorStyle)
+		});
+};
 
 var _user$project$Model_Basics$setPaneLocation = F2(
 	function (newLocation, model) {
@@ -19191,8 +19267,22 @@ var _user$project$View_TestHierarchy_Core$TestInstanceView = F2(
 		return {statusIndicator: a, conditionallyEmbolden: b};
 	});
 
-var _user$project$View_Toolbar$render = F5(
-	function (totalTests, passingTests, runStatus, statusBarTextStyle, runAllButtonClickHandler) {
+var _user$project$View_Toolbar$statusBarStyle = F2(
+	function (runStatus, colorStyle) {
+		var _p0 = runStatus;
+		if (_p0.ctor === 'Processing') {
+			return _mdgriffith$elm_style_animation$Animation$render(colorStyle);
+		} else {
+			return {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			};
+		}
+	});
+var _user$project$View_Toolbar$render = F2(
+	function (data, runAllButtonClickHandler) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -19210,8 +19300,8 @@ var _user$project$View_Toolbar$render = F5(
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								'status-bar ',
-								_user$project$State_RunStatus$toClass(runStatus))),
-						_1: {ctor: '[]'}
+								_user$project$State_RunStatus$toClass(data.runStatus))),
+						_1: A2(_user$project$View_Toolbar$statusBarStyle, data.runStatus, data.statusBarColorStyle)
 					},
 					{
 						ctor: '::',
@@ -19220,12 +19310,12 @@ var _user$project$View_Toolbar$render = F5(
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html_Attributes$class('title'),
-								_1: _mdgriffith$elm_style_animation$Animation$render(statusBarTextStyle)
+								_1: _mdgriffith$elm_style_animation$Animation$render(data.statusBarTextStyle)
 							},
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html$text(
-									_user$project$State_RunStatus$toText(runStatus)),
+									_user$project$State_RunStatus$toText(data.runStatus)),
 								_1: {ctor: '[]'}
 							}),
 						_1: {
@@ -19235,7 +19325,7 @@ var _user$project$View_Toolbar$render = F5(
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$class('passing-tests'),
-									_1: _mdgriffith$elm_style_animation$Animation$render(statusBarTextStyle)
+									_1: _mdgriffith$elm_style_animation$Animation$render(data.statusBarTextStyle)
 								},
 								{
 									ctor: '::',
@@ -19249,7 +19339,7 @@ var _user$project$View_Toolbar$render = F5(
 										{
 											ctor: '::',
 											_0: _elm_lang$html$Html$text(
-												_elm_lang$core$Basics$toString(passingTests)),
+												_elm_lang$core$Basics$toString(data.passedTests)),
 											_1: {ctor: '[]'}
 										}),
 									_1: {
@@ -19274,7 +19364,7 @@ var _user$project$View_Toolbar$render = F5(
 												{
 													ctor: '::',
 													_0: _elm_lang$html$Html$text(
-														_elm_lang$core$Basics$toString(totalTests)),
+														_elm_lang$core$Basics$toString(data.totalTests)),
 													_1: {ctor: '[]'}
 												}),
 											_1: {ctor: '[]'}
@@ -19317,6 +19407,10 @@ var _user$project$View_Toolbar$render = F5(
 				}
 			});
 	});
+var _user$project$View_Toolbar$Data = F5(
+	function (a, b, c, d, e) {
+		return {totalTests: a, passedTests: b, runStatus: c, statusBarTextStyle: d, statusBarColorStyle: e};
+	});
 
 var _user$project$View_Core$render = F2(
 	function (data, messages) {
@@ -19351,7 +19445,10 @@ var _user$project$View_Core$render = F2(
 							},
 							{
 								ctor: '::',
-								_0: A5(_user$project$View_Toolbar$render, data.totalTests, data.passedTests, data.runStatus, data.statusBarTextStyle, messages.runAllButtonClickHandler),
+								_0: A2(
+									_user$project$View_Toolbar$render,
+									{totalTests: data.totalTests, passedTests: data.passedTests, runStatus: data.runStatus, statusBarTextStyle: data.statusBarTextStyle, statusBarColorStyle: data.statusBarColorStyle},
+									messages.runAllButtonClickHandler),
 								_1: {
 									ctor: '::',
 									_0: A3(
@@ -19428,34 +19525,7 @@ var _user$project$View_Core$render = F2(
 				}
 			});
 	});
-var _user$project$View_Core$Messages = function (a) {
-	return function (b) {
-		return function (c) {
-			return function (d) {
-				return function (e) {
-					return function (f) {
-						return function (g) {
-							return function (h) {
-								return function (i) {
-									return function (j) {
-										return function (k) {
-											return function (l) {
-												return function (m) {
-													return {runAllButtonClickHandler: a, testListItemExpand: b, testListItemCollapse: c, testListItemMouseEnter: d, testListItemMouseLeave: e, testClickHandler: f, copySeedClickHandler: g, setSeedClickHandler: h, setForceSeedHandler: i, setAutoRun: j, setAutoNavigate: k, setRunElmVerifyExamples: l, settingsToggle: m};
-												};
-											};
-										};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-};
-var _user$project$View_Core$DisplayData = function (a) {
+var _user$project$View_Core$Data = function (a) {
 	return function (b) {
 		return function (c) {
 			return function (d) {
@@ -19476,7 +19546,9 @@ var _user$project$View_Core$DisplayData = function (a) {
 																		return function (s) {
 																			return function (t) {
 																				return function (u) {
-																					return {runStatus: a, compilerError: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testHierarchy: g, statusIndicator: h, conditionallyEmbolden: i, nodeMouseIsOver: j, selectedNodeId: k, selectedTestInstance: l, failure: m, autoRunEnabled: n, autoNavigateEnabled: o, elmVerifyExamplesEnabled: p, randomSeed: q, forceRandomSeedEnabled: r, statusBarTextStyle: s, footerStyle: t, paneLocation: u};
+																					return function (v) {
+																						return {runStatus: a, compilerError: b, totalTests: c, passedTests: d, runDuration: e, runSeed: f, testHierarchy: g, statusIndicator: h, conditionallyEmbolden: i, nodeMouseIsOver: j, selectedNodeId: k, selectedTestInstance: l, failure: m, autoRunEnabled: n, autoNavigateEnabled: o, elmVerifyExamplesEnabled: p, randomSeed: q, forceRandomSeedEnabled: r, statusBarTextStyle: s, statusBarColorStyle: t, footerStyle: u, paneLocation: v};
+																					};
 																				};
 																			};
 																		};
@@ -19485,6 +19557,33 @@ var _user$project$View_Core$DisplayData = function (a) {
 															};
 														};
 													};
+												};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _user$project$View_Core$Messages = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return {runAllButtonClickHandler: a, testListItemExpand: b, testListItemCollapse: c, testListItemMouseEnter: d, testListItemMouseLeave: e, testClickHandler: f, copySeedClickHandler: g, setSeedClickHandler: h, setForceSeedHandler: i, setAutoRun: j, setAutoNavigate: k, setRunElmVerifyExamples: l, settingsToggle: m};
 												};
 											};
 										};
@@ -19552,13 +19651,15 @@ var _user$project$Main$update = F2(
 					_user$project$Model_RunStatus$setToGeneratingTests(model));
 			case 'ExecuteTestsStart':
 				return _user$project$And$noCommand(
-					_user$project$Model_RunStatus$setToProcessing(model));
+					_user$project$Model_Animation$initiateProcessingColorOscillation(
+						_user$project$Model_RunStatus$setToProcessing(model)));
 			case 'CompilerErrored':
 				return _user$project$And$noCommand(
 					A2(
 						_user$project$Model_Basics$setCompilerErrorMessage,
 						_elm_lang$core$Maybe$Just(_p0._0),
-						_user$project$Model_RunStatus$setToCompileError(model)));
+						_user$project$Model_Animation$haltColorOscillation(
+							_user$project$Model_RunStatus$setToCompileError(model))));
 			case 'RunStart':
 				var event = _user$project$TestEvent_RunStart$parse(_p0._0._1);
 				return _user$project$And$noCommand(
@@ -19587,13 +19688,14 @@ var _user$project$Main$update = F2(
 									A2(
 										_user$project$Model_RunDuration$set,
 										event,
-										A2(
-											_user$project$Model_RunStatus$setForFailure,
-											event,
+										_user$project$Model_Animation$haltColorOscillation(
 											A2(
-												_user$project$Model_RunStatus$setForTodo,
-												_user$project$TestInstance_Core$isTodo,
-												_user$project$Model_RunStatus$setToPassing(model)))))))));
+												_user$project$Model_RunStatus$setForFailure,
+												event,
+												A2(
+													_user$project$Model_RunStatus$setForTodo,
+													_user$project$TestInstance_Core$isTodo,
+													_user$project$Model_RunStatus$setToPassing(model))))))))));
 			case 'TestListItemExpand':
 				return _user$project$And$noCommand(
 					A3(_user$project$Model_TestTree$toggleNode, _p0._0, true, model));
@@ -19659,7 +19761,10 @@ var _user$project$Main$update = F2(
 					A2(_user$project$Model_RandomSeed$setForcing, _p0._0, model));
 			case 'AnimateFlicker':
 				return _user$project$And$noCommand(
-					A2(_user$project$Model_Animation$updateStatusBar, _p0._0, model));
+					A2(_user$project$Model_Animation$updateStatusBarText, _p0._0, model));
+			case 'AnimateProcessingColorOscillate':
+				return _user$project$And$noCommand(
+					A2(_user$project$Model_Animation$updateStatusBarColor, _p0._0, model));
 			case 'AnimateSettingsTransition':
 				return _user$project$And$noCommand(
 					A2(_user$project$Model_Animation$updateFooter, _p0._0, model));
@@ -19726,6 +19831,9 @@ var _user$project$Main$PaneMoved = function (a) {
 };
 var _user$project$Main$AnimateSettingsTransition = function (a) {
 	return {ctor: 'AnimateSettingsTransition', _0: a};
+};
+var _user$project$Main$AnimateProcessingColorOscillate = function (a) {
+	return {ctor: 'AnimateProcessingColorOscillate', _0: a};
 };
 var _user$project$Main$AnimateFlicker = function (a) {
 	return {ctor: 'AnimateFlicker', _0: a};
@@ -19802,7 +19910,8 @@ var _user$project$Main$view = function (model) {
 			elmVerifyExamplesEnabled: model.runElmVerifyExamplesEnabled,
 			randomSeed: model.randomSeed,
 			forceRandomSeedEnabled: model.forceRandomSeedEnabled,
-			statusBarTextStyle: model.statusBarStyle,
+			statusBarTextStyle: model.statusBarTextStyle,
+			statusBarColorStyle: model.statusBarColorStyle,
 			footerStyle: model.footerStyle,
 			paneLocation: model.paneLocation
 		},
@@ -19864,20 +19973,31 @@ var _user$project$Main$subscriptions = function (model) {
 																_user$project$Main$AnimateFlicker,
 																{
 																	ctor: '::',
-																	_0: model.statusBarStyle,
+																	_0: model.statusBarTextStyle,
 																	_1: {ctor: '[]'}
 																}),
 															_1: {
 																ctor: '::',
 																_0: A2(
 																	_mdgriffith$elm_style_animation$Animation$subscription,
-																	_user$project$Main$AnimateSettingsTransition,
+																	_user$project$Main$AnimateProcessingColorOscillate,
 																	{
 																		ctor: '::',
-																		_0: model.footerStyle,
+																		_0: model.statusBarColorStyle,
 																		_1: {ctor: '[]'}
 																	}),
-																_1: {ctor: '[]'}
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_mdgriffith$elm_style_animation$Animation$subscription,
+																		_user$project$Main$AnimateSettingsTransition,
+																		{
+																			ctor: '::',
+																			_0: model.footerStyle,
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}
 															}
 														}
 													}
