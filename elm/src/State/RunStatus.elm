@@ -1,6 +1,6 @@
 module State.RunStatus
     exposing
-        ( RunStatus(Processing)
+        ( RunStatus
         , compileError
         , generatingTests
         , incomplete
@@ -10,8 +10,12 @@ module State.RunStatus
         , passFail
         , processing
         , toClass
+        , toPrimaryColor
+        , toSecondaryColor
         , toText
         )
+
+import Color exposing (Color, rgb)
 
 
 type RunStatus
@@ -115,3 +119,29 @@ toClass runStatus =
 
         Incomplete ->
             "incomplete"
+
+
+toPrimaryColor : RunStatus -> Color
+toPrimaryColor runStatus =
+    case runStatus of
+        NoData ->
+            rgb 16 19 24
+
+        Processing ->
+            rgb 48 48 35
+
+        _ ->
+            rgb 0 0 0
+
+
+toSecondaryColor : RunStatus -> Color
+toSecondaryColor runStatus =
+    case runStatus of
+        NoData ->
+            rgb 16 19 24
+
+        Processing ->
+            rgb 64 64 34
+
+        _ ->
+            rgb 0 0 0

@@ -98,7 +98,7 @@ update message model =
 
         ExecuteTestsStart ->
             Model.RunStatus.setToProcessing model
-                |> Model.Animation.initiateProcessingColorOscillation
+                |> Model.Animation.initiateColorOscillation
                 |> And.noCommand
 
         CompilerErrored errorMessage ->

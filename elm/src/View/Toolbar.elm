@@ -21,7 +21,7 @@ render data runAllButtonClickHandler =
     div [ class "toolbar" ]
         [ div
             ((class <| "status-bar " ++ RunStatus.toClass data.runStatus)
-                :: statusBarStyle data.runStatus data.statusBarColorStyle
+                :: Animation.render data.statusBarColorStyle
             )
             [ strong
                 (class "title" :: Animation.render data.statusBarTextStyle)
@@ -41,13 +41,3 @@ render data runAllButtonClickHandler =
                 [ text "Run All" ]
             ]
         ]
-
-
-statusBarStyle : RunStatus -> State -> List (Attribute message)
-statusBarStyle runStatus colorStyle =
-    case runStatus of
-        RunStatus.Processing ->
-            Animation.render colorStyle
-
-        _ ->
-            [ style [] ]
