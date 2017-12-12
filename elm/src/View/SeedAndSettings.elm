@@ -5,15 +5,6 @@ import Html.Attributes exposing (checked, class, disabled, placeholder, type_, v
 import Html.Events exposing (onCheck, onClick)
 
 
-type alias Messages message =
-    { setForceSeedHandler : Bool -> message
-    , setAutoRun : Bool -> message
-    , setAutoNavigate : Bool -> message
-    , setRunElmVerifyExamples : Bool -> message
-    , settingsToggle : message
-    }
-
-
 type alias Data =
     { autoRunEnabled : Bool
     , autoNavigateEnabled : Bool
@@ -23,8 +14,17 @@ type alias Data =
     }
 
 
-render : Messages message -> Data -> List (Html message)
-render messages data =
+type alias Messages message =
+    { setForceSeedHandler : Bool -> message
+    , setAutoRun : Bool -> message
+    , setAutoNavigate : Bool -> message
+    , setRunElmVerifyExamples : Bool -> message
+    , settingsToggle : message
+    }
+
+
+render : Data -> Messages message -> List (Html message)
+render data messages =
     [ div [ class "seed-settings" ]
         [ input
             [ type_ "checkbox"

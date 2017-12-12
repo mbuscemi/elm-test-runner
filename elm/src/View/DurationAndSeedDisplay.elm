@@ -7,17 +7,23 @@ import Round
 import State.Duration as Duration exposing (Duration)
 
 
+type alias Data =
+    { runDuration : Maybe Duration
+    , runSeed : Maybe Int
+    }
+
+
 type alias Messages message =
     { copySeedClickHandler : String -> message
     , setSeedClickHandler : Int -> message
     }
 
 
-render : Maybe Duration -> Maybe Int -> Messages message -> Html message
-render runDuration runSeed messages =
+render : Data -> Messages message -> Html message
+render data messages =
     div [ class "run-data-row" ]
-        [ div [ runDataClass "time" ] [ runTimeDisplay runDuration ]
-        , div [ runDataClass "seed" ] (runSeedDisplay runSeed messages)
+        [ div [ runDataClass "time" ] [ runTimeDisplay data.runDuration ]
+        , div [ runDataClass "seed" ] (runSeedDisplay data.runSeed messages)
         ]
 
 

@@ -18251,8 +18251,8 @@ var _user$project$View_DurationAndSeedDisplay$runTimeDisplay = function (runDura
 		return _elm_lang$html$Html$text('');
 	}
 };
-var _user$project$View_DurationAndSeedDisplay$render = F3(
-	function (runDuration, runSeed, messages) {
+var _user$project$View_DurationAndSeedDisplay$render = F2(
+	function (data, messages) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -18271,7 +18271,7 @@ var _user$project$View_DurationAndSeedDisplay$render = F3(
 					},
 					{
 						ctor: '::',
-						_0: _user$project$View_DurationAndSeedDisplay$runTimeDisplay(runDuration),
+						_0: _user$project$View_DurationAndSeedDisplay$runTimeDisplay(data.runDuration),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
@@ -18283,10 +18283,14 @@ var _user$project$View_DurationAndSeedDisplay$render = F3(
 							_0: _user$project$View_DurationAndSeedDisplay$runDataClass('seed'),
 							_1: {ctor: '[]'}
 						},
-						A2(_user$project$View_DurationAndSeedDisplay$runSeedDisplay, runSeed, messages)),
+						A2(_user$project$View_DurationAndSeedDisplay$runSeedDisplay, data.runSeed, messages)),
 					_1: {ctor: '[]'}
 				}
 			});
+	});
+var _user$project$View_DurationAndSeedDisplay$Data = F2(
+	function (a, b) {
+		return {runDuration: a, runSeed: b};
 	});
 var _user$project$View_DurationAndSeedDisplay$Messages = F2(
 	function (a, b) {
@@ -18886,7 +18890,7 @@ var _user$project$View_OutputDisplay$render = F2(
 			}
 		}
 	});
-var _user$project$View_OutputDisplay$FailureData = F7(
+var _user$project$View_OutputDisplay$Data = F7(
 	function (a, b, c, d, e, f, g) {
 		return {actual: a, expected: b, given: c, message: d, hasComplexComparison: e, isTodo: f, shouldDiff: g};
 	});
@@ -18901,7 +18905,7 @@ var _user$project$View_SeedAndSettings$seedInputValue = function (randomSeed) {
 	}
 };
 var _user$project$View_SeedAndSettings$render = F2(
-	function (messages, data) {
+	function (data, messages) {
 		return {
 			ctor: '::',
 			_0: A2(
@@ -19096,13 +19100,13 @@ var _user$project$View_SeedAndSettings$render = F2(
 			}
 		};
 	});
-var _user$project$View_SeedAndSettings$Messages = F5(
-	function (a, b, c, d, e) {
-		return {setForceSeedHandler: a, setAutoRun: b, setAutoNavigate: c, setRunElmVerifyExamples: d, settingsToggle: e};
-	});
 var _user$project$View_SeedAndSettings$Data = F5(
 	function (a, b, c, d, e) {
 		return {autoRunEnabled: a, autoNavigateEnabled: b, elmVerifyExamplesEnabled: c, forceRandomSeedEnabled: d, randomSeed: e};
+	});
+var _user$project$View_SeedAndSettings$Messages = F5(
+	function (a, b, c, d, e) {
+		return {setForceSeedHandler: a, setAutoRun: b, setAutoNavigate: c, setRunElmVerifyExamples: d, settingsToggle: e};
 	});
 
 var _user$project$View_TestHierarchy_ChildTree$mouseOverHexColor = '2c333e';
@@ -19164,7 +19168,7 @@ var _user$project$View_TestHierarchy_ChildTree$mouseEvents = F4(
 		} : {ctor: '[]'};
 	});
 var _user$project$View_TestHierarchy_ChildTree$render = F4(
-	function (highlightMessages, nodeData, _p1, renderedChildren) {
+	function (nodeData, highlightMessages, _p1, renderedChildren) {
 		var _p2 = _p1;
 		var _p3 = _p2._0._2;
 		return A2(
@@ -19179,13 +19183,13 @@ var _user$project$View_TestHierarchy_ChildTree$render = F4(
 				_1: {ctor: '[]'}
 			});
 	});
+var _user$project$View_TestHierarchy_ChildTree$Data = F2(
+	function (a, b) {
+		return {nodeMouseIsOver: a, selectedNode: b};
+	});
 var _user$project$View_TestHierarchy_ChildTree$Messages = F3(
 	function (a, b, c) {
 		return {mouseIn: a, mouseOut: b, testClick: c};
-	});
-var _user$project$View_TestHierarchy_ChildTree$NodeData = F2(
-	function (a, b) {
-		return {nodeMouseIsOver: a, selectedNode: b};
 	});
 
 var _user$project$View_TestHierarchy_Root$togglingArrowText = F2(
@@ -19245,8 +19249,8 @@ var _user$project$View_TestHierarchy_Root$TestInstanceView = F2(
 		return {statusIndicator: a, conditionallyEmbolden: b};
 	});
 
-var _user$project$View_TestHierarchy_Core$viewTree = F5(
-	function (testInstanceView, toggleMessages, highlightMessages, nodeData, _p0) {
+var _user$project$View_TestHierarchy$render = F5(
+	function (testInstanceView, nodeData, toggleMessages, selectionMessages, _p0) {
 		var _p1 = _p0;
 		var _p3 = _p1._0._1;
 		var _p2 = _p1._2;
@@ -19268,48 +19272,44 @@ var _user$project$View_TestHierarchy_Core$viewTree = F5(
 					testInstanceView,
 					_p1._1,
 					toggleMessages),
-				_1: A6(_user$project$View_TestHierarchy_Core$viewChildren, testInstanceView, toggleMessages, highlightMessages, _p3, nodeData, _p2)
+				_1: A6(_user$project$View_TestHierarchy$viewChildren, testInstanceView, toggleMessages, selectionMessages, _p3, nodeData, _p2)
 			});
 	});
-var _user$project$View_TestHierarchy_Core$viewChildren = F6(
-	function (testInstanceView, toggleMessages, highlightMessages, shouldShow, nodeData, children) {
-		return shouldShow ? A5(_user$project$View_TestHierarchy_Core$viewForest, testInstanceView, toggleMessages, highlightMessages, nodeData, children) : {ctor: '[]'};
+var _user$project$View_TestHierarchy$viewChildren = F6(
+	function (testInstanceView, toggleMessages, selectionMessages, shouldShow, nodeData, children) {
+		return shouldShow ? A5(_user$project$View_TestHierarchy$viewForest, testInstanceView, toggleMessages, selectionMessages, nodeData, children) : {ctor: '[]'};
 	});
-var _user$project$View_TestHierarchy_Core$viewForest = F5(
-	function (testInstanceView, toggleMessages, highlightMessages, nodeData, children) {
+var _user$project$View_TestHierarchy$viewForest = F5(
+	function (testInstanceView, toggleMessages, selectionMessages, nodeData, children) {
 		return A2(
 			_elm_lang$core$List$map,
-			A4(_user$project$View_TestHierarchy_Core$childTree, testInstanceView, toggleMessages, highlightMessages, nodeData),
+			A4(_user$project$View_TestHierarchy$childTree, testInstanceView, toggleMessages, selectionMessages, nodeData),
 			children);
 	});
-var _user$project$View_TestHierarchy_Core$childTree = F5(
-	function (testInstanceView, toggleMessages, highlightMessages, nodeData, tree) {
+var _user$project$View_TestHierarchy$childTree = F5(
+	function (testInstanceView, toggleMessages, selectionMessages, nodeData, tree) {
 		return A4(
 			_user$project$View_TestHierarchy_ChildTree$render,
-			highlightMessages,
 			nodeData,
+			selectionMessages,
 			tree,
-			A5(_user$project$View_TestHierarchy_Core$viewTree, testInstanceView, toggleMessages, highlightMessages, nodeData, tree));
+			A5(_user$project$View_TestHierarchy$render, testInstanceView, nodeData, toggleMessages, selectionMessages, tree));
 	});
-var _user$project$View_TestHierarchy_Core$render = F5(
-	function (testInstanceView, toggleMessages, highlightMessages, nodeData, testHierarchy) {
-		return A5(_user$project$View_TestHierarchy_Core$viewTree, testInstanceView, toggleMessages, highlightMessages, nodeData, testHierarchy);
-	});
-var _user$project$View_TestHierarchy_Core$ToggleMessages = F2(
+var _user$project$View_TestHierarchy$TestInstanceView = F2(
 	function (a, b) {
-		return {collapse: a, expand: b};
+		return {statusIndicator: a, conditionallyEmbolden: b};
 	});
-var _user$project$View_TestHierarchy_Core$SelectionMessages = F3(
-	function (a, b, c) {
-		return {mouseIn: a, mouseOut: b, testClick: c};
-	});
-var _user$project$View_TestHierarchy_Core$NodeData = F2(
+var _user$project$View_TestHierarchy$NodeData = F2(
 	function (a, b) {
 		return {nodeMouseIsOver: a, selectedNode: b};
 	});
-var _user$project$View_TestHierarchy_Core$TestInstanceView = F2(
+var _user$project$View_TestHierarchy$ToggleMessages = F2(
 	function (a, b) {
-		return {statusIndicator: a, conditionallyEmbolden: b};
+		return {collapse: a, expand: b};
+	});
+var _user$project$View_TestHierarchy$SelectionMessages = F3(
+	function (a, b, c) {
+		return {mouseIn: a, mouseOut: b, testClick: c};
 	});
 
 var _user$project$View_Toolbar$render = F2(
@@ -19439,7 +19439,7 @@ var _user$project$View_Toolbar$Data = F5(
 		return {totalTests: a, passedTests: b, runStatus: c, statusBarTextStyle: d, statusBarColorStyle: e};
 	});
 
-var _user$project$View_Core$render = F2(
+var _user$project$View$render = F2(
 	function (data, messages) {
 		return A2(
 			_elm_lang$html$Html$div,
@@ -19478,10 +19478,9 @@ var _user$project$View_Core$render = F2(
 									messages.runAllButtonClickHandler),
 								_1: {
 									ctor: '::',
-									_0: A3(
+									_0: A2(
 										_user$project$View_DurationAndSeedDisplay$render,
-										data.runDuration,
-										data.runSeed,
+										{runDuration: data.runDuration, runSeed: data.runSeed},
 										{copySeedClickHandler: messages.copySeedClickHandler, setSeedClickHandler: messages.setSeedClickHandler}),
 									_1: {ctor: '[]'}
 								}
@@ -19498,11 +19497,11 @@ var _user$project$View_Core$render = F2(
 								{
 									ctor: '::',
 									_0: A5(
-										_user$project$View_TestHierarchy_Core$render,
+										_user$project$View_TestHierarchy$render,
 										{statusIndicator: data.statusIndicator, conditionallyEmbolden: data.conditionallyEmbolden},
+										{nodeMouseIsOver: data.nodeMouseIsOver, selectedNode: data.selectedNodeId},
 										{expand: messages.testListItemExpand, collapse: messages.testListItemCollapse},
 										{mouseIn: messages.testListItemMouseEnter, mouseOut: messages.testListItemMouseLeave, testClick: messages.testClickHandler},
-										{nodeMouseIsOver: data.nodeMouseIsOver, selectedNode: data.selectedNodeId},
 										data.testHierarchy),
 									_1: {ctor: '[]'}
 								}),
@@ -19543,8 +19542,8 @@ var _user$project$View_Core$render = F2(
 									},
 									A2(
 										_user$project$View_SeedAndSettings$render,
-										{setForceSeedHandler: messages.setForceSeedHandler, setAutoRun: messages.setAutoRun, setAutoNavigate: messages.setAutoNavigate, setRunElmVerifyExamples: messages.setRunElmVerifyExamples, settingsToggle: messages.settingsToggle},
-										{autoRunEnabled: data.autoRunEnabled, autoNavigateEnabled: data.autoNavigateEnabled, elmVerifyExamplesEnabled: data.elmVerifyExamplesEnabled, forceRandomSeedEnabled: data.forceRandomSeedEnabled, randomSeed: data.randomSeed})),
+										{autoRunEnabled: data.autoRunEnabled, autoNavigateEnabled: data.autoNavigateEnabled, elmVerifyExamplesEnabled: data.elmVerifyExamplesEnabled, forceRandomSeedEnabled: data.forceRandomSeedEnabled, randomSeed: data.randomSeed},
+										{setForceSeedHandler: messages.setForceSeedHandler, setAutoRun: messages.setAutoRun, setAutoNavigate: messages.setAutoNavigate, setRunElmVerifyExamples: messages.setRunElmVerifyExamples, settingsToggle: messages.settingsToggle})),
 								_1: {ctor: '[]'}
 							}
 						}),
@@ -19552,7 +19551,7 @@ var _user$project$View_Core$render = F2(
 				}
 			});
 	});
-var _user$project$View_Core$Data = function (a) {
+var _user$project$View$Data = function (a) {
 	return function (b) {
 		return function (c) {
 			return function (d) {
@@ -19597,7 +19596,7 @@ var _user$project$View_Core$Data = function (a) {
 		};
 	};
 };
-var _user$project$View_Core$Messages = function (a) {
+var _user$project$View$Messages = function (a) {
 	return function (b) {
 		return function (c) {
 			return function (d) {
@@ -19624,7 +19623,7 @@ var _user$project$View_Core$Messages = function (a) {
 		};
 	};
 };
-var _user$project$View_Core$Failure = F7(
+var _user$project$View$Failure = F7(
 	function (a, b, c, d, e, f, g) {
 		return {actual: a, expected: b, given: c, message: d, hasComplexComparison: e, isTodo: f, shouldDiff: g};
 	});
@@ -19918,7 +19917,7 @@ var _user$project$Main$GenerateTestsStart = {ctor: 'GenerateTestsStart'};
 var _user$project$Main$InitiateRunAll = {ctor: 'InitiateRunAll'};
 var _user$project$Main$view = function (model) {
 	return A2(
-		_user$project$View_Core$render,
+		_user$project$View$render,
 		{
 			runStatus: model.runStatus,
 			compilerError: model.compilerError,

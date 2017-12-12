@@ -22,7 +22,7 @@ import TestEvent.RunStart as RunStart
 import TestEvent.TestCompleted as TestCompleted
 import TestInstance.Core as TestInstance exposing (TestInstance)
 import TestInstance.View
-import View.Core
+import View
 
 
 type Message
@@ -228,7 +228,7 @@ update message model =
 
 view : Model -> Html Message
 view model =
-    View.Core.render
+    View.render
         { runStatus = model.runStatus
         , compilerError = model.compilerError
         , totalTests = model.totalTests

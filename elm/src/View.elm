@@ -1,16 +1,16 @@
-module View.Core exposing (render)
+module View exposing (render)
 
 import Animation exposing (State)
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
+import State.Duration exposing (Duration)
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus exposing (RunStatus)
 import Tree.Core exposing (CollapsibleTree)
-import State.Duration exposing (Duration)
 import View.DurationAndSeedDisplay
 import View.OutputDisplay
 import View.SeedAndSettings
-import View.TestHierarchy.Core
+import View.TestHierarchy
 import View.Toolbar
 
 
@@ -82,16 +82,20 @@ render data messages =
                     }
                     messages.runAllButtonClickHandler
                 , View.DurationAndSeedDisplay.render
-                    data.runDuration
-                    data.runSeed
+                    { runDuration = data.runDuration
+                    , runSeed = data.runSeed
+                    }
                     { copySeedClickHandler = messages.copySeedClickHandler
                     , setSeedClickHandler = messages.setSeedClickHandler
                     }
                 ]
             , div [ class "test-hierarchy" ]
-                [ View.TestHierarchy.Core.render
+                [ View.TestHierarchy.render
                     { statusIndicator = data.statusIndicator
                     , conditionallyEmbolden = data.conditionallyEmbolden
+                    }
+                    { nodeMouseIsOver = data.nodeMouseIsOver
+                    , selectedNode = data.selectedNodeId
                     }
                     { expand = messages.testListItemExpand
                     , collapse = messages.testListItemCollapse
@@ -99,9 +103,6 @@ render data messages =
                     { mouseIn = messages.testListItemMouseEnter
                     , mouseOut = messages.testListItemMouseLeave
                     , testClick = messages.testClickHandler
-                    }
-                    { nodeMouseIsOver = data.nodeMouseIsOver
-                    , selectedNode = data.selectedNodeId
                     }
                     data.testHierarchy
                 ]
@@ -111,17 +112,17 @@ render data messages =
                 [ View.OutputDisplay.render data.compilerError data.failure ]
             , div (class "footer" :: Animation.render data.footerStyle)
                 (View.SeedAndSettings.render
-                    { setForceSeedHandler = messages.setForceSeedHandler
-                    , setAutoRun = messages.setAutoRun
-                    , setAutoNavigate = messages.setAutoNavigate
-                    , setRunElmVerifyExamples = messages.setRunElmVerifyExamples
-                    , settingsToggle = messages.settingsToggle
-                    }
                     { autoRunEnabled = data.autoRunEnabled
                     , autoNavigateEnabled = data.autoNavigateEnabled
                     , elmVerifyExamplesEnabled = data.elmVerifyExamplesEnabled
                     , forceRandomSeedEnabled = data.forceRandomSeedEnabled
                     , randomSeed = data.randomSeed
+                    }
+                    { setForceSeedHandler = messages.setForceSeedHandler
+                    , setAutoRun = messages.setAutoRun
+                    , setAutoNavigate = messages.setAutoNavigate
+                    , setRunElmVerifyExamples = messages.setRunElmVerifyExamples
+                    , settingsToggle = messages.settingsToggle
                     }
                 )
             ]

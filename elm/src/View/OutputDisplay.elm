@@ -5,7 +5,7 @@ import Html.Attributes exposing (class)
 import Util.Diff exposing (Change(Added, NoChange, Removed), diff)
 
 
-type alias FailureData =
+type alias Data =
     { actual : String
     , expected : String
     , given : Maybe String
@@ -16,7 +16,7 @@ type alias FailureData =
     }
 
 
-render : Maybe String -> Maybe FailureData -> Html message
+render : Maybe String -> Maybe Data -> Html message
 render compilerError maybeFailureData =
     case ( compilerError, maybeFailureData ) of
         ( Just error, _ ) ->
@@ -43,7 +43,7 @@ errorHtml message =
         |> List.intersperse (br [] [])
 
 
-failureText : FailureData -> List (Html message)
+failureText : Data -> List (Html message)
 failureText failureData =
     let
         ( expected, actual ) =
@@ -62,7 +62,7 @@ failureText failureData =
     ]
 
 
-process : FailureData -> ( List (Html message), List (Html message) )
+process : Data -> ( List (Html message), List (Html message) )
 process failureData =
     if failureData.shouldDiff then
         diffed failureData.expected failureData.actual
@@ -100,7 +100,7 @@ toHtml change =
             text <| String.fromChar char
 
 
-headerText : FailureData -> String
+headerText : Data -> String
 headerText failureData =
     if failureData.isTodo then
         "TODO: "
@@ -108,7 +108,7 @@ headerText failureData =
         "Failed on: "
 
 
-givenDisplay : FailureData -> Html message
+givenDisplay : Data -> Html message
 givenDisplay failureData =
     case failureData.given of
         Just givenText ->
@@ -118,22 +118,22 @@ givenDisplay failureData =
             text ""
 
 
-barTop : FailureData -> Html message
+barTop : Data -> Html message
 barTop =
     barPiece "╷" ""
 
 
-barMiddle : String -> FailureData -> Html message
+barMiddle : String -> Data -> Html message
 barMiddle comparison =
     barPiece "│ " comparison
 
 
-barBottom : FailureData -> Html message
+barBottom : Data -> Html message
 barBottom =
     barPiece "╵" ""
 
 
-barPiece : String -> String -> FailureData -> Html message
+barPiece : String -> String -> Data -> Html message
 barPiece piece extra failureData =
     if failureData.hasComplexComparison then
         div [] [ text <| piece ++ extra ]
