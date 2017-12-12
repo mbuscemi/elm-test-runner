@@ -104,7 +104,7 @@ update message model =
 
         CompilerErrored errorMessage ->
             Model.RunStatus.setToCompileError model
-                |> Model.Animation.fadeToStatusColor
+                |> Model.Animation.pulseToStatusColor
                 |> Model.Basics.setCompilerErrorMessage (Just errorMessage)
                 |> And.noCommand
 
@@ -136,7 +136,7 @@ update message model =
             Model.RunStatus.setToPassing model
                 |> Model.RunStatus.setForTodo TestInstance.isTodo
                 |> Model.RunStatus.setForFailure event
-                |> Model.Animation.fadeToStatusColor
+                |> Model.Animation.pulseToStatusColor
                 |> Model.RunDuration.set event
                 |> Model.TestTree.purgeObsoleteNodes
                 |> Model.TestTree.updateHierarchy

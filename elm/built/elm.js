@@ -16487,7 +16487,7 @@ var _user$project$State_RunStatus$toSecondaryColor = function (runStatus) {
 		case 'Processing':
 			return A3(_elm_lang$core$Color$rgb, 64, 64, 34);
 		case 'LastPassed':
-			return A3(_elm_lang$core$Color$rgb, 24, 126, 24);
+			return A3(_elm_lang$core$Color$rgb, 30, 86, 30);
 		case 'LastFailed':
 			return A3(_elm_lang$core$Color$rgb, 163, 15, 15);
 		case 'CompileError':
@@ -16571,6 +16571,36 @@ var _user$project$State_RunStatus$generatingTests = _user$project$State_RunStatu
 var _user$project$State_RunStatus$NoData = {ctor: 'NoData'};
 var _user$project$State_RunStatus$noData = _user$project$State_RunStatus$NoData;
 
+var _user$project$Animation_Color$pulse = function (runStatus) {
+	return _mdgriffith$elm_style_animation$Animation$interrupt(
+		{
+			ctor: '::',
+			_0: A2(
+				_mdgriffith$elm_style_animation$Animation$toWith,
+				_mdgriffith$elm_style_animation$Animation$easing(
+					{duration: 120, ease: _elm_community$easing_functions$Ease$outQuad}),
+				{
+					ctor: '::',
+					_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
+						_user$project$State_RunStatus$toSecondaryColor(runStatus)),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_mdgriffith$elm_style_animation$Animation$toWith,
+					_mdgriffith$elm_style_animation$Animation$easing(
+						{duration: 540, ease: _elm_community$easing_functions$Ease$inQuad}),
+					{
+						ctor: '::',
+						_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
+							_user$project$State_RunStatus$toPrimaryColor(runStatus)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
 var _user$project$Animation_Color$initial = function (runStatus) {
 	return _mdgriffith$elm_style_animation$Animation$style(
 		{
@@ -17909,6 +17939,13 @@ var _user$project$Model_Animation$initiateStatusBarTextFlicker = function (model
 		model,
 		{
 			statusBarTextStyle: _user$project$Animation_Flicker$animation(model.statusBarTextStyle)
+		});
+};
+var _user$project$Model_Animation$pulseToStatusColor = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			statusBarColorStyle: A2(_user$project$Animation_Color$pulse, model.runStatus, model.statusBarColorStyle)
 		});
 };
 var _user$project$Model_Animation$fadeToStatusColor = function (model) {
@@ -19692,7 +19729,7 @@ var _user$project$Main$update = F2(
 					A2(
 						_user$project$Model_Basics$setCompilerErrorMessage,
 						_elm_lang$core$Maybe$Just(_p0._0),
-						_user$project$Model_Animation$fadeToStatusColor(
+						_user$project$Model_Animation$pulseToStatusColor(
 							_user$project$Model_RunStatus$setToCompileError(model))));
 			case 'RunStart':
 				var event = _user$project$TestEvent_RunStart$parse(_p0._0._1);
@@ -19722,7 +19759,7 @@ var _user$project$Main$update = F2(
 									A2(
 										_user$project$Model_RunDuration$set,
 										event,
-										_user$project$Model_Animation$fadeToStatusColor(
+										_user$project$Model_Animation$pulseToStatusColor(
 											A2(
 												_user$project$Model_RunStatus$setForFailure,
 												event,

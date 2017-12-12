@@ -3,6 +3,7 @@ module Model.Animation
         ( fadeToStatusColor
         , initiateColorOscillation
         , initiateStatusBarTextFlicker
+        , pulseToStatusColor
         , toggleFooter
         , updateFooter
         , updateStatusBarColor
@@ -39,6 +40,11 @@ updateStatusBarColor animationMessage model =
 fadeToStatusColor : HasAnimationProperties model -> HasAnimationProperties model
 fadeToStatusColor model =
     { model | statusBarColorStyle = Animation.Color.fadeTo model.runStatus model.statusBarColorStyle }
+
+
+pulseToStatusColor : HasAnimationProperties model -> HasAnimationProperties model
+pulseToStatusColor model =
+    { model | statusBarColorStyle = Animation.Color.pulse model.runStatus model.statusBarColorStyle }
 
 
 initiateStatusBarTextFlicker : HasAnimationProperties model -> HasAnimationProperties model

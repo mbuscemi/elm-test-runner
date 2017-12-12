@@ -159,7 +159,7 @@ toSecondaryColor runStatus =
             rgb 64 64 34
 
         LastPassed ->
-            rgb 24 126 24
+            rgb 30 86 30
 
         LastFailed ->
             rgb 163 15 15
