@@ -19333,11 +19333,7 @@ var _user$project$View_Toolbar$render = F2(
 					_elm_lang$html$Html$div,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class(
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								'status-bar ',
-								_user$project$State_RunStatus$toClass(data.runStatus))),
+						_0: _elm_lang$html$Html_Attributes$class('status-bar'),
 						_1: _mdgriffith$elm_style_animation$Animation$render(data.statusBarColorStyle)
 					},
 					{

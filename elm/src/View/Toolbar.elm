@@ -20,9 +20,7 @@ render : Data -> message -> Html message
 render data runAllButtonClickHandler =
     div [ class "toolbar" ]
         [ div
-            ((class <| "status-bar " ++ RunStatus.toClass data.runStatus)
-                :: Animation.render data.statusBarColorStyle
-            )
+            (class "status-bar" :: Animation.render data.statusBarColorStyle)
             [ strong
                 (class "title" :: Animation.render data.statusBarTextStyle)
                 [ text <| RunStatus.toText data.runStatus ]
