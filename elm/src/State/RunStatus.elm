@@ -9,7 +9,6 @@ module State.RunStatus
         , noData
         , passFail
         , processing
-        , toClass
         , toPrimaryColor
         , toSecondaryColor
         , toText
@@ -94,31 +93,6 @@ toText runStatus =
 
         Incomplete ->
             "Incomplete"
-
-
-toClass : RunStatus -> String
-toClass runStatus =
-    case runStatus of
-        NoData ->
-            "no-data"
-
-        GeneratingTests ->
-            "generating-tests"
-
-        Processing ->
-            "processing"
-
-        LastPassed ->
-            "last-passed"
-
-        LastFailed ->
-            "last-failed"
-
-        CompileError ->
-            "compile-error"
-
-        Incomplete ->
-            "incomplete"
 
 
 toPrimaryColor : RunStatus -> Color

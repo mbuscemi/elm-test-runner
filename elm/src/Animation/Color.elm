@@ -1,4 +1,4 @@
-module Animation.Color exposing (fadeTo, initial, oscillate, pulse)
+module Animation.Color exposing (initial, oscillate, pulse)
 
 import Animation exposing (State, Step, backgroundColor, easing, interrupt, loop, style, toWith)
 import Ease exposing (inQuad, linear, outQuad)
@@ -18,15 +18,6 @@ oscillateDuration =
 initial : RunStatus -> State
 initial runStatus =
     style [ backgroundColor (toPrimaryColor runStatus) ]
-
-
-fadeTo : RunStatus -> State -> State
-fadeTo runStatus =
-    interrupt
-        [ toWith
-            (easing { duration = fadeDuration, ease = linear })
-            [ backgroundColor <| toPrimaryColor runStatus ]
-        ]
 
 
 oscillate : RunStatus -> State -> State

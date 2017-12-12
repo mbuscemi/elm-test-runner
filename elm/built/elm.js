@@ -16515,28 +16515,9 @@ var _user$project$State_RunStatus$toPrimaryColor = function (runStatus) {
 			return A3(_elm_lang$core$Color$rgb, 7, 61, 111);
 	}
 };
-var _user$project$State_RunStatus$toClass = function (runStatus) {
+var _user$project$State_RunStatus$toText = function (runStatus) {
 	var _p2 = runStatus;
 	switch (_p2.ctor) {
-		case 'NoData':
-			return 'no-data';
-		case 'GeneratingTests':
-			return 'generating-tests';
-		case 'Processing':
-			return 'processing';
-		case 'LastPassed':
-			return 'last-passed';
-		case 'LastFailed':
-			return 'last-failed';
-		case 'CompileError':
-			return 'compile-error';
-		default:
-			return 'incomplete';
-	}
-};
-var _user$project$State_RunStatus$toText = function (runStatus) {
-	var _p3 = runStatus;
-	switch (_p3.ctor) {
 		case 'NoData':
 			return 'No Data';
 		case 'GeneratingTests':
@@ -16647,23 +16628,6 @@ var _user$project$Animation_Color$oscillate = function (runStatus) {
 		});
 };
 var _user$project$Animation_Color$fadeDuration = 330;
-var _user$project$Animation_Color$fadeTo = function (runStatus) {
-	return _mdgriffith$elm_style_animation$Animation$interrupt(
-		{
-			ctor: '::',
-			_0: A2(
-				_mdgriffith$elm_style_animation$Animation$toWith,
-				_mdgriffith$elm_style_animation$Animation$easing(
-					{duration: _user$project$Animation_Color$fadeDuration, ease: _elm_community$easing_functions$Ease$linear}),
-				{
-					ctor: '::',
-					_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
-						_user$project$State_RunStatus$toPrimaryColor(runStatus)),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		});
-};
 
 var _user$project$Animation_Flicker$onAndOff = F2(
 	function (times, milliseconds) {
@@ -17946,13 +17910,6 @@ var _user$project$Model_Animation$pulseToStatusColor = function (model) {
 		model,
 		{
 			statusBarColorStyle: A2(_user$project$Animation_Color$pulse, model.runStatus, model.statusBarColorStyle)
-		});
-};
-var _user$project$Model_Animation$fadeToStatusColor = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			statusBarColorStyle: A2(_user$project$Animation_Color$fadeTo, model.runStatus, model.statusBarColorStyle)
 		});
 };
 var _user$project$Model_Animation$updateStatusBarColor = F2(
