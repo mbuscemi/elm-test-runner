@@ -1,7 +1,7 @@
 module Model exposing (Model, default, serialize)
 
 import Animation
-import Animation.ColorOscillate
+import Animation.Color
 import Animation.Flicker
 import Animation.Footer
 import Duration.Core exposing (Duration)
@@ -59,7 +59,7 @@ default =
     , randomSeed = Nothing
     , forceRandomSeedEnabled = False
     , statusBarTextStyle = Animation.Flicker.initial
-    , statusBarColorStyle = Animation.ColorOscillate.initial RunStatus.noData
+    , statusBarColorStyle = Animation.Color.initial RunStatus.noData
     , footerStyle = Animation.Footer.initial
     , footerExpanded = False
     , paneLocation = PaneLocation.default

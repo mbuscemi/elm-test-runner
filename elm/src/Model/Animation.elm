@@ -1,6 +1,6 @@
 module Model.Animation
     exposing
-        ( haltColorOscillation
+        ( fadeToStatusColor
         , initiateColorOscillation
         , initiateStatusBarTextFlicker
         , toggleFooter
@@ -10,7 +10,7 @@ module Model.Animation
         )
 
 import Animation
-import Animation.ColorOscillate
+import Animation.Color
 import Animation.Flicker
 import Animation.Footer
 import State.RunStatus exposing (RunStatus)
@@ -28,7 +28,7 @@ type alias HasAnimationProperties r =
 
 initiateColorOscillation : HasAnimationProperties model -> HasAnimationProperties model
 initiateColorOscillation model =
-    { model | statusBarColorStyle = Animation.ColorOscillate.animation model.runStatus model.statusBarColorStyle }
+    { model | statusBarColorStyle = Animation.Color.oscillate model.runStatus model.statusBarColorStyle }
 
 
 updateStatusBarColor : Animation.Msg -> HasAnimationProperties model -> HasAnimationProperties model
@@ -36,9 +36,9 @@ updateStatusBarColor animationMessage model =
     { model | statusBarColorStyle = Animation.update animationMessage model.statusBarColorStyle }
 
 
-haltColorOscillation : HasAnimationProperties model -> HasAnimationProperties model
-haltColorOscillation model =
-    { model | statusBarColorStyle = Animation.ColorOscillate.halt model.statusBarColorStyle }
+fadeToStatusColor : HasAnimationProperties model -> HasAnimationProperties model
+fadeToStatusColor model =
+    { model | statusBarColorStyle = Animation.Color.fadeTo model.runStatus model.statusBarColorStyle }
 
 
 initiateStatusBarTextFlicker : HasAnimationProperties model -> HasAnimationProperties model

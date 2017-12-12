@@ -16482,10 +16482,18 @@ var _user$project$State_RunStatus$toSecondaryColor = function (runStatus) {
 	switch (_p0.ctor) {
 		case 'NoData':
 			return A3(_elm_lang$core$Color$rgb, 16, 19, 24);
+		case 'GeneratingTests':
+			return A3(_elm_lang$core$Color$rgb, 97, 17, 106);
 		case 'Processing':
 			return A3(_elm_lang$core$Color$rgb, 64, 64, 34);
+		case 'LastPassed':
+			return A3(_elm_lang$core$Color$rgb, 24, 126, 24);
+		case 'LastFailed':
+			return A3(_elm_lang$core$Color$rgb, 163, 15, 15);
+		case 'CompileError':
+			return A3(_elm_lang$core$Color$rgb, 140, 86, 8);
 		default:
-			return A3(_elm_lang$core$Color$rgb, 0, 0, 0);
+			return A3(_elm_lang$core$Color$rgb, 13, 91, 164);
 	}
 };
 var _user$project$State_RunStatus$toPrimaryColor = function (runStatus) {
@@ -16493,10 +16501,18 @@ var _user$project$State_RunStatus$toPrimaryColor = function (runStatus) {
 	switch (_p1.ctor) {
 		case 'NoData':
 			return A3(_elm_lang$core$Color$rgb, 16, 19, 24);
+		case 'GeneratingTests':
+			return A3(_elm_lang$core$Color$rgb, 70, 27, 75);
+		case 'LastPassed':
+			return A3(_elm_lang$core$Color$rgb, 32, 64, 32);
+		case 'LastFailed':
+			return A3(_elm_lang$core$Color$rgb, 98, 12, 12);
+		case 'CompileError':
+			return A3(_elm_lang$core$Color$rgb, 85, 54, 10);
 		case 'Processing':
 			return A3(_elm_lang$core$Color$rgb, 48, 48, 35);
 		default:
-			return A3(_elm_lang$core$Color$rgb, 0, 0, 0);
+			return A3(_elm_lang$core$Color$rgb, 7, 61, 111);
 	}
 };
 var _user$project$State_RunStatus$toClass = function (runStatus) {
@@ -16555,9 +16571,7 @@ var _user$project$State_RunStatus$generatingTests = _user$project$State_RunStatu
 var _user$project$State_RunStatus$NoData = {ctor: 'NoData'};
 var _user$project$State_RunStatus$noData = _user$project$State_RunStatus$NoData;
 
-var _user$project$Animation_ColorOscillate$halt = _mdgriffith$elm_style_animation$Animation$interrupt(
-	{ctor: '[]'});
-var _user$project$Animation_ColorOscillate$initial = function (runStatus) {
+var _user$project$Animation_Color$initial = function (runStatus) {
 	return _mdgriffith$elm_style_animation$Animation$style(
 		{
 			ctor: '::',
@@ -16566,50 +16580,59 @@ var _user$project$Animation_ColorOscillate$initial = function (runStatus) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Animation_ColorOscillate$duration = 660;
-var _user$project$Animation_ColorOscillate$oscillate = F2(
-	function (color1, color2) {
-		return {
+var _user$project$Animation_Color$oscillateDuration = 660;
+var _user$project$Animation_Color$oscillate = function (runStatus) {
+	return _mdgriffith$elm_style_animation$Animation$interrupt(
+		{
+			ctor: '::',
+			_0: _mdgriffith$elm_style_animation$Animation$loop(
+				{
+					ctor: '::',
+					_0: A2(
+						_mdgriffith$elm_style_animation$Animation$toWith,
+						_mdgriffith$elm_style_animation$Animation$easing(
+							{duration: _user$project$Animation_Color$oscillateDuration, ease: _elm_community$easing_functions$Ease$linear}),
+						{
+							ctor: '::',
+							_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
+								_user$project$State_RunStatus$toPrimaryColor(runStatus)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_mdgriffith$elm_style_animation$Animation$toWith,
+							_mdgriffith$elm_style_animation$Animation$easing(
+								{duration: _user$project$Animation_Color$oscillateDuration, ease: _elm_community$easing_functions$Ease$linear}),
+							{
+								ctor: '::',
+								_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
+									_user$project$State_RunStatus$toSecondaryColor(runStatus)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Animation_Color$fadeDuration = 330;
+var _user$project$Animation_Color$fadeTo = function (runStatus) {
+	return _mdgriffith$elm_style_animation$Animation$interrupt(
+		{
 			ctor: '::',
 			_0: A2(
 				_mdgriffith$elm_style_animation$Animation$toWith,
 				_mdgriffith$elm_style_animation$Animation$easing(
-					{duration: _user$project$Animation_ColorOscillate$duration, ease: _elm_community$easing_functions$Ease$linear}),
+					{duration: _user$project$Animation_Color$fadeDuration, ease: _elm_community$easing_functions$Ease$linear}),
 				{
 					ctor: '::',
-					_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(color1),
+					_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
+						_user$project$State_RunStatus$toPrimaryColor(runStatus)),
 					_1: {ctor: '[]'}
 				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_mdgriffith$elm_style_animation$Animation$toWith,
-					_mdgriffith$elm_style_animation$Animation$easing(
-						{duration: _user$project$Animation_ColorOscillate$duration, ease: _elm_community$easing_functions$Ease$linear}),
-					{
-						ctor: '::',
-						_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(color2),
-						_1: {ctor: '[]'}
-					}),
-				_1: {ctor: '[]'}
-			}
-		};
-	});
-var _user$project$Animation_ColorOscillate$doAnimation = F2(
-	function (color1, color2) {
-		return _mdgriffith$elm_style_animation$Animation$interrupt(
-			{
-				ctor: '::',
-				_0: _mdgriffith$elm_style_animation$Animation$loop(
-					A2(_user$project$Animation_ColorOscillate$oscillate, color1, color2)),
-				_1: {ctor: '[]'}
-			});
-	});
-var _user$project$Animation_ColorOscillate$animation = function (runStatus) {
-	return A2(
-		_user$project$Animation_ColorOscillate$doAnimation,
-		_user$project$State_RunStatus$toPrimaryColor(runStatus),
-		_user$project$State_RunStatus$toSecondaryColor(runStatus));
+			_1: {ctor: '[]'}
+		});
 };
 
 var _user$project$Animation_Flicker$onAndOff = F2(
@@ -17447,7 +17470,7 @@ var _user$project$Model$default = {
 	randomSeed: _elm_lang$core$Maybe$Nothing,
 	forceRandomSeedEnabled: false,
 	statusBarTextStyle: _user$project$Animation_Flicker$initial,
-	statusBarColorStyle: _user$project$Animation_ColorOscillate$initial(_user$project$State_RunStatus$noData),
+	statusBarColorStyle: _user$project$Animation_Color$initial(_user$project$State_RunStatus$noData),
 	footerStyle: _user$project$Animation_Footer$initial,
 	footerExpanded: false,
 	paneLocation: _user$project$State_PaneLocation$default
@@ -17888,11 +17911,11 @@ var _user$project$Model_Animation$initiateStatusBarTextFlicker = function (model
 			statusBarTextStyle: _user$project$Animation_Flicker$animation(model.statusBarTextStyle)
 		});
 };
-var _user$project$Model_Animation$haltColorOscillation = function (model) {
+var _user$project$Model_Animation$fadeToStatusColor = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{
-			statusBarColorStyle: _user$project$Animation_ColorOscillate$halt(model.statusBarColorStyle)
+			statusBarColorStyle: A2(_user$project$Animation_Color$fadeTo, model.runStatus, model.statusBarColorStyle)
 		});
 };
 var _user$project$Model_Animation$updateStatusBarColor = F2(
@@ -17907,7 +17930,7 @@ var _user$project$Model_Animation$initiateColorOscillation = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{
-			statusBarColorStyle: A2(_user$project$Animation_ColorOscillate$animation, model.runStatus, model.statusBarColorStyle)
+			statusBarColorStyle: A2(_user$project$Animation_Color$oscillate, model.runStatus, model.statusBarColorStyle)
 		});
 };
 
@@ -19662,7 +19685,8 @@ var _user$project$Main$update = F2(
 												_user$project$Model_TestCount$resetPassed(model)))))))));
 			case 'GenerateTestsStart':
 				return _user$project$And$noCommand(
-					_user$project$Model_RunStatus$setToGeneratingTests(model));
+					_user$project$Model_Animation$initiateColorOscillation(
+						_user$project$Model_RunStatus$setToGeneratingTests(model)));
 			case 'ExecuteTestsStart':
 				return _user$project$And$noCommand(
 					_user$project$Model_Animation$initiateColorOscillation(
@@ -19672,7 +19696,7 @@ var _user$project$Main$update = F2(
 					A2(
 						_user$project$Model_Basics$setCompilerErrorMessage,
 						_elm_lang$core$Maybe$Just(_p0._0),
-						_user$project$Model_Animation$haltColorOscillation(
+						_user$project$Model_Animation$fadeToStatusColor(
 							_user$project$Model_RunStatus$setToCompileError(model))));
 			case 'RunStart':
 				var event = _user$project$TestEvent_RunStart$parse(_p0._0._1);
@@ -19702,7 +19726,7 @@ var _user$project$Main$update = F2(
 									A2(
 										_user$project$Model_RunDuration$set,
 										event,
-										_user$project$Model_Animation$haltColorOscillation(
+										_user$project$Model_Animation$fadeToStatusColor(
 											A2(
 												_user$project$Model_RunStatus$setForFailure,
 												event,

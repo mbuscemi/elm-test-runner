@@ -77,30 +77,6 @@
     text-align: center;
 }
 
-.etr-main-view .status-bar.no-data {
-    background-color: #101318;
-}
-
-.etr-main-view .status-bar.generating-tests {
-    background-color: #461b4b;
-}
-
-.etr-main-view .status-bar.last-passed {
-    background-color: #204020;
-}
-
-.etr-main-view .status-bar.last-failed {
-    background-color: #620c0c;
-}
-
-.etr-main-view .status-bar.compile-error {
-    background-color: #55360a;
-}
-
-.etr-main-view .status-bar.incomplete {
-    background-color: #073d6f;
-}
-
 .etr-main-view .toolbar .status-bar .title {
     padding-left: 10px;
     text-align: left;

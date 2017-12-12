@@ -94,6 +94,7 @@ update message model =
 
         GenerateTestsStart ->
             Model.RunStatus.setToGeneratingTests model
+                |> Model.Animation.initiateColorOscillation
                 |> And.noCommand
 
         ExecuteTestsStart ->
@@ -103,7 +104,7 @@ update message model =
 
         CompilerErrored errorMessage ->
             Model.RunStatus.setToCompileError model
-                |> Model.Animation.haltColorOscillation
+                |> Model.Animation.fadeToStatusColor
                 |> Model.Basics.setCompilerErrorMessage (Just errorMessage)
                 |> And.noCommand
 
@@ -135,7 +136,7 @@ update message model =
             Model.RunStatus.setToPassing model
                 |> Model.RunStatus.setForTodo TestInstance.isTodo
                 |> Model.RunStatus.setForFailure event
-                |> Model.Animation.haltColorOscillation
+                |> Model.Animation.fadeToStatusColor
                 |> Model.RunDuration.set event
                 |> Model.TestTree.purgeObsoleteNodes
                 |> Model.TestTree.updateHierarchy
