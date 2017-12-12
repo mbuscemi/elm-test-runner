@@ -19,17 +19,11 @@ module TestInstance.Core
         )
 
 import Maybe.Extra as Maybe
+import State.Duration as Duration exposing (Duration, inMilliseconds)
 import State.Failure as Failure exposing (Failure)
 import State.Labels as Labels exposing (Labels)
 import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
-import State.Duration as Duration exposing (Duration, inMilliseconds)
-
-
-type TestStatus
-    = Pass
-    | Fail
-    | Pending
-    | Todo
+import TestInstance.TestStatus as TestStatus exposing (TestStatus)
 
 
 type alias TestInstance =
@@ -42,7 +36,7 @@ type alias TestInstance =
 
 default : TestInstance
 default =
-    { testStatus = Pending
+    { testStatus = TestStatus.default
     , labels = Labels.empty
     , duration = inMilliseconds 0
     , failure = Nothing
@@ -52,13 +46,7 @@ default =
 fromEvent : TestCompleted -> TestInstance
 fromEvent event =
     TestInstance
-        (if TestCompleted.passed event then
-            Pass
-         else if TestCompleted.isTodo event then
-            Todo
-         else
-            Fail
-        )
+        (TestStatus.fromTestCompletedEvent event)
         (Labels.fromList <| TestCompleted.labels event)
         (TestCompleted.duration event)
         (TestCompleted.firstFailure event)
@@ -66,49 +54,27 @@ fromEvent event =
 
 toStatusIcon : TestInstance -> String
 toStatusIcon instance =
-    case instance.testStatus of
-        Pass ->
-            "✓"
-
-        Fail ->
-            "✗"
-
-        Pending ->
-            "○"
-
-        Todo ->
-            "»"
+    TestStatus.toIcon instance.testStatus
 
 
 toClass : TestInstance -> String
 toClass instance =
-    case instance.testStatus of
-        Pass ->
-            "passed"
-
-        Fail ->
-            "failed"
-
-        Pending ->
-            "pending"
-
-        Todo ->
-            "todo"
+    TestStatus.toClass instance.testStatus
 
 
 isFailing : TestInstance -> Bool
 isFailing instance =
-    instance.testStatus == Fail
+    TestStatus.isFail instance.testStatus
 
 
 isPending : TestInstance -> Bool
 isPending instance =
-    instance.testStatus == Pending
+    TestStatus.isPending instance.testStatus
 
 
 isTodo : TestInstance -> Bool
 isTodo instance =
-    instance.testStatus == Todo
+    TestStatus.isTodo instance.testStatus
 
 
 getFailure : TestInstance -> Maybe Failure
@@ -125,21 +91,7 @@ getFailureData maybeTestInstance =
 
 setStatus : String -> TestInstance -> TestInstance
 setStatus newStatus instance =
-    case newStatus of
-        "pass" ->
-            { instance | testStatus = Pass }
-
-        "fail" ->
-            { instance | testStatus = Fail }
-
-        "pending" ->
-            { instance | testStatus = Pending }
-
-        "todo" ->
-            { instance | testStatus = Todo }
-
-        _ ->
-            { instance | testStatus = Pending }
+    { instance | testStatus = TestStatus.fromString newStatus }
 
 
 setDuration : Int -> TestInstance -> TestInstance
