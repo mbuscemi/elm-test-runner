@@ -4,13 +4,13 @@ import Animation
 import Animation.Color
 import Animation.Flicker
 import Animation.Footer
-import Duration.Core exposing (Duration)
 import Model.Flags exposing (Flags)
 import Model.ProjectName
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core as Tree exposing (CollapsibleTree, Tree(Node))
+import State.Duration exposing (Duration)
 
 
 type alias Model =

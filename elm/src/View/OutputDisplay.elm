@@ -1,8 +1,8 @@
 module View.OutputDisplay exposing (render)
 
-import Diff.Core exposing (Change(Added, NoChange, Removed), diff)
 import Html exposing (Html, br, div, span, strong, text)
 import Html.Attributes exposing (class)
+import Util.Diff exposing (Change(Added, NoChange, Removed), diff)
 
 
 type alias FailureData =

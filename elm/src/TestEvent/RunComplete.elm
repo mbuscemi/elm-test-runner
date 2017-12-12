@@ -1,8 +1,8 @@
 module TestEvent.RunComplete exposing (RunComplete, duration, parse, passed)
 
-import Duration.Core as Duration exposing (Duration)
 import Json.Decode exposing (Decoder, Value, decodeValue, field, int, map, map3, string)
 import TestEvent.Util exposing (intString)
+import State.Duration as Duration exposing (Duration)
 
 
 type alias Data =

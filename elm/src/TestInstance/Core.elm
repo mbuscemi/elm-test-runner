@@ -18,11 +18,11 @@ module TestInstance.Core
         , toStatusIcon
         )
 
-import Duration.Core as Duration exposing (Duration, inMilliseconds)
 import Maybe.Extra as Maybe
 import State.Failure as Failure exposing (Failure)
 import State.Labels as Labels exposing (Labels)
 import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
+import State.Duration as Duration exposing (Duration, inMilliseconds)
 
 
 type TestStatus

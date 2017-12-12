@@ -1,11 +1,11 @@
 module TestEvent.TestCompleted exposing (TestCompleted, duration, firstFailure, isTodo, labels, parseJson, parseString, passed, passedTestCountToIncrement)
 
-import Duration.Core as Duration exposing (Duration)
 import Json.Decode exposing (Decoder, andThen, decodeString, decodeValue, field, list, map, map4, string, succeed)
 import Json.Encode exposing (Value)
 import State.Failure as Failure exposing (Failure, failure)
 import TestEvent.TestStatus as TestStatus exposing (TestStatus, testStatus)
 import TestEvent.Util exposing (intString)
+import State.Duration as Duration exposing (Duration)
 
 
 type TestCompleted

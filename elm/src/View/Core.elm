@@ -1,12 +1,12 @@
 module View.Core exposing (render)
 
 import Animation exposing (State)
-import Duration.Core exposing (Duration)
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus exposing (RunStatus)
 import Tree.Core exposing (CollapsibleTree)
+import State.Duration exposing (Duration)
 import View.DurationAndSeedDisplay
 import View.OutputDisplay
 import View.SeedAndSettings
