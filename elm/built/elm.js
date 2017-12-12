@@ -17376,24 +17376,10 @@ var _user$project$TestInstance_Core$setLabels = F2(
 			instance,
 			{labels: labels});
 	});
-var _user$project$TestInstance_Core$setFailure = F2(
-	function (failure, instance) {
-		return _elm_lang$core$Native_Utils.update(
-			instance,
-			{failure: failure});
-	});
 var _user$project$TestInstance_Core$durationAsString = function (instance) {
 	return _elm_lang$core$Basics$toString(
 		_user$project$State_Duration$asMilliseconds(instance.duration));
 };
-var _user$project$TestInstance_Core$setDuration = F2(
-	function (duration, instance) {
-		return _elm_lang$core$Native_Utils.update(
-			instance,
-			{
-				duration: _user$project$State_Duration$inMilliseconds(duration)
-			});
-	});
 var _user$project$TestInstance_Core$setStatus = F2(
 	function (newStatus, instance) {
 		return _elm_lang$core$Native_Utils.update(

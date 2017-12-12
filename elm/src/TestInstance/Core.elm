@@ -10,8 +10,6 @@ module TestInstance.Core
         , isPending
         , isTodo
         , pathAndDescription
-        , setDuration
-        , setFailure
         , setLabels
         , setStatus
         , toClass
@@ -94,19 +92,9 @@ setStatus newStatus instance =
     { instance | testStatus = TestStatus.fromString newStatus }
 
 
-setDuration : Int -> TestInstance -> TestInstance
-setDuration duration instance =
-    { instance | duration = inMilliseconds duration }
-
-
 durationAsString : TestInstance -> String
 durationAsString instance =
     toString <| Duration.asMilliseconds instance.duration
-
-
-setFailure : Maybe Failure -> TestInstance -> TestInstance
-setFailure failure instance =
-    { instance | failure = failure }
 
 
 setLabels : Labels -> TestInstance -> TestInstance
