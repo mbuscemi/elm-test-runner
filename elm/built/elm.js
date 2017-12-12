@@ -16542,9 +16542,6 @@ var _user$project$State_RunStatus$LastFailed = {ctor: 'LastFailed'};
 var _user$project$State_RunStatus$lastFailed = _user$project$State_RunStatus$LastFailed;
 var _user$project$State_RunStatus$LastPassed = {ctor: 'LastPassed'};
 var _user$project$State_RunStatus$lastPassed = _user$project$State_RunStatus$LastPassed;
-var _user$project$State_RunStatus$passFail = function (didPass) {
-	return didPass ? _user$project$State_RunStatus$LastPassed : _user$project$State_RunStatus$LastFailed;
-};
 var _user$project$State_RunStatus$Processing = {ctor: 'Processing'};
 var _user$project$State_RunStatus$processing = _user$project$State_RunStatus$Processing;
 var _user$project$State_RunStatus$GeneratingTests = {ctor: 'GeneratingTests'};

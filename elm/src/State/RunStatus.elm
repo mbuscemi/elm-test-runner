@@ -7,7 +7,6 @@ module State.RunStatus
         , lastFailed
         , lastPassed
         , noData
-        , passFail
         , processing
         , toPrimaryColor
         , toSecondaryColor
@@ -60,14 +59,6 @@ compileError =
 incomplete : RunStatus
 incomplete =
     Incomplete
-
-
-passFail : Bool -> RunStatus
-passFail didPass =
-    if didPass then
-        LastPassed
-    else
-        LastFailed
 
 
 toText : RunStatus -> String
