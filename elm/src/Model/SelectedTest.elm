@@ -28,7 +28,7 @@ showInEditor testInstance autoNavigateEnabled =
             And.execute <| navigateToFile (TestInstance.pathAndDescription instance)
 
         _ ->
-            And.noCommand
+            And.doNothing
 
 
 port navigateToFile : ( List String, String ) -> Cmd message

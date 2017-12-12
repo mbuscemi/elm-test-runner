@@ -1,11 +1,11 @@
-port module And exposing (execute, noCommand, updateAtomState)
+port module And exposing (doNothing, execute, updateAtomState)
 
 import Model exposing (Model)
 import Model.Flags exposing (Flags)
 
 
-noCommand : model -> ( model, Cmd message )
-noCommand model =
+doNothing : model -> ( model, Cmd message )
+doNothing model =
     ( model, Cmd.none )
 
 

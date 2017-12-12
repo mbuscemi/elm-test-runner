@@ -75,7 +75,7 @@ init rawFlags =
         |> Model.Config.setAutoRun flags.autoRun
         |> Model.Config.setAutoNavigate flags.autoNavigate
         |> Model.Config.setElmVerifyExamples flags.useElmVerifyExamples
-        |> And.noCommand
+        |> And.doNothing
 
 
 update : Message -> Model -> ( Model, Cmd Message )
@@ -95,18 +95,18 @@ update message model =
         GenerateTestsStart ->
             Model.RunStatus.setToGeneratingTests model
                 |> Model.Animation.initiateColorOscillation
-                |> And.noCommand
+                |> And.doNothing
 
         ExecuteTestsStart ->
             Model.RunStatus.setToProcessing model
                 |> Model.Animation.initiateColorOscillation
-                |> And.noCommand
+                |> And.doNothing
 
         CompilerErrored errorMessage ->
             Model.RunStatus.setToCompileError model
                 |> Model.Animation.pulseToStatusColor
                 |> Model.Basics.setCompilerErrorMessage (Just errorMessage)
-                |> And.noCommand
+                |> And.doNothing
 
         RunStart ( projectPath, value ) ->
             let
@@ -116,7 +116,7 @@ update message model =
             Model.ProjectName.setFromPath projectPath model
                 |> Model.TestCount.setTotal event
                 |> Model.RunSeed.set event
-                |> And.noCommand
+                |> And.doNothing
 
         TestCompleted data ->
             let
@@ -126,7 +126,7 @@ update message model =
             Model.TestCount.updatePassed event model
                 |> Model.TestTree.build event
                 |> Model.TestTree.updateHierarchy
-                |> And.noCommand
+                |> And.doNothing
 
         RunComplete value ->
             let
@@ -142,23 +142,23 @@ update message model =
                 |> Model.TestTree.updateHierarchy
                 |> Model.TestTree.expandFailingAndTodoNodes
                 |> Model.Animation.initiateStatusBarTextFlicker
-                |> And.noCommand
+                |> And.doNothing
 
         TestListItemExpand nodeId ->
             Model.TestTree.toggleNode nodeId True model
-                |> And.noCommand
+                |> And.doNothing
 
         TestListItemCollapse nodeId ->
             Model.TestTree.toggleNode nodeId False model
-                |> And.noCommand
+                |> And.doNothing
 
         TestListItemMouseEnter nodeId ->
             Model.Basics.setTestMouseIsOver (Just nodeId) model
-                |> And.noCommand
+                |> And.doNothing
 
         TestListItemMouseLeave ->
             Model.Basics.setTestMouseIsOver Nothing model
-                |> And.noCommand
+                |> And.doNothing
 
         TestListItemSelect nodeId testInstance ->
             Model.SelectedTest.setNodeId (Just nodeId) model
@@ -196,34 +196,34 @@ update message model =
         SetRandomSeed seed ->
             Model.RandomSeed.set (Just seed) model
                 |> Model.RandomSeed.setForcing True
-                |> And.noCommand
+                |> And.doNothing
 
         SetForceSeed setting ->
             Model.RandomSeed.setForcing setting model
-                |> And.noCommand
+                |> And.doNothing
 
         AnimateFlicker animateMessage ->
             Model.Animation.updateStatusBarText animateMessage model
-                |> And.noCommand
+                |> And.doNothing
 
         AnimateProcessingColorOscillate animateMessage ->
             Model.Animation.updateStatusBarColor animateMessage model
-                |> And.noCommand
+                |> And.doNothing
 
         AnimateSettingsTransition animateMessage ->
             Model.Animation.updateFooter animateMessage model
-                |> And.noCommand
+                |> And.doNothing
 
         PaneMoved newLocation ->
             Model.Basics.setPaneLocation newLocation model
-                |> And.noCommand
+                |> And.doNothing
 
         ToggleSettings ->
             Model.Animation.toggleFooter model
-                |> And.noCommand
+                |> And.doNothing
 
         DoNothing ->
-            model |> And.noCommand
+            model |> And.doNothing
 
 
 view : Model -> Html Message

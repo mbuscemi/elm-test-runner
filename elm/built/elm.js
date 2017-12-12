@@ -17519,7 +17519,7 @@ var _user$project$And$execute = F2(
 	function (command, model) {
 		return {ctor: '_Tuple2', _0: model, _1: command};
 	});
-var _user$project$And$noCommand = function (model) {
+var _user$project$And$doNothing = function (model) {
 	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 };
 var _user$project$And$updatePersistentState = _elm_lang$core$Native_Platform.outgoingPort(
@@ -17895,7 +17895,7 @@ var _user$project$Model_SelectedTest$showInEditor = F2(
 				_user$project$Model_SelectedTest$navigateToFile(
 					_user$project$TestInstance_Core$pathAndDescription(_p0._0._0)));
 		} else {
-			return _user$project$And$noCommand;
+			return _user$project$And$doNothing;
 		}
 	});
 
@@ -19631,7 +19631,7 @@ var _user$project$View_Core$Failure = F7(
 
 var _user$project$Main$init = function (rawFlags) {
 	var flags = _user$project$Model_Flags$parse(rawFlags);
-	return _user$project$And$noCommand(
+	return _user$project$And$doNothing(
 		A2(
 			_user$project$Model_Config$setElmVerifyExamples,
 			flags.useElmVerifyExamples,
@@ -19674,15 +19674,15 @@ var _user$project$Main$update = F2(
 												_elm_lang$core$Maybe$Nothing,
 												_user$project$Model_TestCount$resetPassed(model)))))))));
 			case 'GenerateTestsStart':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					_user$project$Model_Animation$initiateColorOscillation(
 						_user$project$Model_RunStatus$setToGeneratingTests(model)));
 			case 'ExecuteTestsStart':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					_user$project$Model_Animation$initiateColorOscillation(
 						_user$project$Model_RunStatus$setToProcessing(model)));
 			case 'CompilerErrored':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					A2(
 						_user$project$Model_Basics$setCompilerErrorMessage,
 						_elm_lang$core$Maybe$Just(_p0._0),
@@ -19690,7 +19690,7 @@ var _user$project$Main$update = F2(
 							_user$project$Model_RunStatus$setToCompileError(model))));
 			case 'RunStart':
 				var event = _user$project$TestEvent_RunStart$parse(_p0._0._1);
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					A2(
 						_user$project$Model_RunSeed$set,
 						event,
@@ -19700,7 +19700,7 @@ var _user$project$Main$update = F2(
 							A2(_user$project$Model_ProjectName$setFromPath, _p0._0._0, model))));
 			case 'TestCompleted':
 				var event = _user$project$TestEvent_TestCompleted$parseJson(_p0._0);
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					_user$project$Model_TestTree$updateHierarchy(
 						A2(
 							_user$project$Model_TestTree$build,
@@ -19708,7 +19708,7 @@ var _user$project$Main$update = F2(
 							A2(_user$project$Model_TestCount$updatePassed, event, model))));
 			case 'RunComplete':
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					_user$project$Model_Animation$initiateStatusBarTextFlicker(
 						_user$project$Model_TestTree$expandFailingAndTodoNodes(
 							_user$project$Model_TestTree$updateHierarchy(
@@ -19725,19 +19725,19 @@ var _user$project$Main$update = F2(
 													_user$project$TestInstance_Core$isTodo,
 													_user$project$Model_RunStatus$setToPassing(model))))))))));
 			case 'TestListItemExpand':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					A3(_user$project$Model_TestTree$toggleNode, _p0._0, true, model));
 			case 'TestListItemCollapse':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					A3(_user$project$Model_TestTree$toggleNode, _p0._0, false, model));
 			case 'TestListItemMouseEnter':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					A2(
 						_user$project$Model_Basics$setTestMouseIsOver,
 						_elm_lang$core$Maybe$Just(_p0._0),
 						model));
 			case 'TestListItemMouseLeave':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					A2(_user$project$Model_Basics$setTestMouseIsOver, _elm_lang$core$Maybe$Nothing, model));
 			case 'TestListItemSelect':
 				var _p1 = _p0._1;
@@ -19776,7 +19776,7 @@ var _user$project$Main$update = F2(
 					_user$project$Main$copySeed(_p0._0),
 					model);
 			case 'SetRandomSeed':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					A2(
 						_user$project$Model_RandomSeed$setForcing,
 						true,
@@ -19785,25 +19785,25 @@ var _user$project$Main$update = F2(
 							_elm_lang$core$Maybe$Just(_p0._0),
 							model)));
 			case 'SetForceSeed':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					A2(_user$project$Model_RandomSeed$setForcing, _p0._0, model));
 			case 'AnimateFlicker':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					A2(_user$project$Model_Animation$updateStatusBarText, _p0._0, model));
 			case 'AnimateProcessingColorOscillate':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					A2(_user$project$Model_Animation$updateStatusBarColor, _p0._0, model));
 			case 'AnimateSettingsTransition':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					A2(_user$project$Model_Animation$updateFooter, _p0._0, model));
 			case 'PaneMoved':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					A2(_user$project$Model_Basics$setPaneLocation, _p0._0, model));
 			case 'ToggleSettings':
-				return _user$project$And$noCommand(
+				return _user$project$And$doNothing(
 					_user$project$Model_Animation$toggleFooter(model));
 			default:
-				return _user$project$And$noCommand(model);
+				return _user$project$And$doNothing(model);
 		}
 	});
 var _user$project$Main$commandKeyTestStart = _elm_lang$core$Native_Platform.incomingPort(
