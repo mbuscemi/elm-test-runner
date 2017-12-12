@@ -16832,6 +16832,32 @@ var _user$project$State_PaneLocation$fromString = function (location) {
 	}
 };
 
+var _user$project$State_Duration$asSeconds = function (duration) {
+	var _p0 = duration;
+	if (_p0.ctor === 'Milliseconds') {
+		return _elm_lang$core$Basics$toFloat(_p0._0) / 1000;
+	} else {
+		return _p0._0;
+	}
+};
+var _user$project$State_Duration$asMilliseconds = function (duration) {
+	var _p1 = duration;
+	if (_p1.ctor === 'Milliseconds') {
+		return _p1._0;
+	} else {
+		return _elm_lang$core$Basics$round(_p1._0 * 1000);
+	}
+};
+var _user$project$State_Duration$Milliseconds = function (a) {
+	return {ctor: 'Milliseconds', _0: a};
+};
+var _user$project$State_Duration$inMilliseconds = function (milliseconds) {
+	return _user$project$State_Duration$Milliseconds(milliseconds);
+};
+var _user$project$State_Duration$Seconds = function (a) {
+	return {ctor: 'Seconds', _0: a};
+};
+
 var _user$project$State_Failure$expectationText = function (values) {
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
@@ -17207,32 +17233,6 @@ var _user$project$TestEvent_Util$parseInt = function (string) {
 };
 var _user$project$TestEvent_Util$intString = A2(_elm_lang$core$Json_Decode$map, _user$project$TestEvent_Util$parseInt, _elm_lang$core$Json_Decode$string);
 
-var _user$project$State_Duration$asSeconds = function (duration) {
-	var _p0 = duration;
-	if (_p0.ctor === 'Milliseconds') {
-		return _elm_lang$core$Basics$toFloat(_p0._0) / 1000;
-	} else {
-		return _p0._0;
-	}
-};
-var _user$project$State_Duration$asMilliseconds = function (duration) {
-	var _p1 = duration;
-	if (_p1.ctor === 'Milliseconds') {
-		return _p1._0;
-	} else {
-		return _elm_lang$core$Basics$round(_p1._0 * 1000);
-	}
-};
-var _user$project$State_Duration$Milliseconds = function (a) {
-	return {ctor: 'Milliseconds', _0: a};
-};
-var _user$project$State_Duration$inMilliseconds = function (milliseconds) {
-	return _user$project$State_Duration$Milliseconds(milliseconds);
-};
-var _user$project$State_Duration$Seconds = function (a) {
-	return {ctor: 'Seconds', _0: a};
-};
-
 var _user$project$TestEvent_TestCompleted$firstFailure = function (_p0) {
 	var _p1 = _p0;
 	return _elm_lang$core$List$head(_p1._0.failures);
@@ -17308,6 +17308,65 @@ var _user$project$TestEvent_TestCompleted$parseString = function (jsonString) {
 	return A2(_user$project$TestEvent_TestCompleted$parse, _elm_lang$core$Json_Decode$decodeString, jsonString);
 };
 
+var _user$project$TestInstance_TestStatus$toClass = function (testStatus) {
+	var _p0 = testStatus;
+	switch (_p0.ctor) {
+		case 'Pass':
+			return 'passed';
+		case 'Fail':
+			return 'failed';
+		case 'Pending':
+			return 'pending';
+		default:
+			return 'todo';
+	}
+};
+var _user$project$TestInstance_TestStatus$toIcon = function (testStatus) {
+	var _p1 = testStatus;
+	switch (_p1.ctor) {
+		case 'Pass':
+			return '✓';
+		case 'Fail':
+			return '✗';
+		case 'Pending':
+			return '○';
+		default:
+			return '»';
+	}
+};
+var _user$project$TestInstance_TestStatus$Todo = {ctor: 'Todo'};
+var _user$project$TestInstance_TestStatus$isTodo = function (testStatus) {
+	return _elm_lang$core$Native_Utils.eq(testStatus, _user$project$TestInstance_TestStatus$Todo);
+};
+var _user$project$TestInstance_TestStatus$Pending = {ctor: 'Pending'};
+var _user$project$TestInstance_TestStatus$default = _user$project$TestInstance_TestStatus$Pending;
+var _user$project$TestInstance_TestStatus$isPending = function (testStatus) {
+	return _elm_lang$core$Native_Utils.eq(testStatus, _user$project$TestInstance_TestStatus$Pending);
+};
+var _user$project$TestInstance_TestStatus$Fail = {ctor: 'Fail'};
+var _user$project$TestInstance_TestStatus$isFail = function (testStatus) {
+	return _elm_lang$core$Native_Utils.eq(testStatus, _user$project$TestInstance_TestStatus$Fail);
+};
+var _user$project$TestInstance_TestStatus$Pass = {ctor: 'Pass'};
+var _user$project$TestInstance_TestStatus$fromString = function (newStatus) {
+	var _p2 = newStatus;
+	switch (_p2) {
+		case 'pass':
+			return _user$project$TestInstance_TestStatus$Pass;
+		case 'fail':
+			return _user$project$TestInstance_TestStatus$Fail;
+		case 'pending':
+			return _user$project$TestInstance_TestStatus$Pending;
+		case 'todo':
+			return _user$project$TestInstance_TestStatus$Todo;
+		default:
+			return _user$project$TestInstance_TestStatus$default;
+	}
+};
+var _user$project$TestInstance_TestStatus$fromTestCompletedEvent = function (event) {
+	return _user$project$TestEvent_TestCompleted$passed(event) ? _user$project$TestInstance_TestStatus$Pass : (_user$project$TestEvent_TestCompleted$isTodo(event) ? _user$project$TestInstance_TestStatus$Todo : _user$project$TestInstance_TestStatus$Fail);
+};
+
 var _user$project$TestInstance_Core$pathAndDescription = function (instance) {
 	return _user$project$State_Labels$getPotentialPathPiecesAndTestDescription(instance.labels);
 };
@@ -17335,6 +17394,14 @@ var _user$project$TestInstance_Core$setDuration = F2(
 				duration: _user$project$State_Duration$inMilliseconds(duration)
 			});
 	});
+var _user$project$TestInstance_Core$setStatus = F2(
+	function (newStatus, instance) {
+		return _elm_lang$core$Native_Utils.update(
+			instance,
+			{
+				testStatus: _user$project$TestInstance_TestStatus$fromString(newStatus)
+			});
+	});
 var _user$project$TestInstance_Core$getFailure = function (instance) {
 	return instance.failure;
 };
@@ -17345,90 +17412,40 @@ var _user$project$TestInstance_Core$getFailureData = function (maybeTestInstance
 		_elm_community$maybe_extra$Maybe_Extra$join(
 			A2(_elm_lang$core$Maybe$map, _user$project$TestInstance_Core$getFailure, maybeTestInstance)));
 };
+var _user$project$TestInstance_Core$isTodo = function (instance) {
+	return _user$project$TestInstance_TestStatus$isTodo(instance.testStatus);
+};
+var _user$project$TestInstance_Core$isPending = function (instance) {
+	return _user$project$TestInstance_TestStatus$isPending(instance.testStatus);
+};
+var _user$project$TestInstance_Core$isFailing = function (instance) {
+	return _user$project$TestInstance_TestStatus$isFail(instance.testStatus);
+};
 var _user$project$TestInstance_Core$toClass = function (instance) {
-	var _p0 = instance.testStatus;
-	switch (_p0.ctor) {
-		case 'Pass':
-			return 'passed';
-		case 'Fail':
-			return 'failed';
-		case 'Pending':
-			return 'pending';
-		default:
-			return 'todo';
-	}
+	return _user$project$TestInstance_TestStatus$toClass(instance.testStatus);
 };
 var _user$project$TestInstance_Core$toStatusIcon = function (instance) {
-	var _p1 = instance.testStatus;
-	switch (_p1.ctor) {
-		case 'Pass':
-			return '✓';
-		case 'Fail':
-			return '✗';
-		case 'Pending':
-			return '○';
-		default:
-			return '»';
-	}
+	return _user$project$TestInstance_TestStatus$toIcon(instance.testStatus);
+};
+var _user$project$TestInstance_Core$default = {
+	testStatus: _user$project$TestInstance_TestStatus$default,
+	labels: _user$project$State_Labels$empty,
+	duration: _user$project$State_Duration$inMilliseconds(0),
+	failure: _elm_lang$core$Maybe$Nothing
 };
 var _user$project$TestInstance_Core$TestInstance = F4(
 	function (a, b, c, d) {
 		return {testStatus: a, labels: b, duration: c, failure: d};
 	});
-var _user$project$TestInstance_Core$Todo = {ctor: 'Todo'};
-var _user$project$TestInstance_Core$isTodo = function (instance) {
-	return _elm_lang$core$Native_Utils.eq(instance.testStatus, _user$project$TestInstance_Core$Todo);
-};
-var _user$project$TestInstance_Core$Pending = {ctor: 'Pending'};
-var _user$project$TestInstance_Core$default = {
-	testStatus: _user$project$TestInstance_Core$Pending,
-	labels: _user$project$State_Labels$empty,
-	duration: _user$project$State_Duration$inMilliseconds(0),
-	failure: _elm_lang$core$Maybe$Nothing
-};
-var _user$project$TestInstance_Core$isPending = function (instance) {
-	return _elm_lang$core$Native_Utils.eq(instance.testStatus, _user$project$TestInstance_Core$Pending);
-};
-var _user$project$TestInstance_Core$Fail = {ctor: 'Fail'};
-var _user$project$TestInstance_Core$isFailing = function (instance) {
-	return _elm_lang$core$Native_Utils.eq(instance.testStatus, _user$project$TestInstance_Core$Fail);
-};
-var _user$project$TestInstance_Core$Pass = {ctor: 'Pass'};
 var _user$project$TestInstance_Core$fromEvent = function (event) {
 	return A4(
 		_user$project$TestInstance_Core$TestInstance,
-		_user$project$TestEvent_TestCompleted$passed(event) ? _user$project$TestInstance_Core$Pass : (_user$project$TestEvent_TestCompleted$isTodo(event) ? _user$project$TestInstance_Core$Todo : _user$project$TestInstance_Core$Fail),
+		_user$project$TestInstance_TestStatus$fromTestCompletedEvent(event),
 		_user$project$State_Labels$fromList(
 			_user$project$TestEvent_TestCompleted$labels(event)),
 		_user$project$TestEvent_TestCompleted$duration(event),
 		_user$project$TestEvent_TestCompleted$firstFailure(event));
 };
-var _user$project$TestInstance_Core$setStatus = F2(
-	function (newStatus, instance) {
-		var _p2 = newStatus;
-		switch (_p2) {
-			case 'pass':
-				return _elm_lang$core$Native_Utils.update(
-					instance,
-					{testStatus: _user$project$TestInstance_Core$Pass});
-			case 'fail':
-				return _elm_lang$core$Native_Utils.update(
-					instance,
-					{testStatus: _user$project$TestInstance_Core$Fail});
-			case 'pending':
-				return _elm_lang$core$Native_Utils.update(
-					instance,
-					{testStatus: _user$project$TestInstance_Core$Pending});
-			case 'todo':
-				return _elm_lang$core$Native_Utils.update(
-					instance,
-					{testStatus: _user$project$TestInstance_Core$Todo});
-			default:
-				return _elm_lang$core$Native_Utils.update(
-					instance,
-					{testStatus: _user$project$TestInstance_Core$Pending});
-		}
-	});
 
 var _user$project$Model$serialize = function (model) {
 	return {autoRun: model.autoRunEnabled, autoNavigate: model.autoNavigateEnabled, useElmVerifyExamples: model.runElmVerifyExamplesEnabled};
