@@ -17535,6 +17535,28 @@ var _user$project$And$updateAtomState = function (model) {
 		_user$project$And$updatePersistentState(
 			_user$project$Model$serialize(model)));
 };
+var _user$project$And$navigateToFile = _elm_lang$core$Native_Platform.outgoingPort(
+	'navigateToFile',
+	function (v) {
+		return [
+			_elm_lang$core$Native_List.toArray(v._0).map(
+			function (v) {
+				return v;
+			}),
+			v._1
+		];
+	});
+var _user$project$And$showInEditor = F2(
+	function (testInstance, autoNavigateEnabled) {
+		var _p0 = {ctor: '_Tuple2', _0: testInstance, _1: autoNavigateEnabled};
+		if (((_p0.ctor === '_Tuple2') && (_p0._0.ctor === 'Just')) && (_p0._1 === true)) {
+			return _user$project$And$execute(
+				_user$project$And$navigateToFile(
+					_user$project$TestInstance_Core$pathAndDescription(_p0._0._0)));
+		} else {
+			return _user$project$And$doNothing;
+		}
+	});
 
 var _user$project$Bind$arity2 = F4(
 	function (messageWrapper, secondaryMessage, a, b) {
@@ -17665,28 +17687,6 @@ var _user$project$Model_SelectedTest$setNodeId = F2(
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{selectedTestNodeId: nodeId});
-	});
-var _user$project$Model_SelectedTest$navigateToFile = _elm_lang$core$Native_Platform.outgoingPort(
-	'navigateToFile',
-	function (v) {
-		return [
-			_elm_lang$core$Native_List.toArray(v._0).map(
-			function (v) {
-				return v;
-			}),
-			v._1
-		];
-	});
-var _user$project$Model_SelectedTest$showInEditor = F2(
-	function (testInstance, autoNavigateEnabled) {
-		var _p0 = {ctor: '_Tuple2', _0: testInstance, _1: autoNavigateEnabled};
-		if (((_p0.ctor === '_Tuple2') && (_p0._0.ctor === 'Just')) && (_p0._1 === true)) {
-			return _user$project$And$execute(
-				_user$project$Model_SelectedTest$navigateToFile(
-					_user$project$TestInstance_Core$pathAndDescription(_p0._0._0)));
-		} else {
-			return _user$project$And$doNothing;
-		}
 	});
 
 var _user$project$TestInstance_Reconcile$updateStatusPreferringFail = F2(
@@ -17950,7 +17950,7 @@ var _user$project$Message_TestListItem$update = F2(
 			default:
 				var _p1 = _p0._1;
 				return A3(
-					_user$project$Model_SelectedTest$showInEditor,
+					_user$project$And$showInEditor,
 					_p1,
 					model.autoNavigateEnabled,
 					A2(

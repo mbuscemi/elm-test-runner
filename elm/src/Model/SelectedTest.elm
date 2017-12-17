@@ -1,4 +1,4 @@
-port module Model.SelectedTest exposing (setInstance, setNodeId, setTestMouseIsOver, showInEditor)
+port module Model.SelectedTest exposing (setInstance, setNodeId, setTestMouseIsOver)
 
 import And
 import TestInstance.Core as TestInstance exposing (TestInstance)
@@ -25,16 +25,3 @@ setInstance testInstance model =
 setTestMouseIsOver : Maybe Int -> HasSelectedTest model -> HasSelectedTest model
 setTestMouseIsOver nodeId model =
     { model | testMouseIsOver = nodeId }
-
-
-showInEditor : Maybe TestInstance -> Bool -> model -> ( model, Cmd message )
-showInEditor testInstance autoNavigateEnabled =
-    case ( testInstance, autoNavigateEnabled ) of
-        ( Just instance, True ) ->
-            And.execute <| navigateToFile (TestInstance.pathAndDescription instance)
-
-        _ ->
-            And.doNothing
-
-
-port navigateToFile : ( List String, String ) -> Cmd message

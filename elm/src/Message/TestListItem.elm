@@ -49,7 +49,7 @@ update message model =
         Select nodeId testInstance ->
             Model.SelectedTest.setNodeId (Just nodeId) model
                 |> Model.SelectedTest.setInstance testInstance
-                |> Model.SelectedTest.showInEditor testInstance model.autoNavigateEnabled
+                |> And.showInEditor testInstance model.autoNavigateEnabled
 
 
 type alias Messages =

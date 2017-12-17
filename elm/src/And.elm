@@ -1,7 +1,8 @@
-port module And exposing (doNothing, execute, updateAtomState)
+port module And exposing (doNothing, execute, showInEditor, updateAtomState)
 
 import Model exposing (Model)
 import Model.Flags exposing (Flags)
+import TestInstance.Core as TestInstance exposing (TestInstance)
 
 
 doNothing : model -> ( model, Cmd message )
@@ -21,4 +22,17 @@ updateAtomState model =
         |> flip execute model
 
 
+showInEditor : Maybe TestInstance -> Bool -> model -> ( model, Cmd message )
+showInEditor testInstance autoNavigateEnabled =
+    case ( testInstance, autoNavigateEnabled ) of
+        ( Just instance, True ) ->
+            execute <| navigateToFile (TestInstance.pathAndDescription instance)
+
+        _ ->
+            doNothing
+
+
 port updatePersistentState : Flags -> Cmd message
+
+
+port navigateToFile : ( List String, String ) -> Cmd message
