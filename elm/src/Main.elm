@@ -8,35 +8,20 @@ import Json.Encode exposing (Value)
 import Message.Animate as Animate
 import Message.Settings as Settings
 import Message.TestListItem as TestListItem
+import Message.TestRun as TestRun
 import Model exposing (Model)
 import Model.Animation
 import Model.Basics
 import Model.Config
 import Model.Flags as Flags
-import Model.ProjectName
 import Model.RandomSeed
-import Model.RunDuration
-import Model.RunSeed
-import Model.RunStatus
-import Model.SelectedTest
-import Model.TestCount
-import Model.TestTree
-import TestEvent.RunComplete as RunComplete
-import TestEvent.RunStart as RunStart
-import TestEvent.TestCompleted as TestCompleted
 import TestInstance.Core as TestInstance exposing (TestInstance)
 import TestInstance.View
 import View
 
 
 type Message
-    = InitiateRunAll
-    | GenerateTestsStart
-    | ExecuteTestsStart
-    | CompilerErrored String
-    | RunStart ( String, Value )
-    | TestCompleted Value
-    | RunComplete Value
+    = TestRun TestRun.Message
     | TestListItem TestListItem.Message
     | Settings Settings.Message
     | CopySeed String
@@ -74,68 +59,8 @@ init rawFlags =
 update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
-        InitiateRunAll ->
-            Model.TestCount.resetPassed model
-                |> Model.SelectedTest.setNodeId Nothing
-                |> Model.SelectedTest.setInstance Nothing
-                |> Model.Basics.setCompilerErrorMessage Nothing
-                |> Model.RunDuration.clear
-                |> Model.RunSeed.clear
-                |> Model.TestTree.reset
-                |> Model.TestTree.updateHierarchy
-                |> And.execute (runTest <| Model.RandomSeed.forJS model)
-
-        GenerateTestsStart ->
-            Model.RunStatus.setToGeneratingTests model
-                |> Model.Animation.initiateColorOscillation
-                |> And.doNothing
-
-        ExecuteTestsStart ->
-            Model.RunStatus.setToProcessing model
-                |> Model.Animation.initiateColorOscillation
-                |> And.doNothing
-
-        CompilerErrored errorMessage ->
-            Model.RunStatus.setToCompileError model
-                |> Model.Animation.pulseToStatusColor
-                |> Model.Basics.setCompilerErrorMessage (Just errorMessage)
-                |> And.doNothing
-
-        RunStart ( projectPath, value ) ->
-            let
-                event =
-                    RunStart.parse value
-            in
-            Model.ProjectName.setFromPath projectPath model
-                |> Model.TestCount.setTotal event
-                |> Model.RunSeed.set event
-                |> And.doNothing
-
-        TestCompleted data ->
-            let
-                event =
-                    TestCompleted.parseJson data
-            in
-            Model.TestCount.updatePassed event model
-                |> Model.TestTree.build event
-                |> Model.TestTree.updateHierarchy
-                |> And.doNothing
-
-        RunComplete value ->
-            let
-                event =
-                    RunComplete.parse value
-            in
-            Model.RunStatus.setToPassing model
-                |> Model.RunStatus.setForTodo TestInstance.isTodo
-                |> Model.RunStatus.setForFailure event
-                |> Model.Animation.pulseToStatusColor
-                |> Model.RunDuration.set event
-                |> Model.TestTree.purgeObsoleteNodes
-                |> Model.TestTree.updateHierarchy
-                |> Model.TestTree.expandFailingAndTodoNodes
-                |> Model.Animation.initiateStatusBarTextFlicker
-                |> And.doNothing
+        TestRun message ->
+            TestRun.update message model
 
         TestListItem message ->
             TestListItem.update message model
@@ -197,7 +122,7 @@ view model =
         , footerStyle = model.footerStyle
         , paneLocation = model.paneLocation
         }
-        { runAllButtonClickHandler = InitiateRunAll
+        { runAllButtonClickHandler = Bind.arity0 TestRun (.initiate TestRun.messages)
         , testListItemExpand = Bind.arity1 TestListItem (.expand TestListItem.messages)
         , testListItemCollapse = Bind.arity1 TestListItem (.collapse TestListItem.messages)
         , testListItemMouseEnter = Bind.arity1 TestListItem (.mouseEnter TestListItem.messages)
@@ -216,18 +141,18 @@ view model =
 subscriptions : Model -> Sub Message
 subscriptions model =
     Sub.batch
-        [ commandKeyTestStart (always InitiateRunAll)
-        , notifyGeneratingTests (always GenerateTestsStart)
-        , notifyExecutingTests (always ExecuteTestsStart)
-        , notifyCompilerErrored CompilerErrored
+        [ commandKeyTestStart (always <| Bind.arity0 TestRun (.initiate TestRun.messages))
+        , notifyGeneratingTests (always <| Bind.arity0 TestRun (.generate TestRun.messages))
+        , notifyExecutingTests (always <| Bind.arity0 TestRun (.execute TestRun.messages))
+        , notifyCompilerErrored <| Bind.arity1 TestRun (.compilerError TestRun.messages)
         , toggleAutoRun (always <| Bind.arity0 Settings (.toggle <| .autoRun Settings.messages))
         , toggleAutoNavigate (always <| Bind.arity0 Settings (.toggle <| .autoNavigate Settings.messages))
         , toggleElmVerifyExamples (always <| Bind.arity0 Settings (.toggle <| .runElmVerifyExamples Settings.messages))
         , notifySaveEvent <| saveEventMessage model
         , notifyPaneMoved PaneMoved
-        , runStart RunStart
-        , testCompleted TestCompleted
-        , runComplete RunComplete
+        , runStart <| Bind.arity1 TestRun (.runStart TestRun.messages)
+        , testCompleted <| Bind.arity1 TestRun (.testCompleted TestRun.messages)
+        , runComplete <| Bind.arity1 TestRun (.runComplete TestRun.messages)
         , Animation.subscription (Bind.arity1 Animate <| .flicker Animate.messages) [ model.statusBarTextStyle ]
         , Animation.subscription (Bind.arity1 Animate <| .oscillateColor Animate.messages) [ model.statusBarColorStyle ]
         , Animation.subscription (Bind.arity1 Animate <| .settingsTransition Animate.messages) [ model.footerStyle ]
@@ -237,12 +162,9 @@ subscriptions model =
 saveEventMessage : Model -> () -> Message
 saveEventMessage model _ =
     if model.autoRunEnabled then
-        InitiateRunAll
+        Bind.arity0 TestRun (.initiate TestRun.messages)
     else
         DoNothing
-
-
-port runTest : String -> Cmd message
 
 
 port copySeed : String -> Cmd message

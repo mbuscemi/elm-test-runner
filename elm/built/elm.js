@@ -17933,32 +17933,6 @@ var _user$project$Message_TestListItem$Expand = function (a) {
 };
 var _user$project$Message_TestListItem$messages = {expand: _user$project$Message_TestListItem$Expand, collapse: _user$project$Message_TestListItem$Collapse, mouseEnter: _user$project$Message_TestListItem$MouseEnter, mouseLeave: _user$project$Message_TestListItem$MouseLeave, select: _user$project$Message_TestListItem$Select};
 
-var _user$project$Model_ProjectName$setToTopNode = function (model) {
-	var _p0 = model.testRuns;
-	var testInstance = _p0._1;
-	var children = _p0._2;
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			testRuns: A3(_user$project$Tree_Core$Node, model.projectName, testInstance, children)
-		});
-};
-var _user$project$Model_ProjectName$default = 'Unknown Project';
-var _user$project$Model_ProjectName$setFromPath = F2(
-	function (projectPath, model) {
-		return _user$project$Model_ProjectName$setToTopNode(
-			_elm_lang$core$Native_Utils.update(
-				model,
-				{
-					projectName: A2(
-						_elm_lang$core$Maybe$withDefault,
-						_user$project$Model_ProjectName$default,
-						_elm_lang$core$List$head(
-							_elm_lang$core$List$reverse(
-								A2(_elm_lang$core$String$split, '/', projectPath))))
-				}));
-	});
-
 var _user$project$State_PaneLocation$toStyle = function (paneLocation) {
 	var _p0 = paneLocation;
 	if (_p0.ctor === 'Bottom') {
@@ -17983,85 +17957,6 @@ var _user$project$State_PaneLocation$fromString = function (location) {
 	}
 };
 
-var _user$project$Model$default = {
-	projectName: '',
-	compilerError: _elm_lang$core$Maybe$Nothing,
-	runStatus: _user$project$State_RunStatus$noData,
-	totalTests: 0,
-	passedTests: 0,
-	runDuration: _elm_lang$core$Maybe$Nothing,
-	runSeed: _elm_lang$core$Maybe$Nothing,
-	testRuns: A3(
-		_user$project$Tree_Core$Node,
-		_user$project$Model_ProjectName$default,
-		_user$project$TestInstance_Core$default,
-		{ctor: '[]'}),
-	testHierarchy: _user$project$Tree_Core$make(
-		A3(
-			_user$project$Tree_Core$Node,
-			'No Tests',
-			_user$project$TestInstance_Core$default,
-			{ctor: '[]'})),
-	testMouseIsOver: _elm_lang$core$Maybe$Nothing,
-	selectedTestNodeId: _elm_lang$core$Maybe$Nothing,
-	selectedTestInstance: _elm_lang$core$Maybe$Nothing,
-	autoRunEnabled: false,
-	autoNavigateEnabled: true,
-	runElmVerifyExamplesEnabled: false,
-	randomSeed: _elm_lang$core$Maybe$Nothing,
-	forceRandomSeedEnabled: false,
-	statusBarTextStyle: _user$project$Animation_Flicker$initial,
-	statusBarColorStyle: _user$project$Animation_Color$initial(_user$project$State_RunStatus$noData),
-	footerStyle: _user$project$Animation_Footer$initial,
-	footerExpanded: false,
-	paneLocation: _user$project$State_PaneLocation$default
-};
-var _user$project$Model$Model = function (a) {
-	return function (b) {
-		return function (c) {
-			return function (d) {
-				return function (e) {
-					return function (f) {
-						return function (g) {
-							return function (h) {
-								return function (i) {
-									return function (j) {
-										return function (k) {
-											return function (l) {
-												return function (m) {
-													return function (n) {
-														return function (o) {
-															return function (p) {
-																return function (q) {
-																	return function (r) {
-																		return function (s) {
-																			return function (t) {
-																				return function (u) {
-																					return function (v) {
-																						return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, runElmVerifyExamplesEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarTextStyle: r, statusBarColorStyle: s, footerStyle: t, footerExpanded: u, paneLocation: v};
-																					};
-																				};
-																			};
-																		};
-																	};
-																};
-															};
-														};
-													};
-												};
-											};
-										};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-};
-
 var _user$project$Model_Basics$setPaneLocation = F2(
 	function (newLocation, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -18075,6 +17970,32 @@ var _user$project$Model_Basics$setCompilerErrorMessage = F2(
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{compilerError: maybeError});
+	});
+
+var _user$project$Model_ProjectName$setToTopNode = function (model) {
+	var _p0 = model.testRuns;
+	var testInstance = _p0._1;
+	var children = _p0._2;
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testRuns: A3(_user$project$Tree_Core$Node, model.projectName, testInstance, children)
+		});
+};
+var _user$project$Model_ProjectName$default = 'Unknown Project';
+var _user$project$Model_ProjectName$setFromPath = F2(
+	function (projectPath, model) {
+		return _user$project$Model_ProjectName$setToTopNode(
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{
+					projectName: A2(
+						_elm_lang$core$Maybe$withDefault,
+						_user$project$Model_ProjectName$default,
+						_elm_lang$core$List$head(
+							_elm_lang$core$List$reverse(
+								A2(_elm_lang$core$String$split, '/', projectPath))))
+				}));
 	});
 
 var _user$project$Model_RandomSeed$forJS = function (model) {
@@ -18255,6 +18176,187 @@ var _user$project$Model_TestCount$updatePassed = F2(
 				passedTests: model.passedTests + _user$project$TestEvent_TestCompleted$passedTestCountToIncrement(event)
 			});
 	});
+
+var _user$project$Message_TestRun$runTest = _elm_lang$core$Native_Platform.outgoingPort(
+	'runTest',
+	function (v) {
+		return v;
+	});
+var _user$project$Message_TestRun$update = F2(
+	function (message, model) {
+		var _p0 = message;
+		switch (_p0.ctor) {
+			case 'Initiate':
+				return A2(
+					_user$project$And$execute,
+					_user$project$Message_TestRun$runTest(
+						_user$project$Model_RandomSeed$forJS(model)),
+					_user$project$Model_TestTree$updateHierarchy(
+						_user$project$Model_TestTree$reset(
+							_user$project$Model_RunSeed$clear(
+								_user$project$Model_RunDuration$clear(
+									A2(
+										_user$project$Model_Basics$setCompilerErrorMessage,
+										_elm_lang$core$Maybe$Nothing,
+										A2(
+											_user$project$Model_SelectedTest$setInstance,
+											_elm_lang$core$Maybe$Nothing,
+											A2(
+												_user$project$Model_SelectedTest$setNodeId,
+												_elm_lang$core$Maybe$Nothing,
+												_user$project$Model_TestCount$resetPassed(model)))))))));
+			case 'GenerateTests':
+				return _user$project$And$doNothing(
+					_user$project$Model_Animation$initiateColorOscillation(
+						_user$project$Model_RunStatus$setToGeneratingTests(model)));
+			case 'Execute':
+				return _user$project$And$doNothing(
+					_user$project$Model_Animation$initiateColorOscillation(
+						_user$project$Model_RunStatus$setToProcessing(model)));
+			case 'CompilerError':
+				return _user$project$And$doNothing(
+					A2(
+						_user$project$Model_Basics$setCompilerErrorMessage,
+						_elm_lang$core$Maybe$Just(_p0._0),
+						_user$project$Model_Animation$pulseToStatusColor(
+							_user$project$Model_RunStatus$setToCompileError(model))));
+			case 'RunStart':
+				var event = _user$project$TestEvent_RunStart$parse(_p0._0._1);
+				return _user$project$And$doNothing(
+					A2(
+						_user$project$Model_RunSeed$set,
+						event,
+						A2(
+							_user$project$Model_TestCount$setTotal,
+							event,
+							A2(_user$project$Model_ProjectName$setFromPath, _p0._0._0, model))));
+			case 'TestCompleted':
+				var event = _user$project$TestEvent_TestCompleted$parseJson(_p0._0);
+				return _user$project$And$doNothing(
+					_user$project$Model_TestTree$updateHierarchy(
+						A2(
+							_user$project$Model_TestTree$build,
+							event,
+							A2(_user$project$Model_TestCount$updatePassed, event, model))));
+			default:
+				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
+				return _user$project$And$doNothing(
+					_user$project$Model_Animation$initiateStatusBarTextFlicker(
+						_user$project$Model_TestTree$expandFailingAndTodoNodes(
+							_user$project$Model_TestTree$updateHierarchy(
+								_user$project$Model_TestTree$purgeObsoleteNodes(
+									A2(
+										_user$project$Model_RunDuration$set,
+										event,
+										_user$project$Model_Animation$pulseToStatusColor(
+											A2(
+												_user$project$Model_RunStatus$setForFailure,
+												event,
+												A2(
+													_user$project$Model_RunStatus$setForTodo,
+													_user$project$TestInstance_Core$isTodo,
+													_user$project$Model_RunStatus$setToPassing(model))))))))));
+		}
+	});
+var _user$project$Message_TestRun$Messages = F7(
+	function (a, b, c, d, e, f, g) {
+		return {initiate: a, generate: b, execute: c, compilerError: d, runStart: e, testCompleted: f, runComplete: g};
+	});
+var _user$project$Message_TestRun$RunComplete = function (a) {
+	return {ctor: 'RunComplete', _0: a};
+};
+var _user$project$Message_TestRun$TestCompleted = function (a) {
+	return {ctor: 'TestCompleted', _0: a};
+};
+var _user$project$Message_TestRun$RunStart = function (a) {
+	return {ctor: 'RunStart', _0: a};
+};
+var _user$project$Message_TestRun$CompilerError = function (a) {
+	return {ctor: 'CompilerError', _0: a};
+};
+var _user$project$Message_TestRun$Execute = {ctor: 'Execute'};
+var _user$project$Message_TestRun$GenerateTests = {ctor: 'GenerateTests'};
+var _user$project$Message_TestRun$Initiate = {ctor: 'Initiate'};
+var _user$project$Message_TestRun$messages = {initiate: _user$project$Message_TestRun$Initiate, generate: _user$project$Message_TestRun$GenerateTests, execute: _user$project$Message_TestRun$Execute, compilerError: _user$project$Message_TestRun$CompilerError, runStart: _user$project$Message_TestRun$RunStart, testCompleted: _user$project$Message_TestRun$TestCompleted, runComplete: _user$project$Message_TestRun$RunComplete};
+
+var _user$project$Model$default = {
+	projectName: '',
+	compilerError: _elm_lang$core$Maybe$Nothing,
+	runStatus: _user$project$State_RunStatus$noData,
+	totalTests: 0,
+	passedTests: 0,
+	runDuration: _elm_lang$core$Maybe$Nothing,
+	runSeed: _elm_lang$core$Maybe$Nothing,
+	testRuns: A3(
+		_user$project$Tree_Core$Node,
+		_user$project$Model_ProjectName$default,
+		_user$project$TestInstance_Core$default,
+		{ctor: '[]'}),
+	testHierarchy: _user$project$Tree_Core$make(
+		A3(
+			_user$project$Tree_Core$Node,
+			'No Tests',
+			_user$project$TestInstance_Core$default,
+			{ctor: '[]'})),
+	testMouseIsOver: _elm_lang$core$Maybe$Nothing,
+	selectedTestNodeId: _elm_lang$core$Maybe$Nothing,
+	selectedTestInstance: _elm_lang$core$Maybe$Nothing,
+	autoRunEnabled: false,
+	autoNavigateEnabled: true,
+	runElmVerifyExamplesEnabled: false,
+	randomSeed: _elm_lang$core$Maybe$Nothing,
+	forceRandomSeedEnabled: false,
+	statusBarTextStyle: _user$project$Animation_Flicker$initial,
+	statusBarColorStyle: _user$project$Animation_Color$initial(_user$project$State_RunStatus$noData),
+	footerStyle: _user$project$Animation_Footer$initial,
+	footerExpanded: false,
+	paneLocation: _user$project$State_PaneLocation$default
+};
+var _user$project$Model$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return function (n) {
+														return function (o) {
+															return function (p) {
+																return function (q) {
+																	return function (r) {
+																		return function (s) {
+																			return function (t) {
+																				return function (u) {
+																					return function (v) {
+																						return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, runElmVerifyExamplesEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarTextStyle: r, statusBarColorStyle: s, footerStyle: t, footerExpanded: u, paneLocation: v};
+																					};
+																				};
+																			};
+																		};
+																	};
+																};
+															};
+														};
+													};
+												};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 
 var _user$project$TestInstance_View$timeReport = function (testInstance) {
 	return A2(
@@ -19786,11 +19888,6 @@ var _user$project$Main$init = function (rawFlags) {
 				flags.autoNavigate,
 				A2(_user$project$Model_Config$setAutoRun, flags.autoRun, _user$project$Model$default))));
 };
-var _user$project$Main$runTest = _elm_lang$core$Native_Platform.outgoingPort(
-	'runTest',
-	function (v) {
-		return v;
-	});
 var _user$project$Main$copySeed = _elm_lang$core$Native_Platform.outgoingPort(
 	'copySeed',
 	function (v) {
@@ -19800,76 +19897,8 @@ var _user$project$Main$update = F2(
 	function (message, model) {
 		var _p0 = message;
 		switch (_p0.ctor) {
-			case 'InitiateRunAll':
-				return A2(
-					_user$project$And$execute,
-					_user$project$Main$runTest(
-						_user$project$Model_RandomSeed$forJS(model)),
-					_user$project$Model_TestTree$updateHierarchy(
-						_user$project$Model_TestTree$reset(
-							_user$project$Model_RunSeed$clear(
-								_user$project$Model_RunDuration$clear(
-									A2(
-										_user$project$Model_Basics$setCompilerErrorMessage,
-										_elm_lang$core$Maybe$Nothing,
-										A2(
-											_user$project$Model_SelectedTest$setInstance,
-											_elm_lang$core$Maybe$Nothing,
-											A2(
-												_user$project$Model_SelectedTest$setNodeId,
-												_elm_lang$core$Maybe$Nothing,
-												_user$project$Model_TestCount$resetPassed(model)))))))));
-			case 'GenerateTestsStart':
-				return _user$project$And$doNothing(
-					_user$project$Model_Animation$initiateColorOscillation(
-						_user$project$Model_RunStatus$setToGeneratingTests(model)));
-			case 'ExecuteTestsStart':
-				return _user$project$And$doNothing(
-					_user$project$Model_Animation$initiateColorOscillation(
-						_user$project$Model_RunStatus$setToProcessing(model)));
-			case 'CompilerErrored':
-				return _user$project$And$doNothing(
-					A2(
-						_user$project$Model_Basics$setCompilerErrorMessage,
-						_elm_lang$core$Maybe$Just(_p0._0),
-						_user$project$Model_Animation$pulseToStatusColor(
-							_user$project$Model_RunStatus$setToCompileError(model))));
-			case 'RunStart':
-				var event = _user$project$TestEvent_RunStart$parse(_p0._0._1);
-				return _user$project$And$doNothing(
-					A2(
-						_user$project$Model_RunSeed$set,
-						event,
-						A2(
-							_user$project$Model_TestCount$setTotal,
-							event,
-							A2(_user$project$Model_ProjectName$setFromPath, _p0._0._0, model))));
-			case 'TestCompleted':
-				var event = _user$project$TestEvent_TestCompleted$parseJson(_p0._0);
-				return _user$project$And$doNothing(
-					_user$project$Model_TestTree$updateHierarchy(
-						A2(
-							_user$project$Model_TestTree$build,
-							event,
-							A2(_user$project$Model_TestCount$updatePassed, event, model))));
-			case 'RunComplete':
-				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
-				return _user$project$And$doNothing(
-					_user$project$Model_Animation$initiateStatusBarTextFlicker(
-						_user$project$Model_TestTree$expandFailingAndTodoNodes(
-							_user$project$Model_TestTree$updateHierarchy(
-								_user$project$Model_TestTree$purgeObsoleteNodes(
-									A2(
-										_user$project$Model_RunDuration$set,
-										event,
-										_user$project$Model_Animation$pulseToStatusColor(
-											A2(
-												_user$project$Model_RunStatus$setForFailure,
-												event,
-												A2(
-													_user$project$Model_RunStatus$setForTodo,
-													_user$project$TestInstance_Core$isTodo,
-													_user$project$Model_RunStatus$setToPassing(model))))))))));
+			case 'TestRun':
+				return A2(_user$project$Message_TestRun$update, _p0._0, model);
 			case 'TestListItem':
 				return A2(_user$project$Message_TestListItem$update, _p0._0, model);
 			case 'Settings':
@@ -19972,21 +20001,9 @@ var _user$project$Main$Settings = function (a) {
 var _user$project$Main$TestListItem = function (a) {
 	return {ctor: 'TestListItem', _0: a};
 };
-var _user$project$Main$RunComplete = function (a) {
-	return {ctor: 'RunComplete', _0: a};
+var _user$project$Main$TestRun = function (a) {
+	return {ctor: 'TestRun', _0: a};
 };
-var _user$project$Main$TestCompleted = function (a) {
-	return {ctor: 'TestCompleted', _0: a};
-};
-var _user$project$Main$RunStart = function (a) {
-	return {ctor: 'RunStart', _0: a};
-};
-var _user$project$Main$CompilerErrored = function (a) {
-	return {ctor: 'CompilerErrored', _0: a};
-};
-var _user$project$Main$ExecuteTestsStart = {ctor: 'ExecuteTestsStart'};
-var _user$project$Main$GenerateTestsStart = {ctor: 'GenerateTestsStart'};
-var _user$project$Main$InitiateRunAll = {ctor: 'InitiateRunAll'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View$render,
@@ -20015,7 +20032,12 @@ var _user$project$Main$view = function (model) {
 			paneLocation: model.paneLocation
 		},
 		{
-			runAllButtonClickHandler: _user$project$Main$InitiateRunAll,
+			runAllButtonClickHandler: A2(
+				_user$project$Bind$arity0,
+				_user$project$Main$TestRun,
+				function (_) {
+					return _.initiate;
+				}(_user$project$Message_TestRun$messages)),
 			testListItemExpand: A2(
 				_user$project$Bind$arity1,
 				_user$project$Main$TestListItem,
@@ -20081,25 +20103,54 @@ var _user$project$Main$view = function (model) {
 };
 var _user$project$Main$saveEventMessage = F2(
 	function (model, _p1) {
-		return model.autoRunEnabled ? _user$project$Main$InitiateRunAll : _user$project$Main$DoNothing;
+		return model.autoRunEnabled ? A2(
+			_user$project$Bind$arity0,
+			_user$project$Main$TestRun,
+			function (_) {
+				return _.initiate;
+			}(_user$project$Message_TestRun$messages)) : _user$project$Main$DoNothing;
 	});
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
 			_0: _user$project$Main$commandKeyTestStart(
-				_elm_lang$core$Basics$always(_user$project$Main$InitiateRunAll)),
+				_elm_lang$core$Basics$always(
+					A2(
+						_user$project$Bind$arity0,
+						_user$project$Main$TestRun,
+						function (_) {
+							return _.initiate;
+						}(_user$project$Message_TestRun$messages)))),
 			_1: {
 				ctor: '::',
 				_0: _user$project$Main$notifyGeneratingTests(
-					_elm_lang$core$Basics$always(_user$project$Main$GenerateTestsStart)),
+					_elm_lang$core$Basics$always(
+						A2(
+							_user$project$Bind$arity0,
+							_user$project$Main$TestRun,
+							function (_) {
+								return _.generate;
+							}(_user$project$Message_TestRun$messages)))),
 				_1: {
 					ctor: '::',
 					_0: _user$project$Main$notifyExecutingTests(
-						_elm_lang$core$Basics$always(_user$project$Main$ExecuteTestsStart)),
+						_elm_lang$core$Basics$always(
+							A2(
+								_user$project$Bind$arity0,
+								_user$project$Main$TestRun,
+								function (_) {
+									return _.execute;
+								}(_user$project$Message_TestRun$messages)))),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Main$notifyCompilerErrored(_user$project$Main$CompilerErrored),
+						_0: _user$project$Main$notifyCompilerErrored(
+							A2(
+								_user$project$Bind$arity1,
+								_user$project$Main$TestRun,
+								function (_) {
+									return _.compilerError;
+								}(_user$project$Message_TestRun$messages))),
 						_1: {
 							ctor: '::',
 							_0: _user$project$Main$toggleAutoRun(
@@ -20148,13 +20199,31 @@ var _user$project$Main$subscriptions = function (model) {
 											_0: _user$project$Main$notifyPaneMoved(_user$project$Main$PaneMoved),
 											_1: {
 												ctor: '::',
-												_0: _user$project$Main$runStart(_user$project$Main$RunStart),
+												_0: _user$project$Main$runStart(
+													A2(
+														_user$project$Bind$arity1,
+														_user$project$Main$TestRun,
+														function (_) {
+															return _.runStart;
+														}(_user$project$Message_TestRun$messages))),
 												_1: {
 													ctor: '::',
-													_0: _user$project$Main$testCompleted(_user$project$Main$TestCompleted),
+													_0: _user$project$Main$testCompleted(
+														A2(
+															_user$project$Bind$arity1,
+															_user$project$Main$TestRun,
+															function (_) {
+																return _.testCompleted;
+															}(_user$project$Message_TestRun$messages))),
 													_1: {
 														ctor: '::',
-														_0: _user$project$Main$runComplete(_user$project$Main$RunComplete),
+														_0: _user$project$Main$runComplete(
+															A2(
+																_user$project$Bind$arity1,
+																_user$project$Main$TestRun,
+																function (_) {
+																	return _.runComplete;
+																}(_user$project$Message_TestRun$messages))),
 														_1: {
 															ctor: '::',
 															_0: A2(
