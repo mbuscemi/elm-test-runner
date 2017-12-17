@@ -16477,258 +16477,6 @@ var _myrho$elm_round$Round$roundCom = _myrho$elm_round$Round$roundFun(
 	});
 var _myrho$elm_round$Round$roundNumCom = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$roundCom);
 
-var _user$project$State_RunStatus$toSecondaryColor = function (runStatus) {
-	var _p0 = runStatus;
-	switch (_p0.ctor) {
-		case 'NoData':
-			return A3(_elm_lang$core$Color$rgb, 16, 19, 24);
-		case 'GeneratingTests':
-			return A3(_elm_lang$core$Color$rgb, 97, 17, 106);
-		case 'Processing':
-			return A3(_elm_lang$core$Color$rgb, 64, 64, 34);
-		case 'LastPassed':
-			return A3(_elm_lang$core$Color$rgb, 30, 86, 30);
-		case 'LastFailed':
-			return A3(_elm_lang$core$Color$rgb, 163, 15, 15);
-		case 'CompileError':
-			return A3(_elm_lang$core$Color$rgb, 140, 86, 8);
-		default:
-			return A3(_elm_lang$core$Color$rgb, 13, 91, 164);
-	}
-};
-var _user$project$State_RunStatus$toPrimaryColor = function (runStatus) {
-	var _p1 = runStatus;
-	switch (_p1.ctor) {
-		case 'NoData':
-			return A3(_elm_lang$core$Color$rgb, 16, 19, 24);
-		case 'GeneratingTests':
-			return A3(_elm_lang$core$Color$rgb, 70, 27, 75);
-		case 'LastPassed':
-			return A3(_elm_lang$core$Color$rgb, 32, 64, 32);
-		case 'LastFailed':
-			return A3(_elm_lang$core$Color$rgb, 98, 12, 12);
-		case 'CompileError':
-			return A3(_elm_lang$core$Color$rgb, 85, 54, 10);
-		case 'Processing':
-			return A3(_elm_lang$core$Color$rgb, 48, 48, 35);
-		default:
-			return A3(_elm_lang$core$Color$rgb, 7, 61, 111);
-	}
-};
-var _user$project$State_RunStatus$toText = function (runStatus) {
-	var _p2 = runStatus;
-	switch (_p2.ctor) {
-		case 'NoData':
-			return 'No Data';
-		case 'GeneratingTests':
-			return '... Generating Tests ... ';
-		case 'Processing':
-			return '... Running ...';
-		case 'LastPassed':
-			return 'Passed';
-		case 'LastFailed':
-			return 'Failed';
-		case 'CompileError':
-			return 'Compile Error';
-		default:
-			return 'Incomplete';
-	}
-};
-var _user$project$State_RunStatus$Incomplete = {ctor: 'Incomplete'};
-var _user$project$State_RunStatus$incomplete = _user$project$State_RunStatus$Incomplete;
-var _user$project$State_RunStatus$CompileError = {ctor: 'CompileError'};
-var _user$project$State_RunStatus$compileError = _user$project$State_RunStatus$CompileError;
-var _user$project$State_RunStatus$LastFailed = {ctor: 'LastFailed'};
-var _user$project$State_RunStatus$lastFailed = _user$project$State_RunStatus$LastFailed;
-var _user$project$State_RunStatus$LastPassed = {ctor: 'LastPassed'};
-var _user$project$State_RunStatus$lastPassed = _user$project$State_RunStatus$LastPassed;
-var _user$project$State_RunStatus$Processing = {ctor: 'Processing'};
-var _user$project$State_RunStatus$processing = _user$project$State_RunStatus$Processing;
-var _user$project$State_RunStatus$GeneratingTests = {ctor: 'GeneratingTests'};
-var _user$project$State_RunStatus$generatingTests = _user$project$State_RunStatus$GeneratingTests;
-var _user$project$State_RunStatus$NoData = {ctor: 'NoData'};
-var _user$project$State_RunStatus$noData = _user$project$State_RunStatus$NoData;
-
-var _user$project$Animation_Color$pulse = function (runStatus) {
-	return _mdgriffith$elm_style_animation$Animation$interrupt(
-		{
-			ctor: '::',
-			_0: A2(
-				_mdgriffith$elm_style_animation$Animation$toWith,
-				_mdgriffith$elm_style_animation$Animation$easing(
-					{duration: 120, ease: _elm_community$easing_functions$Ease$outQuad}),
-				{
-					ctor: '::',
-					_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
-						_user$project$State_RunStatus$toSecondaryColor(runStatus)),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_mdgriffith$elm_style_animation$Animation$toWith,
-					_mdgriffith$elm_style_animation$Animation$easing(
-						{duration: 540, ease: _elm_community$easing_functions$Ease$inQuad}),
-					{
-						ctor: '::',
-						_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
-							_user$project$State_RunStatus$toPrimaryColor(runStatus)),
-						_1: {ctor: '[]'}
-					}),
-				_1: {ctor: '[]'}
-			}
-		});
-};
-var _user$project$Animation_Color$initial = function (runStatus) {
-	return _mdgriffith$elm_style_animation$Animation$style(
-		{
-			ctor: '::',
-			_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
-				_user$project$State_RunStatus$toPrimaryColor(runStatus)),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$Animation_Color$oscillateDuration = 660;
-var _user$project$Animation_Color$oscillate = function (runStatus) {
-	return _mdgriffith$elm_style_animation$Animation$interrupt(
-		{
-			ctor: '::',
-			_0: _mdgriffith$elm_style_animation$Animation$loop(
-				{
-					ctor: '::',
-					_0: A2(
-						_mdgriffith$elm_style_animation$Animation$toWith,
-						_mdgriffith$elm_style_animation$Animation$easing(
-							{duration: _user$project$Animation_Color$oscillateDuration, ease: _elm_community$easing_functions$Ease$linear}),
-						{
-							ctor: '::',
-							_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
-								_user$project$State_RunStatus$toPrimaryColor(runStatus)),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_mdgriffith$elm_style_animation$Animation$toWith,
-							_mdgriffith$elm_style_animation$Animation$easing(
-								{duration: _user$project$Animation_Color$oscillateDuration, ease: _elm_community$easing_functions$Ease$linear}),
-							{
-								ctor: '::',
-								_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
-									_user$project$State_RunStatus$toSecondaryColor(runStatus)),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}
-				}),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$Animation_Color$fadeDuration = 330;
-
-var _user$project$Animation_Flicker$onAndOff = F2(
-	function (times, milliseconds) {
-		return A2(
-			_mdgriffith$elm_style_animation$Animation$repeat,
-			times,
-			{
-				ctor: '::',
-				_0: _mdgriffith$elm_style_animation$Animation$set(
-					{
-						ctor: '::',
-						_0: _mdgriffith$elm_style_animation$Animation$opacity(0.0),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: _mdgriffith$elm_style_animation$Animation$wait(milliseconds),
-					_1: {
-						ctor: '::',
-						_0: _mdgriffith$elm_style_animation$Animation$set(
-							{
-								ctor: '::',
-								_0: _mdgriffith$elm_style_animation$Animation$opacity(1.0),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: _mdgriffith$elm_style_animation$Animation$wait(milliseconds),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			});
-	});
-var _user$project$Animation_Flicker$animation = _mdgriffith$elm_style_animation$Animation$interrupt(
-	{
-		ctor: '::',
-		_0: A2(_user$project$Animation_Flicker$onAndOff, 1, 5.0),
-		_1: {
-			ctor: '::',
-			_0: A2(_user$project$Animation_Flicker$onAndOff, 1, 10.0),
-			_1: {
-				ctor: '::',
-				_0: A2(_user$project$Animation_Flicker$onAndOff, 3, 20.0),
-				_1: {
-					ctor: '::',
-					_0: A2(_user$project$Animation_Flicker$onAndOff, 2, 50.0),
-					_1: {
-						ctor: '::',
-						_0: A2(_user$project$Animation_Flicker$onAndOff, 1, 100.0),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		}
-	});
-var _user$project$Animation_Flicker$initial = _mdgriffith$elm_style_animation$Animation$style(
-	{
-		ctor: '::',
-		_0: _mdgriffith$elm_style_animation$Animation$opacity(1.0),
-		_1: {ctor: '[]'}
-	});
-
-var _user$project$Animation_Footer$duration = 600;
-var _user$project$Animation_Footer$expandedHeight = 103;
-var _user$project$Animation_Footer$animateUp = _mdgriffith$elm_style_animation$Animation$interrupt(
-	{
-		ctor: '::',
-		_0: A2(
-			_mdgriffith$elm_style_animation$Animation$toWith,
-			_mdgriffith$elm_style_animation$Animation$easing(
-				{duration: _user$project$Animation_Footer$duration, ease: _elm_community$easing_functions$Ease$outQuad}),
-			{
-				ctor: '::',
-				_0: _mdgriffith$elm_style_animation$Animation$height(
-					_mdgriffith$elm_style_animation$Animation$px(_user$project$Animation_Footer$expandedHeight)),
-				_1: {ctor: '[]'}
-			}),
-		_1: {ctor: '[]'}
-	});
-var _user$project$Animation_Footer$initialHeight = 45;
-var _user$project$Animation_Footer$initial = _mdgriffith$elm_style_animation$Animation$style(
-	{
-		ctor: '::',
-		_0: _mdgriffith$elm_style_animation$Animation$height(
-			_mdgriffith$elm_style_animation$Animation$px(_user$project$Animation_Footer$initialHeight)),
-		_1: {ctor: '[]'}
-	});
-var _user$project$Animation_Footer$animateDown = _mdgriffith$elm_style_animation$Animation$interrupt(
-	{
-		ctor: '::',
-		_0: A2(
-			_mdgriffith$elm_style_animation$Animation$toWith,
-			_mdgriffith$elm_style_animation$Animation$easing(
-				{duration: _user$project$Animation_Footer$duration, ease: _elm_community$easing_functions$Ease$outQuad}),
-			{
-				ctor: '::',
-				_0: _mdgriffith$elm_style_animation$Animation$height(
-					_mdgriffith$elm_style_animation$Animation$px(_user$project$Animation_Footer$initialHeight)),
-				_1: {ctor: '[]'}
-			}),
-		_1: {ctor: '[]'}
-	});
-
 var _user$project$Model_Flags$default = {autoRun: false, autoNavigate: true, useElmVerifyExamples: false};
 var _user$project$Model_Flags$Flags = F3(
 	function (a, b, c) {
@@ -16747,89 +16495,41 @@ var _user$project$Model_Flags$parse = function (raw) {
 		A2(_elm_lang$core$Json_Decode$decodeValue, _user$project$Model_Flags$flags, raw));
 };
 
-var _user$project$Tree_Core$newId = A2(
-	_folkertdev$elm_state$State$andThen,
-	function (_p0) {
-		return _folkertdev$elm_state$State$get;
-	},
-	_folkertdev$elm_state$State$modify(
-		function (x) {
-			return x + 1;
-		}));
-var _user$project$Tree_Core$Node = F3(
-	function (a, b, c) {
-		return {ctor: 'Node', _0: a, _1: b, _2: c};
+var _user$project$Model_Config$serialize = function (model) {
+	return {autoRun: model.autoRunEnabled, autoNavigate: model.autoNavigateEnabled, useElmVerifyExamples: model.runElmVerifyExamplesEnabled};
+};
+var _user$project$Model_Config$setElmVerifyExamples = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{runElmVerifyExamplesEnabled: setting});
 	});
-var _user$project$Tree_Core$label = function (_p1) {
-	var _p2 = _p1;
-	return A3(
-		_folkertdev$elm_state$State$map2,
-		F2(
-			function (nid, collapsibleChildren) {
-				return A3(
-					_user$project$Tree_Core$Node,
-					{ctor: '_Tuple3', _0: _p2._0, _1: false, _2: nid},
-					_p2._1,
-					collapsibleChildren);
-			}),
-		_user$project$Tree_Core$newId,
-		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Core$label, _p2._2));
-};
-var _user$project$Tree_Core$make = function (tree) {
-	return A2(
-		_folkertdev$elm_state$State$finalValue,
-		0,
-		_user$project$Tree_Core$label(tree));
-};
-
-var _user$project$Model_ProjectName$setToTopNode = function (model) {
-	var _p0 = model.testRuns;
-	var testInstance = _p0._1;
-	var children = _p0._2;
+var _user$project$Model_Config$invertElmVerifyExamples = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
-		{
-			testRuns: A3(_user$project$Tree_Core$Node, model.projectName, testInstance, children)
-		});
+		{runElmVerifyExamplesEnabled: !model.runElmVerifyExamplesEnabled});
 };
-var _user$project$Model_ProjectName$default = 'Unknown Project';
-var _user$project$Model_ProjectName$setFromPath = F2(
-	function (projectPath, model) {
-		return _user$project$Model_ProjectName$setToTopNode(
-			_elm_lang$core$Native_Utils.update(
-				model,
-				{
-					projectName: A2(
-						_elm_lang$core$Maybe$withDefault,
-						_user$project$Model_ProjectName$default,
-						_elm_lang$core$List$head(
-							_elm_lang$core$List$reverse(
-								A2(_elm_lang$core$String$split, '/', projectPath))))
-				}));
+var _user$project$Model_Config$setAutoNavigate = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{autoNavigateEnabled: setting});
 	});
-
-var _user$project$State_PaneLocation$toStyle = function (paneLocation) {
-	var _p0 = paneLocation;
-	if (_p0.ctor === 'Bottom') {
-		return 'landscape';
-	} else {
-		return 'portrait';
-	}
+var _user$project$Model_Config$invertAutoNavigate = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{autoNavigateEnabled: !model.autoNavigateEnabled});
 };
-var _user$project$State_PaneLocation$Left = {ctor: 'Left'};
-var _user$project$State_PaneLocation$Bottom = {ctor: 'Bottom'};
-var _user$project$State_PaneLocation$Right = {ctor: 'Right'};
-var _user$project$State_PaneLocation$default = _user$project$State_PaneLocation$Right;
-var _user$project$State_PaneLocation$fromString = function (location) {
-	var _p1 = location;
-	switch (_p1) {
-		case 'bottom':
-			return _user$project$State_PaneLocation$Bottom;
-		case 'left':
-			return _user$project$State_PaneLocation$Left;
-		default:
-			return _user$project$State_PaneLocation$Right;
-	}
+var _user$project$Model_Config$setAutoRun = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{autoRunEnabled: setting});
+	});
+var _user$project$Model_Config$invertAutoRun = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{autoRunEnabled: !model.autoRunEnabled});
 };
 
 var _user$project$State_Duration$asSeconds = function (duration) {
@@ -17433,88 +17133,6 @@ var _user$project$TestInstance_Core$fromEvent = function (event) {
 		_user$project$TestEvent_TestCompleted$firstFailure(event));
 };
 
-var _user$project$Model$serialize = function (model) {
-	return {autoRun: model.autoRunEnabled, autoNavigate: model.autoNavigateEnabled, useElmVerifyExamples: model.runElmVerifyExamplesEnabled};
-};
-var _user$project$Model$default = {
-	projectName: '',
-	compilerError: _elm_lang$core$Maybe$Nothing,
-	runStatus: _user$project$State_RunStatus$noData,
-	totalTests: 0,
-	passedTests: 0,
-	runDuration: _elm_lang$core$Maybe$Nothing,
-	runSeed: _elm_lang$core$Maybe$Nothing,
-	testRuns: A3(
-		_user$project$Tree_Core$Node,
-		_user$project$Model_ProjectName$default,
-		_user$project$TestInstance_Core$default,
-		{ctor: '[]'}),
-	testHierarchy: _user$project$Tree_Core$make(
-		A3(
-			_user$project$Tree_Core$Node,
-			'No Tests',
-			_user$project$TestInstance_Core$default,
-			{ctor: '[]'})),
-	testMouseIsOver: _elm_lang$core$Maybe$Nothing,
-	selectedTestNodeId: _elm_lang$core$Maybe$Nothing,
-	selectedTestInstance: _elm_lang$core$Maybe$Nothing,
-	autoRunEnabled: false,
-	autoNavigateEnabled: true,
-	runElmVerifyExamplesEnabled: false,
-	randomSeed: _elm_lang$core$Maybe$Nothing,
-	forceRandomSeedEnabled: false,
-	statusBarTextStyle: _user$project$Animation_Flicker$initial,
-	statusBarColorStyle: _user$project$Animation_Color$initial(_user$project$State_RunStatus$noData),
-	footerStyle: _user$project$Animation_Footer$initial,
-	footerExpanded: false,
-	paneLocation: _user$project$State_PaneLocation$default
-};
-var _user$project$Model$Model = function (a) {
-	return function (b) {
-		return function (c) {
-			return function (d) {
-				return function (e) {
-					return function (f) {
-						return function (g) {
-							return function (h) {
-								return function (i) {
-									return function (j) {
-										return function (k) {
-											return function (l) {
-												return function (m) {
-													return function (n) {
-														return function (o) {
-															return function (p) {
-																return function (q) {
-																	return function (r) {
-																		return function (s) {
-																			return function (t) {
-																				return function (u) {
-																					return function (v) {
-																						return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, runElmVerifyExamplesEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarTextStyle: r, statusBarColorStyle: s, footerStyle: t, footerExpanded: u, paneLocation: v};
-																					};
-																				};
-																			};
-																		};
-																	};
-																};
-															};
-														};
-													};
-												};
-											};
-										};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-};
-
 var _user$project$And$execute = F2(
 	function (command, model) {
 		return {ctor: '_Tuple2', _0: model, _1: command};
@@ -17533,7 +17151,7 @@ var _user$project$And$updateAtomState = function (model) {
 		_user$project$And$execute,
 		model,
 		_user$project$And$updatePersistentState(
-			_user$project$Model$serialize(model)));
+			_user$project$Model_Config$serialize(model)));
 };
 var _user$project$And$navigateToFile = _elm_lang$core$Native_Platform.outgoingPort(
 	'navigateToFile',
@@ -17556,6 +17174,258 @@ var _user$project$And$showInEditor = F2(
 		} else {
 			return _user$project$And$doNothing;
 		}
+	});
+
+var _user$project$State_RunStatus$toSecondaryColor = function (runStatus) {
+	var _p0 = runStatus;
+	switch (_p0.ctor) {
+		case 'NoData':
+			return A3(_elm_lang$core$Color$rgb, 16, 19, 24);
+		case 'GeneratingTests':
+			return A3(_elm_lang$core$Color$rgb, 97, 17, 106);
+		case 'Processing':
+			return A3(_elm_lang$core$Color$rgb, 64, 64, 34);
+		case 'LastPassed':
+			return A3(_elm_lang$core$Color$rgb, 30, 86, 30);
+		case 'LastFailed':
+			return A3(_elm_lang$core$Color$rgb, 163, 15, 15);
+		case 'CompileError':
+			return A3(_elm_lang$core$Color$rgb, 140, 86, 8);
+		default:
+			return A3(_elm_lang$core$Color$rgb, 13, 91, 164);
+	}
+};
+var _user$project$State_RunStatus$toPrimaryColor = function (runStatus) {
+	var _p1 = runStatus;
+	switch (_p1.ctor) {
+		case 'NoData':
+			return A3(_elm_lang$core$Color$rgb, 16, 19, 24);
+		case 'GeneratingTests':
+			return A3(_elm_lang$core$Color$rgb, 70, 27, 75);
+		case 'LastPassed':
+			return A3(_elm_lang$core$Color$rgb, 32, 64, 32);
+		case 'LastFailed':
+			return A3(_elm_lang$core$Color$rgb, 98, 12, 12);
+		case 'CompileError':
+			return A3(_elm_lang$core$Color$rgb, 85, 54, 10);
+		case 'Processing':
+			return A3(_elm_lang$core$Color$rgb, 48, 48, 35);
+		default:
+			return A3(_elm_lang$core$Color$rgb, 7, 61, 111);
+	}
+};
+var _user$project$State_RunStatus$toText = function (runStatus) {
+	var _p2 = runStatus;
+	switch (_p2.ctor) {
+		case 'NoData':
+			return 'No Data';
+		case 'GeneratingTests':
+			return '... Generating Tests ... ';
+		case 'Processing':
+			return '... Running ...';
+		case 'LastPassed':
+			return 'Passed';
+		case 'LastFailed':
+			return 'Failed';
+		case 'CompileError':
+			return 'Compile Error';
+		default:
+			return 'Incomplete';
+	}
+};
+var _user$project$State_RunStatus$Incomplete = {ctor: 'Incomplete'};
+var _user$project$State_RunStatus$incomplete = _user$project$State_RunStatus$Incomplete;
+var _user$project$State_RunStatus$CompileError = {ctor: 'CompileError'};
+var _user$project$State_RunStatus$compileError = _user$project$State_RunStatus$CompileError;
+var _user$project$State_RunStatus$LastFailed = {ctor: 'LastFailed'};
+var _user$project$State_RunStatus$lastFailed = _user$project$State_RunStatus$LastFailed;
+var _user$project$State_RunStatus$LastPassed = {ctor: 'LastPassed'};
+var _user$project$State_RunStatus$lastPassed = _user$project$State_RunStatus$LastPassed;
+var _user$project$State_RunStatus$Processing = {ctor: 'Processing'};
+var _user$project$State_RunStatus$processing = _user$project$State_RunStatus$Processing;
+var _user$project$State_RunStatus$GeneratingTests = {ctor: 'GeneratingTests'};
+var _user$project$State_RunStatus$generatingTests = _user$project$State_RunStatus$GeneratingTests;
+var _user$project$State_RunStatus$NoData = {ctor: 'NoData'};
+var _user$project$State_RunStatus$noData = _user$project$State_RunStatus$NoData;
+
+var _user$project$Animation_Color$pulse = function (runStatus) {
+	return _mdgriffith$elm_style_animation$Animation$interrupt(
+		{
+			ctor: '::',
+			_0: A2(
+				_mdgriffith$elm_style_animation$Animation$toWith,
+				_mdgriffith$elm_style_animation$Animation$easing(
+					{duration: 120, ease: _elm_community$easing_functions$Ease$outQuad}),
+				{
+					ctor: '::',
+					_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
+						_user$project$State_RunStatus$toSecondaryColor(runStatus)),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_mdgriffith$elm_style_animation$Animation$toWith,
+					_mdgriffith$elm_style_animation$Animation$easing(
+						{duration: 540, ease: _elm_community$easing_functions$Ease$inQuad}),
+					{
+						ctor: '::',
+						_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
+							_user$project$State_RunStatus$toPrimaryColor(runStatus)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$Animation_Color$initial = function (runStatus) {
+	return _mdgriffith$elm_style_animation$Animation$style(
+		{
+			ctor: '::',
+			_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
+				_user$project$State_RunStatus$toPrimaryColor(runStatus)),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Animation_Color$oscillateDuration = 660;
+var _user$project$Animation_Color$oscillate = function (runStatus) {
+	return _mdgriffith$elm_style_animation$Animation$interrupt(
+		{
+			ctor: '::',
+			_0: _mdgriffith$elm_style_animation$Animation$loop(
+				{
+					ctor: '::',
+					_0: A2(
+						_mdgriffith$elm_style_animation$Animation$toWith,
+						_mdgriffith$elm_style_animation$Animation$easing(
+							{duration: _user$project$Animation_Color$oscillateDuration, ease: _elm_community$easing_functions$Ease$linear}),
+						{
+							ctor: '::',
+							_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
+								_user$project$State_RunStatus$toPrimaryColor(runStatus)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_mdgriffith$elm_style_animation$Animation$toWith,
+							_mdgriffith$elm_style_animation$Animation$easing(
+								{duration: _user$project$Animation_Color$oscillateDuration, ease: _elm_community$easing_functions$Ease$linear}),
+							{
+								ctor: '::',
+								_0: _mdgriffith$elm_style_animation$Animation$backgroundColor(
+									_user$project$State_RunStatus$toSecondaryColor(runStatus)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Animation_Color$fadeDuration = 330;
+
+var _user$project$Animation_Flicker$onAndOff = F2(
+	function (times, milliseconds) {
+		return A2(
+			_mdgriffith$elm_style_animation$Animation$repeat,
+			times,
+			{
+				ctor: '::',
+				_0: _mdgriffith$elm_style_animation$Animation$set(
+					{
+						ctor: '::',
+						_0: _mdgriffith$elm_style_animation$Animation$opacity(0.0),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _mdgriffith$elm_style_animation$Animation$wait(milliseconds),
+					_1: {
+						ctor: '::',
+						_0: _mdgriffith$elm_style_animation$Animation$set(
+							{
+								ctor: '::',
+								_0: _mdgriffith$elm_style_animation$Animation$opacity(1.0),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _mdgriffith$elm_style_animation$Animation$wait(milliseconds),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+	});
+var _user$project$Animation_Flicker$animation = _mdgriffith$elm_style_animation$Animation$interrupt(
+	{
+		ctor: '::',
+		_0: A2(_user$project$Animation_Flicker$onAndOff, 1, 5.0),
+		_1: {
+			ctor: '::',
+			_0: A2(_user$project$Animation_Flicker$onAndOff, 1, 10.0),
+			_1: {
+				ctor: '::',
+				_0: A2(_user$project$Animation_Flicker$onAndOff, 3, 20.0),
+				_1: {
+					ctor: '::',
+					_0: A2(_user$project$Animation_Flicker$onAndOff, 2, 50.0),
+					_1: {
+						ctor: '::',
+						_0: A2(_user$project$Animation_Flicker$onAndOff, 1, 100.0),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	});
+var _user$project$Animation_Flicker$initial = _mdgriffith$elm_style_animation$Animation$style(
+	{
+		ctor: '::',
+		_0: _mdgriffith$elm_style_animation$Animation$opacity(1.0),
+		_1: {ctor: '[]'}
+	});
+
+var _user$project$Animation_Footer$duration = 600;
+var _user$project$Animation_Footer$expandedHeight = 103;
+var _user$project$Animation_Footer$animateUp = _mdgriffith$elm_style_animation$Animation$interrupt(
+	{
+		ctor: '::',
+		_0: A2(
+			_mdgriffith$elm_style_animation$Animation$toWith,
+			_mdgriffith$elm_style_animation$Animation$easing(
+				{duration: _user$project$Animation_Footer$duration, ease: _elm_community$easing_functions$Ease$outQuad}),
+			{
+				ctor: '::',
+				_0: _mdgriffith$elm_style_animation$Animation$height(
+					_mdgriffith$elm_style_animation$Animation$px(_user$project$Animation_Footer$expandedHeight)),
+				_1: {ctor: '[]'}
+			}),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Animation_Footer$initialHeight = 45;
+var _user$project$Animation_Footer$initial = _mdgriffith$elm_style_animation$Animation$style(
+	{
+		ctor: '::',
+		_0: _mdgriffith$elm_style_animation$Animation$height(
+			_mdgriffith$elm_style_animation$Animation$px(_user$project$Animation_Footer$initialHeight)),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Animation_Footer$animateDown = _mdgriffith$elm_style_animation$Animation$interrupt(
+	{
+		ctor: '::',
+		_0: A2(
+			_mdgriffith$elm_style_animation$Animation$toWith,
+			_mdgriffith$elm_style_animation$Animation$easing(
+				{duration: _user$project$Animation_Footer$duration, ease: _elm_community$easing_functions$Ease$outQuad}),
+			{
+				ctor: '::',
+				_0: _mdgriffith$elm_style_animation$Animation$height(
+					_mdgriffith$elm_style_animation$Animation$px(_user$project$Animation_Footer$initialHeight)),
+				_1: {ctor: '[]'}
+			}),
+		_1: {ctor: '[]'}
 	});
 
 var _user$project$Bind$arity2 = F4(
@@ -17670,6 +17540,52 @@ var _user$project$Message_Animate$Flicker = function (a) {
 };
 var _user$project$Message_Animate$messages = {flicker: _user$project$Message_Animate$Flicker, oscillateColor: _user$project$Message_Animate$OscillateColor, settingsTransition: _user$project$Message_Animate$SettingsTransition};
 
+var _user$project$Message_Settings$update = F2(
+	function (message, model) {
+		var _p0 = message;
+		switch (_p0.ctor) {
+			case 'ToggleAutoRun':
+				return _user$project$And$updateAtomState(
+					_user$project$Model_Config$invertAutoRun(model));
+			case 'SetAutoRun':
+				return _user$project$And$updateAtomState(
+					A2(_user$project$Model_Config$setAutoRun, _p0._0, model));
+			case 'ToggleAutoNavigate':
+				return _user$project$And$updateAtomState(
+					_user$project$Model_Config$invertAutoNavigate(model));
+			case 'SetAutoNavigate':
+				return _user$project$And$updateAtomState(
+					A2(_user$project$Model_Config$setAutoNavigate, _p0._0, model));
+			case 'ToggleRunElmVerifyExamples':
+				return _user$project$And$updateAtomState(
+					_user$project$Model_Config$invertElmVerifyExamples(model));
+			default:
+				return _user$project$And$updateAtomState(
+					A2(_user$project$Model_Config$setElmVerifyExamples, _p0._0, model));
+		}
+	});
+var _user$project$Message_Settings$Messages = F3(
+	function (a, b, c) {
+		return {autoRun: a, autoNavigate: b, runElmVerifyExamples: c};
+	});
+var _user$project$Message_Settings$SetRunElmVerifyExamples = function (a) {
+	return {ctor: 'SetRunElmVerifyExamples', _0: a};
+};
+var _user$project$Message_Settings$ToggleRunElmVerifyExamples = {ctor: 'ToggleRunElmVerifyExamples'};
+var _user$project$Message_Settings$SetAutoNavigate = function (a) {
+	return {ctor: 'SetAutoNavigate', _0: a};
+};
+var _user$project$Message_Settings$ToggleAutoNavigate = {ctor: 'ToggleAutoNavigate'};
+var _user$project$Message_Settings$SetAutoRun = function (a) {
+	return {ctor: 'SetAutoRun', _0: a};
+};
+var _user$project$Message_Settings$ToggleAutoRun = {ctor: 'ToggleAutoRun'};
+var _user$project$Message_Settings$messages = {
+	autoRun: {toggle: _user$project$Message_Settings$ToggleAutoRun, set: _user$project$Message_Settings$SetAutoRun},
+	autoNavigate: {toggle: _user$project$Message_Settings$ToggleAutoNavigate, set: _user$project$Message_Settings$SetAutoNavigate},
+	runElmVerifyExamples: {toggle: _user$project$Message_Settings$ToggleRunElmVerifyExamples, set: _user$project$Message_Settings$SetRunElmVerifyExamples}
+};
+
 var _user$project$Model_SelectedTest$setTestMouseIsOver = F2(
 	function (nodeId, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -17697,6 +17613,41 @@ var _user$project$TestInstance_Reconcile$transform = F2(
 	function ($new, old) {
 		return A2(_user$project$TestInstance_Reconcile$updateStatusPreferringFail, $new, old);
 	});
+
+var _user$project$Tree_Core$newId = A2(
+	_folkertdev$elm_state$State$andThen,
+	function (_p0) {
+		return _folkertdev$elm_state$State$get;
+	},
+	_folkertdev$elm_state$State$modify(
+		function (x) {
+			return x + 1;
+		}));
+var _user$project$Tree_Core$Node = F3(
+	function (a, b, c) {
+		return {ctor: 'Node', _0: a, _1: b, _2: c};
+	});
+var _user$project$Tree_Core$label = function (_p1) {
+	var _p2 = _p1;
+	return A3(
+		_folkertdev$elm_state$State$map2,
+		F2(
+			function (nid, collapsibleChildren) {
+				return A3(
+					_user$project$Tree_Core$Node,
+					{ctor: '_Tuple3', _0: _p2._0, _1: false, _2: nid},
+					_p2._1,
+					collapsibleChildren);
+			}),
+		_user$project$Tree_Core$newId,
+		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Core$label, _p2._2));
+};
+var _user$project$Tree_Core$make = function (tree) {
+	return A2(
+		_folkertdev$elm_state$State$finalValue,
+		0,
+		_user$project$Tree_Core$label(tree));
+};
 
 var _user$project$Tree_Merge$listToTree = F3(
 	function (first, data, path) {
@@ -17982,6 +17933,135 @@ var _user$project$Message_TestListItem$Expand = function (a) {
 };
 var _user$project$Message_TestListItem$messages = {expand: _user$project$Message_TestListItem$Expand, collapse: _user$project$Message_TestListItem$Collapse, mouseEnter: _user$project$Message_TestListItem$MouseEnter, mouseLeave: _user$project$Message_TestListItem$MouseLeave, select: _user$project$Message_TestListItem$Select};
 
+var _user$project$Model_ProjectName$setToTopNode = function (model) {
+	var _p0 = model.testRuns;
+	var testInstance = _p0._1;
+	var children = _p0._2;
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testRuns: A3(_user$project$Tree_Core$Node, model.projectName, testInstance, children)
+		});
+};
+var _user$project$Model_ProjectName$default = 'Unknown Project';
+var _user$project$Model_ProjectName$setFromPath = F2(
+	function (projectPath, model) {
+		return _user$project$Model_ProjectName$setToTopNode(
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{
+					projectName: A2(
+						_elm_lang$core$Maybe$withDefault,
+						_user$project$Model_ProjectName$default,
+						_elm_lang$core$List$head(
+							_elm_lang$core$List$reverse(
+								A2(_elm_lang$core$String$split, '/', projectPath))))
+				}));
+	});
+
+var _user$project$State_PaneLocation$toStyle = function (paneLocation) {
+	var _p0 = paneLocation;
+	if (_p0.ctor === 'Bottom') {
+		return 'landscape';
+	} else {
+		return 'portrait';
+	}
+};
+var _user$project$State_PaneLocation$Left = {ctor: 'Left'};
+var _user$project$State_PaneLocation$Bottom = {ctor: 'Bottom'};
+var _user$project$State_PaneLocation$Right = {ctor: 'Right'};
+var _user$project$State_PaneLocation$default = _user$project$State_PaneLocation$Right;
+var _user$project$State_PaneLocation$fromString = function (location) {
+	var _p1 = location;
+	switch (_p1) {
+		case 'bottom':
+			return _user$project$State_PaneLocation$Bottom;
+		case 'left':
+			return _user$project$State_PaneLocation$Left;
+		default:
+			return _user$project$State_PaneLocation$Right;
+	}
+};
+
+var _user$project$Model$default = {
+	projectName: '',
+	compilerError: _elm_lang$core$Maybe$Nothing,
+	runStatus: _user$project$State_RunStatus$noData,
+	totalTests: 0,
+	passedTests: 0,
+	runDuration: _elm_lang$core$Maybe$Nothing,
+	runSeed: _elm_lang$core$Maybe$Nothing,
+	testRuns: A3(
+		_user$project$Tree_Core$Node,
+		_user$project$Model_ProjectName$default,
+		_user$project$TestInstance_Core$default,
+		{ctor: '[]'}),
+	testHierarchy: _user$project$Tree_Core$make(
+		A3(
+			_user$project$Tree_Core$Node,
+			'No Tests',
+			_user$project$TestInstance_Core$default,
+			{ctor: '[]'})),
+	testMouseIsOver: _elm_lang$core$Maybe$Nothing,
+	selectedTestNodeId: _elm_lang$core$Maybe$Nothing,
+	selectedTestInstance: _elm_lang$core$Maybe$Nothing,
+	autoRunEnabled: false,
+	autoNavigateEnabled: true,
+	runElmVerifyExamplesEnabled: false,
+	randomSeed: _elm_lang$core$Maybe$Nothing,
+	forceRandomSeedEnabled: false,
+	statusBarTextStyle: _user$project$Animation_Flicker$initial,
+	statusBarColorStyle: _user$project$Animation_Color$initial(_user$project$State_RunStatus$noData),
+	footerStyle: _user$project$Animation_Footer$initial,
+	footerExpanded: false,
+	paneLocation: _user$project$State_PaneLocation$default
+};
+var _user$project$Model$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return function (n) {
+														return function (o) {
+															return function (p) {
+																return function (q) {
+																	return function (r) {
+																		return function (s) {
+																			return function (t) {
+																				return function (u) {
+																					return function (v) {
+																						return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, runElmVerifyExamplesEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarTextStyle: r, statusBarColorStyle: s, footerStyle: t, footerExpanded: u, paneLocation: v};
+																					};
+																				};
+																			};
+																		};
+																	};
+																};
+															};
+														};
+													};
+												};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+
 var _user$project$Model_Basics$setPaneLocation = F2(
 	function (newLocation, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -17996,40 +18076,6 @@ var _user$project$Model_Basics$setCompilerErrorMessage = F2(
 			model,
 			{compilerError: maybeError});
 	});
-
-var _user$project$Model_Config$setElmVerifyExamples = F2(
-	function (setting, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{runElmVerifyExamplesEnabled: setting});
-	});
-var _user$project$Model_Config$invertElmVerifyExamples = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{runElmVerifyExamplesEnabled: !model.runElmVerifyExamplesEnabled});
-};
-var _user$project$Model_Config$setAutoNavigate = F2(
-	function (setting, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{autoNavigateEnabled: setting});
-	});
-var _user$project$Model_Config$invertAutoNavigate = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{autoNavigateEnabled: !model.autoNavigateEnabled});
-};
-var _user$project$Model_Config$setAutoRun = F2(
-	function (setting, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{autoRunEnabled: setting});
-	});
-var _user$project$Model_Config$invertAutoRun = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{autoRunEnabled: !model.autoRunEnabled});
-};
 
 var _user$project$Model_RandomSeed$forJS = function (model) {
 	var _p0 = {ctor: '_Tuple2', _0: model.forceRandomSeedEnabled, _1: model.randomSeed};
@@ -19826,24 +19872,8 @@ var _user$project$Main$update = F2(
 													_user$project$Model_RunStatus$setToPassing(model))))))))));
 			case 'TestListItem':
 				return A2(_user$project$Message_TestListItem$update, _p0._0, model);
-			case 'ToggleAutoRun':
-				return _user$project$And$updateAtomState(
-					_user$project$Model_Config$invertAutoRun(model));
-			case 'SetAutoRun':
-				return _user$project$And$updateAtomState(
-					A2(_user$project$Model_Config$setAutoRun, _p0._0, model));
-			case 'ToggleAutoNavigate':
-				return _user$project$And$updateAtomState(
-					_user$project$Model_Config$invertAutoNavigate(model));
-			case 'SetAutoNavigate':
-				return _user$project$And$updateAtomState(
-					A2(_user$project$Model_Config$setAutoNavigate, _p0._0, model));
-			case 'ToggleRunElmVerifyExamples':
-				return _user$project$And$updateAtomState(
-					_user$project$Model_Config$invertElmVerifyExamples(model));
-			case 'SetRunElmVerifyExamples':
-				return _user$project$And$updateAtomState(
-					A2(_user$project$Model_Config$setElmVerifyExamples, _p0._0, model));
+			case 'Settings':
+				return A2(_user$project$Message_Settings$update, _p0._0, model);
 			case 'CopySeed':
 				return A2(
 					_user$project$And$execute,
@@ -19936,18 +19966,9 @@ var _user$project$Main$SetRandomSeed = function (a) {
 var _user$project$Main$CopySeed = function (a) {
 	return {ctor: 'CopySeed', _0: a};
 };
-var _user$project$Main$SetRunElmVerifyExamples = function (a) {
-	return {ctor: 'SetRunElmVerifyExamples', _0: a};
+var _user$project$Main$Settings = function (a) {
+	return {ctor: 'Settings', _0: a};
 };
-var _user$project$Main$ToggleRunElmVerifyExamples = {ctor: 'ToggleRunElmVerifyExamples'};
-var _user$project$Main$SetAutoNavigate = function (a) {
-	return {ctor: 'SetAutoNavigate', _0: a};
-};
-var _user$project$Main$ToggleAutoNavigate = {ctor: 'ToggleAutoNavigate'};
-var _user$project$Main$SetAutoRun = function (a) {
-	return {ctor: 'SetAutoRun', _0: a};
-};
-var _user$project$Main$ToggleAutoRun = {ctor: 'ToggleAutoRun'};
 var _user$project$Main$TestListItem = function (a) {
 	return {ctor: 'TestListItem', _0: a};
 };
@@ -20028,9 +20049,33 @@ var _user$project$Main$view = function (model) {
 			copySeedClickHandler: _user$project$Main$CopySeed,
 			setSeedClickHandler: _user$project$Main$SetRandomSeed,
 			setForceSeedHandler: _user$project$Main$SetForceSeed,
-			setAutoRun: _user$project$Main$SetAutoRun,
-			setAutoNavigate: _user$project$Main$SetAutoNavigate,
-			setRunElmVerifyExamples: _user$project$Main$SetRunElmVerifyExamples,
+			setAutoRun: A2(
+				_user$project$Bind$arity1,
+				_user$project$Main$Settings,
+				function (_) {
+					return _.set;
+				}(
+					function (_) {
+						return _.autoRun;
+					}(_user$project$Message_Settings$messages))),
+			setAutoNavigate: A2(
+				_user$project$Bind$arity1,
+				_user$project$Main$Settings,
+				function (_) {
+					return _.set;
+				}(
+					function (_) {
+						return _.autoNavigate;
+					}(_user$project$Message_Settings$messages))),
+			setRunElmVerifyExamples: A2(
+				_user$project$Bind$arity1,
+				_user$project$Main$Settings,
+				function (_) {
+					return _.set;
+				}(
+					function (_) {
+						return _.runElmVerifyExamples;
+					}(_user$project$Message_Settings$messages))),
 			settingsToggle: _user$project$Main$ToggleSettings
 		});
 };
@@ -20058,15 +20103,42 @@ var _user$project$Main$subscriptions = function (model) {
 						_1: {
 							ctor: '::',
 							_0: _user$project$Main$toggleAutoRun(
-								_elm_lang$core$Basics$always(_user$project$Main$ToggleAutoRun)),
+								_elm_lang$core$Basics$always(
+									A2(
+										_user$project$Bind$arity0,
+										_user$project$Main$Settings,
+										function (_) {
+											return _.toggle;
+										}(
+											function (_) {
+												return _.autoRun;
+											}(_user$project$Message_Settings$messages))))),
 							_1: {
 								ctor: '::',
 								_0: _user$project$Main$toggleAutoNavigate(
-									_elm_lang$core$Basics$always(_user$project$Main$ToggleAutoNavigate)),
+									_elm_lang$core$Basics$always(
+										A2(
+											_user$project$Bind$arity0,
+											_user$project$Main$Settings,
+											function (_) {
+												return _.toggle;
+											}(
+												function (_) {
+													return _.autoNavigate;
+												}(_user$project$Message_Settings$messages))))),
 								_1: {
 									ctor: '::',
 									_0: _user$project$Main$toggleElmVerifyExamples(
-										_elm_lang$core$Basics$always(_user$project$Main$ToggleRunElmVerifyExamples)),
+										_elm_lang$core$Basics$always(
+											A2(
+												_user$project$Bind$arity0,
+												_user$project$Main$Settings,
+												function (_) {
+													return _.toggle;
+												}(
+													function (_) {
+														return _.runElmVerifyExamples;
+													}(_user$project$Message_Settings$messages))))),
 									_1: {
 										ctor: '::',
 										_0: _user$project$Main$notifySaveEvent(

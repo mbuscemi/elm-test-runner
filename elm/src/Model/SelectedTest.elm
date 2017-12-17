@@ -1,6 +1,5 @@
 port module Model.SelectedTest exposing (setInstance, setNodeId, setTestMouseIsOver)
 
-import And
 import TestInstance.Core as TestInstance exposing (TestInstance)
 
 

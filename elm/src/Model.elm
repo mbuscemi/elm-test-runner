@@ -1,4 +1,4 @@
-module Model exposing (Model, default, serialize)
+module Model exposing (Model, default)
 
 import Animation
 import Animation.Color
@@ -6,11 +6,11 @@ import Animation.Flicker
 import Animation.Footer
 import Model.Flags exposing (Flags)
 import Model.ProjectName
+import State.Duration exposing (Duration)
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core as Tree exposing (CollapsibleTree, Tree(Node))
-import State.Duration exposing (Duration)
 
 
 type alias Model =
@@ -63,12 +63,4 @@ default =
     , footerStyle = Animation.Footer.initial
     , footerExpanded = False
     , paneLocation = PaneLocation.default
-    }
-
-
-serialize : Model -> Flags
-serialize model =
-    { autoRun = model.autoRunEnabled
-    , autoNavigate = model.autoNavigateEnabled
-    , useElmVerifyExamples = model.runElmVerifyExamplesEnabled
     }

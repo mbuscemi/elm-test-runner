@@ -1,6 +1,6 @@
 port module And exposing (doNothing, execute, showInEditor, updateAtomState)
 
-import Model exposing (Model)
+import Model.Config exposing (HasConfig)
 import Model.Flags exposing (Flags)
 import TestInstance.Core as TestInstance exposing (TestInstance)
 
@@ -15,9 +15,9 @@ execute command model =
     ( model, command )
 
 
-updateAtomState : Model -> ( Model, Cmd message )
+updateAtomState : HasConfig model -> ( HasConfig model, Cmd message )
 updateAtomState model =
-    Model.serialize model
+    Model.Config.serialize model
         |> updatePersistentState
         |> flip execute model
 

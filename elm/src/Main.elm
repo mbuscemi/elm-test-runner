@@ -6,6 +6,7 @@ import Bind
 import Html exposing (Html)
 import Json.Encode exposing (Value)
 import Message.Animate as Animate
+import Message.Settings as Settings
 import Message.TestListItem as TestListItem
 import Model exposing (Model)
 import Model.Animation
@@ -37,12 +38,7 @@ type Message
     | TestCompleted Value
     | RunComplete Value
     | TestListItem TestListItem.Message
-    | ToggleAutoRun
-    | SetAutoRun Bool
-    | ToggleAutoNavigate
-    | SetAutoNavigate Bool
-    | ToggleRunElmVerifyExamples
-    | SetRunElmVerifyExamples Bool
+    | Settings Settings.Message
     | CopySeed String
     | SetRandomSeed Int
     | SetForceSeed Bool
@@ -144,29 +140,8 @@ update message model =
         TestListItem message ->
             TestListItem.update message model
 
-        ToggleAutoRun ->
-            Model.Config.invertAutoRun model
-                |> And.updateAtomState
-
-        SetAutoRun state ->
-            Model.Config.setAutoRun state model
-                |> And.updateAtomState
-
-        ToggleAutoNavigate ->
-            Model.Config.invertAutoNavigate model
-                |> And.updateAtomState
-
-        SetAutoNavigate state ->
-            Model.Config.setAutoNavigate state model
-                |> And.updateAtomState
-
-        ToggleRunElmVerifyExamples ->
-            Model.Config.invertElmVerifyExamples model
-                |> And.updateAtomState
-
-        SetRunElmVerifyExamples state ->
-            Model.Config.setElmVerifyExamples state model
-                |> And.updateAtomState
+        Settings message ->
+            Settings.update message model
 
         CopySeed seed ->
             model
@@ -231,9 +206,9 @@ view model =
         , copySeedClickHandler = CopySeed
         , setSeedClickHandler = SetRandomSeed
         , setForceSeedHandler = SetForceSeed
-        , setAutoRun = SetAutoRun
-        , setAutoNavigate = SetAutoNavigate
-        , setRunElmVerifyExamples = SetRunElmVerifyExamples
+        , setAutoRun = Bind.arity1 Settings (.set <| .autoRun Settings.messages)
+        , setAutoNavigate = Bind.arity1 Settings (.set <| .autoNavigate Settings.messages)
+        , setRunElmVerifyExamples = Bind.arity1 Settings (.set <| .runElmVerifyExamples Settings.messages)
         , settingsToggle = ToggleSettings
         }
 
@@ -245,9 +220,9 @@ subscriptions model =
         , notifyGeneratingTests (always GenerateTestsStart)
         , notifyExecutingTests (always ExecuteTestsStart)
         , notifyCompilerErrored CompilerErrored
-        , toggleAutoRun (always ToggleAutoRun)
-        , toggleAutoNavigate (always ToggleAutoNavigate)
-        , toggleElmVerifyExamples (always ToggleRunElmVerifyExamples)
+        , toggleAutoRun (always <| Bind.arity0 Settings (.toggle <| .autoRun Settings.messages))
+        , toggleAutoNavigate (always <| Bind.arity0 Settings (.toggle <| .autoNavigate Settings.messages))
+        , toggleElmVerifyExamples (always <| Bind.arity0 Settings (.toggle <| .runElmVerifyExamples Settings.messages))
         , notifySaveEvent <| saveEventMessage model
         , notifyPaneMoved PaneMoved
         , runStart RunStart
