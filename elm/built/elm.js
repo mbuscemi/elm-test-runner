@@ -17088,6 +17088,9 @@ var _user$project$TestInstance_Core$setStatus = F2(
 				testStatus: _user$project$TestInstance_TestStatus$fromString(newStatus)
 			});
 	});
+var _user$project$TestInstance_Core$hasFailureData = function (testInstance) {
+	return _elm_community$maybe_extra$Maybe_Extra$isJust(testInstance.failure);
+};
 var _user$project$TestInstance_Core$getFailure = function (instance) {
 	return instance.failure;
 };
@@ -17687,24 +17690,32 @@ var _user$project$Tree_Core$newId = A2(
 		function (x) {
 			return x + 1;
 		}));
+var _user$project$Tree_Core$getData = function (_p1) {
+	var _p2 = _p1;
+	return _p2._1;
+};
+var _user$project$Tree_Core$getId = function (_p3) {
+	var _p4 = _p3;
+	return _p4._0._2;
+};
 var _user$project$Tree_Core$Node = F3(
 	function (a, b, c) {
 		return {ctor: 'Node', _0: a, _1: b, _2: c};
 	});
-var _user$project$Tree_Core$label = function (_p1) {
-	var _p2 = _p1;
+var _user$project$Tree_Core$label = function (_p5) {
+	var _p6 = _p5;
 	return A3(
 		_folkertdev$elm_state$State$map2,
 		F2(
-			function (nid, collapsibleChildren) {
+			function (nodeId, collapsibleChildren) {
 				return A3(
 					_user$project$Tree_Core$Node,
-					{ctor: '_Tuple3', _0: _p2._0, _1: false, _2: nid},
-					_p2._1,
+					{ctor: '_Tuple3', _0: _p6._0, _1: false, _2: nodeId},
+					_p6._1,
 					collapsibleChildren);
 			}),
 		_user$project$Tree_Core$newId,
-		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Core$label, _p2._2));
+		A2(_folkertdev$elm_state$State$traverse, _user$project$Tree_Core$label, _p6._2));
 };
 var _user$project$Tree_Core$make = function (tree) {
 	return A2(
@@ -17820,10 +17831,22 @@ var _user$project$Tree_Node$toggle = F3(
 				_p3));
 	});
 
-var _user$project$Tree_Traverse$hasMatchingNode = F2(
+var _user$project$Tree_Traverse$find = F2(
 	function (evaluator, _p0) {
 		var _p1 = _p0;
-		return evaluator(_p1._1) ? true : A3(
+		return evaluator(_p1._1) ? _elm_lang$core$Maybe$Just(_p1) : A3(
+			_elm_lang$core$List$foldl,
+			_elm_community$maybe_extra$Maybe_Extra$or,
+			_elm_lang$core$Maybe$Nothing,
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Tree_Traverse$find(evaluator),
+				_p1._2));
+	});
+var _user$project$Tree_Traverse$hasMatchingNode = F2(
+	function (evaluator, _p2) {
+		var _p3 = _p2;
+		return evaluator(_p3._1) ? true : A3(
 			_elm_lang$core$List$foldl,
 			F2(
 				function (x, y) {
@@ -17833,44 +17856,65 @@ var _user$project$Tree_Traverse$hasMatchingNode = F2(
 			A2(
 				_elm_lang$core$List$map,
 				_user$project$Tree_Traverse$hasMatchingNode(evaluator),
-				_p1._2));
+				_p3._2));
 	});
 var _user$project$Tree_Traverse$purgeNodes = F2(
 	function (evaluator, nodeList) {
 		return A2(
 			_elm_lang$core$List$filter,
-			function (_p2) {
-				var _p3 = _p2;
-				return evaluator(_p3._1);
+			function (_p4) {
+				var _p5 = _p4;
+				return evaluator(_p5._1);
 			},
 			nodeList);
 	});
 var _user$project$Tree_Traverse$purge = F2(
-	function (evaluator, _p4) {
-		var _p5 = _p4;
-		return A3(
-			_user$project$Tree_Core$Node,
-			_p5._0,
-			_p5._1,
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$Tree_Traverse$purge(evaluator),
-				A2(_user$project$Tree_Traverse$purgeNodes, evaluator, _p5._2)));
-	});
-var _user$project$Tree_Traverse$update = F2(
-	function (updater, _p6) {
+	function (evaluator, _p6) {
 		var _p7 = _p6;
-		var updatedData = updater(_p7._1);
 		return A3(
 			_user$project$Tree_Core$Node,
 			_p7._0,
+			_p7._1,
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Tree_Traverse$purge(evaluator),
+				A2(_user$project$Tree_Traverse$purgeNodes, evaluator, _p7._2)));
+	});
+var _user$project$Tree_Traverse$update = F2(
+	function (updater, _p8) {
+		var _p9 = _p8;
+		var updatedData = updater(_p9._1);
+		return A3(
+			_user$project$Tree_Core$Node,
+			_p9._0,
 			updatedData,
 			A2(
 				_elm_lang$core$List$map,
 				_user$project$Tree_Traverse$update(updater),
-				_p7._2));
+				_p9._2));
 	});
 
+var _user$project$Model_TestTree$lastNodeWithFailureData = function (testHierarchy) {
+	return A2(
+		_elm_lang$core$Maybe$map,
+		function (tree) {
+			return {
+				ctor: '_Tuple2',
+				_0: _user$project$Tree_Core$getId(tree),
+				_1: _user$project$Tree_Core$getData(tree)
+			};
+		},
+		A2(_user$project$Tree_Traverse$find, _user$project$TestInstance_Core$hasFailureData, testHierarchy));
+};
+var _user$project$Model_TestTree$selectLastNodeWithFailureData = function (model) {
+	var maybeNode = _user$project$Model_TestTree$lastNodeWithFailureData(model.testHierarchy);
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			selectedTestNodeId: A2(_elm_lang$core$Maybe$map, _elm_lang$core$Tuple$first, maybeNode),
+			selectedTestInstance: A2(_elm_lang$core$Maybe$map, _elm_lang$core$Tuple$second, maybeNode)
+		});
+};
 var _user$project$Model_TestTree$toggleFailingAndTodoNodes = function (_p0) {
 	var _p1 = _p0;
 	var _p2 = _p1._1;
@@ -18285,20 +18329,21 @@ var _user$project$Message_TestRun$update = F2(
 				var event = _user$project$TestEvent_RunComplete$parse(_p0._0);
 				return _user$project$And$doNothing(
 					_user$project$Model_Animation$initiateStatusBarTextFlicker(
-						_user$project$Model_TestTree$expandFailingAndTodoNodes(
-							_user$project$Model_TestTree$updateHierarchy(
-								_user$project$Model_TestTree$purgeObsoleteNodes(
-									A2(
-										_user$project$Model_RunDuration$set,
-										event,
-										_user$project$Model_Animation$pulseToStatusColor(
-											A2(
-												_user$project$Model_RunStatus$setForFailure,
-												event,
+						_user$project$Model_TestTree$selectLastNodeWithFailureData(
+							_user$project$Model_TestTree$expandFailingAndTodoNodes(
+								_user$project$Model_TestTree$updateHierarchy(
+									_user$project$Model_TestTree$purgeObsoleteNodes(
+										A2(
+											_user$project$Model_RunDuration$set,
+											event,
+											_user$project$Model_Animation$pulseToStatusColor(
 												A2(
-													_user$project$Model_RunStatus$setForTodo,
-													_user$project$TestInstance_Core$isTodo,
-													_user$project$Model_RunStatus$setToPassing(model))))))))));
+													_user$project$Model_RunStatus$setForFailure,
+													event,
+													A2(
+														_user$project$Model_RunStatus$setForTodo,
+														_user$project$TestInstance_Core$isTodo,
+														_user$project$Model_RunStatus$setToPassing(model)))))))))));
 		}
 	});
 var _user$project$Message_TestRun$Messages = F7(

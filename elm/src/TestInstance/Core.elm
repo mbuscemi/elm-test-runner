@@ -6,6 +6,7 @@ module TestInstance.Core
         , fromEvent
         , getFailure
         , getFailureData
+        , hasFailureData
         , isFailing
         , isPending
         , isTodo
@@ -85,6 +86,11 @@ getFailureData maybeTestInstance =
     Maybe.map getFailure maybeTestInstance
         |> Maybe.join
         |> Maybe.map Failure.toData
+
+
+hasFailureData : TestInstance -> Bool
+hasFailureData testInstance =
+    Maybe.isJust testInstance.failure
 
 
 setStatus : String -> TestInstance -> TestInstance

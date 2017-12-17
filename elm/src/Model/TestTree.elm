@@ -1,4 +1,13 @@
-module Model.TestTree exposing (build, expandFailingAndTodoNodes, purgeObsoleteNodes, reset, toggleNode, updateHierarchy)
+module Model.TestTree
+    exposing
+        ( build
+        , expandFailingAndTodoNodes
+        , purgeObsoleteNodes
+        , reset
+        , selectLastNodeWithFailureData
+        , toggleNode
+        , updateHierarchy
+        )
 
 import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
 import TestInstance.Core as TestInstance exposing (TestInstance)
@@ -14,6 +23,8 @@ type alias WithTestRuns r =
         | projectName : String
         , testRuns : Tree String TestInstance
         , testHierarchy : CollapsibleTree String TestInstance
+        , selectedTestNodeId : Maybe Int
+        , selectedTestInstance : Maybe TestInstance
     }
 
 
@@ -76,3 +87,21 @@ toggleFailingAndTodoNodes (Node ( name, _, nodeId ) testInstance children) =
     in
     Node ( name, expanded, nodeId ) testInstance <|
         List.map toggleFailingAndTodoNodes children
+
+
+selectLastNodeWithFailureData : WithTestRuns model -> WithTestRuns model
+selectLastNodeWithFailureData model =
+    let
+        maybeNode =
+            lastNodeWithFailureData model.testHierarchy
+    in
+    { model
+        | selectedTestNodeId = Maybe.map Tuple.first maybeNode
+        , selectedTestInstance = Maybe.map Tuple.second maybeNode
+    }
+
+
+lastNodeWithFailureData : CollapsibleTree String TestInstance -> Maybe ( Int, TestInstance )
+lastNodeWithFailureData testHierarchy =
+    Tree.Traverse.find TestInstance.hasFailureData testHierarchy
+        |> Maybe.map (\tree -> ( Tree.getId tree, Tree.getData tree ))

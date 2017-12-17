@@ -123,6 +123,7 @@ update message model =
                 |> Model.TestTree.purgeObsoleteNodes
                 |> Model.TestTree.updateHierarchy
                 |> Model.TestTree.expandFailingAndTodoNodes
+                |> Model.TestTree.selectLastNodeWithFailureData
                 |> Model.Animation.initiateStatusBarTextFlicker
                 |> And.doNothing
 
