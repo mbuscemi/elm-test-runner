@@ -17540,6 +17540,70 @@ var _user$project$Message_Animate$Flicker = function (a) {
 };
 var _user$project$Message_Animate$messages = {flicker: _user$project$Message_Animate$Flicker, oscillateColor: _user$project$Message_Animate$OscillateColor, settingsTransition: _user$project$Message_Animate$SettingsTransition};
 
+var _user$project$Model_RandomSeed$forJS = function (model) {
+	var _p0 = {ctor: '_Tuple2', _0: model.forceRandomSeedEnabled, _1: model.randomSeed};
+	if (((_p0.ctor === '_Tuple2') && (_p0._0 === true)) && (_p0._1.ctor === 'Just')) {
+		return _elm_lang$core$Basics$toString(_p0._1._0);
+	} else {
+		return '';
+	}
+};
+var _user$project$Model_RandomSeed$setForcing = F2(
+	function (setting, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{forceRandomSeedEnabled: setting});
+	});
+var _user$project$Model_RandomSeed$set = F2(
+	function (randomSeed, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{randomSeed: randomSeed});
+	});
+
+var _user$project$Message_RandomSeed$copySeed = _elm_lang$core$Native_Platform.outgoingPort(
+	'copySeed',
+	function (v) {
+		return v;
+	});
+var _user$project$Message_RandomSeed$update = F2(
+	function (message, model) {
+		var _p0 = message;
+		switch (_p0.ctor) {
+			case 'Copy':
+				return A2(
+					_user$project$And$execute,
+					_user$project$Message_RandomSeed$copySeed(_p0._0),
+					model);
+			case 'Set':
+				return _user$project$And$doNothing(
+					A2(
+						_user$project$Model_RandomSeed$setForcing,
+						true,
+						A2(
+							_user$project$Model_RandomSeed$set,
+							_elm_lang$core$Maybe$Just(_p0._0),
+							model)));
+			default:
+				return _user$project$And$doNothing(
+					A2(_user$project$Model_RandomSeed$setForcing, _p0._0, model));
+		}
+	});
+var _user$project$Message_RandomSeed$Messages = F3(
+	function (a, b, c) {
+		return {copy: a, set: b, setForce: c};
+	});
+var _user$project$Message_RandomSeed$SetForce = function (a) {
+	return {ctor: 'SetForce', _0: a};
+};
+var _user$project$Message_RandomSeed$Set = function (a) {
+	return {ctor: 'Set', _0: a};
+};
+var _user$project$Message_RandomSeed$Copy = function (a) {
+	return {ctor: 'Copy', _0: a};
+};
+var _user$project$Message_RandomSeed$messages = {copy: _user$project$Message_RandomSeed$Copy, set: _user$project$Message_RandomSeed$Set, setForce: _user$project$Message_RandomSeed$SetForce};
+
 var _user$project$Message_Settings$update = F2(
 	function (message, model) {
 		var _p0 = message;
@@ -17996,27 +18060,6 @@ var _user$project$Model_ProjectName$setFromPath = F2(
 							_elm_lang$core$List$reverse(
 								A2(_elm_lang$core$String$split, '/', projectPath))))
 				}));
-	});
-
-var _user$project$Model_RandomSeed$forJS = function (model) {
-	var _p0 = {ctor: '_Tuple2', _0: model.forceRandomSeedEnabled, _1: model.randomSeed};
-	if (((_p0.ctor === '_Tuple2') && (_p0._0 === true)) && (_p0._1.ctor === 'Just')) {
-		return _elm_lang$core$Basics$toString(_p0._1._0);
-	} else {
-		return '';
-	}
-};
-var _user$project$Model_RandomSeed$setForcing = F2(
-	function (setting, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{forceRandomSeedEnabled: setting});
-	});
-var _user$project$Model_RandomSeed$set = F2(
-	function (randomSeed, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{randomSeed: randomSeed});
 	});
 
 var _user$project$TestEvent_RunComplete$duration = function (_p0) {
@@ -19877,22 +19920,6 @@ var _user$project$View$Failure = F7(
 		return {actual: a, expected: b, given: c, message: d, hasComplexComparison: e, isTodo: f, shouldDiff: g};
 	});
 
-var _user$project$Main$init = function (rawFlags) {
-	var flags = _user$project$Model_Flags$parse(rawFlags);
-	return _user$project$And$doNothing(
-		A2(
-			_user$project$Model_Config$setElmVerifyExamples,
-			flags.useElmVerifyExamples,
-			A2(
-				_user$project$Model_Config$setAutoNavigate,
-				flags.autoNavigate,
-				A2(_user$project$Model_Config$setAutoRun, flags.autoRun, _user$project$Model$default))));
-};
-var _user$project$Main$copySeed = _elm_lang$core$Native_Platform.outgoingPort(
-	'copySeed',
-	function (v) {
-		return v;
-	});
 var _user$project$Main$update = F2(
 	function (message, model) {
 		var _p0 = message;
@@ -19903,23 +19930,8 @@ var _user$project$Main$update = F2(
 				return A2(_user$project$Message_TestListItem$update, _p0._0, model);
 			case 'Settings':
 				return A2(_user$project$Message_Settings$update, _p0._0, model);
-			case 'CopySeed':
-				return A2(
-					_user$project$And$execute,
-					_user$project$Main$copySeed(_p0._0),
-					model);
-			case 'SetRandomSeed':
-				return _user$project$And$doNothing(
-					A2(
-						_user$project$Model_RandomSeed$setForcing,
-						true,
-						A2(
-							_user$project$Model_RandomSeed$set,
-							_elm_lang$core$Maybe$Just(_p0._0),
-							model)));
-			case 'SetForceSeed':
-				return _user$project$And$doNothing(
-					A2(_user$project$Model_RandomSeed$setForcing, _p0._0, model));
+			case 'RandomSeed':
+				return A2(_user$project$Message_RandomSeed$update, _p0._0, model);
 			case 'Animate':
 				return A2(_user$project$Message_Animate$update, _p0._0, model);
 			case 'PaneMoved':
@@ -19932,6 +19944,17 @@ var _user$project$Main$update = F2(
 				return _user$project$And$doNothing(model);
 		}
 	});
+var _user$project$Main$init = function (rawFlags) {
+	var flags = _user$project$Model_Flags$parse(rawFlags);
+	return _user$project$And$doNothing(
+		A2(
+			_user$project$Model_Config$setElmVerifyExamples,
+			flags.useElmVerifyExamples,
+			A2(
+				_user$project$Model_Config$setAutoNavigate,
+				flags.autoNavigate,
+				A2(_user$project$Model_Config$setAutoRun, flags.autoRun, _user$project$Model$default))));
+};
 var _user$project$Main$commandKeyTestStart = _elm_lang$core$Native_Platform.incomingPort(
 	'commandKeyTestStart',
 	_elm_lang$core$Json_Decode$null(
@@ -19986,14 +20009,8 @@ var _user$project$Main$PaneMoved = function (a) {
 var _user$project$Main$Animate = function (a) {
 	return {ctor: 'Animate', _0: a};
 };
-var _user$project$Main$SetForceSeed = function (a) {
-	return {ctor: 'SetForceSeed', _0: a};
-};
-var _user$project$Main$SetRandomSeed = function (a) {
-	return {ctor: 'SetRandomSeed', _0: a};
-};
-var _user$project$Main$CopySeed = function (a) {
-	return {ctor: 'CopySeed', _0: a};
+var _user$project$Main$RandomSeed = function (a) {
+	return {ctor: 'RandomSeed', _0: a};
 };
 var _user$project$Main$Settings = function (a) {
 	return {ctor: 'Settings', _0: a};
@@ -20068,9 +20085,24 @@ var _user$project$Main$view = function (model) {
 				function (_) {
 					return _.select;
 				}(_user$project$Message_TestListItem$messages)),
-			copySeedClickHandler: _user$project$Main$CopySeed,
-			setSeedClickHandler: _user$project$Main$SetRandomSeed,
-			setForceSeedHandler: _user$project$Main$SetForceSeed,
+			copySeedClickHandler: A2(
+				_user$project$Bind$arity1,
+				_user$project$Main$RandomSeed,
+				function (_) {
+					return _.copy;
+				}(_user$project$Message_RandomSeed$messages)),
+			setSeedClickHandler: A2(
+				_user$project$Bind$arity1,
+				_user$project$Main$RandomSeed,
+				function (_) {
+					return _.set;
+				}(_user$project$Message_RandomSeed$messages)),
+			setForceSeedHandler: A2(
+				_user$project$Bind$arity1,
+				_user$project$Main$RandomSeed,
+				function (_) {
+					return _.setForce;
+				}(_user$project$Message_RandomSeed$messages)),
 			setAutoRun: A2(
 				_user$project$Bind$arity1,
 				_user$project$Main$Settings,

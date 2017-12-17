@@ -6,6 +6,7 @@ import Bind
 import Html exposing (Html)
 import Json.Encode exposing (Value)
 import Message.Animate as Animate
+import Message.RandomSeed as RandomSeed
 import Message.Settings as Settings
 import Message.TestListItem as TestListItem
 import Message.TestRun as TestRun
@@ -14,8 +15,7 @@ import Model.Animation
 import Model.Basics
 import Model.Config
 import Model.Flags as Flags
-import Model.RandomSeed
-import TestInstance.Core as TestInstance exposing (TestInstance)
+import TestInstance.Core as TestInstance
 import TestInstance.View
 import View
 
@@ -24,9 +24,7 @@ type Message
     = TestRun TestRun.Message
     | TestListItem TestListItem.Message
     | Settings Settings.Message
-    | CopySeed String
-    | SetRandomSeed Int
-    | SetForceSeed Bool
+    | RandomSeed RandomSeed.Message
     | Animate Animate.Message
     | PaneMoved String
     | ToggleSettings
@@ -68,18 +66,8 @@ update message model =
         Settings message ->
             Settings.update message model
 
-        CopySeed seed ->
-            model
-                |> And.execute (copySeed seed)
-
-        SetRandomSeed seed ->
-            Model.RandomSeed.set (Just seed) model
-                |> Model.RandomSeed.setForcing True
-                |> And.doNothing
-
-        SetForceSeed setting ->
-            Model.RandomSeed.setForcing setting model
-                |> And.doNothing
+        RandomSeed message ->
+            RandomSeed.update message model
 
         Animate message ->
             Animate.update message model
@@ -128,9 +116,9 @@ view model =
         , testListItemMouseEnter = Bind.arity1 TestListItem (.mouseEnter TestListItem.messages)
         , testListItemMouseLeave = Bind.arity0 TestListItem (.mouseLeave TestListItem.messages)
         , testClickHandler = Bind.arity2 TestListItem (.select TestListItem.messages)
-        , copySeedClickHandler = CopySeed
-        , setSeedClickHandler = SetRandomSeed
-        , setForceSeedHandler = SetForceSeed
+        , copySeedClickHandler = Bind.arity1 RandomSeed (.copy RandomSeed.messages)
+        , setSeedClickHandler = Bind.arity1 RandomSeed (.set RandomSeed.messages)
+        , setForceSeedHandler = Bind.arity1 RandomSeed (.setForce RandomSeed.messages)
         , setAutoRun = Bind.arity1 Settings (.set <| .autoRun Settings.messages)
         , setAutoNavigate = Bind.arity1 Settings (.set <| .autoNavigate Settings.messages)
         , setRunElmVerifyExamples = Bind.arity1 Settings (.set <| .runElmVerifyExamples Settings.messages)
@@ -165,9 +153,6 @@ saveEventMessage model _ =
         Bind.arity0 TestRun (.initiate TestRun.messages)
     else
         DoNothing
-
-
-port copySeed : String -> Cmd message
 
 
 port commandKeyTestStart : (() -> message) -> Sub message
