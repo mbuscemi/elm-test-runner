@@ -17536,22 +17536,117 @@ var _user$project$And$updateAtomState = function (model) {
 			_user$project$Model$serialize(model)));
 };
 
-var _user$project$Bind$bind2 = F4(
+var _user$project$Bind$arity2 = F4(
 	function (messageWrapper, secondaryMessage, a, b) {
 		return messageWrapper(
 			A2(secondaryMessage, a, b));
 	});
-var _user$project$Bind$bind1 = F2(
+var _user$project$Bind$arity1 = F2(
 	function (messageWrapper, secondaryMessage) {
 		return function (_p0) {
 			return messageWrapper(
 				secondaryMessage(_p0));
 		};
 	});
-var _user$project$Bind$bind0 = F2(
+var _user$project$Bind$arity0 = F2(
 	function (messageWrapper, secondaryMessage) {
 		return messageWrapper(secondaryMessage);
 	});
+
+var _user$project$Model_Animation$retractFooter = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			footerStyle: _user$project$Animation_Footer$animateDown(model.footerStyle),
+			footerExpanded: false
+		});
+};
+var _user$project$Model_Animation$expandFooter = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			footerStyle: _user$project$Animation_Footer$animateUp(model.footerStyle),
+			footerExpanded: true
+		});
+};
+var _user$project$Model_Animation$toggleFooter = function (model) {
+	return model.footerExpanded ? _user$project$Model_Animation$retractFooter(model) : _user$project$Model_Animation$expandFooter(model);
+};
+var _user$project$Model_Animation$updateFooter = F2(
+	function (animationMessage, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				footerStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.footerStyle)
+			});
+	});
+var _user$project$Model_Animation$updateStatusBarText = F2(
+	function (animationMessage, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				statusBarTextStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarTextStyle)
+			});
+	});
+var _user$project$Model_Animation$initiateStatusBarTextFlicker = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			statusBarTextStyle: _user$project$Animation_Flicker$animation(model.statusBarTextStyle)
+		});
+};
+var _user$project$Model_Animation$pulseToStatusColor = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			statusBarColorStyle: A2(_user$project$Animation_Color$pulse, model.runStatus, model.statusBarColorStyle)
+		});
+};
+var _user$project$Model_Animation$updateStatusBarColor = F2(
+	function (animationMessage, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				statusBarColorStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarColorStyle)
+			});
+	});
+var _user$project$Model_Animation$initiateColorOscillation = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			statusBarColorStyle: A2(_user$project$Animation_Color$oscillate, model.runStatus, model.statusBarColorStyle)
+		});
+};
+
+var _user$project$Message_Animate$update = F2(
+	function (message, model) {
+		var _p0 = message;
+		switch (_p0.ctor) {
+			case 'Flicker':
+				return _user$project$And$doNothing(
+					A2(_user$project$Model_Animation$updateStatusBarText, _p0._0, model));
+			case 'OscillateColor':
+				return _user$project$And$doNothing(
+					A2(_user$project$Model_Animation$updateStatusBarColor, _p0._0, model));
+			default:
+				return _user$project$And$doNothing(
+					A2(_user$project$Model_Animation$updateFooter, _p0._0, model));
+		}
+	});
+var _user$project$Message_Animate$Messages = F3(
+	function (a, b, c) {
+		return {flicker: a, oscillateColor: b, settingsTransition: c};
+	});
+var _user$project$Message_Animate$SettingsTransition = function (a) {
+	return {ctor: 'SettingsTransition', _0: a};
+};
+var _user$project$Message_Animate$OscillateColor = function (a) {
+	return {ctor: 'OscillateColor', _0: a};
+};
+var _user$project$Message_Animate$Flicker = function (a) {
+	return {ctor: 'Flicker', _0: a};
+};
+var _user$project$Message_Animate$messages = {flicker: _user$project$Message_Animate$Flicker, oscillateColor: _user$project$Message_Animate$OscillateColor, settingsTransition: _user$project$Message_Animate$SettingsTransition};
 
 var _user$project$Model_SelectedTest$setTestMouseIsOver = F2(
 	function (nodeId, model) {
@@ -17886,71 +17981,6 @@ var _user$project$Message_TestListItem$Expand = function (a) {
 	return {ctor: 'Expand', _0: a};
 };
 var _user$project$Message_TestListItem$messages = {expand: _user$project$Message_TestListItem$Expand, collapse: _user$project$Message_TestListItem$Collapse, mouseEnter: _user$project$Message_TestListItem$MouseEnter, mouseLeave: _user$project$Message_TestListItem$MouseLeave, select: _user$project$Message_TestListItem$Select};
-
-var _user$project$Model_Animation$retractFooter = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			footerStyle: _user$project$Animation_Footer$animateDown(model.footerStyle),
-			footerExpanded: false
-		});
-};
-var _user$project$Model_Animation$expandFooter = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			footerStyle: _user$project$Animation_Footer$animateUp(model.footerStyle),
-			footerExpanded: true
-		});
-};
-var _user$project$Model_Animation$toggleFooter = function (model) {
-	return model.footerExpanded ? _user$project$Model_Animation$retractFooter(model) : _user$project$Model_Animation$expandFooter(model);
-};
-var _user$project$Model_Animation$updateFooter = F2(
-	function (animationMessage, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				footerStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.footerStyle)
-			});
-	});
-var _user$project$Model_Animation$updateStatusBarText = F2(
-	function (animationMessage, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				statusBarTextStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarTextStyle)
-			});
-	});
-var _user$project$Model_Animation$initiateStatusBarTextFlicker = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			statusBarTextStyle: _user$project$Animation_Flicker$animation(model.statusBarTextStyle)
-		});
-};
-var _user$project$Model_Animation$pulseToStatusColor = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			statusBarColorStyle: A2(_user$project$Animation_Color$pulse, model.runStatus, model.statusBarColorStyle)
-		});
-};
-var _user$project$Model_Animation$updateStatusBarColor = F2(
-	function (animationMessage, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				statusBarColorStyle: A2(_mdgriffith$elm_style_animation$Animation$update, animationMessage, model.statusBarColorStyle)
-			});
-	});
-var _user$project$Model_Animation$initiateColorOscillation = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			statusBarColorStyle: A2(_user$project$Animation_Color$oscillate, model.runStatus, model.statusBarColorStyle)
-		});
-};
 
 var _user$project$Model_Basics$setPaneLocation = F2(
 	function (newLocation, model) {
@@ -19831,15 +19861,8 @@ var _user$project$Main$update = F2(
 			case 'SetForceSeed':
 				return _user$project$And$doNothing(
 					A2(_user$project$Model_RandomSeed$setForcing, _p0._0, model));
-			case 'AnimateFlicker':
-				return _user$project$And$doNothing(
-					A2(_user$project$Model_Animation$updateStatusBarText, _p0._0, model));
-			case 'AnimateProcessingColorOscillate':
-				return _user$project$And$doNothing(
-					A2(_user$project$Model_Animation$updateStatusBarColor, _p0._0, model));
-			case 'AnimateSettingsTransition':
-				return _user$project$And$doNothing(
-					A2(_user$project$Model_Animation$updateFooter, _p0._0, model));
+			case 'Animate':
+				return A2(_user$project$Message_Animate$update, _p0._0, model);
 			case 'PaneMoved':
 				return _user$project$And$doNothing(
 					A2(_user$project$Model_Basics$setPaneLocation, _p0._0, model));
@@ -19901,14 +19924,8 @@ var _user$project$Main$ToggleSettings = {ctor: 'ToggleSettings'};
 var _user$project$Main$PaneMoved = function (a) {
 	return {ctor: 'PaneMoved', _0: a};
 };
-var _user$project$Main$AnimateSettingsTransition = function (a) {
-	return {ctor: 'AnimateSettingsTransition', _0: a};
-};
-var _user$project$Main$AnimateProcessingColorOscillate = function (a) {
-	return {ctor: 'AnimateProcessingColorOscillate', _0: a};
-};
-var _user$project$Main$AnimateFlicker = function (a) {
-	return {ctor: 'AnimateFlicker', _0: a};
+var _user$project$Main$Animate = function (a) {
+	return {ctor: 'Animate', _0: a};
 };
 var _user$project$Main$SetForceSeed = function (a) {
 	return {ctor: 'SetForceSeed', _0: a};
@@ -19979,31 +19996,31 @@ var _user$project$Main$view = function (model) {
 		{
 			runAllButtonClickHandler: _user$project$Main$InitiateRunAll,
 			testListItemExpand: A2(
-				_user$project$Bind$bind1,
+				_user$project$Bind$arity1,
 				_user$project$Main$TestListItem,
 				function (_) {
 					return _.expand;
 				}(_user$project$Message_TestListItem$messages)),
 			testListItemCollapse: A2(
-				_user$project$Bind$bind1,
+				_user$project$Bind$arity1,
 				_user$project$Main$TestListItem,
 				function (_) {
 					return _.collapse;
 				}(_user$project$Message_TestListItem$messages)),
 			testListItemMouseEnter: A2(
-				_user$project$Bind$bind1,
+				_user$project$Bind$arity1,
 				_user$project$Main$TestListItem,
 				function (_) {
 					return _.mouseEnter;
 				}(_user$project$Message_TestListItem$messages)),
 			testListItemMouseLeave: A2(
-				_user$project$Bind$bind0,
+				_user$project$Bind$arity0,
 				_user$project$Main$TestListItem,
 				function (_) {
 					return _.mouseLeave;
 				}(_user$project$Message_TestListItem$messages)),
 			testClickHandler: A2(
-				_user$project$Bind$bind2,
+				_user$project$Bind$arity2,
 				_user$project$Main$TestListItem,
 				function (_) {
 					return _.select;
@@ -20070,7 +20087,12 @@ var _user$project$Main$subscriptions = function (model) {
 															ctor: '::',
 															_0: A2(
 																_mdgriffith$elm_style_animation$Animation$subscription,
-																_user$project$Main$AnimateFlicker,
+																A2(
+																	_user$project$Bind$arity1,
+																	_user$project$Main$Animate,
+																	function (_) {
+																		return _.flicker;
+																	}(_user$project$Message_Animate$messages)),
 																{
 																	ctor: '::',
 																	_0: model.statusBarTextStyle,
@@ -20080,7 +20102,12 @@ var _user$project$Main$subscriptions = function (model) {
 																ctor: '::',
 																_0: A2(
 																	_mdgriffith$elm_style_animation$Animation$subscription,
-																	_user$project$Main$AnimateProcessingColorOscillate,
+																	A2(
+																		_user$project$Bind$arity1,
+																		_user$project$Main$Animate,
+																		function (_) {
+																			return _.oscillateColor;
+																		}(_user$project$Message_Animate$messages)),
 																	{
 																		ctor: '::',
 																		_0: model.statusBarColorStyle,
@@ -20090,7 +20117,12 @@ var _user$project$Main$subscriptions = function (model) {
 																	ctor: '::',
 																	_0: A2(
 																		_mdgriffith$elm_style_animation$Animation$subscription,
-																		_user$project$Main$AnimateSettingsTransition,
+																		A2(
+																			_user$project$Bind$arity1,
+																			_user$project$Main$Animate,
+																			function (_) {
+																				return _.settingsTransition;
+																			}(_user$project$Message_Animate$messages)),
 																		{
 																			ctor: '::',
 																			_0: model.footerStyle,

@@ -5,6 +5,7 @@ import Animation
 import Bind
 import Html exposing (Html)
 import Json.Encode exposing (Value)
+import Message.Animate as Animate
 import Message.TestListItem as TestListItem
 import Model exposing (Model)
 import Model.Animation
@@ -45,9 +46,7 @@ type Message
     | CopySeed String
     | SetRandomSeed Int
     | SetForceSeed Bool
-    | AnimateFlicker Animation.Msg
-    | AnimateProcessingColorOscillate Animation.Msg
-    | AnimateSettingsTransition Animation.Msg
+    | Animate Animate.Message
     | PaneMoved String
     | ToggleSettings
     | DoNothing
@@ -182,17 +181,8 @@ update message model =
             Model.RandomSeed.setForcing setting model
                 |> And.doNothing
 
-        AnimateFlicker animateMessage ->
-            Model.Animation.updateStatusBarText animateMessage model
-                |> And.doNothing
-
-        AnimateProcessingColorOscillate animateMessage ->
-            Model.Animation.updateStatusBarColor animateMessage model
-                |> And.doNothing
-
-        AnimateSettingsTransition animateMessage ->
-            Model.Animation.updateFooter animateMessage model
-                |> And.doNothing
+        Animate message ->
+            Animate.update message model
 
         PaneMoved newLocation ->
             Model.Basics.setPaneLocation newLocation model
@@ -263,9 +253,9 @@ subscriptions model =
         , runStart RunStart
         , testCompleted TestCompleted
         , runComplete RunComplete
-        , Animation.subscription AnimateFlicker [ model.statusBarTextStyle ]
-        , Animation.subscription AnimateProcessingColorOscillate [ model.statusBarColorStyle ]
-        , Animation.subscription AnimateSettingsTransition [ model.footerStyle ]
+        , Animation.subscription (Bind.arity1 Animate <| .flicker Animate.messages) [ model.statusBarTextStyle ]
+        , Animation.subscription (Bind.arity1 Animate <| .oscillateColor Animate.messages) [ model.statusBarColorStyle ]
+        , Animation.subscription (Bind.arity1 Animate <| .settingsTransition Animate.messages) [ model.footerStyle ]
         ]
 
 
