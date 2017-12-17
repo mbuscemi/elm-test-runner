@@ -1,4 +1,4 @@
-module Model.Basics exposing (setCompilerErrorMessage, setPaneLocation, setTestMouseIsOver)
+module Model.Basics exposing (setCompilerErrorMessage, setPaneLocation)
 
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 
@@ -6,7 +6,6 @@ import State.PaneLocation as PaneLocation exposing (PaneLocation)
 type alias WithBasics r =
     { r
         | compilerError : Maybe String
-        , testMouseIsOver : Maybe Int
         , paneLocation : PaneLocation
     }
 
@@ -14,11 +13,6 @@ type alias WithBasics r =
 setCompilerErrorMessage : Maybe String -> WithBasics model -> WithBasics model
 setCompilerErrorMessage maybeError model =
     { model | compilerError = maybeError }
-
-
-setTestMouseIsOver : Maybe Int -> WithBasics model -> WithBasics model
-setTestMouseIsOver nodeId model =
-    { model | testMouseIsOver = nodeId }
 
 
 setPaneLocation : String -> WithBasics model -> WithBasics model

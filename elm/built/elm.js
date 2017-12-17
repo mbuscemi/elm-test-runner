@@ -17536,6 +17536,357 @@ var _user$project$And$updateAtomState = function (model) {
 			_user$project$Model$serialize(model)));
 };
 
+var _user$project$Bind$bind2 = F4(
+	function (messageWrapper, secondaryMessage, a, b) {
+		return messageWrapper(
+			A2(secondaryMessage, a, b));
+	});
+var _user$project$Bind$bind1 = F2(
+	function (messageWrapper, secondaryMessage) {
+		return function (_p0) {
+			return messageWrapper(
+				secondaryMessage(_p0));
+		};
+	});
+var _user$project$Bind$bind0 = F2(
+	function (messageWrapper, secondaryMessage) {
+		return messageWrapper(secondaryMessage);
+	});
+
+var _user$project$Model_SelectedTest$setTestMouseIsOver = F2(
+	function (nodeId, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{testMouseIsOver: nodeId});
+	});
+var _user$project$Model_SelectedTest$setInstance = F2(
+	function (testInstance, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{selectedTestInstance: testInstance});
+	});
+var _user$project$Model_SelectedTest$setNodeId = F2(
+	function (nodeId, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{selectedTestNodeId: nodeId});
+	});
+var _user$project$Model_SelectedTest$navigateToFile = _elm_lang$core$Native_Platform.outgoingPort(
+	'navigateToFile',
+	function (v) {
+		return [
+			_elm_lang$core$Native_List.toArray(v._0).map(
+			function (v) {
+				return v;
+			}),
+			v._1
+		];
+	});
+var _user$project$Model_SelectedTest$showInEditor = F2(
+	function (testInstance, autoNavigateEnabled) {
+		var _p0 = {ctor: '_Tuple2', _0: testInstance, _1: autoNavigateEnabled};
+		if (((_p0.ctor === '_Tuple2') && (_p0._0.ctor === 'Just')) && (_p0._1 === true)) {
+			return _user$project$And$execute(
+				_user$project$Model_SelectedTest$navigateToFile(
+					_user$project$TestInstance_Core$pathAndDescription(_p0._0._0)));
+		} else {
+			return _user$project$And$doNothing;
+		}
+	});
+
+var _user$project$TestInstance_Reconcile$updateStatusPreferringFail = F2(
+	function ($new, old) {
+		return (_user$project$TestInstance_Core$isFailing($new) || _user$project$TestInstance_Core$isFailing(old)) ? A2(_user$project$TestInstance_Core$setStatus, 'fail', $new) : ((_user$project$TestInstance_Core$isTodo($new) || _user$project$TestInstance_Core$isTodo(old)) ? A2(_user$project$TestInstance_Core$setStatus, 'todo', $new) : A2(_user$project$TestInstance_Core$setStatus, 'pass', $new));
+	});
+var _user$project$TestInstance_Reconcile$transform = F2(
+	function ($new, old) {
+		return A2(_user$project$TestInstance_Reconcile$updateStatusPreferringFail, $new, old);
+	});
+
+var _user$project$Tree_Merge$listToTree = F3(
+	function (first, data, path) {
+		var _p0 = path;
+		if (_p0.ctor === '[]') {
+			return A3(
+				_user$project$Tree_Core$Node,
+				first,
+				data,
+				{ctor: '[]'});
+		} else {
+			return A3(
+				_user$project$Tree_Core$Node,
+				first,
+				data,
+				{
+					ctor: '::',
+					_0: A3(_user$project$Tree_Merge$listToTree, _p0._0, data, _p0._1),
+					_1: {ctor: '[]'}
+				});
+		}
+	});
+var _user$project$Tree_Merge$mergeChildren = F4(
+	function (path, newData, transformer, children) {
+		var _p1 = path;
+		if (_p1.ctor === '[]') {
+			return children;
+		} else {
+			var _p6 = _p1._1;
+			var _p5 = _p1._0;
+			var _p2 = children;
+			if (_p2.ctor === '::') {
+				var _p4 = _p2._1;
+				var _p3 = _p2._0._0;
+				var transformedData = A2(transformer, newData, _p2._0._1);
+				return _elm_lang$core$Native_Utils.eq(_p3, _p5) ? {
+					ctor: '::',
+					_0: A3(
+						_user$project$Tree_Core$Node,
+						_p3,
+						transformedData,
+						A4(_user$project$Tree_Merge$mergeChildren, _p6, newData, transformer, _p2._0._2)),
+					_1: _p4
+				} : {
+					ctor: '::',
+					_0: _p2._0,
+					_1: A4(_user$project$Tree_Merge$mergeChildren, path, newData, transformer, _p4)
+				};
+			} else {
+				return {
+					ctor: '::',
+					_0: A3(_user$project$Tree_Merge$listToTree, _p5, newData, _p6),
+					_1: {ctor: '[]'}
+				};
+			}
+		}
+	});
+var _user$project$Tree_Merge$fromPath = F4(
+	function (path, newData, transformer, _p7) {
+		var _p8 = _p7;
+		var _p13 = _p8._0;
+		var _p12 = _p8._2;
+		var _p9 = path;
+		if (_p9.ctor === '[]') {
+			return _p8;
+		} else {
+			var _p11 = _p9._1;
+			var _p10 = _p9._0;
+			var transformedData = A2(transformer, newData, _p8._1);
+			return _elm_lang$core$Native_Utils.eq(_p13, _p10) ? A3(
+				_user$project$Tree_Core$Node,
+				_p13,
+				transformedData,
+				A4(_user$project$Tree_Merge$mergeChildren, _p11, newData, transformer, _p12)) : A3(
+				_user$project$Tree_Core$Node,
+				_p13,
+				transformedData,
+				{
+					ctor: '::',
+					_0: A3(_user$project$Tree_Merge$listToTree, _p10, newData, _p11),
+					_1: _p12
+				});
+		}
+	});
+
+var _user$project$Tree_Node$toggle = F3(
+	function (nodeId, expand, _p0) {
+		var _p1 = _p0;
+		var _p5 = _p1._0;
+		var _p4 = _p1._1;
+		var _p3 = _p1._2;
+		var _p2 = _p5;
+		var x = _p2._0;
+		var nid = _p2._2;
+		return _elm_lang$core$Native_Utils.eq(nodeId, nid) ? A3(
+			_user$project$Tree_Core$Node,
+			{ctor: '_Tuple3', _0: x, _1: expand, _2: nid},
+			_p4,
+			_p3) : A3(
+			_user$project$Tree_Core$Node,
+			_p5,
+			_p4,
+			A2(
+				_elm_lang$core$List$map,
+				A2(_user$project$Tree_Node$toggle, nodeId, expand),
+				_p3));
+	});
+
+var _user$project$Tree_Traverse$hasMatchingNode = F2(
+	function (evaluator, _p0) {
+		var _p1 = _p0;
+		return evaluator(_p1._1) ? true : A3(
+			_elm_lang$core$List$foldl,
+			F2(
+				function (x, y) {
+					return x || y;
+				}),
+			false,
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Tree_Traverse$hasMatchingNode(evaluator),
+				_p1._2));
+	});
+var _user$project$Tree_Traverse$purgeNodes = F2(
+	function (evaluator, nodeList) {
+		return A2(
+			_elm_lang$core$List$filter,
+			function (_p2) {
+				var _p3 = _p2;
+				return evaluator(_p3._1);
+			},
+			nodeList);
+	});
+var _user$project$Tree_Traverse$purge = F2(
+	function (evaluator, _p4) {
+		var _p5 = _p4;
+		return A3(
+			_user$project$Tree_Core$Node,
+			_p5._0,
+			_p5._1,
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Tree_Traverse$purge(evaluator),
+				A2(_user$project$Tree_Traverse$purgeNodes, evaluator, _p5._2)));
+	});
+var _user$project$Tree_Traverse$update = F2(
+	function (updater, _p6) {
+		var _p7 = _p6;
+		var updatedData = updater(_p7._1);
+		return A3(
+			_user$project$Tree_Core$Node,
+			_p7._0,
+			updatedData,
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Tree_Traverse$update(updater),
+				_p7._2));
+	});
+
+var _user$project$Model_TestTree$toggleFailingAndTodoNodes = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1._1;
+	var expanded = _user$project$TestInstance_Core$isFailing(_p2) || _user$project$TestInstance_Core$isTodo(_p2);
+	return A3(
+		_user$project$Tree_Core$Node,
+		{ctor: '_Tuple3', _0: _p1._0._0, _1: expanded, _2: _p1._0._2},
+		_p2,
+		A2(_elm_lang$core$List$map, _user$project$Model_TestTree$toggleFailingAndTodoNodes, _p1._2));
+};
+var _user$project$Model_TestTree$expandFailingAndTodoNodes = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testHierarchy: _user$project$Model_TestTree$toggleFailingAndTodoNodes(model.testHierarchy)
+		});
+};
+var _user$project$Model_TestTree$toggleNode = F3(
+	function (nodeId, newState, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				testHierarchy: A3(_user$project$Tree_Node$toggle, nodeId, newState, model.testHierarchy)
+			});
+	});
+var _user$project$Model_TestTree$updateHierarchy = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testHierarchy: _user$project$Tree_Core$make(model.testRuns)
+		});
+};
+var _user$project$Model_TestTree$purgeObsoleteNodes = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testRuns: A2(
+				_user$project$Tree_Traverse$purge,
+				function (_p3) {
+					return !_user$project$TestInstance_Core$isPending(_p3);
+				},
+				model.testRuns)
+		});
+};
+var _user$project$Model_TestTree$reset = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			testRuns: A2(
+				_user$project$Tree_Traverse$update,
+				_user$project$TestInstance_Core$setStatus('pending'),
+				model.testRuns)
+		});
+};
+var _user$project$Model_TestTree$build = F2(
+	function (event, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				testRuns: A4(
+					_user$project$Tree_Merge$fromPath,
+					{
+						ctor: '::',
+						_0: model.projectName,
+						_1: _user$project$TestEvent_TestCompleted$labels(event)
+					},
+					_user$project$TestInstance_Core$fromEvent(event),
+					_user$project$TestInstance_Reconcile$transform,
+					model.testRuns)
+			});
+	});
+
+var _user$project$Message_TestListItem$update = F2(
+	function (message, model) {
+		var _p0 = message;
+		switch (_p0.ctor) {
+			case 'Expand':
+				return _user$project$And$doNothing(
+					A3(_user$project$Model_TestTree$toggleNode, _p0._0, true, model));
+			case 'Collapse':
+				return _user$project$And$doNothing(
+					A3(_user$project$Model_TestTree$toggleNode, _p0._0, false, model));
+			case 'MouseEnter':
+				return _user$project$And$doNothing(
+					A2(
+						_user$project$Model_SelectedTest$setTestMouseIsOver,
+						_elm_lang$core$Maybe$Just(_p0._0),
+						model));
+			case 'MouseLeave':
+				return _user$project$And$doNothing(
+					A2(_user$project$Model_SelectedTest$setTestMouseIsOver, _elm_lang$core$Maybe$Nothing, model));
+			default:
+				var _p1 = _p0._1;
+				return A3(
+					_user$project$Model_SelectedTest$showInEditor,
+					_p1,
+					model.autoNavigateEnabled,
+					A2(
+						_user$project$Model_SelectedTest$setInstance,
+						_p1,
+						A2(
+							_user$project$Model_SelectedTest$setNodeId,
+							_elm_lang$core$Maybe$Just(_p0._0),
+							model)));
+		}
+	});
+var _user$project$Message_TestListItem$Messages = F5(
+	function (a, b, c, d, e) {
+		return {expand: a, collapse: b, mouseEnter: c, mouseLeave: d, select: e};
+	});
+var _user$project$Message_TestListItem$Select = F2(
+	function (a, b) {
+		return {ctor: 'Select', _0: a, _1: b};
+	});
+var _user$project$Message_TestListItem$MouseLeave = {ctor: 'MouseLeave'};
+var _user$project$Message_TestListItem$MouseEnter = function (a) {
+	return {ctor: 'MouseEnter', _0: a};
+};
+var _user$project$Message_TestListItem$Collapse = function (a) {
+	return {ctor: 'Collapse', _0: a};
+};
+var _user$project$Message_TestListItem$Expand = function (a) {
+	return {ctor: 'Expand', _0: a};
+};
+var _user$project$Message_TestListItem$messages = {expand: _user$project$Message_TestListItem$Expand, collapse: _user$project$Message_TestListItem$Collapse, mouseEnter: _user$project$Message_TestListItem$MouseEnter, mouseLeave: _user$project$Message_TestListItem$MouseLeave, select: _user$project$Message_TestListItem$Select};
+
 var _user$project$Model_Animation$retractFooter = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -17608,12 +17959,6 @@ var _user$project$Model_Basics$setPaneLocation = F2(
 			{
 				paneLocation: _user$project$State_PaneLocation$fromString(newLocation)
 			});
-	});
-var _user$project$Model_Basics$setTestMouseIsOver = F2(
-	function (nodeId, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{testMouseIsOver: nodeId});
 	});
 var _user$project$Model_Basics$setCompilerErrorMessage = F2(
 	function (maybeError, model) {
@@ -17776,57 +18121,6 @@ var _user$project$Model_RunSeed$set = F2(
 			});
 	});
 
-var _user$project$Tree_Traverse$hasMatchingNode = F2(
-	function (evaluator, _p0) {
-		var _p1 = _p0;
-		return evaluator(_p1._1) ? true : A3(
-			_elm_lang$core$List$foldl,
-			F2(
-				function (x, y) {
-					return x || y;
-				}),
-			false,
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$Tree_Traverse$hasMatchingNode(evaluator),
-				_p1._2));
-	});
-var _user$project$Tree_Traverse$purgeNodes = F2(
-	function (evaluator, nodeList) {
-		return A2(
-			_elm_lang$core$List$filter,
-			function (_p2) {
-				var _p3 = _p2;
-				return evaluator(_p3._1);
-			},
-			nodeList);
-	});
-var _user$project$Tree_Traverse$purge = F2(
-	function (evaluator, _p4) {
-		var _p5 = _p4;
-		return A3(
-			_user$project$Tree_Core$Node,
-			_p5._0,
-			_p5._1,
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$Tree_Traverse$purge(evaluator),
-				A2(_user$project$Tree_Traverse$purgeNodes, evaluator, _p5._2)));
-	});
-var _user$project$Tree_Traverse$update = F2(
-	function (updater, _p6) {
-		var _p7 = _p6;
-		var updatedData = updater(_p7._1);
-		return A3(
-			_user$project$Tree_Core$Node,
-			_p7._0,
-			updatedData,
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$Tree_Traverse$update(updater),
-				_p7._2));
-	});
-
 var _user$project$Model_RunStatus$setToCompileError = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -17864,41 +18158,6 @@ var _user$project$Model_RunStatus$setToGeneratingTests = function (model) {
 		{runStatus: _user$project$State_RunStatus$generatingTests});
 };
 
-var _user$project$Model_SelectedTest$setInstance = F2(
-	function (testInstance, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{selectedTestInstance: testInstance});
-	});
-var _user$project$Model_SelectedTest$setNodeId = F2(
-	function (nodeId, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{selectedTestNodeId: nodeId});
-	});
-var _user$project$Model_SelectedTest$navigateToFile = _elm_lang$core$Native_Platform.outgoingPort(
-	'navigateToFile',
-	function (v) {
-		return [
-			_elm_lang$core$Native_List.toArray(v._0).map(
-			function (v) {
-				return v;
-			}),
-			v._1
-		];
-	});
-var _user$project$Model_SelectedTest$showInEditor = F2(
-	function (testInstance, autoNavigateEnabled) {
-		var _p0 = {ctor: '_Tuple2', _0: testInstance, _1: autoNavigateEnabled};
-		if (((_p0.ctor === '_Tuple2') && (_p0._0.ctor === 'Just')) && (_p0._1 === true)) {
-			return _user$project$And$execute(
-				_user$project$Model_SelectedTest$navigateToFile(
-					_user$project$TestInstance_Core$pathAndDescription(_p0._0._0)));
-		} else {
-			return _user$project$And$doNothing;
-		}
-	});
-
 var _user$project$Model_TestCount$setTotal = F2(
 	function (event, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -17918,194 +18177,6 @@ var _user$project$Model_TestCount$updatePassed = F2(
 			model,
 			{
 				passedTests: model.passedTests + _user$project$TestEvent_TestCompleted$passedTestCountToIncrement(event)
-			});
-	});
-
-var _user$project$TestInstance_Reconcile$updateStatusPreferringFail = F2(
-	function ($new, old) {
-		return (_user$project$TestInstance_Core$isFailing($new) || _user$project$TestInstance_Core$isFailing(old)) ? A2(_user$project$TestInstance_Core$setStatus, 'fail', $new) : ((_user$project$TestInstance_Core$isTodo($new) || _user$project$TestInstance_Core$isTodo(old)) ? A2(_user$project$TestInstance_Core$setStatus, 'todo', $new) : A2(_user$project$TestInstance_Core$setStatus, 'pass', $new));
-	});
-var _user$project$TestInstance_Reconcile$transform = F2(
-	function ($new, old) {
-		return A2(_user$project$TestInstance_Reconcile$updateStatusPreferringFail, $new, old);
-	});
-
-var _user$project$Tree_Merge$listToTree = F3(
-	function (first, data, path) {
-		var _p0 = path;
-		if (_p0.ctor === '[]') {
-			return A3(
-				_user$project$Tree_Core$Node,
-				first,
-				data,
-				{ctor: '[]'});
-		} else {
-			return A3(
-				_user$project$Tree_Core$Node,
-				first,
-				data,
-				{
-					ctor: '::',
-					_0: A3(_user$project$Tree_Merge$listToTree, _p0._0, data, _p0._1),
-					_1: {ctor: '[]'}
-				});
-		}
-	});
-var _user$project$Tree_Merge$mergeChildren = F4(
-	function (path, newData, transformer, children) {
-		var _p1 = path;
-		if (_p1.ctor === '[]') {
-			return children;
-		} else {
-			var _p6 = _p1._1;
-			var _p5 = _p1._0;
-			var _p2 = children;
-			if (_p2.ctor === '::') {
-				var _p4 = _p2._1;
-				var _p3 = _p2._0._0;
-				var transformedData = A2(transformer, newData, _p2._0._1);
-				return _elm_lang$core$Native_Utils.eq(_p3, _p5) ? {
-					ctor: '::',
-					_0: A3(
-						_user$project$Tree_Core$Node,
-						_p3,
-						transformedData,
-						A4(_user$project$Tree_Merge$mergeChildren, _p6, newData, transformer, _p2._0._2)),
-					_1: _p4
-				} : {
-					ctor: '::',
-					_0: _p2._0,
-					_1: A4(_user$project$Tree_Merge$mergeChildren, path, newData, transformer, _p4)
-				};
-			} else {
-				return {
-					ctor: '::',
-					_0: A3(_user$project$Tree_Merge$listToTree, _p5, newData, _p6),
-					_1: {ctor: '[]'}
-				};
-			}
-		}
-	});
-var _user$project$Tree_Merge$fromPath = F4(
-	function (path, newData, transformer, _p7) {
-		var _p8 = _p7;
-		var _p13 = _p8._0;
-		var _p12 = _p8._2;
-		var _p9 = path;
-		if (_p9.ctor === '[]') {
-			return _p8;
-		} else {
-			var _p11 = _p9._1;
-			var _p10 = _p9._0;
-			var transformedData = A2(transformer, newData, _p8._1);
-			return _elm_lang$core$Native_Utils.eq(_p13, _p10) ? A3(
-				_user$project$Tree_Core$Node,
-				_p13,
-				transformedData,
-				A4(_user$project$Tree_Merge$mergeChildren, _p11, newData, transformer, _p12)) : A3(
-				_user$project$Tree_Core$Node,
-				_p13,
-				transformedData,
-				{
-					ctor: '::',
-					_0: A3(_user$project$Tree_Merge$listToTree, _p10, newData, _p11),
-					_1: _p12
-				});
-		}
-	});
-
-var _user$project$Tree_Node$toggle = F3(
-	function (nodeId, expand, _p0) {
-		var _p1 = _p0;
-		var _p5 = _p1._0;
-		var _p4 = _p1._1;
-		var _p3 = _p1._2;
-		var _p2 = _p5;
-		var x = _p2._0;
-		var nid = _p2._2;
-		return _elm_lang$core$Native_Utils.eq(nodeId, nid) ? A3(
-			_user$project$Tree_Core$Node,
-			{ctor: '_Tuple3', _0: x, _1: expand, _2: nid},
-			_p4,
-			_p3) : A3(
-			_user$project$Tree_Core$Node,
-			_p5,
-			_p4,
-			A2(
-				_elm_lang$core$List$map,
-				A2(_user$project$Tree_Node$toggle, nodeId, expand),
-				_p3));
-	});
-
-var _user$project$Model_TestTree$toggleFailingAndTodoNodes = function (_p0) {
-	var _p1 = _p0;
-	var _p2 = _p1._1;
-	var expanded = _user$project$TestInstance_Core$isFailing(_p2) || _user$project$TestInstance_Core$isTodo(_p2);
-	return A3(
-		_user$project$Tree_Core$Node,
-		{ctor: '_Tuple3', _0: _p1._0._0, _1: expanded, _2: _p1._0._2},
-		_p2,
-		A2(_elm_lang$core$List$map, _user$project$Model_TestTree$toggleFailingAndTodoNodes, _p1._2));
-};
-var _user$project$Model_TestTree$expandFailingAndTodoNodes = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			testHierarchy: _user$project$Model_TestTree$toggleFailingAndTodoNodes(model.testHierarchy)
-		});
-};
-var _user$project$Model_TestTree$toggleNode = F3(
-	function (nodeId, newState, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				testHierarchy: A3(_user$project$Tree_Node$toggle, nodeId, newState, model.testHierarchy)
-			});
-	});
-var _user$project$Model_TestTree$updateHierarchy = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			testHierarchy: _user$project$Tree_Core$make(model.testRuns)
-		});
-};
-var _user$project$Model_TestTree$purgeObsoleteNodes = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			testRuns: A2(
-				_user$project$Tree_Traverse$purge,
-				function (_p3) {
-					return !_user$project$TestInstance_Core$isPending(_p3);
-				},
-				model.testRuns)
-		});
-};
-var _user$project$Model_TestTree$reset = function (model) {
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{
-			testRuns: A2(
-				_user$project$Tree_Traverse$update,
-				_user$project$TestInstance_Core$setStatus('pending'),
-				model.testRuns)
-		});
-};
-var _user$project$Model_TestTree$build = F2(
-	function (event, model) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				testRuns: A4(
-					_user$project$Tree_Merge$fromPath,
-					{
-						ctor: '::',
-						_0: model.projectName,
-						_1: _user$project$TestEvent_TestCompleted$labels(event)
-					},
-					_user$project$TestInstance_Core$fromEvent(event),
-					_user$project$TestInstance_Reconcile$transform,
-					model.testRuns)
 			});
 	});
 
@@ -19723,34 +19794,8 @@ var _user$project$Main$update = F2(
 													_user$project$Model_RunStatus$setForTodo,
 													_user$project$TestInstance_Core$isTodo,
 													_user$project$Model_RunStatus$setToPassing(model))))))))));
-			case 'TestListItemExpand':
-				return _user$project$And$doNothing(
-					A3(_user$project$Model_TestTree$toggleNode, _p0._0, true, model));
-			case 'TestListItemCollapse':
-				return _user$project$And$doNothing(
-					A3(_user$project$Model_TestTree$toggleNode, _p0._0, false, model));
-			case 'TestListItemMouseEnter':
-				return _user$project$And$doNothing(
-					A2(
-						_user$project$Model_Basics$setTestMouseIsOver,
-						_elm_lang$core$Maybe$Just(_p0._0),
-						model));
-			case 'TestListItemMouseLeave':
-				return _user$project$And$doNothing(
-					A2(_user$project$Model_Basics$setTestMouseIsOver, _elm_lang$core$Maybe$Nothing, model));
-			case 'TestListItemSelect':
-				var _p1 = _p0._1;
-				return A3(
-					_user$project$Model_SelectedTest$showInEditor,
-					_p1,
-					model.autoNavigateEnabled,
-					A2(
-						_user$project$Model_SelectedTest$setInstance,
-						_p1,
-						A2(
-							_user$project$Model_SelectedTest$setNodeId,
-							_elm_lang$core$Maybe$Just(_p0._0),
-							model)));
+			case 'TestListItem':
+				return A2(_user$project$Message_TestListItem$update, _p0._0, model);
 			case 'ToggleAutoRun':
 				return _user$project$And$updateAtomState(
 					_user$project$Model_Config$invertAutoRun(model));
@@ -19886,19 +19931,8 @@ var _user$project$Main$SetAutoRun = function (a) {
 	return {ctor: 'SetAutoRun', _0: a};
 };
 var _user$project$Main$ToggleAutoRun = {ctor: 'ToggleAutoRun'};
-var _user$project$Main$TestListItemSelect = F2(
-	function (a, b) {
-		return {ctor: 'TestListItemSelect', _0: a, _1: b};
-	});
-var _user$project$Main$TestListItemMouseLeave = {ctor: 'TestListItemMouseLeave'};
-var _user$project$Main$TestListItemMouseEnter = function (a) {
-	return {ctor: 'TestListItemMouseEnter', _0: a};
-};
-var _user$project$Main$TestListItemCollapse = function (a) {
-	return {ctor: 'TestListItemCollapse', _0: a};
-};
-var _user$project$Main$TestListItemExpand = function (a) {
-	return {ctor: 'TestListItemExpand', _0: a};
+var _user$project$Main$TestListItem = function (a) {
+	return {ctor: 'TestListItem', _0: a};
 };
 var _user$project$Main$RunComplete = function (a) {
 	return {ctor: 'RunComplete', _0: a};
@@ -19942,10 +19976,49 @@ var _user$project$Main$view = function (model) {
 			footerStyle: model.footerStyle,
 			paneLocation: model.paneLocation
 		},
-		{runAllButtonClickHandler: _user$project$Main$InitiateRunAll, testListItemExpand: _user$project$Main$TestListItemExpand, testListItemCollapse: _user$project$Main$TestListItemCollapse, testListItemMouseEnter: _user$project$Main$TestListItemMouseEnter, testListItemMouseLeave: _user$project$Main$TestListItemMouseLeave, testClickHandler: _user$project$Main$TestListItemSelect, copySeedClickHandler: _user$project$Main$CopySeed, setSeedClickHandler: _user$project$Main$SetRandomSeed, setForceSeedHandler: _user$project$Main$SetForceSeed, setAutoRun: _user$project$Main$SetAutoRun, setAutoNavigate: _user$project$Main$SetAutoNavigate, setRunElmVerifyExamples: _user$project$Main$SetRunElmVerifyExamples, settingsToggle: _user$project$Main$ToggleSettings});
+		{
+			runAllButtonClickHandler: _user$project$Main$InitiateRunAll,
+			testListItemExpand: A2(
+				_user$project$Bind$bind1,
+				_user$project$Main$TestListItem,
+				function (_) {
+					return _.expand;
+				}(_user$project$Message_TestListItem$messages)),
+			testListItemCollapse: A2(
+				_user$project$Bind$bind1,
+				_user$project$Main$TestListItem,
+				function (_) {
+					return _.collapse;
+				}(_user$project$Message_TestListItem$messages)),
+			testListItemMouseEnter: A2(
+				_user$project$Bind$bind1,
+				_user$project$Main$TestListItem,
+				function (_) {
+					return _.mouseEnter;
+				}(_user$project$Message_TestListItem$messages)),
+			testListItemMouseLeave: A2(
+				_user$project$Bind$bind0,
+				_user$project$Main$TestListItem,
+				function (_) {
+					return _.mouseLeave;
+				}(_user$project$Message_TestListItem$messages)),
+			testClickHandler: A2(
+				_user$project$Bind$bind2,
+				_user$project$Main$TestListItem,
+				function (_) {
+					return _.select;
+				}(_user$project$Message_TestListItem$messages)),
+			copySeedClickHandler: _user$project$Main$CopySeed,
+			setSeedClickHandler: _user$project$Main$SetRandomSeed,
+			setForceSeedHandler: _user$project$Main$SetForceSeed,
+			setAutoRun: _user$project$Main$SetAutoRun,
+			setAutoNavigate: _user$project$Main$SetAutoNavigate,
+			setRunElmVerifyExamples: _user$project$Main$SetRunElmVerifyExamples,
+			settingsToggle: _user$project$Main$ToggleSettings
+		});
 };
 var _user$project$Main$saveEventMessage = F2(
-	function (model, _p2) {
+	function (model, _p1) {
 		return model.autoRunEnabled ? _user$project$Main$InitiateRunAll : _user$project$Main$DoNothing;
 	});
 var _user$project$Main$subscriptions = function (model) {

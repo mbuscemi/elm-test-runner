@@ -2,8 +2,10 @@ port module Main exposing (main)
 
 import And
 import Animation
+import Bind
 import Html exposing (Html)
 import Json.Encode exposing (Value)
+import Message.TestListItem as TestListItem
 import Model exposing (Model)
 import Model.Animation
 import Model.Basics
@@ -33,11 +35,7 @@ type Message
     | RunStart ( String, Value )
     | TestCompleted Value
     | RunComplete Value
-    | TestListItemExpand Int
-    | TestListItemCollapse Int
-    | TestListItemMouseEnter Int
-    | TestListItemMouseLeave
-    | TestListItemSelect Int (Maybe TestInstance)
+    | TestListItem TestListItem.Message
     | ToggleAutoRun
     | SetAutoRun Bool
     | ToggleAutoNavigate
@@ -144,26 +142,8 @@ update message model =
                 |> Model.Animation.initiateStatusBarTextFlicker
                 |> And.doNothing
 
-        TestListItemExpand nodeId ->
-            Model.TestTree.toggleNode nodeId True model
-                |> And.doNothing
-
-        TestListItemCollapse nodeId ->
-            Model.TestTree.toggleNode nodeId False model
-                |> And.doNothing
-
-        TestListItemMouseEnter nodeId ->
-            Model.Basics.setTestMouseIsOver (Just nodeId) model
-                |> And.doNothing
-
-        TestListItemMouseLeave ->
-            Model.Basics.setTestMouseIsOver Nothing model
-                |> And.doNothing
-
-        TestListItemSelect nodeId testInstance ->
-            Model.SelectedTest.setNodeId (Just nodeId) model
-                |> Model.SelectedTest.setInstance testInstance
-                |> Model.SelectedTest.showInEditor testInstance model.autoNavigateEnabled
+        TestListItem message ->
+            TestListItem.update message model
 
         ToggleAutoRun ->
             Model.Config.invertAutoRun model
@@ -253,11 +233,11 @@ view model =
         , paneLocation = model.paneLocation
         }
         { runAllButtonClickHandler = InitiateRunAll
-        , testListItemExpand = TestListItemExpand
-        , testListItemCollapse = TestListItemCollapse
-        , testListItemMouseEnter = TestListItemMouseEnter
-        , testListItemMouseLeave = TestListItemMouseLeave
-        , testClickHandler = TestListItemSelect
+        , testListItemExpand = Bind.arity1 TestListItem (.expand TestListItem.messages)
+        , testListItemCollapse = Bind.arity1 TestListItem (.collapse TestListItem.messages)
+        , testListItemMouseEnter = Bind.arity1 TestListItem (.mouseEnter TestListItem.messages)
+        , testListItemMouseLeave = Bind.arity0 TestListItem (.mouseLeave TestListItem.messages)
+        , testClickHandler = Bind.arity2 TestListItem (.select TestListItem.messages)
         , copySeedClickHandler = CopySeed
         , setSeedClickHandler = SetRandomSeed
         , setForceSeedHandler = SetForceSeed
