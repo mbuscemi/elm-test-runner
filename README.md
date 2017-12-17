@@ -76,3 +76,10 @@ Run elm-test and view results without leaving Atom
 ## Release History
 
 * [Elm Test Runner Release History](https://github.com/mbuscemi/elm-test-runner/releases)
+
+## Roadmap
+
+* 0.4.0 [Elm Coverage](https://github.com/zwilias/elm-coverage) Integration
+* 0.3.0 Select from Multiple Project Directories
+* 0.2.0 Better Project Directory Detection / Elm Verify Examples
+* 0.1.0 Initial Release
