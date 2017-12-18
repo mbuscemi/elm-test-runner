@@ -33,9 +33,17 @@ render data runAllButtonClickHandler =
             ]
         , div [ class "run-all-button" ]
             [ div
-                [ class "btn icon icon-sync"
+                [ class <| buttonClass data.runStatus
                 , onClick runAllButtonClickHandler
                 ]
                 [ text "Run All" ]
             ]
         ]
+
+
+buttonClass : RunStatus -> String
+buttonClass runStatus =
+    if RunStatus.canStartNewTestRun runStatus then
+        "btn icon icon-sync"
+    else
+        "btn icon icon-sync disabled"

@@ -1,6 +1,7 @@
 module State.RunStatus
     exposing
         ( RunStatus
+        , canStartNewTestRun
         , compileError
         , generatingTests
         , incomplete
@@ -134,3 +135,16 @@ toSecondaryColor runStatus =
 
         Incomplete ->
             rgb 13 91 164
+
+
+canStartNewTestRun : RunStatus -> Bool
+canStartNewTestRun runStatus =
+    case runStatus of
+        GeneratingTests ->
+            False
+
+        Processing ->
+            False
+
+        _ ->
+            True

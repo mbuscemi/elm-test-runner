@@ -17179,9 +17179,20 @@ var _user$project$And$showInEditor = F2(
 		}
 	});
 
-var _user$project$State_RunStatus$toSecondaryColor = function (runStatus) {
+var _user$project$State_RunStatus$canStartNewTestRun = function (runStatus) {
 	var _p0 = runStatus;
 	switch (_p0.ctor) {
+		case 'GeneratingTests':
+			return false;
+		case 'Processing':
+			return false;
+		default:
+			return true;
+	}
+};
+var _user$project$State_RunStatus$toSecondaryColor = function (runStatus) {
+	var _p1 = runStatus;
+	switch (_p1.ctor) {
 		case 'NoData':
 			return A3(_elm_lang$core$Color$rgb, 16, 19, 24);
 		case 'GeneratingTests':
@@ -17199,8 +17210,8 @@ var _user$project$State_RunStatus$toSecondaryColor = function (runStatus) {
 	}
 };
 var _user$project$State_RunStatus$toPrimaryColor = function (runStatus) {
-	var _p1 = runStatus;
-	switch (_p1.ctor) {
+	var _p2 = runStatus;
+	switch (_p2.ctor) {
 		case 'NoData':
 			return A3(_elm_lang$core$Color$rgb, 16, 19, 24);
 		case 'GeneratingTests':
@@ -17218,8 +17229,8 @@ var _user$project$State_RunStatus$toPrimaryColor = function (runStatus) {
 	}
 };
 var _user$project$State_RunStatus$toText = function (runStatus) {
-	var _p2 = runStatus;
-	switch (_p2.ctor) {
+	var _p3 = runStatus;
+	switch (_p3.ctor) {
 		case 'NoData':
 			return 'No Data';
 		case 'GeneratingTests':
@@ -19649,6 +19660,9 @@ var _user$project$View_TestHierarchy$SelectionMessages = F3(
 		return {mouseIn: a, mouseOut: b, testClick: c};
 	});
 
+var _user$project$View_Toolbar$buttonClass = function (runStatus) {
+	return _user$project$State_RunStatus$canStartNewTestRun(runStatus) ? 'btn icon icon-sync' : 'btn icon icon-sync disabled';
+};
 var _user$project$View_Toolbar$render = F2(
 	function (data, runAllButtonClickHandler) {
 		return A2(
@@ -19753,7 +19767,8 @@ var _user$project$View_Toolbar$render = F2(
 								_elm_lang$html$Html$div,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('btn icon icon-sync'),
+									_0: _elm_lang$html$Html_Attributes$class(
+										_user$project$View_Toolbar$buttonClass(data.runStatus)),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html_Events$onClick(runAllButtonClickHandler),
