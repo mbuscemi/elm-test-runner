@@ -18861,22 +18861,25 @@ var _user$project$Tree_Node$toggle = F3(
 				_p3));
 	});
 
-var _user$project$Tree_Traverse$find = F2(
+var _user$project$Tree_Traverse$findChildlessNodes = F2(
 	function (evaluator, _p0) {
 		var _p1 = _p0;
-		return evaluator(_p1._1) ? _elm_lang$core$Maybe$Just(_p1) : A3(
+		var _p2 = _p1._2;
+		return (evaluator(_p1._1) && _elm_lang$core$Native_Utils.eq(
+			_elm_lang$core$List$length(_p2),
+			0)) ? _elm_lang$core$Maybe$Just(_p1) : A3(
 			_elm_lang$core$List$foldl,
 			_elm_community$maybe_extra$Maybe_Extra$or,
 			_elm_lang$core$Maybe$Nothing,
 			A2(
 				_elm_lang$core$List$map,
-				_user$project$Tree_Traverse$find(evaluator),
-				_p1._2));
+				_user$project$Tree_Traverse$findChildlessNodes(evaluator),
+				_p2));
 	});
 var _user$project$Tree_Traverse$hasMatchingNode = F2(
-	function (evaluator, _p2) {
-		var _p3 = _p2;
-		return evaluator(_p3._1) ? true : A3(
+	function (evaluator, _p3) {
+		var _p4 = _p3;
+		return evaluator(_p4._1) ? true : A3(
 			_elm_lang$core$List$foldl,
 			F2(
 				function (x, y) {
@@ -18886,42 +18889,42 @@ var _user$project$Tree_Traverse$hasMatchingNode = F2(
 			A2(
 				_elm_lang$core$List$map,
 				_user$project$Tree_Traverse$hasMatchingNode(evaluator),
-				_p3._2));
+				_p4._2));
 	});
 var _user$project$Tree_Traverse$purgeNodes = F2(
 	function (evaluator, nodeList) {
 		return A2(
 			_elm_lang$core$List$filter,
-			function (_p4) {
-				var _p5 = _p4;
-				return evaluator(_p5._1);
+			function (_p5) {
+				var _p6 = _p5;
+				return evaluator(_p6._1);
 			},
 			nodeList);
 	});
 var _user$project$Tree_Traverse$purge = F2(
-	function (evaluator, _p6) {
-		var _p7 = _p6;
+	function (evaluator, _p7) {
+		var _p8 = _p7;
 		return A3(
 			_user$project$Tree_Core$Node,
-			_p7._0,
-			_p7._1,
+			_p8._0,
+			_p8._1,
 			A2(
 				_elm_lang$core$List$map,
 				_user$project$Tree_Traverse$purge(evaluator),
-				A2(_user$project$Tree_Traverse$purgeNodes, evaluator, _p7._2)));
+				A2(_user$project$Tree_Traverse$purgeNodes, evaluator, _p8._2)));
 	});
 var _user$project$Tree_Traverse$update = F2(
-	function (updater, _p8) {
-		var _p9 = _p8;
-		var updatedData = updater(_p9._1);
+	function (updater, _p9) {
+		var _p10 = _p9;
+		var updatedData = updater(_p10._1);
 		return A3(
 			_user$project$Tree_Core$Node,
-			_p9._0,
+			_p10._0,
 			updatedData,
 			A2(
 				_elm_lang$core$List$map,
 				_user$project$Tree_Traverse$update(updater),
-				_p9._2));
+				_p10._2));
 	});
 
 var _user$project$Model_TestTree$lastNodeWithFailureData = function (testHierarchy) {
@@ -18934,7 +18937,7 @@ var _user$project$Model_TestTree$lastNodeWithFailureData = function (testHierarc
 				_1: _user$project$Tree_Core$getData(tree)
 			};
 		},
-		A2(_user$project$Tree_Traverse$find, _user$project$TestInstance_Core$hasFailureData, testHierarchy));
+		A2(_user$project$Tree_Traverse$findChildlessNodes, _user$project$TestInstance_Core$hasFailureData, testHierarchy));
 };
 var _user$project$Model_TestTree$selectLastNodeWithFailureData = function (model) {
 	var maybeNode = _user$project$Model_TestTree$lastNodeWithFailureData(model.testHierarchy);

@@ -103,5 +103,5 @@ selectLastNodeWithFailureData model =
 
 lastNodeWithFailureData : CollapsibleTree String TestInstance -> Maybe ( Int, TestInstance )
 lastNodeWithFailureData testHierarchy =
-    Tree.Traverse.find TestInstance.hasFailureData testHierarchy
+    Tree.Traverse.findChildlessNodes TestInstance.hasFailureData testHierarchy
         |> Maybe.map (\tree -> ( Tree.getId tree, Tree.getData tree ))
