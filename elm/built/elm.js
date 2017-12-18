@@ -20327,7 +20327,11 @@ var _user$project$View_ProjectSelector$render = function (data) {
 						ctor: '::',
 						_0: A2(
 							_elm_lang$html$Html$select,
-							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('form-control'),
+								_1: {ctor: '[]'}
+							},
 							A2(_user$project$View_ProjectSelector$options, data.projectDirectories, data.testableElmDirectories)),
 						_1: {ctor: '[]'}
 					}),
@@ -20369,11 +20373,15 @@ var _user$project$View_SeedAndSettings$render = F2(
 							_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onCheck(messages.setForceSeedHandler),
+								_0: _elm_lang$html$Html_Attributes$class('input-checkbox'),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$checked(data.forceRandomSeedEnabled),
-									_1: {ctor: '[]'}
+									_0: _elm_lang$html$Html_Events$onCheck(messages.setForceSeedHandler),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$checked(data.forceRandomSeedEnabled),
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						},
@@ -20397,14 +20405,18 @@ var _user$project$View_SeedAndSettings$render = F2(
 									_0: _elm_lang$html$Html_Attributes$type_('number'),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$placeholder('Generate Random'),
+										_0: _elm_lang$html$Html_Attributes$class('input-number'),
 										_1: {
 											ctor: '::',
-											_0: _user$project$View_SeedAndSettings$seedInputValue(data.randomSeed),
+											_0: _elm_lang$html$Html_Attributes$placeholder('Generate Random'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$disabled(!data.forceRandomSeedEnabled),
-												_1: {ctor: '[]'}
+												_0: _user$project$View_SeedAndSettings$seedInputValue(data.randomSeed),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$disabled(!data.forceRandomSeedEnabled),
+													_1: {ctor: '[]'}
+												}
 											}
 										}
 									}

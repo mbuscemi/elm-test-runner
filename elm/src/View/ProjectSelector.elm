@@ -15,7 +15,7 @@ render : Data -> Html message
 render data =
     div [ class "project-selector" ]
         [ div [ class "label" ] [ text "Project: " ]
-        , div [ class "selector" ] [ select [] (options data.projectDirectories data.testableElmDirectories) ]
+        , div [ class "selector" ] [ select [ class "form-control" ] (options data.projectDirectories data.testableElmDirectories) ]
         ]
 
 

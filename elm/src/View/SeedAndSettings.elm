@@ -28,6 +28,7 @@ render data messages =
     [ div [ class "seed-settings" ]
         [ input
             [ type_ "checkbox"
+            , class "input-checkbox"
             , onCheck messages.setForceSeedHandler
             , checked data.forceRandomSeedEnabled
             ]
@@ -35,6 +36,7 @@ render data messages =
         , span [] [ text "Seed:" ]
         , input
             [ type_ "number"
+            , class "input-number"
             , placeholder "Generate Random"
             , seedInputValue data.randomSeed
             , disabled <| not data.forceRandomSeedEnabled

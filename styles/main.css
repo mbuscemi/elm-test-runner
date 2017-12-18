@@ -143,6 +143,11 @@
 
 .etr-main-view div.project-selector div.selector select {
     width: 100%;
+    color: #9da5b4;
+    border-color: #181a1f;
+    background-color: #353b45;
+    font-size: auto;
+    height: auto;
 }
 
 .etr-main-view ul.test-list {
@@ -216,13 +221,17 @@
     padding: 0 8px;
 }
 
-.etr-main-view .seed-settings input {
-    border-width: 1px;
-    border-style: groove;
+.etr-main-view .seed-settings input[type=checkbox] {
+    margin-top: -1px;
 }
 
-.etr-main-view .seed-settings input:disabled {
-    background-color: rgb(84, 84, 84);
+.etr-main-view .seed-settings input[type=number] {
+    padding: 0.1em 0.4em;
+    line-height: 0;
+}
+
+.etr-main-view .seed-settings input[type=number]:disabled {
+    color: #555;
 }
 
 .etr-main-view .settings-toggle {
