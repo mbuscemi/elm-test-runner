@@ -1,7 +1,9 @@
-port module And exposing (doNothing, execute, showInEditor, updateAtomState)
+port module And exposing (doNothing, execute, executeOnDelay, showInEditor, updateAtomState)
 
 import Model.Config exposing (HasConfig)
 import Model.Flags exposing (Flags)
+import Process
+import Task
 import TestInstance.Core as TestInstance exposing (TestInstance)
 
 
@@ -13,6 +15,15 @@ doNothing model =
 execute : Cmd message -> model -> ( model, Cmd message )
 execute command model =
     ( model, command )
+
+
+executeOnDelay : message -> model -> ( model, Cmd message )
+executeOnDelay message model =
+    ( model
+    , Process.sleep 100
+        |> Task.andThen (always <| Task.succeed message)
+        |> Task.perform identity
+    )
 
 
 updateAtomState : HasConfig model -> ( HasConfig model, Cmd message )

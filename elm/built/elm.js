@@ -18129,6 +18129,21 @@ var _user$project$TestInstance_Core$fromEvent = function (event) {
 		_user$project$TestEvent_TestCompleted$firstFailure(event));
 };
 
+var _user$project$And$executeOnDelay = F2(
+	function (message, model) {
+		return {
+			ctor: '_Tuple2',
+			_0: model,
+			_1: A2(
+				_elm_lang$core$Task$perform,
+				_elm_lang$core$Basics$identity,
+				A2(
+					_elm_lang$core$Task$andThen,
+					_elm_lang$core$Basics$always(
+						_elm_lang$core$Task$succeed(message)),
+					_elm_lang$core$Process$sleep(100)))
+		};
+	});
 var _user$project$And$execute = F2(
 	function (command, model) {
 		return {ctor: '_Tuple2', _0: model, _1: command};
@@ -21179,22 +21194,11 @@ var _user$project$Main$update = F2(
 		var _p0 = message;
 		switch (_p0.ctor) {
 			case 'TestRun':
-				return model.hasRegisteredDirectories ? A2(_user$project$Message_TestRun$update, _p0._0, model) : {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: A2(
-						_elm_lang$core$Task$perform,
-						_elm_lang$core$Basics$identity,
-						A2(
-							_elm_lang$core$Task$andThen,
-							_elm_lang$core$Basics$always(
-								_elm_lang$core$Task$succeed(
-									_user$project$Main$TestRun(
-										function (_) {
-											return _.initiate;
-										}(_user$project$Message_TestRun$messages)))),
-							_elm_lang$core$Process$sleep(100)))
-				};
+				var _p1 = _p0._0;
+				return model.hasRegisteredDirectories ? A2(_user$project$Message_TestRun$update, _p1, model) : A2(
+					_user$project$And$executeOnDelay,
+					_user$project$Main$TestRun(_p1),
+					model);
 			case 'TestListItem':
 				return A2(_user$project$Message_TestListItem$update, _p0._0, model);
 			case 'Settings':
@@ -21215,16 +21219,16 @@ var _user$project$Main$update = F2(
 						model,
 						{projectDirectories: _p0._0}));
 			case 'TestableElmDirectoryUpdate':
-				var _p1 = _p0._0;
+				var _p2 = _p0._0;
 				return _user$project$And$doNothing(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							testableElmDirectories: _p1,
+							testableElmDirectories: _p2,
 							currentWorkingDirectory: A2(
 								_elm_lang$core$Maybe$withDefault,
 								'',
-								_elm_lang$core$List$head(_p1)),
+								_elm_lang$core$List$head(_p2)),
 							hasRegisteredDirectories: true
 						}));
 			default:
@@ -21346,7 +21350,7 @@ var _user$project$Main$view = function (model) {
 		});
 };
 var _user$project$Main$saveEventMessage = F2(
-	function (model, _p2) {
+	function (model, _p3) {
 		return model.autoRunEnabled ? A2(
 			_user$project$Bind$arity0,
 			_user$project$Main$TestRun,

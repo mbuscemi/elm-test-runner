@@ -15,8 +15,6 @@ import Model.Animation
 import Model.Basics
 import Model.Config
 import Model.Flags as Flags
-import Process
-import Task
 import TestInstance.Core as TestInstance
 import TestInstance.View
 import View
@@ -65,11 +63,7 @@ update message model =
             if model.hasRegisteredDirectories then
                 TestRun.update message model
             else
-                ( model
-                , Process.sleep 100
-                    |> Task.andThen (always <| Task.succeed <| TestRun <| .initiate TestRun.messages)
-                    |> Task.perform identity
-                )
+                And.executeOnDelay (TestRun message) model
 
         TestListItem message ->
             TestListItem.update message model
