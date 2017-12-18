@@ -57,6 +57,7 @@ type alias Messages message testInstance =
     , setAutoNavigate : Bool -> message
     , setRunElmVerifyExamples : Bool -> message
     , settingsToggle : message
+    , workingDirectoryChanged : String -> message
     }
 
 
@@ -88,6 +89,7 @@ render data messages =
                     { projectDirectories = data.projectDirectories
                     , testableElmDirectories = data.testableElmDirectories
                     }
+                    { workingDirectoryChanged = messages.workingDirectoryChanged }
                 , View.DurationAndSeedDisplay.render
                     { runDuration = data.runDuration
                     , runSeed = data.runSeed

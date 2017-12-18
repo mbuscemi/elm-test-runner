@@ -18063,12 +18063,6 @@ var _user$project$TestInstance_TestStatus$fromTestCompletedEvent = function (eve
 var _user$project$TestInstance_Core$pathAndDescription = function (instance) {
 	return _user$project$State_Labels$getPotentialPathPiecesAndTestDescription(instance.labels);
 };
-var _user$project$TestInstance_Core$setLabels = F2(
-	function (labels, instance) {
-		return _elm_lang$core$Native_Utils.update(
-			instance,
-			{labels: labels});
-	});
 var _user$project$TestInstance_Core$durationAsString = function (instance) {
 	return _elm_lang$core$Basics$toString(
 		_user$project$State_Duration$asMilliseconds(instance.duration));
@@ -18129,6 +18123,17 @@ var _user$project$TestInstance_Core$fromEvent = function (event) {
 		_user$project$TestEvent_TestCompleted$firstFailure(event));
 };
 
+var _user$project$State_NavigationData$make = F2(
+	function (workingDirectory, testInstance) {
+		var pathAndDescription = _user$project$TestInstance_Core$pathAndDescription(testInstance);
+		return {
+			ctor: '_Tuple3',
+			_0: workingDirectory,
+			_1: _elm_lang$core$Tuple$first(pathAndDescription),
+			_2: _elm_lang$core$Tuple$second(pathAndDescription)
+		};
+	});
+
 var _user$project$And$executeOnDelay = F2(
 	function (message, model) {
 		return {
@@ -18168,24 +18173,18 @@ var _user$project$And$navigateToFile = _elm_lang$core$Native_Platform.outgoingPo
 	'navigateToFile',
 	function (v) {
 		return [
-			_elm_lang$core$Native_List.toArray(v._0).map(
+			v._0,
+			_elm_lang$core$Native_List.toArray(v._1).map(
 			function (v) {
 				return v;
 			}),
-			v._1
+			v._2
 		];
 	});
-var _user$project$And$showInEditor = F2(
-	function (testInstance, autoNavigateEnabled) {
-		var _p0 = {ctor: '_Tuple2', _0: testInstance, _1: autoNavigateEnabled};
-		if (((_p0.ctor === '_Tuple2') && (_p0._0.ctor === 'Just')) && (_p0._1 === true)) {
-			return _user$project$And$execute(
-				_user$project$And$navigateToFile(
-					_user$project$TestInstance_Core$pathAndDescription(_p0._0._0)));
-		} else {
-			return _user$project$And$doNothing;
-		}
-	});
+var _user$project$And$showInEditor = function (data) {
+	return _user$project$And$execute(
+		_user$project$And$navigateToFile(data));
+};
 
 var _user$project$State_RunStatus$canStartNewTestRun = function (runStatus) {
 	var _p0 = runStatus;
@@ -18672,6 +18671,18 @@ var _user$project$Message_Settings$messages = {
 	runElmVerifyExamples: {toggle: _user$project$Message_Settings$ToggleRunElmVerifyExamples, set: _user$project$Message_Settings$SetRunElmVerifyExamples}
 };
 
+var _user$project$Model_SelectedTest$andShowInEditor = F2(
+	function (testInstance, model) {
+		var _p0 = {ctor: '_Tuple2', _0: testInstance, _1: model.autoNavigateEnabled};
+		if (((_p0.ctor === '_Tuple2') && (_p0._0.ctor === 'Just')) && (_p0._1 === true)) {
+			return A2(
+				_user$project$And$showInEditor,
+				A2(_user$project$State_NavigationData$make, model.currentWorkingDirectory, _p0._0._0),
+				model);
+		} else {
+			return _user$project$And$doNothing(model);
+		}
+	});
 var _user$project$Model_SelectedTest$setTestMouseIsOver = F2(
 	function (nodeId, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -19027,10 +19038,9 @@ var _user$project$Message_TestListItem$update = F2(
 					A2(_user$project$Model_SelectedTest$setTestMouseIsOver, _elm_lang$core$Maybe$Nothing, model));
 			default:
 				var _p1 = _p0._1;
-				return A3(
-					_user$project$And$showInEditor,
+				return A2(
+					_user$project$Model_SelectedTest$andShowInEditor,
 					_p1,
-					model.autoNavigateEnabled,
 					A2(
 						_user$project$Model_SelectedTest$setInstance,
 						_p1,
@@ -20307,57 +20317,65 @@ var _user$project$View_ProjectSelector$options = F2(
 			},
 			testableElmDirectories);
 	});
-var _user$project$View_ProjectSelector$render = function (data) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('project-selector'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('label'),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Project: '),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
+var _user$project$View_ProjectSelector$render = F2(
+	function (data, messages) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('project-selector'),
+				_1: {ctor: '[]'}
+			},
+			{
 				ctor: '::',
 				_0: A2(
 					_elm_lang$html$Html$div,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('selector'),
+						_0: _elm_lang$html$Html_Attributes$class('label'),
 						_1: {ctor: '[]'}
 					},
 					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$select,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('form-control'),
-								_1: {ctor: '[]'}
-							},
-							A2(_user$project$View_ProjectSelector$options, data.projectDirectories, data.testableElmDirectories)),
+						_0: _elm_lang$html$Html$text('Project: '),
 						_1: {ctor: '[]'}
 					}),
-				_1: {ctor: '[]'}
-			}
-		});
-};
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('selector'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onInput(messages.workingDirectoryChanged),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$select,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('form-control'),
+									_1: {ctor: '[]'}
+								},
+								A2(_user$project$View_ProjectSelector$options, data.projectDirectories, data.testableElmDirectories)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
 var _user$project$View_ProjectSelector$Data = F2(
 	function (a, b) {
 		return {projectDirectories: a, testableElmDirectories: b};
 	});
+var _user$project$View_ProjectSelector$Messages = function (a) {
+	return {workingDirectoryChanged: a};
+};
 
 var _user$project$View_SeedAndSettings$seedInputValue = function (randomSeed) {
 	var _p0 = randomSeed;
@@ -20954,8 +20972,10 @@ var _user$project$View$render = F2(
 									messages.runAllButtonClickHandler),
 								_1: {
 									ctor: '::',
-									_0: _user$project$View_ProjectSelector$render(
-										{projectDirectories: data.projectDirectories, testableElmDirectories: data.testableElmDirectories}),
+									_0: A2(
+										_user$project$View_ProjectSelector$render,
+										{projectDirectories: data.projectDirectories, testableElmDirectories: data.testableElmDirectories},
+										{workingDirectoryChanged: messages.workingDirectoryChanged}),
 									_1: {
 										ctor: '::',
 										_0: A2(
@@ -21094,7 +21114,9 @@ var _user$project$View$Messages = function (a) {
 										return function (k) {
 											return function (l) {
 												return function (m) {
-													return {runAllButtonClickHandler: a, testListItemExpand: b, testListItemCollapse: c, testListItemMouseEnter: d, testListItemMouseLeave: e, testClickHandler: f, copySeedClickHandler: g, setSeedClickHandler: h, setForceSeedHandler: i, setAutoRun: j, setAutoNavigate: k, setRunElmVerifyExamples: l, settingsToggle: m};
+													return function (n) {
+														return {runAllButtonClickHandler: a, testListItemExpand: b, testListItemCollapse: c, testListItemMouseEnter: d, testListItemMouseLeave: e, testClickHandler: f, copySeedClickHandler: g, setSeedClickHandler: h, setForceSeedHandler: i, setAutoRun: j, setAutoNavigate: k, setRunElmVerifyExamples: l, settingsToggle: m, workingDirectoryChanged: n};
+													};
 												};
 											};
 										};
@@ -21164,6 +21186,9 @@ var _user$project$Main$updateTestableElmDirectories = _elm_lang$core$Native_Plat
 	'updateTestableElmDirectories',
 	_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string));
 var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
+var _user$project$Main$WorkingDirectoryChanged = function (a) {
+	return {ctor: 'WorkingDirectoryChanged', _0: a};
+};
 var _user$project$Main$TestableElmDirectoryUpdate = function (a) {
 	return {ctor: 'TestableElmDirectoryUpdate', _0: a};
 };
@@ -21231,6 +21256,11 @@ var _user$project$Main$update = F2(
 								_elm_lang$core$List$head(_p2)),
 							hasRegisteredDirectories: true
 						}));
+			case 'WorkingDirectoryChanged':
+				return _user$project$And$doNothing(
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{currentWorkingDirectory: _p0._0}));
 			default:
 				return _user$project$And$doNothing(model);
 		}
@@ -21346,7 +21376,8 @@ var _user$project$Main$view = function (model) {
 					function (_) {
 						return _.runElmVerifyExamples;
 					}(_user$project$Message_Settings$messages))),
-			settingsToggle: _user$project$Main$ToggleSettings
+			settingsToggle: _user$project$Main$ToggleSettings,
+			workingDirectoryChanged: _user$project$Main$WorkingDirectoryChanged
 		});
 };
 var _user$project$Main$saveEventMessage = F2(

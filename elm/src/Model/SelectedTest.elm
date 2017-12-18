@@ -1,5 +1,7 @@
-port module Model.SelectedTest exposing (setInstance, setNodeId, setTestMouseIsOver)
+port module Model.SelectedTest exposing (andShowInEditor, setInstance, setNodeId, setTestMouseIsOver)
 
+import And
+import State.NavigationData as NavigationData
 import TestInstance.Core as TestInstance exposing (TestInstance)
 
 
@@ -8,6 +10,13 @@ type alias HasSelectedTest r =
         | selectedTestNodeId : Maybe Int
         , selectedTestInstance : Maybe TestInstance
         , testMouseIsOver : Maybe Int
+    }
+
+
+type alias ForNavigation r =
+    { r
+        | autoNavigateEnabled : Bool
+        , currentWorkingDirectory : String
     }
 
 
@@ -24,3 +33,13 @@ setInstance testInstance model =
 setTestMouseIsOver : Maybe Int -> HasSelectedTest model -> HasSelectedTest model
 setTestMouseIsOver nodeId model =
     { model | testMouseIsOver = nodeId }
+
+
+andShowInEditor : Maybe TestInstance -> ForNavigation model -> ( ForNavigation model, Cmd message )
+andShowInEditor testInstance model =
+    case ( testInstance, model.autoNavigateEnabled ) of
+        ( Just instance, True ) ->
+            And.showInEditor (NavigationData.make model.currentWorkingDirectory instance) model
+
+        _ ->
+            And.doNothing model

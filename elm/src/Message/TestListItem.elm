@@ -3,7 +3,7 @@ module Message.TestListItem exposing (Message, messages, update)
 import And
 import Model.SelectedTest
 import Model.TestTree
-import TestInstance.Core exposing (TestInstance)
+import TestInstance.Core as TestInstance exposing (TestInstance)
 import Tree.Core exposing (CollapsibleTree, Tree)
 
 
@@ -16,6 +16,7 @@ type alias Model model =
         , selectedTestInstance : Maybe TestInstance
         , testMouseIsOver : Maybe Int
         , autoNavigateEnabled : Bool
+        , currentWorkingDirectory : String
     }
 
 
@@ -49,7 +50,7 @@ update message model =
         Select nodeId testInstance ->
             Model.SelectedTest.setNodeId (Just nodeId) model
                 |> Model.SelectedTest.setInstance testInstance
-                |> And.showInEditor testInstance model.autoNavigateEnabled
+                |> Model.SelectedTest.andShowInEditor testInstance
 
 
 type alias Messages =

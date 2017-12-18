@@ -3,8 +3,8 @@ port module And exposing (doNothing, execute, executeOnDelay, showInEditor, upda
 import Model.Config exposing (HasConfig)
 import Model.Flags exposing (Flags)
 import Process
+import State.NavigationData exposing (NavigationData)
 import Task
-import TestInstance.Core as TestInstance exposing (TestInstance)
 
 
 doNothing : model -> ( model, Cmd message )
@@ -33,17 +33,12 @@ updateAtomState model =
         |> flip execute model
 
 
-showInEditor : Maybe TestInstance -> Bool -> model -> ( model, Cmd message )
-showInEditor testInstance autoNavigateEnabled =
-    case ( testInstance, autoNavigateEnabled ) of
-        ( Just instance, True ) ->
-            execute <| navigateToFile (TestInstance.pathAndDescription instance)
-
-        _ ->
-            doNothing
+showInEditor : NavigationData -> model -> ( model, Cmd message )
+showInEditor data =
+    execute <| navigateToFile data
 
 
 port updatePersistentState : Flags -> Cmd message
 
 
-port navigateToFile : ( List String, String ) -> Cmd message
+port navigateToFile : NavigationData -> Cmd message

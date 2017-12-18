@@ -30,6 +30,7 @@ type Message
     | ToggleSettings
     | ProjectDirectoryUpdate (List String)
     | TestableElmDirectoryUpdate (List String)
+    | WorkingDirectoryChanged String
     | DoNothing
 
 
@@ -97,6 +98,10 @@ update message model =
             }
                 |> And.doNothing
 
+        WorkingDirectoryChanged directory ->
+            { model | currentWorkingDirectory = directory }
+                |> And.doNothing
+
         DoNothing ->
             model |> And.doNothing
 
@@ -142,6 +147,7 @@ view model =
         , setAutoNavigate = Bind.arity1 Settings (.set <| .autoNavigate Settings.messages)
         , setRunElmVerifyExamples = Bind.arity1 Settings (.set <| .runElmVerifyExamples Settings.messages)
         , settingsToggle = ToggleSettings
+        , workingDirectoryChanged = WorkingDirectoryChanged
         }
 
 

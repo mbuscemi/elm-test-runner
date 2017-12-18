@@ -2,6 +2,7 @@ module View.ProjectSelector exposing (render)
 
 import Html exposing (Html, div, option, select, span, text)
 import Html.Attributes exposing (class, value)
+import Html.Events exposing (onInput)
 import String.Extra as String
 
 
@@ -11,11 +12,20 @@ type alias Data =
     }
 
 
-render : Data -> Html message
-render data =
+type alias Messages message =
+    { workingDirectoryChanged : String -> message
+    }
+
+
+render : Data -> Messages message -> Html message
+render data messages =
     div [ class "project-selector" ]
         [ div [ class "label" ] [ text "Project: " ]
-        , div [ class "selector" ] [ select [ class "form-control" ] (options data.projectDirectories data.testableElmDirectories) ]
+        , div
+            [ class "selector"
+            , onInput messages.workingDirectoryChanged
+            ]
+            [ select [ class "form-control" ] (options data.projectDirectories data.testableElmDirectories) ]
         ]
 
 

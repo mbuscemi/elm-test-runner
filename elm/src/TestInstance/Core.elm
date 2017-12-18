@@ -11,7 +11,6 @@ module TestInstance.Core
         , isPending
         , isTodo
         , pathAndDescription
-        , setLabels
         , setStatus
         , toClass
         , toStatusIcon
@@ -101,11 +100,6 @@ setStatus newStatus instance =
 durationAsString : TestInstance -> String
 durationAsString instance =
     toString <| Duration.asMilliseconds instance.duration
-
-
-setLabels : Labels -> TestInstance -> TestInstance
-setLabels labels instance =
-    { instance | labels = labels }
 
 
 pathAndDescription : TestInstance -> ( List String, String )
