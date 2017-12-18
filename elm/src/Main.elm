@@ -28,6 +28,8 @@ type Message
     | Animate Animate.Message
     | PaneMoved String
     | ToggleSettings
+    | ProjectDirectoryUpdate (List String)
+    | TestableElmDirectoryUpdate (List String)
     | DoNothing
 
 
@@ -80,6 +82,14 @@ update message model =
             Model.Animation.toggleFooter model
                 |> And.doNothing
 
+        ProjectDirectoryUpdate directories ->
+            { model | projectDirectories = directories }
+                |> And.doNothing
+
+        TestableElmDirectoryUpdate directories ->
+            { model | testableElmDirectories = directories }
+                |> And.doNothing
+
         DoNothing ->
             model |> And.doNothing
 
@@ -109,6 +119,8 @@ view model =
         , statusBarColorStyle = model.statusBarColorStyle
         , footerStyle = model.footerStyle
         , paneLocation = model.paneLocation
+        , projectDirectories = model.projectDirectories
+        , testableElmDirectories = model.testableElmDirectories
         }
         { runAllButtonClickHandler = Bind.arity0 TestRun (.initiate TestRun.messages)
         , testListItemExpand = Bind.arity1 TestListItem (.expand TestListItem.messages)
@@ -141,6 +153,8 @@ subscriptions model =
         , runStart <| Bind.arity1 TestRun (.runStart TestRun.messages)
         , testCompleted <| Bind.arity1 TestRun (.testCompleted TestRun.messages)
         , runComplete <| Bind.arity1 TestRun (.runComplete TestRun.messages)
+        , updateProjectDirectories ProjectDirectoryUpdate
+        , updateTestableElmDirectories TestableElmDirectoryUpdate
         , Animation.subscription (Bind.arity1 Animate <| .flicker Animate.messages) [ model.statusBarTextStyle ]
         , Animation.subscription (Bind.arity1 Animate <| .oscillateColor Animate.messages) [ model.statusBarColorStyle ]
         , Animation.subscription (Bind.arity1 Animate <| .settingsTransition Animate.messages) [ model.footerStyle ]
@@ -189,3 +203,9 @@ port testCompleted : (Value -> message) -> Sub message
 
 
 port runComplete : (Value -> message) -> Sub message
+
+
+port updateProjectDirectories : (List String -> message) -> Sub message
+
+
+port updateTestableElmDirectories : (List String -> message) -> Sub message

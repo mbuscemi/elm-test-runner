@@ -9,6 +9,7 @@ import State.RunStatus exposing (RunStatus)
 import Tree.Core exposing (CollapsibleTree)
 import View.DurationAndSeedDisplay
 import View.OutputDisplay
+import View.ProjectSelector
 import View.SeedAndSettings
 import View.TestHierarchy
 import View.Toolbar
@@ -37,6 +38,8 @@ type alias Data message testInstance =
     , statusBarColorStyle : State
     , footerStyle : State
     , paneLocation : PaneLocation
+    , projectDirectories : List String
+    , testableElmDirectories : List String
     }
 
 
@@ -81,6 +84,10 @@ render data messages =
                     , statusBarColorStyle = data.statusBarColorStyle
                     }
                     messages.runAllButtonClickHandler
+                , View.ProjectSelector.render
+                    { projectDirectories = data.projectDirectories
+                    , testableElmDirectories = data.testableElmDirectories
+                    }
                 , View.DurationAndSeedDisplay.render
                     { runDuration = data.runDuration
                     , runSeed = data.runSeed

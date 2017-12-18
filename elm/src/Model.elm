@@ -4,7 +4,6 @@ import Animation
 import Animation.Color
 import Animation.Flicker
 import Animation.Footer
-import Model.Flags exposing (Flags)
 import Model.ProjectName
 import State.Duration exposing (Duration)
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
@@ -36,6 +35,8 @@ type alias Model =
     , footerStyle : Animation.State
     , footerExpanded : Bool
     , paneLocation : PaneLocation
+    , projectDirectories : List String
+    , testableElmDirectories : List String
     }
 
 
@@ -63,4 +64,6 @@ default =
     , footerStyle = Animation.Footer.initial
     , footerExpanded = False
     , paneLocation = PaneLocation.default
+    , projectDirectories = []
+    , testableElmDirectories = []
     }

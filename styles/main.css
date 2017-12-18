@@ -103,7 +103,7 @@
 }
 
 .etr-main-view div.run-data-row {
-    margin: 0.75em 0;
+    margin: 0.75em 0 0 0;
     height: 24px;
 }
 
@@ -122,6 +122,27 @@
 
 .etr-main-view div.run-data-field.seed {
     float: right;
+}
+
+.etr-main-view div.project-selector {
+    margin: 0.75em 0;
+}
+
+.etr-main-view div.project-selector {
+    display: flex;
+}
+
+.etr-main-view div.project-selector div.label {
+    flex: 1;
+}
+
+.etr-main-view div.project-selector div.selector {
+    flex: 7;
+    margin-left: 10px;
+}
+
+.etr-main-view div.project-selector div.selector select {
+    width: 100%;
 }
 
 .etr-main-view ul.test-list {
