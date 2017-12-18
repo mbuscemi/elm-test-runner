@@ -15,6 +15,8 @@ import Model.Animation
 import Model.Basics
 import Model.Config
 import Model.Flags as Flags
+import Process
+import Task
 import TestInstance.Core as TestInstance
 import TestInstance.View
 import View
@@ -60,7 +62,14 @@ update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
         TestRun message ->
-            TestRun.update message model
+            if model.hasRegisteredDirectories then
+                TestRun.update message model
+            else
+                ( model
+                , Process.sleep 100
+                    |> Task.andThen (always <| Task.succeed <| TestRun <| .initiate TestRun.messages)
+                    |> Task.perform identity
+                )
 
         TestListItem message ->
             TestListItem.update message model
@@ -87,7 +96,11 @@ update message model =
                 |> And.doNothing
 
         TestableElmDirectoryUpdate directories ->
-            { model | testableElmDirectories = directories }
+            { model
+                | testableElmDirectories = directories
+                , currentWorkingDirectory = List.head directories |> Maybe.withDefault ""
+                , hasRegisteredDirectories = True
+            }
                 |> And.doNothing
 
         DoNothing ->
@@ -196,7 +209,7 @@ port notifySaveEvent : (() -> message) -> Sub message
 port notifyPaneMoved : (String -> message) -> Sub message
 
 
-port runStart : (( String, Value ) -> message) -> Sub message
+port runStart : (Value -> message) -> Sub message
 
 
 port testCompleted : (Value -> message) -> Sub message

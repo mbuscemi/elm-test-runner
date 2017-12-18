@@ -47,6 +47,7 @@ type alias Model model =
         , projectName : String
         , testRuns : Tree String TestInstance
         , testHierarchy : CollapsibleTree String TestInstance
+        , currentWorkingDirectory : String
     }
 
 
@@ -55,7 +56,7 @@ type Message
     | GenerateTests
     | Execute
     | CompilerError String
-    | RunStart ( String, Value )
+    | RunStart Value
     | TestCompleted Value
     | RunComplete Value
 
@@ -72,7 +73,7 @@ update message model =
                 |> Model.RunSeed.clear
                 |> Model.TestTree.reset
                 |> Model.TestTree.updateHierarchy
-                |> And.execute (runTest <| Model.RandomSeed.forJS model)
+                |> And.execute (runTest <| ( model.currentWorkingDirectory, Model.RandomSeed.forJS model ))
 
         GenerateTests ->
             Model.RunStatus.setToGeneratingTests model
@@ -90,12 +91,12 @@ update message model =
                 |> Model.Basics.setCompilerErrorMessage (Just error)
                 |> And.doNothing
 
-        RunStart ( projectPath, value ) ->
+        RunStart value ->
             let
                 event =
                     RunStart.parse value
             in
-            Model.ProjectName.setFromPath projectPath model
+            Model.ProjectName.setFromPath model
                 |> Model.TestCount.setTotal event
                 |> Model.RunSeed.set event
                 |> And.doNothing
@@ -133,7 +134,7 @@ type alias Messages =
     , generate : Message
     , execute : Message
     , compilerError : String -> Message
-    , runStart : ( String, Value ) -> Message
+    , runStart : Value -> Message
     , testCompleted : Value -> Message
     , runComplete : Value -> Message
     }
@@ -151,4 +152,4 @@ messages =
     }
 
 
-port runTest : String -> Cmd message
+port runTest : ( String, String ) -> Cmd message

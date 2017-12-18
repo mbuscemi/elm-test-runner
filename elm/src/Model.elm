@@ -37,6 +37,8 @@ type alias Model =
     , paneLocation : PaneLocation
     , projectDirectories : List String
     , testableElmDirectories : List String
+    , currentWorkingDirectory : String
+    , hasRegisteredDirectories : Bool
     }
 
 
@@ -66,4 +68,6 @@ default =
     , paneLocation = PaneLocation.default
     , projectDirectories = []
     , testableElmDirectories = []
+    , currentWorkingDirectory = ""
+    , hasRegisteredDirectories = False
     }

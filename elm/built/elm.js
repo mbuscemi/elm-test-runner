@@ -19095,20 +19095,19 @@ var _user$project$Model_ProjectName$setToTopNode = function (model) {
 		});
 };
 var _user$project$Model_ProjectName$default = 'Unknown Project';
-var _user$project$Model_ProjectName$setFromPath = F2(
-	function (projectPath, model) {
-		return _user$project$Model_ProjectName$setToTopNode(
-			_elm_lang$core$Native_Utils.update(
-				model,
-				{
-					projectName: A2(
-						_elm_lang$core$Maybe$withDefault,
-						_user$project$Model_ProjectName$default,
-						_elm_lang$core$List$head(
-							_elm_lang$core$List$reverse(
-								A2(_elm_lang$core$String$split, '/', projectPath))))
-				}));
-	});
+var _user$project$Model_ProjectName$setFromPath = function (model) {
+	return _user$project$Model_ProjectName$setToTopNode(
+		_elm_lang$core$Native_Utils.update(
+			model,
+			{
+				projectName: A2(
+					_elm_lang$core$Maybe$withDefault,
+					_user$project$Model_ProjectName$default,
+					_elm_lang$core$List$head(
+						_elm_lang$core$List$reverse(
+							A2(_elm_lang$core$String$split, '/', model.currentWorkingDirectory))))
+			}));
+};
 
 var _user$project$TestEvent_RunComplete$duration = function (_p0) {
 	var _p1 = _p0;
@@ -19271,7 +19270,7 @@ var _user$project$Model_TestCount$updatePassed = F2(
 var _user$project$Message_TestRun$runTest = _elm_lang$core$Native_Platform.outgoingPort(
 	'runTest',
 	function (v) {
-		return v;
+		return [v._0, v._1];
 	});
 var _user$project$Message_TestRun$update = F2(
 	function (message, model) {
@@ -19281,7 +19280,11 @@ var _user$project$Message_TestRun$update = F2(
 				return A2(
 					_user$project$And$execute,
 					_user$project$Message_TestRun$runTest(
-						_user$project$Model_RandomSeed$forJS(model)),
+						{
+							ctor: '_Tuple2',
+							_0: model.currentWorkingDirectory,
+							_1: _user$project$Model_RandomSeed$forJS(model)
+						}),
 					_user$project$Model_TestTree$updateHierarchy(
 						_user$project$Model_TestTree$reset(
 							_user$project$Model_RunSeed$clear(
@@ -19312,7 +19315,7 @@ var _user$project$Message_TestRun$update = F2(
 						_user$project$Model_Animation$pulseToStatusColor(
 							_user$project$Model_RunStatus$setToCompileError(model))));
 			case 'RunStart':
-				var event = _user$project$TestEvent_RunStart$parse(_p0._0._1);
+				var event = _user$project$TestEvent_RunStart$parse(_p0._0);
 				return _user$project$And$doNothing(
 					A2(
 						_user$project$Model_RunSeed$set,
@@ -19320,7 +19323,7 @@ var _user$project$Message_TestRun$update = F2(
 						A2(
 							_user$project$Model_TestCount$setTotal,
 							event,
-							A2(_user$project$Model_ProjectName$setFromPath, _p0._0._0, model))));
+							_user$project$Model_ProjectName$setFromPath(model))));
 			case 'TestCompleted':
 				var event = _user$project$TestEvent_TestCompleted$parseJson(_p0._0);
 				return _user$project$And$doNothing(
@@ -19404,7 +19407,9 @@ var _user$project$Model$default = {
 	footerExpanded: false,
 	paneLocation: _user$project$State_PaneLocation$default,
 	projectDirectories: {ctor: '[]'},
-	testableElmDirectories: {ctor: '[]'}
+	testableElmDirectories: {ctor: '[]'},
+	currentWorkingDirectory: '',
+	hasRegisteredDirectories: false
 };
 var _user$project$Model$Model = function (a) {
 	return function (b) {
@@ -19430,7 +19435,11 @@ var _user$project$Model$Model = function (a) {
 																					return function (v) {
 																						return function (w) {
 																							return function (x) {
-																								return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, runElmVerifyExamplesEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarTextStyle: r, statusBarColorStyle: s, footerStyle: t, footerExpanded: u, paneLocation: v, projectDirectories: w, testableElmDirectories: x};
+																								return function (y) {
+																									return function (z) {
+																										return {projectName: a, compilerError: b, runStatus: c, totalTests: d, passedTests: e, runDuration: f, runSeed: g, testRuns: h, testHierarchy: i, testMouseIsOver: j, selectedTestNodeId: k, selectedTestInstance: l, autoRunEnabled: m, autoNavigateEnabled: n, runElmVerifyExamplesEnabled: o, randomSeed: p, forceRandomSeedEnabled: q, statusBarTextStyle: r, statusBarColorStyle: s, footerStyle: t, footerExpanded: u, paneLocation: v, projectDirectories: w, testableElmDirectories: x, currentWorkingDirectory: y, hasRegisteredDirectories: z};
+																									};
+																								};
 																							};
 																						};
 																					};
@@ -21077,40 +21086,6 @@ var _user$project$View$Failure = F7(
 		return {actual: a, expected: b, given: c, message: d, hasComplexComparison: e, isTodo: f, shouldDiff: g};
 	});
 
-var _user$project$Main$update = F2(
-	function (message, model) {
-		var _p0 = message;
-		switch (_p0.ctor) {
-			case 'TestRun':
-				return A2(_user$project$Message_TestRun$update, _p0._0, model);
-			case 'TestListItem':
-				return A2(_user$project$Message_TestListItem$update, _p0._0, model);
-			case 'Settings':
-				return A2(_user$project$Message_Settings$update, _p0._0, model);
-			case 'RandomSeed':
-				return A2(_user$project$Message_RandomSeed$update, _p0._0, model);
-			case 'Animate':
-				return A2(_user$project$Message_Animate$update, _p0._0, model);
-			case 'PaneMoved':
-				return _user$project$And$doNothing(
-					A2(_user$project$Model_Basics$setPaneLocation, _p0._0, model));
-			case 'ToggleSettings':
-				return _user$project$And$doNothing(
-					_user$project$Model_Animation$toggleFooter(model));
-			case 'ProjectDirectoryUpdate':
-				return _user$project$And$doNothing(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{projectDirectories: _p0._0}));
-			case 'TestableElmDirectoryUpdate':
-				return _user$project$And$doNothing(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{testableElmDirectories: _p0._0}));
-			default:
-				return _user$project$And$doNothing(model);
-		}
-	});
 var _user$project$Main$init = function (rawFlags) {
 	var flags = _user$project$Model_Flags$parse(rawFlags);
 	return _user$project$And$doNothing(
@@ -21152,20 +21127,7 @@ var _user$project$Main$notifySaveEvent = _elm_lang$core$Native_Platform.incoming
 	_elm_lang$core$Json_Decode$null(
 		{ctor: '_Tuple0'}));
 var _user$project$Main$notifyPaneMoved = _elm_lang$core$Native_Platform.incomingPort('notifyPaneMoved', _elm_lang$core$Json_Decode$string);
-var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort(
-	'runStart',
-	A2(
-		_elm_lang$core$Json_Decode$andThen,
-		function (x0) {
-			return A2(
-				_elm_lang$core$Json_Decode$andThen,
-				function (x1) {
-					return _elm_lang$core$Json_Decode$succeed(
-						{ctor: '_Tuple2', _0: x0, _1: x1});
-				},
-				A2(_elm_lang$core$Json_Decode$index, 1, _elm_lang$core$Json_Decode$value));
-		},
-		A2(_elm_lang$core$Json_Decode$index, 0, _elm_lang$core$Json_Decode$string)));
+var _user$project$Main$runStart = _elm_lang$core$Native_Platform.incomingPort('runStart', _elm_lang$core$Json_Decode$value);
 var _user$project$Main$testCompleted = _elm_lang$core$Native_Platform.incomingPort('testCompleted', _elm_lang$core$Json_Decode$value);
 var _user$project$Main$runComplete = _elm_lang$core$Native_Platform.incomingPort('runComplete', _elm_lang$core$Json_Decode$value);
 var _user$project$Main$updateProjectDirectories = _elm_lang$core$Native_Platform.incomingPort(
@@ -21200,6 +21162,63 @@ var _user$project$Main$TestListItem = function (a) {
 var _user$project$Main$TestRun = function (a) {
 	return {ctor: 'TestRun', _0: a};
 };
+var _user$project$Main$update = F2(
+	function (message, model) {
+		var _p0 = message;
+		switch (_p0.ctor) {
+			case 'TestRun':
+				return model.hasRegisteredDirectories ? A2(_user$project$Message_TestRun$update, _p0._0, model) : {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: A2(
+						_elm_lang$core$Task$perform,
+						_elm_lang$core$Basics$identity,
+						A2(
+							_elm_lang$core$Task$andThen,
+							_elm_lang$core$Basics$always(
+								_elm_lang$core$Task$succeed(
+									_user$project$Main$TestRun(
+										function (_) {
+											return _.initiate;
+										}(_user$project$Message_TestRun$messages)))),
+							_elm_lang$core$Process$sleep(100)))
+				};
+			case 'TestListItem':
+				return A2(_user$project$Message_TestListItem$update, _p0._0, model);
+			case 'Settings':
+				return A2(_user$project$Message_Settings$update, _p0._0, model);
+			case 'RandomSeed':
+				return A2(_user$project$Message_RandomSeed$update, _p0._0, model);
+			case 'Animate':
+				return A2(_user$project$Message_Animate$update, _p0._0, model);
+			case 'PaneMoved':
+				return _user$project$And$doNothing(
+					A2(_user$project$Model_Basics$setPaneLocation, _p0._0, model));
+			case 'ToggleSettings':
+				return _user$project$And$doNothing(
+					_user$project$Model_Animation$toggleFooter(model));
+			case 'ProjectDirectoryUpdate':
+				return _user$project$And$doNothing(
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{projectDirectories: _p0._0}));
+			case 'TestableElmDirectoryUpdate':
+				var _p1 = _p0._0;
+				return _user$project$And$doNothing(
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							testableElmDirectories: _p1,
+							currentWorkingDirectory: A2(
+								_elm_lang$core$Maybe$withDefault,
+								'',
+								_elm_lang$core$List$head(_p1)),
+							hasRegisteredDirectories: true
+						}));
+			default:
+				return _user$project$And$doNothing(model);
+		}
+	});
 var _user$project$Main$view = function (model) {
 	return A2(
 		_user$project$View$render,
@@ -21315,7 +21334,7 @@ var _user$project$Main$view = function (model) {
 		});
 };
 var _user$project$Main$saveEventMessage = F2(
-	function (model, _p1) {
+	function (model, _p2) {
 		return model.autoRunEnabled ? A2(
 			_user$project$Bind$arity0,
 			_user$project$Main$TestRun,
