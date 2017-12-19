@@ -3168,6 +3168,137 @@ var _elm_lang$core$Platform$Task = {ctor: 'Task'};
 var _elm_lang$core$Platform$ProcessId = {ctor: 'ProcessId'};
 var _elm_lang$core$Platform$Router = {ctor: 'Router'};
 
+var _Fresheyeball$elm_function_extra$Function$flip3 = F4(
+	function (f, c, b, a) {
+		return A3(f, a, b, c);
+	});
+var _Fresheyeball$elm_function_extra$Function$swirll = F4(
+	function (f, b, c, a) {
+		return A3(f, a, b, c);
+	});
+var _Fresheyeball$elm_function_extra$Function$swirlr = F4(
+	function (f, c, a, b) {
+		return A3(f, a, b, c);
+	});
+var _Fresheyeball$elm_function_extra$Function$on = F4(
+	function (g, f, x, y) {
+		return A2(
+			g,
+			f(x),
+			f(y));
+	});
+var _Fresheyeball$elm_function_extra$Function$singleton = _elm_lang$core$Basics$always;
+var _Fresheyeball$elm_function_extra$Function$andThen = F3(
+	function (k, f, x) {
+		return A2(
+			k,
+			f(x),
+			x);
+	});
+var _Fresheyeball$elm_function_extra$Function$andMap = F3(
+	function (f, ff, x) {
+		return A2(
+			ff,
+			x,
+			f(x));
+	});
+var _Fresheyeball$elm_function_extra$Function$map = F2(
+	function (x, y) {
+		return function (_p0) {
+			return x(
+				y(_p0));
+		};
+	});
+var _Fresheyeball$elm_function_extra$Function$map2 = F3(
+	function (f, a, b) {
+		return A2(
+			_Fresheyeball$elm_function_extra$Function$andMap,
+			b,
+			A2(_Fresheyeball$elm_function_extra$Function$map, f, a));
+	});
+var _Fresheyeball$elm_function_extra$Function$map3 = F4(
+	function (f, a, b, c) {
+		return A2(
+			_Fresheyeball$elm_function_extra$Function$andMap,
+			c,
+			A2(
+				_Fresheyeball$elm_function_extra$Function$andMap,
+				b,
+				A2(_Fresheyeball$elm_function_extra$Function$map, f, a)));
+	});
+var _Fresheyeball$elm_function_extra$Function$map4 = F5(
+	function (f, a, b, c, d) {
+		return A2(
+			_Fresheyeball$elm_function_extra$Function$andMap,
+			d,
+			A2(
+				_Fresheyeball$elm_function_extra$Function$andMap,
+				c,
+				A2(
+					_Fresheyeball$elm_function_extra$Function$andMap,
+					b,
+					A2(_Fresheyeball$elm_function_extra$Function$map, f, a))));
+	});
+var _Fresheyeball$elm_function_extra$Function$map5 = F6(
+	function (f, a, b, c, d, e) {
+		return A2(
+			_Fresheyeball$elm_function_extra$Function$andMap,
+			e,
+			A2(
+				_Fresheyeball$elm_function_extra$Function$andMap,
+				d,
+				A2(
+					_Fresheyeball$elm_function_extra$Function$andMap,
+					c,
+					A2(
+						_Fresheyeball$elm_function_extra$Function$andMap,
+						b,
+						A2(_Fresheyeball$elm_function_extra$Function$map, f, a)))));
+	});
+var _Fresheyeball$elm_function_extra$Function$map6 = F7(
+	function (f, a, b, c, d, e, g) {
+		return A2(
+			_Fresheyeball$elm_function_extra$Function$andMap,
+			g,
+			A2(
+				_Fresheyeball$elm_function_extra$Function$andMap,
+				e,
+				A2(
+					_Fresheyeball$elm_function_extra$Function$andMap,
+					d,
+					A2(
+						_Fresheyeball$elm_function_extra$Function$andMap,
+						c,
+						A2(
+							_Fresheyeball$elm_function_extra$Function$andMap,
+							b,
+							A2(_Fresheyeball$elm_function_extra$Function$map, f, a))))));
+	});
+var _Fresheyeball$elm_function_extra$Function_ops = _Fresheyeball$elm_function_extra$Function_ops || {};
+_Fresheyeball$elm_function_extra$Function_ops['>>>>'] = F5(
+	function (fff, f, x, y, z) {
+		return f(
+			A3(fff, x, y, z));
+	});
+var _Fresheyeball$elm_function_extra$Function_ops = _Fresheyeball$elm_function_extra$Function_ops || {};
+_Fresheyeball$elm_function_extra$Function_ops['<<<<'] = _elm_lang$core$Basics$flip(
+	F2(
+		function (x, y) {
+			return A2(_Fresheyeball$elm_function_extra$Function_ops['>>>>'], x, y);
+		}));
+var _Fresheyeball$elm_function_extra$Function_ops = _Fresheyeball$elm_function_extra$Function_ops || {};
+_Fresheyeball$elm_function_extra$Function_ops['>>>'] = F4(
+	function (ff, f, x, y) {
+		return f(
+			A2(ff, x, y));
+	});
+var _Fresheyeball$elm_function_extra$Function_ops = _Fresheyeball$elm_function_extra$Function_ops || {};
+_Fresheyeball$elm_function_extra$Function_ops['<<<'] = _elm_lang$core$Basics$flip(
+	F2(
+		function (x, y) {
+			return A2(_Fresheyeball$elm_function_extra$Function_ops['>>>'], x, y);
+		}));
+
 var _elm_community$easing_functions$Ease$reverse = F2(
 	function (easing, time) {
 		return easing(1 - time);
@@ -18449,23 +18580,6 @@ var _user$project$Animation_Footer$animateDown = _mdgriffith$elm_style_animation
 		_1: {ctor: '[]'}
 	});
 
-var _user$project$Bind$arity2 = F4(
-	function (messageWrapper, secondaryMessage, a, b) {
-		return messageWrapper(
-			A2(secondaryMessage, a, b));
-	});
-var _user$project$Bind$arity1 = F2(
-	function (messageWrapper, secondaryMessage) {
-		return function (_p0) {
-			return messageWrapper(
-				secondaryMessage(_p0));
-		};
-	});
-var _user$project$Bind$arity0 = F2(
-	function (messageWrapper, secondaryMessage) {
-		return messageWrapper(secondaryMessage);
-	});
-
 var _user$project$Model_Animation$retractFooter = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
@@ -18560,6 +18674,62 @@ var _user$project$Message_Animate$Flicker = function (a) {
 	return {ctor: 'Flicker', _0: a};
 };
 var _user$project$Message_Animate$messages = {flicker: _user$project$Message_Animate$Flicker, oscillateColor: _user$project$Message_Animate$OscillateColor, settingsTransition: _user$project$Message_Animate$SettingsTransition};
+
+var _user$project$Model_Directories$setWorking = F2(
+	function (directory, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{currentWorkingDirectory: directory});
+	});
+var _user$project$Model_Directories$setTestable = F2(
+	function (directories, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				testableElmDirectories: directories,
+				currentWorkingDirectory: A2(
+					_elm_lang$core$Maybe$withDefault,
+					'',
+					_elm_lang$core$List$head(directories)),
+				hasRegisteredDirectories: true
+			});
+	});
+var _user$project$Model_Directories$setProject = F2(
+	function (directories, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{projectDirectories: directories});
+	});
+
+var _user$project$Message_Directories$update = F2(
+	function (message, model) {
+		var _p0 = message;
+		switch (_p0.ctor) {
+			case 'ProjectUpdate':
+				return _user$project$And$doNothing(
+					A2(_user$project$Model_Directories$setProject, _p0._0, model));
+			case 'TestableUpdate':
+				return _user$project$And$doNothing(
+					A2(_user$project$Model_Directories$setTestable, _p0._0, model));
+			default:
+				return _user$project$And$doNothing(
+					A2(_user$project$Model_Directories$setWorking, _p0._0, model));
+		}
+	});
+var _user$project$Message_Directories$Messages = F3(
+	function (a, b, c) {
+		return {updateProject: a, updateTestable: b, changeWorking: c};
+	});
+var _user$project$Message_Directories$WorkingChanged = function (a) {
+	return {ctor: 'WorkingChanged', _0: a};
+};
+var _user$project$Message_Directories$TestableUpdate = function (a) {
+	return {ctor: 'TestableUpdate', _0: a};
+};
+var _user$project$Message_Directories$ProjectUpdate = function (a) {
+	return {ctor: 'ProjectUpdate', _0: a};
+};
+var _user$project$Message_Directories$messages = {updateProject: _user$project$Message_Directories$ProjectUpdate, updateTestable: _user$project$Message_Directories$TestableUpdate, changeWorking: _user$project$Message_Directories$WorkingChanged};
 
 var _user$project$Model_RandomSeed$forJS = function (model) {
 	var _p0 = {ctor: '_Tuple2', _0: model.forceRandomSeedEnabled, _1: model.randomSeed};
@@ -21189,18 +21359,12 @@ var _user$project$Main$updateTestableElmDirectories = _elm_lang$core$Native_Plat
 	'updateTestableElmDirectories',
 	_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string));
 var _user$project$Main$DoNothing = {ctor: 'DoNothing'};
-var _user$project$Main$WorkingDirectoryChanged = function (a) {
-	return {ctor: 'WorkingDirectoryChanged', _0: a};
-};
-var _user$project$Main$TestableElmDirectoryUpdate = function (a) {
-	return {ctor: 'TestableElmDirectoryUpdate', _0: a};
-};
-var _user$project$Main$ProjectDirectoryUpdate = function (a) {
-	return {ctor: 'ProjectDirectoryUpdate', _0: a};
-};
 var _user$project$Main$ToggleSettings = {ctor: 'ToggleSettings'};
 var _user$project$Main$PaneMoved = function (a) {
 	return {ctor: 'PaneMoved', _0: a};
+};
+var _user$project$Main$Directories = function (a) {
+	return {ctor: 'Directories', _0: a};
 };
 var _user$project$Main$Animate = function (a) {
 	return {ctor: 'Animate', _0: a};
@@ -21235,35 +21399,14 @@ var _user$project$Main$update = F2(
 				return A2(_user$project$Message_RandomSeed$update, _p0._0, model);
 			case 'Animate':
 				return A2(_user$project$Message_Animate$update, _p0._0, model);
+			case 'Directories':
+				return A2(_user$project$Message_Directories$update, _p0._0, model);
 			case 'PaneMoved':
 				return _user$project$And$doNothing(
 					A2(_user$project$Model_Basics$setPaneLocation, _p0._0, model));
 			case 'ToggleSettings':
 				return _user$project$And$doNothing(
 					_user$project$Model_Animation$toggleFooter(model));
-			case 'ProjectDirectoryUpdate':
-				return _user$project$And$doNothing(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{projectDirectories: _p0._0}));
-			case 'TestableElmDirectoryUpdate':
-				var _p2 = _p0._0;
-				return _user$project$And$doNothing(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							testableElmDirectories: _p2,
-							currentWorkingDirectory: A2(
-								_elm_lang$core$Maybe$withDefault,
-								'',
-								_elm_lang$core$List$head(_p2)),
-							hasRegisteredDirectories: true
-						}));
-			case 'WorkingDirectoryChanged':
-				return _user$project$And$doNothing(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{currentWorkingDirectory: _p0._0}));
 			default:
 				return _user$project$And$doNothing(model);
 		}
@@ -21298,96 +21441,116 @@ var _user$project$Main$view = function (model) {
 			testableElmDirectories: model.testableElmDirectories
 		},
 		{
-			runAllButtonClickHandler: A2(
-				_user$project$Bind$arity0,
-				_user$project$Main$TestRun,
+			runAllButtonClickHandler: _user$project$Main$TestRun(
 				function (_) {
 					return _.initiate;
 				}(_user$project$Message_TestRun$messages)),
-			testListItemExpand: A2(
-				_user$project$Bind$arity1,
-				_user$project$Main$TestListItem,
-				function (_) {
-					return _.expand;
-				}(_user$project$Message_TestListItem$messages)),
-			testListItemCollapse: A2(
-				_user$project$Bind$arity1,
-				_user$project$Main$TestListItem,
-				function (_) {
-					return _.collapse;
-				}(_user$project$Message_TestListItem$messages)),
-			testListItemMouseEnter: A2(
-				_user$project$Bind$arity1,
-				_user$project$Main$TestListItem,
-				function (_) {
-					return _.mouseEnter;
-				}(_user$project$Message_TestListItem$messages)),
-			testListItemMouseLeave: A2(
-				_user$project$Bind$arity0,
-				_user$project$Main$TestListItem,
+			testListItemExpand: function (_p2) {
+				return _user$project$Main$TestListItem(
+					A2(
+						function (_) {
+							return _.expand;
+						},
+						_user$project$Message_TestListItem$messages,
+						_p2));
+			},
+			testListItemCollapse: function (_p3) {
+				return _user$project$Main$TestListItem(
+					A2(
+						function (_) {
+							return _.collapse;
+						},
+						_user$project$Message_TestListItem$messages,
+						_p3));
+			},
+			testListItemMouseEnter: function (_p4) {
+				return _user$project$Main$TestListItem(
+					A2(
+						function (_) {
+							return _.mouseEnter;
+						},
+						_user$project$Message_TestListItem$messages,
+						_p4));
+			},
+			testListItemMouseLeave: _user$project$Main$TestListItem(
 				function (_) {
 					return _.mouseLeave;
 				}(_user$project$Message_TestListItem$messages)),
 			testClickHandler: A2(
-				_user$project$Bind$arity2,
+				_Fresheyeball$elm_function_extra$Function_ops['<<<'],
 				_user$project$Main$TestListItem,
 				function (_) {
 					return _.select;
 				}(_user$project$Message_TestListItem$messages)),
-			copySeedClickHandler: A2(
-				_user$project$Bind$arity1,
-				_user$project$Main$RandomSeed,
-				function (_) {
-					return _.copy;
-				}(_user$project$Message_RandomSeed$messages)),
-			setSeedClickHandler: A2(
-				_user$project$Bind$arity1,
-				_user$project$Main$RandomSeed,
-				function (_) {
-					return _.set;
-				}(_user$project$Message_RandomSeed$messages)),
-			setForceSeedHandler: A2(
-				_user$project$Bind$arity1,
-				_user$project$Main$RandomSeed,
-				function (_) {
-					return _.setForce;
-				}(_user$project$Message_RandomSeed$messages)),
-			setAutoRun: A2(
-				_user$project$Bind$arity1,
-				_user$project$Main$Settings,
-				function (_) {
-					return _.set;
-				}(
+			copySeedClickHandler: function (_p5) {
+				return _user$project$Main$RandomSeed(
+					A2(
+						function (_) {
+							return _.copy;
+						},
+						_user$project$Message_RandomSeed$messages,
+						_p5));
+			},
+			setSeedClickHandler: function (_p6) {
+				return _user$project$Main$RandomSeed(
+					A2(
+						function (_) {
+							return _.set;
+						},
+						_user$project$Message_RandomSeed$messages,
+						_p6));
+			},
+			setForceSeedHandler: function (_p7) {
+				return _user$project$Main$RandomSeed(
+					A2(
+						function (_) {
+							return _.setForce;
+						},
+						_user$project$Message_RandomSeed$messages,
+						_p7));
+			},
+			setAutoRun: function (_p8) {
+				return _user$project$Main$Settings(
 					function (_) {
-						return _.autoRun;
-					}(_user$project$Message_Settings$messages))),
-			setAutoNavigate: A2(
-				_user$project$Bind$arity1,
-				_user$project$Main$Settings,
-				function (_) {
-					return _.set;
-				}(
+						return _.set;
+					}(
+						function (_) {
+							return _.autoRun;
+						}(_user$project$Message_Settings$messages))(_p8));
+			},
+			setAutoNavigate: function (_p9) {
+				return _user$project$Main$Settings(
 					function (_) {
-						return _.autoNavigate;
-					}(_user$project$Message_Settings$messages))),
-			setRunElmVerifyExamples: A2(
-				_user$project$Bind$arity1,
-				_user$project$Main$Settings,
-				function (_) {
-					return _.set;
-				}(
+						return _.set;
+					}(
+						function (_) {
+							return _.autoNavigate;
+						}(_user$project$Message_Settings$messages))(_p9));
+			},
+			setRunElmVerifyExamples: function (_p10) {
+				return _user$project$Main$Settings(
 					function (_) {
-						return _.runElmVerifyExamples;
-					}(_user$project$Message_Settings$messages))),
+						return _.set;
+					}(
+						function (_) {
+							return _.runElmVerifyExamples;
+						}(_user$project$Message_Settings$messages))(_p10));
+			},
 			settingsToggle: _user$project$Main$ToggleSettings,
-			workingDirectoryChanged: _user$project$Main$WorkingDirectoryChanged
+			workingDirectoryChanged: function (_p11) {
+				return _user$project$Main$Directories(
+					A2(
+						function (_) {
+							return _.changeWorking;
+						},
+						_user$project$Message_Directories$messages,
+						_p11));
+			}
 		});
 };
 var _user$project$Main$saveEventMessage = F2(
-	function (model, _p3) {
-		return model.autoRunEnabled ? A2(
-			_user$project$Bind$arity0,
-			_user$project$Main$TestRun,
+	function (model, _p12) {
+		return model.autoRunEnabled ? _user$project$Main$TestRun(
 			function (_) {
 				return _.initiate;
 			}(_user$project$Message_TestRun$messages)) : _user$project$Main$DoNothing;
@@ -21398,9 +21561,7 @@ var _user$project$Main$subscriptions = function (model) {
 			ctor: '::',
 			_0: _user$project$Main$commandKeyTestStart(
 				_elm_lang$core$Basics$always(
-					A2(
-						_user$project$Bind$arity0,
-						_user$project$Main$TestRun,
+					_user$project$Main$TestRun(
 						function (_) {
 							return _.initiate;
 						}(_user$project$Message_TestRun$messages)))),
@@ -21408,9 +21569,7 @@ var _user$project$Main$subscriptions = function (model) {
 				ctor: '::',
 				_0: _user$project$Main$notifyGeneratingTests(
 					_elm_lang$core$Basics$always(
-						A2(
-							_user$project$Bind$arity0,
-							_user$project$Main$TestRun,
+						_user$project$Main$TestRun(
 							function (_) {
 								return _.generate;
 							}(_user$project$Message_TestRun$messages)))),
@@ -21418,28 +21577,27 @@ var _user$project$Main$subscriptions = function (model) {
 					ctor: '::',
 					_0: _user$project$Main$notifyExecutingTests(
 						_elm_lang$core$Basics$always(
-							A2(
-								_user$project$Bind$arity0,
-								_user$project$Main$TestRun,
+							_user$project$Main$TestRun(
 								function (_) {
 									return _.execute;
 								}(_user$project$Message_TestRun$messages)))),
 					_1: {
 						ctor: '::',
 						_0: _user$project$Main$notifyCompilerErrored(
-							A2(
-								_user$project$Bind$arity1,
-								_user$project$Main$TestRun,
-								function (_) {
-									return _.compilerError;
-								}(_user$project$Message_TestRun$messages))),
+							function (_p13) {
+								return _user$project$Main$TestRun(
+									A2(
+										function (_) {
+											return _.compilerError;
+										},
+										_user$project$Message_TestRun$messages,
+										_p13));
+							}),
 						_1: {
 							ctor: '::',
 							_0: _user$project$Main$toggleAutoRun(
 								_elm_lang$core$Basics$always(
-									A2(
-										_user$project$Bind$arity0,
-										_user$project$Main$Settings,
+									_user$project$Main$Settings(
 										function (_) {
 											return _.toggle;
 										}(
@@ -21450,9 +21608,7 @@ var _user$project$Main$subscriptions = function (model) {
 								ctor: '::',
 								_0: _user$project$Main$toggleAutoNavigate(
 									_elm_lang$core$Basics$always(
-										A2(
-											_user$project$Bind$arity0,
-											_user$project$Main$Settings,
+										_user$project$Main$Settings(
 											function (_) {
 												return _.toggle;
 											}(
@@ -21463,9 +21619,7 @@ var _user$project$Main$subscriptions = function (model) {
 									ctor: '::',
 									_0: _user$project$Main$toggleElmVerifyExamples(
 										_elm_lang$core$Basics$always(
-											A2(
-												_user$project$Bind$arity0,
-												_user$project$Main$Settings,
+											_user$project$Main$Settings(
 												function (_) {
 													return _.toggle;
 												}(
@@ -21482,46 +21636,76 @@ var _user$project$Main$subscriptions = function (model) {
 											_1: {
 												ctor: '::',
 												_0: _user$project$Main$runStart(
-													A2(
-														_user$project$Bind$arity1,
-														_user$project$Main$TestRun,
-														function (_) {
-															return _.runStart;
-														}(_user$project$Message_TestRun$messages))),
+													function (_p14) {
+														return _user$project$Main$TestRun(
+															A2(
+																function (_) {
+																	return _.runStart;
+																},
+																_user$project$Message_TestRun$messages,
+																_p14));
+													}),
 												_1: {
 													ctor: '::',
 													_0: _user$project$Main$testCompleted(
-														A2(
-															_user$project$Bind$arity1,
-															_user$project$Main$TestRun,
-															function (_) {
-																return _.testCompleted;
-															}(_user$project$Message_TestRun$messages))),
+														function (_p15) {
+															return _user$project$Main$TestRun(
+																A2(
+																	function (_) {
+																		return _.testCompleted;
+																	},
+																	_user$project$Message_TestRun$messages,
+																	_p15));
+														}),
 													_1: {
 														ctor: '::',
 														_0: _user$project$Main$runComplete(
-															A2(
-																_user$project$Bind$arity1,
-																_user$project$Main$TestRun,
-																function (_) {
-																	return _.runComplete;
-																}(_user$project$Message_TestRun$messages))),
+															function (_p16) {
+																return _user$project$Main$TestRun(
+																	A2(
+																		function (_) {
+																			return _.runComplete;
+																		},
+																		_user$project$Message_TestRun$messages,
+																		_p16));
+															}),
 														_1: {
 															ctor: '::',
-															_0: _user$project$Main$updateProjectDirectories(_user$project$Main$ProjectDirectoryUpdate),
+															_0: _user$project$Main$updateProjectDirectories(
+																function (_p17) {
+																	return _user$project$Main$Directories(
+																		A2(
+																			function (_) {
+																				return _.updateProject;
+																			},
+																			_user$project$Message_Directories$messages,
+																			_p17));
+																}),
 															_1: {
 																ctor: '::',
-																_0: _user$project$Main$updateTestableElmDirectories(_user$project$Main$TestableElmDirectoryUpdate),
+																_0: _user$project$Main$updateTestableElmDirectories(
+																	function (_p18) {
+																		return _user$project$Main$Directories(
+																			A2(
+																				function (_) {
+																					return _.updateTestable;
+																				},
+																				_user$project$Message_Directories$messages,
+																				_p18));
+																	}),
 																_1: {
 																	ctor: '::',
 																	_0: A2(
 																		_mdgriffith$elm_style_animation$Animation$subscription,
-																		A2(
-																			_user$project$Bind$arity1,
-																			_user$project$Main$Animate,
-																			function (_) {
-																				return _.flicker;
-																			}(_user$project$Message_Animate$messages)),
+																		function (_p19) {
+																			return _user$project$Main$Animate(
+																				A2(
+																					function (_) {
+																						return _.flicker;
+																					},
+																					_user$project$Message_Animate$messages,
+																					_p19));
+																		},
 																		{
 																			ctor: '::',
 																			_0: model.statusBarTextStyle,
@@ -21531,12 +21715,15 @@ var _user$project$Main$subscriptions = function (model) {
 																		ctor: '::',
 																		_0: A2(
 																			_mdgriffith$elm_style_animation$Animation$subscription,
-																			A2(
-																				_user$project$Bind$arity1,
-																				_user$project$Main$Animate,
-																				function (_) {
-																					return _.oscillateColor;
-																				}(_user$project$Message_Animate$messages)),
+																			function (_p20) {
+																				return _user$project$Main$Animate(
+																					A2(
+																						function (_) {
+																							return _.oscillateColor;
+																						},
+																						_user$project$Message_Animate$messages,
+																						_p20));
+																			},
 																			{
 																				ctor: '::',
 																				_0: model.statusBarColorStyle,
@@ -21546,12 +21733,15 @@ var _user$project$Main$subscriptions = function (model) {
 																			ctor: '::',
 																			_0: A2(
 																				_mdgriffith$elm_style_animation$Animation$subscription,
-																				A2(
-																					_user$project$Bind$arity1,
-																					_user$project$Main$Animate,
-																					function (_) {
-																						return _.settingsTransition;
-																					}(_user$project$Message_Animate$messages)),
+																				function (_p21) {
+																					return _user$project$Main$Animate(
+																						A2(
+																							function (_) {
+																								return _.settingsTransition;
+																							},
+																							_user$project$Message_Animate$messages,
+																							_p21));
+																				},
 																				{
 																					ctor: '::',
 																					_0: model.footerStyle,

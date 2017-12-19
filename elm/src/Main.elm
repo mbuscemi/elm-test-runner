@@ -2,10 +2,11 @@ port module Main exposing (main)
 
 import And
 import Animation
-import Bind
+import Function exposing ((<<<))
 import Html exposing (Html)
 import Json.Encode exposing (Value)
 import Message.Animate as Animate
+import Message.Directories as Directories
 import Message.RandomSeed as RandomSeed
 import Message.Settings as Settings
 import Message.TestListItem as TestListItem
@@ -26,11 +27,9 @@ type Message
     | Settings Settings.Message
     | RandomSeed RandomSeed.Message
     | Animate Animate.Message
+    | Directories Directories.Message
     | PaneMoved String
     | ToggleSettings
-    | ProjectDirectoryUpdate (List String)
-    | TestableElmDirectoryUpdate (List String)
-    | WorkingDirectoryChanged String
     | DoNothing
 
 
@@ -78,28 +77,15 @@ update message model =
         Animate message ->
             Animate.update message model
 
+        Directories message ->
+            Directories.update message model
+
         PaneMoved newLocation ->
             Model.Basics.setPaneLocation newLocation model
                 |> And.doNothing
 
         ToggleSettings ->
             Model.Animation.toggleFooter model
-                |> And.doNothing
-
-        ProjectDirectoryUpdate directories ->
-            { model | projectDirectories = directories }
-                |> And.doNothing
-
-        TestableElmDirectoryUpdate directories ->
-            { model
-                | testableElmDirectories = directories
-                , currentWorkingDirectory = List.head directories |> Maybe.withDefault ""
-                , hasRegisteredDirectories = True
-            }
-                |> And.doNothing
-
-        WorkingDirectoryChanged directory ->
-            { model | currentWorkingDirectory = directory }
                 |> And.doNothing
 
         DoNothing ->
@@ -134,50 +120,50 @@ view model =
         , projectDirectories = model.projectDirectories
         , testableElmDirectories = model.testableElmDirectories
         }
-        { runAllButtonClickHandler = Bind.arity0 TestRun (.initiate TestRun.messages)
-        , testListItemExpand = Bind.arity1 TestListItem (.expand TestListItem.messages)
-        , testListItemCollapse = Bind.arity1 TestListItem (.collapse TestListItem.messages)
-        , testListItemMouseEnter = Bind.arity1 TestListItem (.mouseEnter TestListItem.messages)
-        , testListItemMouseLeave = Bind.arity0 TestListItem (.mouseLeave TestListItem.messages)
-        , testClickHandler = Bind.arity2 TestListItem (.select TestListItem.messages)
-        , copySeedClickHandler = Bind.arity1 RandomSeed (.copy RandomSeed.messages)
-        , setSeedClickHandler = Bind.arity1 RandomSeed (.set RandomSeed.messages)
-        , setForceSeedHandler = Bind.arity1 RandomSeed (.setForce RandomSeed.messages)
-        , setAutoRun = Bind.arity1 Settings (.set <| .autoRun Settings.messages)
-        , setAutoNavigate = Bind.arity1 Settings (.set <| .autoNavigate Settings.messages)
-        , setRunElmVerifyExamples = Bind.arity1 Settings (.set <| .runElmVerifyExamples Settings.messages)
+        { runAllButtonClickHandler = TestRun <| .initiate TestRun.messages
+        , testListItemExpand = TestListItem << .expand TestListItem.messages
+        , testListItemCollapse = TestListItem << .collapse TestListItem.messages
+        , testListItemMouseEnter = TestListItem << .mouseEnter TestListItem.messages
+        , testListItemMouseLeave = TestListItem <| .mouseLeave TestListItem.messages
+        , testClickHandler = TestListItem <<< .select TestListItem.messages
+        , copySeedClickHandler = RandomSeed << .copy RandomSeed.messages
+        , setSeedClickHandler = RandomSeed << .set RandomSeed.messages
+        , setForceSeedHandler = RandomSeed << .setForce RandomSeed.messages
+        , setAutoRun = Settings << (.set <| .autoRun Settings.messages)
+        , setAutoNavigate = Settings << (.set <| .autoNavigate Settings.messages)
+        , setRunElmVerifyExamples = Settings << (.set <| .runElmVerifyExamples Settings.messages)
         , settingsToggle = ToggleSettings
-        , workingDirectoryChanged = WorkingDirectoryChanged
+        , workingDirectoryChanged = Directories << .changeWorking Directories.messages
         }
 
 
 subscriptions : Model -> Sub Message
 subscriptions model =
     Sub.batch
-        [ commandKeyTestStart (always <| Bind.arity0 TestRun (.initiate TestRun.messages))
-        , notifyGeneratingTests (always <| Bind.arity0 TestRun (.generate TestRun.messages))
-        , notifyExecutingTests (always <| Bind.arity0 TestRun (.execute TestRun.messages))
-        , notifyCompilerErrored <| Bind.arity1 TestRun (.compilerError TestRun.messages)
-        , toggleAutoRun (always <| Bind.arity0 Settings (.toggle <| .autoRun Settings.messages))
-        , toggleAutoNavigate (always <| Bind.arity0 Settings (.toggle <| .autoNavigate Settings.messages))
-        , toggleElmVerifyExamples (always <| Bind.arity0 Settings (.toggle <| .runElmVerifyExamples Settings.messages))
+        [ commandKeyTestStart <| always <| TestRun <| .initiate TestRun.messages
+        , notifyGeneratingTests <| always <| TestRun <| .generate TestRun.messages
+        , notifyExecutingTests <| always <| TestRun <| .execute TestRun.messages
+        , notifyCompilerErrored <| TestRun << .compilerError TestRun.messages
+        , toggleAutoRun <| always <| Settings <| .toggle <| .autoRun Settings.messages
+        , toggleAutoNavigate <| always <| Settings <| .toggle <| .autoNavigate Settings.messages
+        , toggleElmVerifyExamples <| always <| Settings <| .toggle <| .runElmVerifyExamples Settings.messages
         , notifySaveEvent <| saveEventMessage model
         , notifyPaneMoved PaneMoved
-        , runStart <| Bind.arity1 TestRun (.runStart TestRun.messages)
-        , testCompleted <| Bind.arity1 TestRun (.testCompleted TestRun.messages)
-        , runComplete <| Bind.arity1 TestRun (.runComplete TestRun.messages)
-        , updateProjectDirectories ProjectDirectoryUpdate
-        , updateTestableElmDirectories TestableElmDirectoryUpdate
-        , Animation.subscription (Bind.arity1 Animate <| .flicker Animate.messages) [ model.statusBarTextStyle ]
-        , Animation.subscription (Bind.arity1 Animate <| .oscillateColor Animate.messages) [ model.statusBarColorStyle ]
-        , Animation.subscription (Bind.arity1 Animate <| .settingsTransition Animate.messages) [ model.footerStyle ]
+        , runStart <| TestRun << .runStart TestRun.messages
+        , testCompleted <| TestRun << .testCompleted TestRun.messages
+        , runComplete <| TestRun << .runComplete TestRun.messages
+        , updateProjectDirectories <| Directories << .updateProject Directories.messages
+        , updateTestableElmDirectories <| Directories << .updateTestable Directories.messages
+        , Animation.subscription (Animate << .flicker Animate.messages) [ model.statusBarTextStyle ]
+        , Animation.subscription (Animate << .oscillateColor Animate.messages) [ model.statusBarColorStyle ]
+        , Animation.subscription (Animate << .settingsTransition Animate.messages) [ model.footerStyle ]
         ]
 
 
 saveEventMessage : Model -> () -> Message
 saveEventMessage model _ =
     if model.autoRunEnabled then
-        Bind.arity0 TestRun (.initiate TestRun.messages)
+        TestRun <| .initiate TestRun.messages
     else
         DoNothing
 
