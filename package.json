@@ -1,32 +1,32 @@
 {
-    "name": "elm-test-runner",
-    "main": "./lib/elm-test-runner",
-    "version": "0.2.1",
-    "description": "Run elm-test and view results without leaving Atom",
-    "keywords": [
-        "elm",
-        "testing",
-        "testing-tools"
-    ],
-    "activationCommands": {
-        "atom-workspace": [
-            "elm-test-runner:toggle",
-            "elm-test-runner:run-test"
-        ]
-    },
-    "repository": "https://github.com/mbuscemi/elm-test-runner",
-    "license": "MIT",
-    "engines": {
-        "atom": ">=1.0.0 <2.0.0"
-    },
-    "dependencies": {
-        "elm-test": "0.18.12",
-        "elm-verify-examples": "1.0.2"
-    },
-    "deserializers": {
-        "ElmTestRunnerView": "deserialize"
-    },
-    "scripts": {
-        "test": "cd elm ; elm-test"
-    }
+  "name": "elm-test-runner",
+  "main": "./lib/elm-test-runner",
+  "version": "0.3.0",
+  "description": "Run elm-test and view results without leaving Atom",
+  "keywords": [
+    "elm",
+    "testing",
+    "testing-tools"
+  ],
+  "activationCommands": {
+    "atom-workspace": [
+      "elm-test-runner:toggle",
+      "elm-test-runner:run-test"
+    ]
+  },
+  "repository": "https://github.com/mbuscemi/elm-test-runner",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "elm-test": "0.18.12",
+    "elm-verify-examples": "1.0.2"
+  },
+  "deserializers": {
+    "ElmTestRunnerView": "deserialize"
+  },
+  "scripts": {
+    "test": "cd elm ; elm-test"
+  }
 }
