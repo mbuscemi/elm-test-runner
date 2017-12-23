@@ -14,6 +14,13 @@
                         { "type" : "separator" },
 
                         {
+                            "label": "Re-Scan for Testable Directories",
+                            "command": "elm-test-runner:scan-for-directories"
+                        },
+
+                        { "type" : "separator" },
+
+                        {
                             "label": "Toggle Dashboard",
                             "command": "elm-test-runner:toggle"
                         },

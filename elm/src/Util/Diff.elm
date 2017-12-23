@@ -1,4 +1,4 @@
-module Diff.Core exposing (Change(Added, NoChange, Removed), diff, diffLines)
+module Util.Diff exposing (Change(Added, NoChange, Removed), diff, diffLines)
 
 {-| This describes how each line has changed and also contains its value.
 -}

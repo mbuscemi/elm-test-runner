@@ -1,7 +1,7 @@
 module Model.RunDuration exposing (clear, set)
 
-import Duration.Core exposing (Duration)
 import TestEvent.RunComplete as RunComplete exposing (RunComplete)
+import State.Duration exposing (Duration)
 
 
 type alias WithRunDuration r =

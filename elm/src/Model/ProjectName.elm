@@ -7,6 +7,7 @@ type alias HasProject r a =
     { r
         | projectName : String
         , testRuns : Tree String a
+        , currentWorkingDirectory : String
     }
 
 
@@ -15,11 +16,11 @@ default =
     "Unknown Project"
 
 
-setFromPath : String -> HasProject model a -> HasProject model a
-setFromPath projectPath model =
+setFromPath : HasProject model a -> HasProject model a
+setFromPath model =
     { model
         | projectName =
-            String.split "/" projectPath
+            String.split "/" model.currentWorkingDirectory
                 |> List.reverse
                 |> List.head
                 |> Maybe.withDefault default

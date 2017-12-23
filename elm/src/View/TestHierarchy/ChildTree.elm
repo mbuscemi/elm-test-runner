@@ -6,6 +6,12 @@ import Html.Events exposing (onClick, onMouseEnter, onMouseLeave)
 import Tree.Core exposing (CollapsibleTree, Tree(Node))
 
 
+type alias Data =
+    { nodeMouseIsOver : Maybe Int
+    , selectedNode : Maybe Int
+    }
+
+
 type alias Messages message testInstance =
     { mouseIn : Int -> message
     , mouseOut : message
@@ -13,14 +19,8 @@ type alias Messages message testInstance =
     }
 
 
-type alias NodeData =
-    { nodeMouseIsOver : Maybe Int
-    , selectedNode : Maybe Int
-    }
-
-
-render : Messages message testInstance -> NodeData -> CollapsibleTree String testInstance -> Html message -> Html message
-render highlightMessages nodeData (Node ( _, _, nodeId ) testInstance children) renderedChildren =
+render : Data -> Messages message testInstance -> CollapsibleTree String testInstance -> Html message -> Html message
+render nodeData highlightMessages (Node ( _, _, nodeId ) testInstance children) renderedChildren =
     li
         (List.append
             (mouseEvents highlightMessages nodeId testInstance children)
@@ -40,7 +40,7 @@ mouseEvents messages nodeId testInstance children =
         []
 
 
-mouseOverHighlight : Int -> NodeData -> List (Attribute message)
+mouseOverHighlight : Int -> Data -> List (Attribute message)
 mouseOverHighlight nodeId nodeData =
     case ( nodeData.nodeMouseIsOver, nodeData.selectedNode ) of
         ( Just mouseOverId, Just selectedId ) ->

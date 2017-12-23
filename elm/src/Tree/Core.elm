@@ -1,4 +1,4 @@
-module Tree.Core exposing (CollapsibleTree, NodeId, Tree(Node), make)
+module Tree.Core exposing (CollapsibleTree, NodeId, Tree(Node), getData, getId, make)
 
 import State exposing (State)
 
@@ -24,10 +24,20 @@ make tree =
     State.finalValue 0 (label tree)
 
 
+getId : CollapsibleTree a b -> Int
+getId (Node ( _, _, nodeId ) _ _) =
+    nodeId
+
+
+getData : CollapsibleTree a b -> b
+getData (Node _ data _) =
+    data
+
+
 label : Tree a b -> IdGen (CollapsibleTree a b)
 label (Node root data children) =
     State.map2
-        (\nid collapsibleChildren -> Node ( root, False, nid ) data collapsibleChildren)
+        (\nodeId collapsibleChildren -> Node ( root, False, nodeId ) data collapsibleChildren)
         newId
         (State.traverse label children)
 

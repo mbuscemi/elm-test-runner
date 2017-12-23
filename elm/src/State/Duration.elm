@@ -1,4 +1,4 @@
-module Duration.Core exposing (Duration, asMilliseconds, asSeconds, inMilliseconds)
+module State.Duration exposing (Duration, asMilliseconds, asSeconds, inMilliseconds)
 
 
 type Duration

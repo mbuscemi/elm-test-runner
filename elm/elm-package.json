@@ -8,6 +8,7 @@
     ],
     "exposed-modules": [],
     "dependencies": {
+        "Fresheyeball/elm-function-extra": "3.0.0 <= v < 4.0.0",
         "elm-community/easing-functions": "1.0.2 <= v < 2.0.0",
         "elm-community/list-extra": "6.1.0 <= v < 7.0.0",
         "elm-community/maybe-extra": "4.0.0 <= v < 5.0.0",

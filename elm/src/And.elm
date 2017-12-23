@@ -1,11 +1,14 @@
-port module And exposing (execute, noCommand, updateAtomState)
+port module And exposing (doNothing, execute, executeOnDelay, showInEditor, updateAtomState)
 
-import Model exposing (Model)
+import Model.Config exposing (HasConfig)
 import Model.Flags exposing (Flags)
+import Process
+import State.NavigationData exposing (NavigationData)
+import Task
 
 
-noCommand : model -> ( model, Cmd message )
-noCommand model =
+doNothing : model -> ( model, Cmd message )
+doNothing model =
     ( model, Cmd.none )
 
 
@@ -14,11 +17,28 @@ execute command model =
     ( model, command )
 
 
-updateAtomState : Model -> ( Model, Cmd message )
+executeOnDelay : message -> model -> ( model, Cmd message )
+executeOnDelay message model =
+    ( model
+    , Process.sleep 100
+        |> Task.andThen (always <| Task.succeed message)
+        |> Task.perform identity
+    )
+
+
+updateAtomState : HasConfig model -> ( HasConfig model, Cmd message )
 updateAtomState model =
-    Model.serialize model
+    Model.Config.serialize model
         |> updatePersistentState
         |> flip execute model
 
 
+showInEditor : NavigationData -> model -> ( model, Cmd message )
+showInEditor data =
+    execute <| navigateToFile data
+
+
 port updatePersistentState : Flags -> Cmd message
+
+
+port navigateToFile : NavigationData -> Cmd message

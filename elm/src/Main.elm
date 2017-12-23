@@ -2,53 +2,32 @@ port module Main exposing (main)
 
 import And
 import Animation
+import Function exposing ((<<<))
 import Html exposing (Html)
 import Json.Encode exposing (Value)
+import Message.Animate as Animate
+import Message.Directories as Directories
+import Message.RandomSeed as RandomSeed
+import Message.Settings as Settings
+import Message.TestListItem as TestListItem
+import Message.TestRun as TestRun
 import Model exposing (Model)
 import Model.Animation
 import Model.Basics
 import Model.Config
 import Model.Flags as Flags
-import Model.ProjectName
-import Model.RandomSeed
-import Model.RunDuration
-import Model.RunSeed
-import Model.RunStatus
-import Model.SelectedTest
-import Model.TestCount
-import Model.TestTree
-import TestEvent.RunComplete as RunComplete
-import TestEvent.RunStart as RunStart
-import TestEvent.TestCompleted as TestCompleted
-import TestInstance.Core as TestInstance exposing (TestInstance)
+import TestInstance.Core as TestInstance
 import TestInstance.View
-import View.Core
+import View
 
 
 type Message
-    = InitiateRunAll
-    | GenerateTestsStart
-    | ExecuteTestsStart
-    | CompilerErrored String
-    | RunStart ( String, Value )
-    | TestCompleted Value
-    | RunComplete Value
-    | TestListItemExpand Int
-    | TestListItemCollapse Int
-    | TestListItemMouseEnter Int
-    | TestListItemMouseLeave
-    | TestListItemSelect Int (Maybe TestInstance)
-    | ToggleAutoRun
-    | SetAutoRun Bool
-    | ToggleAutoNavigate
-    | SetAutoNavigate Bool
-    | ToggleRunElmVerifyExamples
-    | SetRunElmVerifyExamples Bool
-    | CopySeed String
-    | SetRandomSeed Int
-    | SetForceSeed Bool
-    | AnimateFlicker Animation.Msg
-    | AnimateSettingsTransition Animation.Msg
+    = TestRun TestRun.Message
+    | TestListItem TestListItem.Message
+    | Settings Settings.Message
+    | RandomSeed RandomSeed.Message
+    | Animate Animate.Message
+    | Directories Directories.Message
     | PaneMoved String
     | ToggleSettings
     | DoNothing
@@ -74,152 +53,48 @@ init rawFlags =
         |> Model.Config.setAutoRun flags.autoRun
         |> Model.Config.setAutoNavigate flags.autoNavigate
         |> Model.Config.setElmVerifyExamples flags.useElmVerifyExamples
-        |> And.noCommand
+        |> And.doNothing
 
 
 update : Message -> Model -> ( Model, Cmd Message )
 update message model =
     case message of
-        InitiateRunAll ->
-            Model.TestCount.resetPassed model
-                |> Model.SelectedTest.setNodeId Nothing
-                |> Model.SelectedTest.setInstance Nothing
-                |> Model.Basics.setCompilerErrorMessage Nothing
-                |> Model.RunDuration.clear
-                |> Model.RunSeed.clear
-                |> Model.TestTree.reset
-                |> Model.TestTree.updateHierarchy
-                |> And.execute (runTest <| Model.RandomSeed.forJS model)
+        TestRun message ->
+            if model.hasRegisteredDirectories then
+                TestRun.update message model
+            else
+                And.executeOnDelay (TestRun message) model
 
-        GenerateTestsStart ->
-            Model.RunStatus.setToGeneratingTests model
-                |> And.noCommand
+        TestListItem message ->
+            TestListItem.update message model
 
-        ExecuteTestsStart ->
-            Model.RunStatus.setToProcessing model
-                |> And.noCommand
+        Settings message ->
+            Settings.update message model
 
-        CompilerErrored errorMessage ->
-            Model.RunStatus.setToCompileError model
-                |> Model.Basics.setCompilerErrorMessage (Just errorMessage)
-                |> And.noCommand
+        RandomSeed message ->
+            RandomSeed.update message model
 
-        RunStart ( projectPath, value ) ->
-            let
-                event =
-                    RunStart.parse value
-            in
-            Model.ProjectName.setFromPath projectPath model
-                |> Model.TestCount.setTotal event
-                |> Model.RunSeed.set event
-                |> And.noCommand
+        Animate message ->
+            Animate.update message model
 
-        TestCompleted data ->
-            let
-                event =
-                    TestCompleted.parseJson data
-            in
-            Model.TestCount.updatePassed event model
-                |> Model.TestTree.build event
-                |> Model.TestTree.updateHierarchy
-                |> And.noCommand
-
-        RunComplete value ->
-            let
-                event =
-                    RunComplete.parse value
-            in
-            Model.RunStatus.setToPassing model
-                |> Model.RunStatus.setForTodo TestInstance.isTodo
-                |> Model.RunStatus.setForFailure event
-                |> Model.RunDuration.set event
-                |> Model.TestTree.purgeObsoleteNodes
-                |> Model.TestTree.updateHierarchy
-                |> Model.TestTree.expandFailingAndTodoNodes
-                |> Model.Animation.initiateStatusBarTextFlicker
-                |> And.noCommand
-
-        TestListItemExpand nodeId ->
-            Model.TestTree.toggleNode nodeId True model
-                |> And.noCommand
-
-        TestListItemCollapse nodeId ->
-            Model.TestTree.toggleNode nodeId False model
-                |> And.noCommand
-
-        TestListItemMouseEnter nodeId ->
-            Model.Basics.setTestMouseIsOver (Just nodeId) model
-                |> And.noCommand
-
-        TestListItemMouseLeave ->
-            Model.Basics.setTestMouseIsOver Nothing model
-                |> And.noCommand
-
-        TestListItemSelect nodeId testInstance ->
-            Model.SelectedTest.setNodeId (Just nodeId) model
-                |> Model.SelectedTest.setInstance testInstance
-                |> Model.SelectedTest.showInEditor testInstance model.autoNavigateEnabled
-
-        ToggleAutoRun ->
-            Model.Config.invertAutoRun model
-                |> And.updateAtomState
-
-        SetAutoRun state ->
-            Model.Config.setAutoRun state model
-                |> And.updateAtomState
-
-        ToggleAutoNavigate ->
-            Model.Config.invertAutoNavigate model
-                |> And.updateAtomState
-
-        SetAutoNavigate state ->
-            Model.Config.setAutoNavigate state model
-                |> And.updateAtomState
-
-        ToggleRunElmVerifyExamples ->
-            Model.Config.invertElmVerifyExamples model
-                |> And.updateAtomState
-
-        SetRunElmVerifyExamples state ->
-            Model.Config.setElmVerifyExamples state model
-                |> And.updateAtomState
-
-        CopySeed seed ->
-            model
-                |> And.execute (copySeed seed)
-
-        SetRandomSeed seed ->
-            Model.RandomSeed.set (Just seed) model
-                |> Model.RandomSeed.setForcing True
-                |> And.noCommand
-
-        SetForceSeed setting ->
-            Model.RandomSeed.setForcing setting model
-                |> And.noCommand
-
-        AnimateFlicker animateMessage ->
-            Model.Animation.updateStatusBar animateMessage model
-                |> And.noCommand
-
-        AnimateSettingsTransition animateMessage ->
-            Model.Animation.updateFooter animateMessage model
-                |> And.noCommand
+        Directories message ->
+            Directories.update message model
 
         PaneMoved newLocation ->
             Model.Basics.setPaneLocation newLocation model
-                |> And.noCommand
+                |> And.doNothing
 
         ToggleSettings ->
             Model.Animation.toggleFooter model
-                |> And.noCommand
+                |> And.doNothing
 
         DoNothing ->
-            model |> And.noCommand
+            model |> And.doNothing
 
 
 view : Model -> Html Message
 view model =
-    View.Core.render
+    View.render
         { runStatus = model.runStatus
         , compilerError = model.compilerError
         , totalTests = model.totalTests
@@ -238,58 +113,59 @@ view model =
         , elmVerifyExamplesEnabled = model.runElmVerifyExamplesEnabled
         , randomSeed = model.randomSeed
         , forceRandomSeedEnabled = model.forceRandomSeedEnabled
-        , statusBarTextStyle = model.statusBarStyle
+        , statusBarTextStyle = model.statusBarTextStyle
+        , statusBarColorStyle = model.statusBarColorStyle
         , footerStyle = model.footerStyle
         , paneLocation = model.paneLocation
+        , projectDirectories = model.projectDirectories
+        , testableElmDirectories = model.testableElmDirectories
         }
-        { runAllButtonClickHandler = InitiateRunAll
-        , testListItemExpand = TestListItemExpand
-        , testListItemCollapse = TestListItemCollapse
-        , testListItemMouseEnter = TestListItemMouseEnter
-        , testListItemMouseLeave = TestListItemMouseLeave
-        , testClickHandler = TestListItemSelect
-        , copySeedClickHandler = CopySeed
-        , setSeedClickHandler = SetRandomSeed
-        , setForceSeedHandler = SetForceSeed
-        , setAutoRun = SetAutoRun
-        , setAutoNavigate = SetAutoNavigate
-        , setRunElmVerifyExamples = SetRunElmVerifyExamples
+        { runAllButtonClickHandler = TestRun <| .initiate TestRun.messages
+        , testListItemExpand = TestListItem << .expand TestListItem.messages
+        , testListItemCollapse = TestListItem << .collapse TestListItem.messages
+        , testListItemMouseEnter = TestListItem << .mouseEnter TestListItem.messages
+        , testListItemMouseLeave = TestListItem <| .mouseLeave TestListItem.messages
+        , testClickHandler = TestListItem <<< .select TestListItem.messages
+        , copySeedClickHandler = RandomSeed << .copy RandomSeed.messages
+        , setSeedClickHandler = RandomSeed << .set RandomSeed.messages
+        , setForceSeedHandler = RandomSeed << .setForce RandomSeed.messages
+        , setAutoRun = Settings << (.set <| .autoRun Settings.messages)
+        , setAutoNavigate = Settings << (.set <| .autoNavigate Settings.messages)
+        , setRunElmVerifyExamples = Settings << (.set <| .runElmVerifyExamples Settings.messages)
         , settingsToggle = ToggleSettings
+        , workingDirectoryChanged = Directories << .changeWorking Directories.messages
         }
 
 
 subscriptions : Model -> Sub Message
 subscriptions model =
     Sub.batch
-        [ commandKeyTestStart (always InitiateRunAll)
-        , notifyGeneratingTests (always GenerateTestsStart)
-        , notifyExecutingTests (always ExecuteTestsStart)
-        , notifyCompilerErrored CompilerErrored
-        , toggleAutoRun (always ToggleAutoRun)
-        , toggleAutoNavigate (always ToggleAutoNavigate)
-        , toggleElmVerifyExamples (always ToggleRunElmVerifyExamples)
+        [ commandKeyTestStart <| always <| TestRun <| .initiate TestRun.messages
+        , notifyGeneratingTests <| always <| TestRun <| .generate TestRun.messages
+        , notifyExecutingTests <| always <| TestRun <| .execute TestRun.messages
+        , notifyCompilerErrored <| TestRun << .compilerError TestRun.messages
+        , toggleAutoRun <| always <| Settings <| .toggle <| .autoRun Settings.messages
+        , toggleAutoNavigate <| always <| Settings <| .toggle <| .autoNavigate Settings.messages
+        , toggleElmVerifyExamples <| always <| Settings <| .toggle <| .runElmVerifyExamples Settings.messages
         , notifySaveEvent <| saveEventMessage model
         , notifyPaneMoved PaneMoved
-        , runStart RunStart
-        , testCompleted TestCompleted
-        , runComplete RunComplete
-        , Animation.subscription AnimateFlicker [ model.statusBarStyle ]
-        , Animation.subscription AnimateSettingsTransition [ model.footerStyle ]
+        , runStart <| TestRun << .runStart TestRun.messages
+        , testCompleted <| TestRun << .testCompleted TestRun.messages
+        , runComplete <| TestRun << .runComplete TestRun.messages
+        , updateProjectDirectories <| Directories << .updateProject Directories.messages
+        , updateTestableElmDirectories <| Directories << .updateTestable Directories.messages
+        , Animation.subscription (Animate << .flicker Animate.messages) [ model.statusBarTextStyle ]
+        , Animation.subscription (Animate << .oscillateColor Animate.messages) [ model.statusBarColorStyle ]
+        , Animation.subscription (Animate << .settingsTransition Animate.messages) [ model.footerStyle ]
         ]
 
 
 saveEventMessage : Model -> () -> Message
 saveEventMessage model _ =
     if model.autoRunEnabled then
-        InitiateRunAll
+        TestRun <| .initiate TestRun.messages
     else
         DoNothing
-
-
-port runTest : String -> Cmd message
-
-
-port copySeed : String -> Cmd message
 
 
 port commandKeyTestStart : (() -> message) -> Sub message
@@ -319,10 +195,16 @@ port notifySaveEvent : (() -> message) -> Sub message
 port notifyPaneMoved : (String -> message) -> Sub message
 
 
-port runStart : (( String, Value ) -> message) -> Sub message
+port runStart : (Value -> message) -> Sub message
 
 
 port testCompleted : (Value -> message) -> Sub message
 
 
 port runComplete : (Value -> message) -> Sub message
+
+
+port updateProjectDirectories : (List String -> message) -> Sub message
+
+
+port updateTestableElmDirectories : (List String -> message) -> Sub message

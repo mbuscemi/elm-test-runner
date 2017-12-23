@@ -1,5 +1,6 @@
-module Tree.Traverse exposing (hasMatchingNode, purge, update)
+module Tree.Traverse exposing (findChildlessNodes, hasMatchingNode, purge, update)
 
+import Maybe.Extra as Maybe
 import Tree.Core exposing (Tree(Node))
 
 
@@ -39,7 +40,12 @@ hasMatchingNode evaluator (Node _ data children) =
     if evaluator data then
         True
     else
-        List.foldl
-            (||)
-            False
-            (List.map (hasMatchingNode evaluator) children)
+        List.foldl (||) False (List.map (hasMatchingNode evaluator) children)
+
+
+findChildlessNodes : DataEvaluator b -> Tree a b -> Maybe (Tree a b)
+findChildlessNodes evaluator ((Node _ data children) as node) =
+    if evaluator data && List.length children == 0 then
+        Just node
+    else
+        List.foldl Maybe.or Nothing (List.map (findChildlessNodes evaluator) children)

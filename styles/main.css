@@ -75,35 +75,6 @@
     margin-right: 90px;
     border-radius: 4px;
     text-align: center;
-    transition: background-color 0.33s ease-in-out;
-}
-
-.etr-main-view .status-bar.no-data {
-    background-color: #101318;
-}
-
-.etr-main-view .status-bar.generating-tests {
-    background-color: #461b4b;
-}
-
-.etr-main-view .status-bar.processing {
-    background-color: #303023;
-}
-
-.etr-main-view .status-bar.last-passed {
-    background-color: #204020;
-}
-
-.etr-main-view .status-bar.last-failed {
-    background-color: #620c0c;
-}
-
-.etr-main-view .status-bar.compile-error {
-    background-color: #55360a;
-}
-
-.etr-main-view .status-bar.incomplete {
-    background-color: #073d6f;
 }
 
 .etr-main-view .toolbar .status-bar .title {
@@ -132,7 +103,7 @@
 }
 
 .etr-main-view div.run-data-row {
-    margin: 0.75em 0;
+    margin: 0.75em 0 0 0;
     height: 24px;
 }
 
@@ -151,6 +122,32 @@
 
 .etr-main-view div.run-data-field.seed {
     float: right;
+}
+
+.etr-main-view div.project-selector {
+    margin: 0.75em 0;
+}
+
+.etr-main-view div.project-selector {
+    display: flex;
+}
+
+.etr-main-view div.project-selector div.label {
+    flex: 1;
+}
+
+.etr-main-view div.project-selector div.selector {
+    flex: 7;
+    margin-left: 10px;
+}
+
+.etr-main-view div.project-selector div.selector select {
+    width: 100%;
+    color: #9da5b4;
+    border-color: #181a1f;
+    background-color: #353b45;
+    font-size: auto;
+    height: auto;
 }
 
 .etr-main-view ul.test-list {
@@ -224,13 +221,17 @@
     padding: 0 8px;
 }
 
-.etr-main-view .seed-settings input {
-    border-width: 1px;
-    border-style: groove;
+.etr-main-view .seed-settings input[type=checkbox] {
+    margin-top: -1px;
 }
 
-.etr-main-view .seed-settings input:disabled {
-    background-color: rgb(84, 84, 84);
+.etr-main-view .seed-settings input[type=number] {
+    padding: 0.1em 0.4em;
+    line-height: 0;
+}
+
+.etr-main-view .seed-settings input[type=number]:disabled {
+    color: #555;
 }
 
 .etr-main-view .settings-toggle {

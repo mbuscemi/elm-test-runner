@@ -1,11 +1,11 @@
-module Model exposing (Model, default, serialize)
+module Model exposing (Model, default)
 
 import Animation
+import Animation.Color
 import Animation.Flicker
 import Animation.Footer
-import Duration.Core exposing (Duration)
-import Model.Flags exposing (Flags)
 import Model.ProjectName
+import State.Duration exposing (Duration)
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus as RunStatus exposing (RunStatus)
 import TestInstance.Core as TestInstance exposing (TestInstance)
@@ -30,10 +30,15 @@ type alias Model =
     , runElmVerifyExamplesEnabled : Bool
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
-    , statusBarStyle : Animation.State
+    , statusBarTextStyle : Animation.State
+    , statusBarColorStyle : Animation.State
     , footerStyle : Animation.State
     , footerExpanded : Bool
     , paneLocation : PaneLocation
+    , projectDirectories : List String
+    , testableElmDirectories : List String
+    , currentWorkingDirectory : String
+    , hasRegisteredDirectories : Bool
     }
 
 
@@ -56,16 +61,13 @@ default =
     , runElmVerifyExamplesEnabled = False
     , randomSeed = Nothing
     , forceRandomSeedEnabled = False
-    , statusBarStyle = Animation.Flicker.initial
+    , statusBarTextStyle = Animation.Flicker.initial
+    , statusBarColorStyle = Animation.Color.initial RunStatus.noData
     , footerStyle = Animation.Footer.initial
     , footerExpanded = False
     , paneLocation = PaneLocation.default
-    }
-
-
-serialize : Model -> Flags
-serialize model =
-    { autoRun = model.autoRunEnabled
-    , autoNavigate = model.autoNavigateEnabled
-    , useElmVerifyExamples = model.runElmVerifyExamplesEnabled
+    , projectDirectories = []
+    , testableElmDirectories = []
+    , currentWorkingDirectory = ""
+    , hasRegisteredDirectories = False
     }

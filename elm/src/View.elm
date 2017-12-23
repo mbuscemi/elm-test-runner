@@ -1,37 +1,21 @@
-module View.Core exposing (render)
+module View exposing (render)
 
 import Animation exposing (State)
-import Duration.Core exposing (Duration)
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
+import State.Duration exposing (Duration)
 import State.PaneLocation as PaneLocation exposing (PaneLocation)
 import State.RunStatus exposing (RunStatus)
 import Tree.Core exposing (CollapsibleTree)
 import View.DurationAndSeedDisplay
 import View.OutputDisplay
+import View.ProjectSelector
 import View.SeedAndSettings
-import View.TestHierarchy.Core
+import View.TestHierarchy
 import View.Toolbar
 
 
-type alias Messages message testInstance =
-    { runAllButtonClickHandler : message
-    , testListItemExpand : Int -> message
-    , testListItemCollapse : Int -> message
-    , testListItemMouseEnter : Int -> message
-    , testListItemMouseLeave : message
-    , testClickHandler : Int -> Maybe testInstance -> message
-    , copySeedClickHandler : String -> message
-    , setSeedClickHandler : Int -> message
-    , setForceSeedHandler : Bool -> message
-    , setAutoRun : Bool -> message
-    , setAutoNavigate : Bool -> message
-    , setRunElmVerifyExamples : Bool -> message
-    , settingsToggle : message
-    }
-
-
-type alias DisplayData message testInstance =
+type alias Data message testInstance =
     { runStatus : RunStatus
     , compilerError : Maybe String
     , totalTests : Int
@@ -51,8 +35,29 @@ type alias DisplayData message testInstance =
     , randomSeed : Maybe Int
     , forceRandomSeedEnabled : Bool
     , statusBarTextStyle : State
+    , statusBarColorStyle : State
     , footerStyle : State
     , paneLocation : PaneLocation
+    , projectDirectories : List String
+    , testableElmDirectories : List String
+    }
+
+
+type alias Messages message testInstance =
+    { runAllButtonClickHandler : message
+    , testListItemExpand : Int -> message
+    , testListItemCollapse : Int -> message
+    , testListItemMouseEnter : Int -> message
+    , testListItemMouseLeave : message
+    , testClickHandler : Int -> Maybe testInstance -> message
+    , copySeedClickHandler : String -> message
+    , setSeedClickHandler : Int -> message
+    , setForceSeedHandler : Bool -> message
+    , setAutoRun : Bool -> message
+    , setAutoNavigate : Bool -> message
+    , setRunElmVerifyExamples : Bool -> message
+    , settingsToggle : message
+    , workingDirectoryChanged : String -> message
     }
 
 
@@ -67,23 +72,39 @@ type alias Failure =
     }
 
 
-render : DisplayData message testInstance -> Messages message testInstance -> Html message
+render : Data message testInstance -> Messages message testInstance -> Html message
 render data messages =
     div [ class <| "etr-main-view " ++ PaneLocation.toStyle data.paneLocation ]
         [ div [ class "section-one" ]
             [ div [ class "core" ]
-                [ View.Toolbar.render data.totalTests data.passedTests data.runStatus data.statusBarTextStyle messages.runAllButtonClickHandler
+                [ View.Toolbar.render
+                    { totalTests = data.totalTests
+                    , passedTests = data.passedTests
+                    , runStatus = data.runStatus
+                    , statusBarTextStyle = data.statusBarTextStyle
+                    , statusBarColorStyle = data.statusBarColorStyle
+                    }
+                    messages.runAllButtonClickHandler
+                , View.ProjectSelector.render
+                    { projectDirectories = data.projectDirectories
+                    , testableElmDirectories = data.testableElmDirectories
+                    }
+                    { workingDirectoryChanged = messages.workingDirectoryChanged }
                 , View.DurationAndSeedDisplay.render
-                    data.runDuration
-                    data.runSeed
+                    { runDuration = data.runDuration
+                    , runSeed = data.runSeed
+                    }
                     { copySeedClickHandler = messages.copySeedClickHandler
                     , setSeedClickHandler = messages.setSeedClickHandler
                     }
                 ]
             , div [ class "test-hierarchy" ]
-                [ View.TestHierarchy.Core.render
+                [ View.TestHierarchy.render
                     { statusIndicator = data.statusIndicator
                     , conditionallyEmbolden = data.conditionallyEmbolden
+                    }
+                    { nodeMouseIsOver = data.nodeMouseIsOver
+                    , selectedNode = data.selectedNodeId
                     }
                     { expand = messages.testListItemExpand
                     , collapse = messages.testListItemCollapse
@@ -91,9 +112,6 @@ render data messages =
                     { mouseIn = messages.testListItemMouseEnter
                     , mouseOut = messages.testListItemMouseLeave
                     , testClick = messages.testClickHandler
-                    }
-                    { nodeMouseIsOver = data.nodeMouseIsOver
-                    , selectedNode = data.selectedNodeId
                     }
                     data.testHierarchy
                 ]
@@ -103,17 +121,17 @@ render data messages =
                 [ View.OutputDisplay.render data.compilerError data.failure ]
             , div (class "footer" :: Animation.render data.footerStyle)
                 (View.SeedAndSettings.render
-                    { setForceSeedHandler = messages.setForceSeedHandler
-                    , setAutoRun = messages.setAutoRun
-                    , setAutoNavigate = messages.setAutoNavigate
-                    , setRunElmVerifyExamples = messages.setRunElmVerifyExamples
-                    , settingsToggle = messages.settingsToggle
-                    }
                     { autoRunEnabled = data.autoRunEnabled
                     , autoNavigateEnabled = data.autoNavigateEnabled
                     , elmVerifyExamplesEnabled = data.elmVerifyExamplesEnabled
                     , forceRandomSeedEnabled = data.forceRandomSeedEnabled
                     , randomSeed = data.randomSeed
+                    }
+                    { setForceSeedHandler = messages.setForceSeedHandler
+                    , setAutoRun = messages.setAutoRun
+                    , setAutoNavigate = messages.setAutoNavigate
+                    , setRunElmVerifyExamples = messages.setRunElmVerifyExamples
+                    , settingsToggle = messages.settingsToggle
                     }
                 )
             ]

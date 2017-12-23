@@ -1,4 +1,6 @@
-module Model.Config exposing (invertAutoNavigate, invertAutoRun, invertElmVerifyExamples, setAutoNavigate, setAutoRun, setElmVerifyExamples)
+module Model.Config exposing (HasConfig, invertAutoNavigate, invertAutoRun, invertElmVerifyExamples, serialize, setAutoNavigate, setAutoRun, setElmVerifyExamples)
+
+import Model.Flags exposing (Flags)
 
 
 type alias HasConfig r =
@@ -37,3 +39,11 @@ invertElmVerifyExamples model =
 setElmVerifyExamples : Bool -> HasConfig model -> HasConfig model
 setElmVerifyExamples setting model =
     { model | runElmVerifyExamplesEnabled = setting }
+
+
+serialize : HasConfig model -> Flags
+serialize model =
+    { autoRun = model.autoRunEnabled
+    , autoNavigate = model.autoNavigateEnabled
+    , useElmVerifyExamples = model.runElmVerifyExamplesEnabled
+    }
