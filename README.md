@@ -29,15 +29,15 @@ Run elm-test and view results without leaving Atom
 
 ![Project Selection](https://raw.githubusercontent.com/mbuscemi/elm-test-runner/master/images/project-selection.gif?raw=true)
 
-When you activate the Elm Test Runner panel for the first time in an Atom session, Elm Test Runner scans your all projects in your workspace for directories that meet the following criteria:
+When you activate the Elm Test Runner panel for the first time in an Atom session, Elm Test Runner scans all projects in your workspace for directories that meet the following criteria:
   1. The directory contains an `elm-package.json` file.
   2. The directory contains a subdirectory called `tests`.
 
 Each directory that meets these criteria is saved and added to the "Projects" selector at the top of the panel. If your Atom workspace contains multiple testable Elm projects,
-you can select which project Elm Test runs against by changing the selection.
+you can select which project Elm Test runs against by changing the value in the selector.
 
-Your directories are only scanned once, and the results are cached. If you add a new project to your workspace after Elm Test Runner has been initialized, you will need to tell Elm Test Runner to rescan for
-valid projects. You can do this from the menu: Packages → Elm Test Runner → Re-Scan for Testable Directories.
+Your directories are only scanned once, and the results are cached. If you change your workspace to include or remove an Elm project after Elm Test Runner has been initialized,
+you will need to rescan for valid projects. You can do this from the following menu selection: Packages → Elm Test Runner → Re-Scan for Testable Directories.
 
 ### Dock Left, Right, or Center
 
