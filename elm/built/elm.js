@@ -20676,11 +20676,15 @@ var _user$project$View_SeedAndSettings$render = F2(
 												_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Events$onCheck(messages.setAutoRun),
+													_0: _elm_lang$html$Html_Attributes$class('input-checkbox'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$checked(data.autoRunEnabled),
-														_1: {ctor: '[]'}
+														_0: _elm_lang$html$Html_Events$onCheck(messages.setAutoRun),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$checked(data.autoRunEnabled),
+															_1: {ctor: '[]'}
+														}
 													}
 												}
 											},
@@ -20709,11 +20713,15 @@ var _user$project$View_SeedAndSettings$render = F2(
 													_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Events$onCheck(messages.setAutoNavigate),
+														_0: _elm_lang$html$Html_Attributes$class('input-checkbox'),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$checked(data.autoNavigateEnabled),
-															_1: {ctor: '[]'}
+															_0: _elm_lang$html$Html_Events$onCheck(messages.setAutoNavigate),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$checked(data.autoNavigateEnabled),
+																_1: {ctor: '[]'}
+															}
 														}
 													}
 												},
@@ -20742,11 +20750,15 @@ var _user$project$View_SeedAndSettings$render = F2(
 														_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html_Events$onCheck(messages.setRunElmVerifyExamples),
+															_0: _elm_lang$html$Html_Attributes$class('input-checkbox'),
 															_1: {
 																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$checked(data.elmVerifyExamplesEnabled),
-																_1: {ctor: '[]'}
+																_0: _elm_lang$html$Html_Events$onCheck(messages.setRunElmVerifyExamples),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$checked(data.elmVerifyExamplesEnabled),
+																	_1: {ctor: '[]'}
+																}
 															}
 														}
 													},

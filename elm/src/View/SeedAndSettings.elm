@@ -55,6 +55,7 @@ render data messages =
             [ text "Auto-Run on Save "
             , input
                 [ type_ "checkbox"
+                , class "input-checkbox"
                 , onCheck messages.setAutoRun
                 , checked data.autoRunEnabled
                 ]
@@ -65,6 +66,7 @@ render data messages =
             [ text "Auto-Navigate to Test File "
             , input
                 [ type_ "checkbox"
+                , class "input-checkbox"
                 , onCheck messages.setAutoNavigate
                 , checked data.autoNavigateEnabled
                 ]
@@ -75,6 +77,7 @@ render data messages =
             [ text "Run with 'Elm Verify Examples' "
             , input
                 [ type_ "checkbox"
+                , class "input-checkbox"
                 , onCheck messages.setRunElmVerifyExamples
                 , checked data.elmVerifyExamplesEnabled
                 ]
