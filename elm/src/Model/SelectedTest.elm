@@ -1,11 +1,7 @@
-port module Model.SelectedTest exposing (andShowInEditor, setInstance, setNodeId, setTestMouseIsOver)
-
-import And
-import State.NavigationData as NavigationData
-import TestInstance.Core exposing (TestInstance)
+port module Model.SelectedTest exposing (setInstance, setNodeId, setTestMouseIsOver)
 
 
-type alias TestSelectionModel model testInstance =
+type alias Model model testInstance =
     { model
         | selectedTestNodeId : Maybe Int
         , selectedTestInstance : Maybe testInstance
@@ -13,33 +9,16 @@ type alias TestSelectionModel model testInstance =
     }
 
 
-type alias NavigationModel model =
-    { model
-        | autoNavigateEnabled : Bool
-        , currentWorkingDirectory : String
-    }
-
-
-setNodeId : Maybe Int -> TestSelectionModel model testInstance -> TestSelectionModel model testInstance
+setNodeId : Maybe Int -> Model model testInstance -> Model model testInstance
 setNodeId nodeId model =
     { model | selectedTestNodeId = nodeId }
 
 
-setInstance : Maybe testInstance -> TestSelectionModel model testInstance -> TestSelectionModel model testInstance
+setInstance : Maybe testInstance -> Model model testInstance -> Model model testInstance
 setInstance testInstance model =
     { model | selectedTestInstance = testInstance }
 
 
-setTestMouseIsOver : Maybe Int -> TestSelectionModel model testInstance -> TestSelectionModel model testInstance
+setTestMouseIsOver : Maybe Int -> Model model testInstance -> Model model testInstance
 setTestMouseIsOver nodeId model =
     { model | testMouseIsOver = nodeId }
-
-
-andShowInEditor : Maybe TestInstance -> NavigationModel model -> ( NavigationModel model, Cmd message )
-andShowInEditor testInstance model =
-    case ( testInstance, model.autoNavigateEnabled ) of
-        ( Just instance, True ) ->
-            And.showInEditor (NavigationData.make model.currentWorkingDirectory instance) model
-
-        _ ->
-            And.doNothing model

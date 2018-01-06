@@ -1,6 +1,7 @@
 module Message.TestListItem exposing (Message, messages, update)
 
 import And
+import And.Editor
 import Model.SelectedTest
 import Model.TestTree
 import TestInstance.Core as TestInstance exposing (TestInstance)
@@ -55,7 +56,7 @@ update message model =
             model
                 |> Model.SelectedTest.setNodeId (Just nodeId)
                 |> Model.SelectedTest.setInstance testInstance
-                |> Model.SelectedTest.andShowInEditor testInstance
+                |> And.Editor.showFile testInstance
 
 
 type alias Messages =

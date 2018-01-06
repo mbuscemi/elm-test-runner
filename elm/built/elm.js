@@ -17601,6 +17601,29 @@ var _myrho$elm_round$Round$roundCom = _myrho$elm_round$Round$roundFun(
 	});
 var _myrho$elm_round$Round$roundNumCom = _myrho$elm_round$Round$funNum(_myrho$elm_round$Round$roundCom);
 
+var _user$project$And$executeOnDelay = F2(
+	function (message, model) {
+		return {
+			ctor: '_Tuple2',
+			_0: model,
+			_1: A2(
+				_elm_lang$core$Task$perform,
+				_elm_lang$core$Basics$identity,
+				A2(
+					_elm_lang$core$Task$andThen,
+					_elm_lang$core$Basics$always(
+						_elm_lang$core$Task$succeed(message)),
+					_elm_lang$core$Process$sleep(100)))
+		};
+	});
+var _user$project$And$execute = F2(
+	function (command, model) {
+		return {ctor: '_Tuple2', _0: model, _1: command};
+	});
+var _user$project$And$doNothing = function (model) {
+	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+};
+
 var _user$project$Model_Flags$default = {autoRun: false, autoNavigate: true, useElmVerifyExamples: false};
 var _user$project$Model_Flags$Flags = F3(
 	function (a, b, c) {
@@ -18228,6 +18251,9 @@ var _user$project$TestInstance_Core$isPending = function (instance) {
 var _user$project$TestInstance_Core$isFailing = function (instance) {
 	return _user$project$TestInstance_TestStatus$isFail(instance.testStatus);
 };
+var _user$project$TestInstance_Core$isFailingOrTodo = function (instance) {
+	return _user$project$TestInstance_Core$isFailing(instance) || _user$project$TestInstance_Core$isTodo(instance);
+};
 var _user$project$TestInstance_Core$toClass = function (instance) {
 	return _user$project$TestInstance_TestStatus$toClass(instance.testStatus);
 };
@@ -18265,42 +18291,20 @@ var _user$project$State_NavigationData$make = F2(
 		};
 	});
 
-var _user$project$And$executeOnDelay = F2(
-	function (message, model) {
-		return {
-			ctor: '_Tuple2',
-			_0: model,
-			_1: A2(
-				_elm_lang$core$Task$perform,
-				_elm_lang$core$Basics$identity,
-				A2(
-					_elm_lang$core$Task$andThen,
-					_elm_lang$core$Basics$always(
-						_elm_lang$core$Task$succeed(message)),
-					_elm_lang$core$Process$sleep(100)))
-		};
-	});
-var _user$project$And$execute = F2(
-	function (command, model) {
-		return {ctor: '_Tuple2', _0: model, _1: command};
-	});
-var _user$project$And$doNothing = function (model) {
-	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-};
-var _user$project$And$updatePersistentState = _elm_lang$core$Native_Platform.outgoingPort(
+var _user$project$And_Editor$updatePersistentState = _elm_lang$core$Native_Platform.outgoingPort(
 	'updatePersistentState',
 	function (v) {
 		return {autoRun: v.autoRun, autoNavigate: v.autoNavigate, useElmVerifyExamples: v.useElmVerifyExamples};
 	});
-var _user$project$And$updateAtomState = function (model) {
+var _user$project$And_Editor$updateState = function (model) {
 	return A3(
 		_elm_lang$core$Basics$flip,
 		_user$project$And$execute,
 		model,
-		_user$project$And$updatePersistentState(
+		_user$project$And_Editor$updatePersistentState(
 			_user$project$Model_Config$serialize(model)));
 };
-var _user$project$And$navigateToFile = _elm_lang$core$Native_Platform.outgoingPort(
+var _user$project$And_Editor$navigateToFile = _elm_lang$core$Native_Platform.outgoingPort(
 	'navigateToFile',
 	function (v) {
 		return [
@@ -18312,10 +18316,19 @@ var _user$project$And$navigateToFile = _elm_lang$core$Native_Platform.outgoingPo
 			v._2
 		];
 	});
-var _user$project$And$showInEditor = function (data) {
-	return _user$project$And$execute(
-		_user$project$And$navigateToFile(data));
-};
+var _user$project$And_Editor$showFile = F2(
+	function (maybeTestInstance, model) {
+		var _p0 = {ctor: '_Tuple2', _0: maybeTestInstance, _1: model.autoNavigateEnabled};
+		if (((_p0.ctor === '_Tuple2') && (_p0._0.ctor === 'Just')) && (_p0._1 === true)) {
+			return A2(
+				_user$project$And$execute,
+				_user$project$And_Editor$navigateToFile(
+					A2(_user$project$State_NavigationData$make, model.currentWorkingDirectory, _p0._0._0)),
+				model);
+		} else {
+			return _user$project$And$doNothing(model);
+		}
+	});
 
 var _user$project$State_RunStatus$canStartNewTestRun = function (runStatus) {
 	var _p0 = runStatus;
@@ -18800,22 +18813,22 @@ var _user$project$Message_Settings$update = F2(
 		var _p0 = message;
 		switch (_p0.ctor) {
 			case 'ToggleAutoRun':
-				return _user$project$And$updateAtomState(
+				return _user$project$And_Editor$updateState(
 					_user$project$Model_Config$invertAutoRun(model));
 			case 'SetAutoRun':
-				return _user$project$And$updateAtomState(
+				return _user$project$And_Editor$updateState(
 					A2(_user$project$Model_Config$setAutoRun, _p0._0, model));
 			case 'ToggleAutoNavigate':
-				return _user$project$And$updateAtomState(
+				return _user$project$And_Editor$updateState(
 					_user$project$Model_Config$invertAutoNavigate(model));
 			case 'SetAutoNavigate':
-				return _user$project$And$updateAtomState(
+				return _user$project$And_Editor$updateState(
 					A2(_user$project$Model_Config$setAutoNavigate, _p0._0, model));
 			case 'ToggleRunElmVerifyExamples':
-				return _user$project$And$updateAtomState(
+				return _user$project$And_Editor$updateState(
 					_user$project$Model_Config$invertElmVerifyExamples(model));
 			default:
-				return _user$project$And$updateAtomState(
+				return _user$project$And_Editor$updateState(
 					A2(_user$project$Model_Config$setElmVerifyExamples, _p0._0, model));
 		}
 	});
@@ -18841,18 +18854,6 @@ var _user$project$Message_Settings$messages = {
 	runElmVerifyExamples: {toggle: _user$project$Message_Settings$ToggleRunElmVerifyExamples, set: _user$project$Message_Settings$SetRunElmVerifyExamples}
 };
 
-var _user$project$Model_SelectedTest$andShowInEditor = F2(
-	function (testInstance, model) {
-		var _p0 = {ctor: '_Tuple2', _0: testInstance, _1: model.autoNavigateEnabled};
-		if (((_p0.ctor === '_Tuple2') && (_p0._0.ctor === 'Just')) && (_p0._1 === true)) {
-			return A2(
-				_user$project$And$showInEditor,
-				A2(_user$project$State_NavigationData$make, model.currentWorkingDirectory, _p0._0._0),
-				model);
-		} else {
-			return _user$project$And$doNothing(model);
-		}
-	});
 var _user$project$Model_SelectedTest$setTestMouseIsOver = F2(
 	function (nodeId, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -19121,10 +19122,14 @@ var _user$project$Model_TestTree$selectLastNodeWithFailureData = function (model
 var _user$project$Model_TestTree$toggleFailingAndTodoNodes = function (_p0) {
 	var _p1 = _p0;
 	var _p2 = _p1._1;
-	var expanded = _user$project$TestInstance_Core$isFailing(_p2) || _user$project$TestInstance_Core$isTodo(_p2);
 	return A3(
 		_user$project$Tree_Core$Node,
-		{ctor: '_Tuple3', _0: _p1._0._0, _1: expanded, _2: _p1._0._2},
+		{
+			ctor: '_Tuple3',
+			_0: _p1._0._0,
+			_1: _user$project$TestInstance_Core$isFailingOrTodo(_p2),
+			_2: _p1._0._2
+		},
 		_p2,
 		A2(_elm_lang$core$List$map, _user$project$Model_TestTree$toggleFailingAndTodoNodes, _p1._2));
 };
@@ -19212,7 +19217,7 @@ var _user$project$Message_TestListItem$update = F2(
 			default:
 				var _p1 = _p0._1;
 				return A2(
-					_user$project$Model_SelectedTest$andShowInEditor,
+					_user$project$And_Editor$showFile,
 					_p1,
 					A2(
 						_user$project$Model_SelectedTest$setInstance,
