@@ -25,27 +25,33 @@ update : Message -> Model model -> ( Model model, Cmd message )
 update message model =
     case message of
         ToggleAutoRun ->
-            Model.Config.invertAutoRun model
+            model
+                |> Model.Config.invertAutoRun
                 |> And.updateAtomState
 
         SetAutoRun state ->
-            Model.Config.setAutoRun state model
+            model
+                |> Model.Config.setAutoRun state
                 |> And.updateAtomState
 
         ToggleAutoNavigate ->
-            Model.Config.invertAutoNavigate model
+            model
+                |> Model.Config.invertAutoNavigate
                 |> And.updateAtomState
 
         SetAutoNavigate state ->
-            Model.Config.setAutoNavigate state model
+            model
+                |> Model.Config.setAutoNavigate state
                 |> And.updateAtomState
 
         ToggleRunElmVerifyExamples ->
-            Model.Config.invertElmVerifyExamples model
+            model
+                |> Model.Config.invertElmVerifyExamples
                 |> And.updateAtomState
 
         SetRunElmVerifyExamples state ->
-            Model.Config.setElmVerifyExamples state model
+            model
+                |> Model.Config.setElmVerifyExamples state
                 |> And.updateAtomState
 
 

@@ -65,7 +65,8 @@ update : Message -> Model model -> ( Model model, Cmd message )
 update message model =
     case message of
         Initiate ->
-            Model.TestCount.resetPassed model
+            model
+                |> Model.TestCount.resetPassed
                 |> Model.SelectedTest.setNodeId Nothing
                 |> Model.SelectedTest.setInstance Nothing
                 |> Model.Basics.setCompilerErrorMessage Nothing
@@ -76,17 +77,20 @@ update message model =
                 |> And.execute (runTest <| ( model.currentWorkingDirectory, Model.RandomSeed.forJS model ))
 
         GenerateTests ->
-            Model.RunStatus.setToGeneratingTests model
+            model
+                |> Model.RunStatus.setToGeneratingTests
                 |> Model.Animation.initiateColorOscillation
                 |> And.doNothing
 
         Execute ->
-            Model.RunStatus.setToProcessing model
+            model
+                |> Model.RunStatus.setToProcessing
                 |> Model.Animation.initiateColorOscillation
                 |> And.doNothing
 
         CompilerError error ->
-            Model.RunStatus.setToCompileError model
+            model
+                |> Model.RunStatus.setToCompileError
                 |> Model.Animation.pulseToStatusColor
                 |> Model.Basics.setCompilerErrorMessage (Just error)
                 |> And.doNothing
@@ -96,7 +100,8 @@ update message model =
                 event =
                     RunStart.parse value
             in
-            Model.ProjectName.setFromPath model
+            model
+                |> Model.ProjectName.setFromPath
                 |> Model.TestCount.setTotal event
                 |> Model.RunSeed.set event
                 |> And.doNothing
@@ -106,7 +111,8 @@ update message model =
                 event =
                     TestCompleted.parseJson data
             in
-            Model.TestCount.updatePassed event model
+            model
+                |> Model.TestCount.updatePassed event
                 |> Model.TestTree.build event
                 |> Model.TestTree.updateHierarchy
                 |> And.doNothing
@@ -116,7 +122,8 @@ update message model =
                 event =
                     RunComplete.parse value
             in
-            Model.RunStatus.setToPassing model
+            model
+                |> Model.RunStatus.setToPassing
                 |> Model.RunStatus.setForTodo TestInstance.isTodo
                 |> Model.RunStatus.setForFailure event
                 |> Model.Animation.pulseToStatusColor

@@ -25,12 +25,14 @@ update message model =
                 |> And.execute (copySeed seed)
 
         Set seed ->
-            Model.RandomSeed.set (Just seed) model
+            model
+                |> Model.RandomSeed.set (Just seed)
                 |> Model.RandomSeed.setForcing True
                 |> And.doNothing
 
         SetForce setting ->
-            Model.RandomSeed.setForcing setting model
+            model
+                |> Model.RandomSeed.setForcing setting
                 |> And.doNothing
 
 

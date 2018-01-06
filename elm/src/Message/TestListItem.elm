@@ -32,23 +32,28 @@ update : Message -> Model model -> ( Model model, Cmd message )
 update message model =
     case message of
         Expand nodeId ->
-            Model.TestTree.toggleNode nodeId True model
+            model
+                |> Model.TestTree.toggleNode nodeId True
                 |> And.doNothing
 
         Collapse nodeId ->
-            Model.TestTree.toggleNode nodeId False model
+            model
+                |> Model.TestTree.toggleNode nodeId False
                 |> And.doNothing
 
         MouseEnter nodeId ->
-            Model.SelectedTest.setTestMouseIsOver (Just nodeId) model
+            model
+                |> Model.SelectedTest.setTestMouseIsOver (Just nodeId)
                 |> And.doNothing
 
         MouseLeave ->
-            Model.SelectedTest.setTestMouseIsOver Nothing model
+            model
+                |> Model.SelectedTest.setTestMouseIsOver Nothing
                 |> And.doNothing
 
         Select nodeId testInstance ->
-            Model.SelectedTest.setNodeId (Just nodeId) model
+            model
+                |> Model.SelectedTest.setNodeId (Just nodeId)
                 |> Model.SelectedTest.setInstance testInstance
                 |> Model.SelectedTest.andShowInEditor testInstance
 

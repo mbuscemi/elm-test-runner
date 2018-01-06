@@ -81,15 +81,18 @@ update message model =
             Directories.update message model
 
         PaneMoved newLocation ->
-            Model.Basics.setPaneLocation newLocation model
+            model
+                |> Model.Basics.setPaneLocation newLocation
                 |> And.doNothing
 
         ToggleSettings ->
-            Model.Animation.toggleFooter model
+            model
+                |> Model.Animation.toggleFooter
                 |> And.doNothing
 
         DoNothing ->
-            model |> And.doNothing
+            model
+                |> And.doNothing
 
 
 view : Model -> Html Message

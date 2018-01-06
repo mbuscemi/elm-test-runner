@@ -26,15 +26,18 @@ update : Message -> Model model -> ( Model model, Cmd message )
 update message model =
     case message of
         Flicker animateMessage ->
-            Model.Animation.updateStatusBarText animateMessage model
+            model
+                |> Model.Animation.updateStatusBarText animateMessage
                 |> And.doNothing
 
         OscillateColor animateMessage ->
-            Model.Animation.updateStatusBarColor animateMessage model
+            model
+                |> Model.Animation.updateStatusBarColor animateMessage
                 |> And.doNothing
 
         SettingsTransition animateMessage ->
-            Model.Animation.updateFooter animateMessage model
+            model
+                |> Model.Animation.updateFooter animateMessage
                 |> And.doNothing
 
 
