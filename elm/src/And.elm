@@ -1,6 +1,6 @@
 port module And exposing (doNothing, execute, executeOnDelay, showInEditor, updateAtomState)
 
-import Model.Config exposing (HasConfig)
+import Model.Config exposing (Model)
 import Model.Flags exposing (Flags)
 import Process
 import State.NavigationData exposing (NavigationData)
@@ -26,7 +26,7 @@ executeOnDelay message model =
     )
 
 
-updateAtomState : HasConfig model -> ( HasConfig model, Cmd message )
+updateAtomState : Model model -> ( Model model, Cmd message )
 updateAtomState model =
     Model.Config.serialize model
         |> updatePersistentState

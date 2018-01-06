@@ -1,8 +1,8 @@
 module Model.Directories exposing (setProject, setTestable, setWorking)
 
 
-type alias HasDirectories r =
-    { r
+type alias Model model =
+    { model
         | projectDirectories : List String
         , testableElmDirectories : List String
         , currentWorkingDirectory : String
@@ -10,12 +10,12 @@ type alias HasDirectories r =
     }
 
 
-setProject : List String -> HasDirectories model -> HasDirectories model
+setProject : List String -> Model model -> Model model
 setProject directories model =
     { model | projectDirectories = directories }
 
 
-setTestable : List String -> HasDirectories model -> HasDirectories model
+setTestable : List String -> Model model -> Model model
 setTestable directories model =
     { model
         | testableElmDirectories = directories
@@ -24,6 +24,6 @@ setTestable directories model =
     }
 
 
-setWorking : String -> HasDirectories model -> HasDirectories model
+setWorking : String -> Model model -> Model model
 setWorking directory model =
     { model | currentWorkingDirectory = directory }

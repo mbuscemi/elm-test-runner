@@ -14,29 +14,29 @@ import Tree.Core exposing (Tree)
 import Tree.Traverse
 
 
-type alias HasRunStatus model testInstance =
+type alias Model model testInstance =
     { model
         | runStatus : RunStatus
         , testRuns : Tree String testInstance
     }
 
 
-setToGeneratingTests : HasRunStatus model testInstance -> HasRunStatus model testInstance
+setToGeneratingTests : Model model testInstance -> Model model testInstance
 setToGeneratingTests model =
     { model | runStatus = RunStatus.generatingTests }
 
 
-setToProcessing : HasRunStatus model testInstance -> HasRunStatus model testInstance
+setToProcessing : Model model testInstance -> Model model testInstance
 setToProcessing model =
     { model | runStatus = RunStatus.processing }
 
 
-setToPassing : HasRunStatus model testInstance -> HasRunStatus model testInstance
+setToPassing : Model model testInstance -> Model model testInstance
 setToPassing model =
     { model | runStatus = RunStatus.lastPassed }
 
 
-setForFailure : RunComplete -> HasRunStatus model testInstance -> HasRunStatus model testInstance
+setForFailure : RunComplete -> Model model testInstance -> Model model testInstance
 setForFailure event model =
     { model
         | runStatus =
@@ -47,7 +47,7 @@ setForFailure event model =
     }
 
 
-setForTodo : (testInstance -> Bool) -> HasRunStatus model testInstance -> HasRunStatus model testInstance
+setForTodo : (testInstance -> Bool) -> Model model testInstance -> Model model testInstance
 setForTodo isTodo model =
     { model
         | runStatus =
@@ -58,6 +58,6 @@ setForTodo isTodo model =
     }
 
 
-setToCompileError : HasRunStatus model testInstance -> HasRunStatus model testInstance
+setToCompileError : Model model testInstance -> Model model testInstance
 setToCompileError model =
     { model | runStatus = RunStatus.compileError }

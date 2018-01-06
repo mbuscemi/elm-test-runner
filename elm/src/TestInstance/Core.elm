@@ -8,6 +8,7 @@ module TestInstance.Core
         , getFailureData
         , hasFailureData
         , isFailing
+        , isFailingOrTodo
         , isPending
         , isTodo
         , pathAndDescription
@@ -73,6 +74,11 @@ isPending instance =
 isTodo : TestInstance -> Bool
 isTodo instance =
     TestStatus.isTodo instance.testStatus
+
+
+isFailingOrTodo : TestInstance -> Bool
+isFailingOrTodo instance =
+    isFailing instance || isTodo instance
 
 
 getFailure : TestInstance -> Maybe Failure

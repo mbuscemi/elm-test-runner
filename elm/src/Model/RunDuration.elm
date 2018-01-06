@@ -1,20 +1,20 @@
 module Model.RunDuration exposing (clear, set)
 
-import TestEvent.RunComplete as RunComplete exposing (RunComplete)
 import State.Duration exposing (Duration)
+import TestEvent.RunComplete as RunComplete exposing (RunComplete)
 
 
-type alias WithRunDuration r =
-    { r
+type alias Model model =
+    { model
         | runDuration : Maybe Duration
     }
 
 
-set : RunComplete -> WithRunDuration model -> WithRunDuration model
+set : RunComplete -> Model model -> Model model
 set event model =
     { model | runDuration = Just <| RunComplete.duration event }
 
 
-clear : WithRunDuration model -> WithRunDuration model
+clear : Model model -> Model model
 clear model =
     { model | runDuration = Nothing }
