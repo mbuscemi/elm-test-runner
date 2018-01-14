@@ -1,13 +1,4 @@
-module Model.TestTree
-    exposing
-        ( build
-        , expandFailingAndTodoNodes
-        , purgeObsoleteNodes
-        , reset
-        , selectLastNodeWithFailureData
-        , toggleNode
-        , updateHierarchy
-        )
+module Model.TestTree exposing (build, expandFailingAndTodoNodes, purgeObsoleteNodes, reset, selectLastNodeWithFailureData, toggleNode, updateHierarchy)
 
 import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
 import TestInstance.Core as TestInstance exposing (TestInstance)
@@ -18,8 +9,8 @@ import Tree.Node
 import Tree.Traverse
 
 
-type alias WithTestRuns r =
-    { r
+type alias Model model =
+    { model
         | projectName : String
         , testRuns : Tree String TestInstance
         , testHierarchy : CollapsibleTree String TestInstance
@@ -28,7 +19,7 @@ type alias WithTestRuns r =
     }
 
 
-build : TestCompleted -> WithTestRuns model -> WithTestRuns model
+build : TestCompleted -> Model model -> Model model
 build event model =
     { model
         | testRuns =
@@ -40,56 +31,37 @@ build event model =
     }
 
 
-reset : WithTestRuns model -> WithTestRuns model
+reset : Model model -> Model model
 reset model =
-    { model
-        | testRuns =
-            Tree.Traverse.update
-                (TestInstance.setStatus "pending")
-                model.testRuns
-    }
+    { model | testRuns = Tree.Traverse.update (TestInstance.setStatus "pending") model.testRuns }
 
 
-purgeObsoleteNodes : WithTestRuns model -> WithTestRuns model
+purgeObsoleteNodes : Model model -> Model model
 purgeObsoleteNodes model =
-    { model
-        | testRuns =
-            Tree.Traverse.purge
-                (not << TestInstance.isPending)
-                model.testRuns
-    }
+    { model | testRuns = Tree.Traverse.purge (not << TestInstance.isPending) model.testRuns }
 
 
-updateHierarchy : WithTestRuns model -> WithTestRuns model
+updateHierarchy : Model model -> Model model
 updateHierarchy model =
-    { model
-        | testHierarchy =
-            model.testRuns
-                |> Tree.make
-    }
+    { model | testHierarchy = Tree.make model.testRuns }
 
 
-toggleNode : Int -> Bool -> WithTestRuns model -> WithTestRuns model
+toggleNode : Int -> Bool -> Model model -> Model model
 toggleNode nodeId newState model =
     { model | testHierarchy = Tree.Node.toggle nodeId newState model.testHierarchy }
 
 
-expandFailingAndTodoNodes : WithTestRuns model -> WithTestRuns model
+expandFailingAndTodoNodes : Model model -> Model model
 expandFailingAndTodoNodes model =
     { model | testHierarchy = toggleFailingAndTodoNodes model.testHierarchy }
 
 
 toggleFailingAndTodoNodes : CollapsibleTree String TestInstance -> CollapsibleTree String TestInstance
 toggleFailingAndTodoNodes (Node ( name, _, nodeId ) testInstance children) =
-    let
-        expanded =
-            TestInstance.isFailing testInstance || TestInstance.isTodo testInstance
-    in
-    Node ( name, expanded, nodeId ) testInstance <|
-        List.map toggleFailingAndTodoNodes children
+    Node ( name, TestInstance.isFailingOrTodo testInstance, nodeId ) testInstance (List.map toggleFailingAndTodoNodes children)
 
 
-selectLastNodeWithFailureData : WithTestRuns model -> WithTestRuns model
+selectLastNodeWithFailureData : Model model -> Model model
 selectLastNodeWithFailureData model =
     let
         maybeNode =

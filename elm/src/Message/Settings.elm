@@ -1,6 +1,6 @@
 module Message.Settings exposing (Message, messages, update)
 
-import And
+import And.Editor
 import Model.Config
 
 
@@ -25,28 +25,34 @@ update : Message -> Model model -> ( Model model, Cmd message )
 update message model =
     case message of
         ToggleAutoRun ->
-            Model.Config.invertAutoRun model
-                |> And.updateAtomState
+            model
+                |> Model.Config.invertAutoRun
+                |> And.Editor.updateState
 
         SetAutoRun state ->
-            Model.Config.setAutoRun state model
-                |> And.updateAtomState
+            model
+                |> Model.Config.setAutoRun state
+                |> And.Editor.updateState
 
         ToggleAutoNavigate ->
-            Model.Config.invertAutoNavigate model
-                |> And.updateAtomState
+            model
+                |> Model.Config.invertAutoNavigate
+                |> And.Editor.updateState
 
         SetAutoNavigate state ->
-            Model.Config.setAutoNavigate state model
-                |> And.updateAtomState
+            model
+                |> Model.Config.setAutoNavigate state
+                |> And.Editor.updateState
 
         ToggleRunElmVerifyExamples ->
-            Model.Config.invertElmVerifyExamples model
-                |> And.updateAtomState
+            model
+                |> Model.Config.invertElmVerifyExamples
+                |> And.Editor.updateState
 
         SetRunElmVerifyExamples state ->
-            Model.Config.setElmVerifyExamples state model
-                |> And.updateAtomState
+            model
+                |> Model.Config.setElmVerifyExamples state
+                |> And.Editor.updateState
 
 
 type alias Messages =

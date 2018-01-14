@@ -4,23 +4,23 @@ import TestEvent.RunStart as RunStart exposing (RunStart)
 import TestEvent.TestCompleted as TestCompleted exposing (TestCompleted)
 
 
-type alias HasTestCounts r =
-    { r
+type alias Model model =
+    { model
         | passedTests : Int
         , totalTests : Int
     }
 
 
-updatePassed : TestCompleted -> HasTestCounts model -> HasTestCounts model
+updatePassed : TestCompleted -> Model model -> Model model
 updatePassed event model =
     { model | passedTests = model.passedTests + TestCompleted.passedTestCountToIncrement event }
 
 
-resetPassed : HasTestCounts model -> HasTestCounts model
+resetPassed : Model model -> Model model
 resetPassed model =
     { model | passedTests = 0 }
 
 
-setTotal : RunStart -> HasTestCounts model -> HasTestCounts model
+setTotal : RunStart -> Model model -> Model model
 setTotal event model =
     { model | totalTests = RunStart.numTotalTests event }

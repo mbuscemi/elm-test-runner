@@ -3,17 +3,17 @@ module Model.RunSeed exposing (clear, set)
 import TestEvent.RunStart as RunStart exposing (RunStart)
 
 
-type alias WithRunSeed r =
-    { r
+type alias Model model =
+    { model
         | runSeed : Maybe Int
     }
 
 
-set : RunStart -> WithRunSeed model -> WithRunSeed model
+set : RunStart -> Model model -> Model model
 set event model =
     { model | runSeed = Just <| RunStart.initialSeed event }
 
 
-clear : WithRunSeed model -> WithRunSeed model
+clear : Model model -> Model model
 clear model =
     { model | runSeed = Nothing }

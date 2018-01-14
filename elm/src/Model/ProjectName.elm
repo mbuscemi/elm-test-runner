@@ -3,10 +3,10 @@ module Model.ProjectName exposing (default, setFromPath)
 import Tree.Core exposing (Tree(Node))
 
 
-type alias HasProject r a =
-    { r
+type alias Model model testInstance =
+    { model
         | projectName : String
-        , testRuns : Tree String a
+        , testRuns : Tree String testInstance
         , currentWorkingDirectory : String
     }
 
@@ -16,7 +16,7 @@ default =
     "Unknown Project"
 
 
-setFromPath : HasProject model a -> HasProject model a
+setFromPath : Model model testInstance -> Model model testInstance
 setFromPath model =
     { model
         | projectName =
@@ -28,7 +28,7 @@ setFromPath model =
         |> setToTopNode
 
 
-setToTopNode : HasProject model a -> HasProject model a
+setToTopNode : Model model testInstance -> Model model testInstance
 setToTopNode model =
     let
         (Node _ testInstance children) =

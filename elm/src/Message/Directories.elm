@@ -23,15 +23,18 @@ update : Message -> Model model -> ( Model model, Cmd message )
 update message model =
     case message of
         ProjectUpdate directories ->
-            Model.Directories.setProject directories model
+            model
+                |> Model.Directories.setProject directories
                 |> And.doNothing
 
         TestableUpdate directories ->
-            Model.Directories.setTestable directories model
+            model
+                |> Model.Directories.setTestable directories
                 |> And.doNothing
 
         WorkingChanged directory ->
-            Model.Directories.setWorking directory model
+            model
+                |> Model.Directories.setWorking directory
                 |> And.doNothing
 
 
